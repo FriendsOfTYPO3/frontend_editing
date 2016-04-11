@@ -1,0 +1,25 @@
+{
+    "name": "Pixelant frontend editing", 
+    "type": "typo3-cms-extension",
+    "description": "Enable editors to work with the content in the most intuitive way possible",
+    "license": ["GPL-2.0+"],
+    "keywords": ["TYPO3 CMS", "feediting"],
+    "authors": [
+        {
+            "name": "Jozef Spisiak",
+            "email": "jozef@pixelant.se",
+            "role": "Developer"
+        },
+        {
+            "name": "Phat Hoang",
+            "email": "phat@pixelant.se",
+            "role": "Developer"
+        }
+    ],
+     "version": "0.0.0",
+    "autoload": {
+        "psr-4": {
+            "Pixelant\\PxaFeediting\\": "Classes/"
+        }
+    }
+}
