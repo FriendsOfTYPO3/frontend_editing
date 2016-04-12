@@ -1,5 +1,5 @@
 {
-    "name": "Pixelant frontend editing", 
+    "name": "pixelant/pxa-feediting", 
     "type": "typo3-cms-extension",
     "description": "Enable editors to work with the content in the most intuitive way possible",
     "license": ["GPL-2.0+"],
