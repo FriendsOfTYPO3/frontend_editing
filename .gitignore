@@ -1,0 +1,5 @@
+# Exclude PHPStorm indexing files
+/.idea
+
+# Exclude OSX index files
+.DS_Store
