@@ -1,9 +1,7 @@
 (function($, w){
 
-
-
 	var editorConfig = {
-        uiColor : '#FF0000'
+		uiColor : '#FF0000'
 	};
 
 	$('p').attr('contenteditable', true).ckeditor(editorConfig, function(e){
@@ -17,14 +15,12 @@
 		});
 	}
 	
-
-
 	/*
-	CKEDITOR.inline( 'c164',
-    {
-        toolbar : 'links',
-        uiColor : 'yellow'
-    });
-	*/	
+	 CKEDITOR.inline( 'c164',
+	 {
+	 toolbar : 'links',
+	 uiColor : 'yellow'
+	 });
+	 */
 
 })(jQuery, window);

@@ -3,3 +3,5 @@
 
 # Exclude OSX index files
 .DS_Store
+
+composer.lock
