@@ -17,6 +17,9 @@
         }
     ],
     "version": "0.0.1",
+    "require": {
+        "ckeditor/ckeditor": "4.*"
+    },
     "autoload": {
         "psr-4": {
             "Pixelant\\PxaFeediting\\": "Classes/"

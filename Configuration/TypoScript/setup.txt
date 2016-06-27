@@ -1,3 +1,3 @@
-page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/Resources/Public/ckeditor/ckeditor.js
-page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/Resources/Public/ckeditor/adapters/jquery.js
+page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/vendor/ckeditor/ckeditor/ckeditor.js
+page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/vendor/ckeditor/ckeditor/adapters/jquery.js
 page.includeJSFooter.ckeditor = EXT:pxa_feediting/Resources/Public/main.js
