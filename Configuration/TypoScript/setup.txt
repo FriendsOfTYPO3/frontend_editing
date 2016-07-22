@@ -1,3 +1,16 @@
+page.javascriptLibs {
+    # include jQuery (boolean)
+    jQuery = 1
+    # Change the version
+    # (possible values: latest|1.7.2|…, default: latest)
+    # Note: jQuery.source has to be a CDN like "google"
+    # when jQuery.version is not "latest"
+    jQuery.version = latest
+    # Include from local or different CDNs
+    # (possible values: local|google|jquery|msn, default: local)
+    jQuery.source = local
+}
+
 page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/vendor/ckeditor/ckeditor/ckeditor.js
 page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/vendor/ckeditor/ckeditor/adapters/jquery.js
 page.includeJSFooter.ckeditor = EXT:pxa_feediting/Resources/Public/main.js

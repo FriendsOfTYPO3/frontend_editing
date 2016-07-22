@@ -20,6 +20,9 @@
     "require": {
         "ckeditor/ckeditor": "4.*"
     },
+    "replace": {
+        "pxa_feediting": "*"
+    },
     "autoload": {
         "psr-4": {
             "Pixelant\\PxaFeediting\\": "Classes/"
