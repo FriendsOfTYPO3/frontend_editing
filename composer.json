@@ -14,18 +14,55 @@
             "name": "Phat Hoang",
             "email": "phat@pixelant.se",
             "role": "Developer"
+        },
+        {
+            "name": "Mattias Nilsson",
+            "email": "mattias@pixelant.se",
+            "role": "Developer"
         }
     ],
     "version": "0.0.1",
     "require": {
-        "ckeditor/ckeditor": "4.*"
+        "php": ">=5.6.0"
+    },
+    "require-dev": {
+        "typo3/cms": "^7.6",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpunit/phpunit": "~4.8.0",
+        "mikey179/vfsStream": "~1.6.0"
     },
     "replace": {
-        "pxa_feediting": "*"
+        "pxa_feediting": "self.version"
     },
     "autoload": {
         "psr-4": {
             "Pixelant\\PxaFeediting\\": "Classes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pixelant\\PxaFeediting\\Tests\\": "Tests/",
+            "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
+            "TYPO3\\CMS\\Fluid\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
+        }
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .Build/Web/typo3conf/ext/",
+            "[ -L .Build/Web/typo3conf/ext/pxa_feediting ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/pxa_feediting"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.x-dev"
+        },
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
         }
     }
 }
