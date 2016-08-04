@@ -4,7 +4,11 @@
   "description": "",
   "main": "gruntfile.js",
   "scripts": {
-    "build:extension": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript"
+    "build:extension": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
+    "configuration:set-typo3-root-path": "export TYPO3_PATH_WEB=$PWD/.Build/Web",
+    "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Configuration/ Tests/",
+    "php:unittests": "npm run configuration:set-typo3-root-path && .Build/bin/phpunit -c Tests/Build/UnitTests.xml",
+    "build:suite": "npm run php:codesniffer && npm run php:unittests"
   },
   "dependencies": {
     "ckeditor": "^4.5.10"
