@@ -7,6 +7,7 @@
 # Composer
 /.Build/*
 composer.lock
+/vendor
 
 # Node packages.
 /node_modules
