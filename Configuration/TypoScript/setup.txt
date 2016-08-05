@@ -1,3 +1,4 @@
+[globalVar = TSFE : beUserLogin > 0]
 page.javascriptLibs {
     jQuery = 1
     jQuery.version = latest
@@ -6,4 +7,5 @@ page.javascriptLibs {
 
 page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/Resources/Public/Javascript/ckeditor/ckeditor.js
 page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/Resources/Public/Javascript/ckeditor/adapters/jquery.js
-page.includeJSFooter.ckeditor = EXT:pxa_feediting/Resources/Public/main.js
+page.includeJSFooter.ckeditor_configuration = EXT:pxa_feediting/Resources/Public/configuration.js
+[global]
