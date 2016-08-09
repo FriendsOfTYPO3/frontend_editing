@@ -9,3 +9,107 @@ page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/Resources/Public/Javascrip
 page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/Resources/Public/Javascript/ckeditor/adapters/jquery.js
 page.includeJSFooter.ckeditor_configuration = EXT:pxa_feediting/Resources/Public/configuration.js
 [global]
+
+[globalVar = TSFE : beUserLogin > 0]
+# Additional page plugin for save requests as those need a BE-USER
+frontendEditing = PAGE
+frontendEditing {
+    typeNum = 1470741815
+
+    config {
+        disableAllHeaderCode = 1
+        xhtml_cleaning = none
+        admPanel = 0
+        metaCharset = utf-8
+        no_cache = 1
+    }
+
+    includeLibs.aloha = EXT:pxa_feediting/Classes/Ckeditor/SaveController.php
+    10 = USER
+    10 {
+        userFunc = TYPO3\CMS\FrontendEditing\Ckeditor\SaveController->start
+    }
+}
+[global]
+
+# Add this extensions rootPaths to lib.fluidContent (fluid_styled_content)
+lib.fluidContent {
+    templateRootPaths {
+        #1910 = EXT:theme_t3kit/Resources/Private/Templates/ContentElements
+        #1911 =  EXT:pxa_feediting/Resources/Private/Templates/FluidStyledContent
+    }
+    partialRootPaths {
+        #1910 =  EXT:theme_t3kit/Resources/Private/Partials/ContentElements
+        200 = EXT:pxa_feediting/Resources/Private/Partials/FluidStyledContent/
+    }
+    layoutRootPaths {
+        #1910 =  EXT:theme_t3kit/Resources/Private/Layouts/ContentElements
+        #1911 =  EXT:theme_t3kit/Resources/Private/Layouts/FluidStyledContent
+    }
+}
+
+#tt_content.header.stdWrap.outerWrap = <div class="testyiii">|</div>
+
+# Remove header link
+#lib.stdheader.10.setCurrent.typolink >
+
+# Header
+#lib.stdheader.10.1.stdWrapProcess = \TYPO3\CMS\FrontendEditing\Hooks\EditIcons->render
+#lib.stdheader.10.1.frontendEditingProcess = 1
+#lib.stdheader.10.1.frontendEditingProcess {
+#    tag = div
+#    field = header
+#    allow = edit
+#    class = heading nostyles
+#}
+
+#lib.stdheader.10.2.stdWrapProcess < lib.stdheader.10.1.stdWrapProcess
+#lib.stdheader.10.3.stdWrapProcess < lib.stdheader.10.1.stdWrapProcess
+#lib.stdheader.10.4.stdWrapProcess < lib.stdheader.10.1.stdWrapProcess
+#lib.stdheader.10.5.stdWrapProcess < lib.stdheader.10.1.stdWrapProcess
+#lib.stdheader.10.2.frontendEditingProcess < lib.stdheader.10.1.frontendEditingProcess
+#lib.stdheader.10.3.frontendEditingProcess < lib.stdheader.10.1.frontendEditingProcess
+#lib.stdheader.10.4.frontendEditingProcess < lib.stdheader.10.1.frontendEditingProcess
+#lib.stdheader.10.5.frontendEditingProcess < lib.stdheader.10.1.frontendEditingProcess
+
+#lib.stdheader.default.stdWrap.editIcons.beforeLastTag = -1
+
+#lib.stdheader.default.10.2.frontendEditing < lib.stdheader.default.10.1.frontendEditing
+
+#tt_content.text.20.editIcons.beforeLastTag = 0
+#tt_content.text.20.frontendEditingProcess = 1
+#tt_content.text.20.frontendEditingProcess {
+#    class = alohaeditable-block
+#    field = bodytext
+#    allow = all
+#}
+
+# Content element "bullets"
+#tt_content.bullets.20.editIcons >
+#tt_content.bullets.20.frontendEditingPostProcess = 1
+#tt_content.bullets.20.frontendEditingPostProcess {
+#    class = alohaeditable-block
+#    field = bodytext
+#    allow = all
+#}
+
+# Content element "table"
+#tt_content.table.20.stdWrap.editIcons >
+#tt_content.table.20.stdWrap.frontendEditingPostProcess = 1
+#tt_content.table.20.stdWrap.frontendEditingPostProcess {
+#    class = alohaeditable-block
+#    field = bodytext
+#    allow = all
+#}
+
+#lib.fluidContent {
+    #templateRootPaths {
+    #    10 = EXT:pxa_feediting/Resources/Private/Templates/
+    #}
+    #partialRootPaths {
+    #    200 = EXT:pxa_feediting/Resources/Private/Partials/Header/Header.html
+    #}
+    #layoutRootPaths {
+    #    200 = EXT:your_extension_key/Resources/Private/Layouts/
+    #}
+#}
