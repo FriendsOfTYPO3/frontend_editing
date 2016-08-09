@@ -1,7 +1,7 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Ckeditor;
 
-use Pixelant\Aloha\Utility\Helper;
+use TYPO3\CMS\FrontendEditing\Utility\Helper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -337,7 +337,7 @@ class SaveController
         // request is only allowed for POST request and a BE_USER is available
         if (empty($request)) {
             throw new \BadFunctionCallException(Helper::ll('error.request.no-post'));
-        } elseif (!\Pixelant\Aloha\Utility\Access::isEnabled()) {
+        } elseif (!\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()) {
             throw new \BadFunctionCallException(Helper::ll('error.request.not-allowed'));
         }
 
