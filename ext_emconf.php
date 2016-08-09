@@ -1,5 +1,5 @@
 <?php
-$EM_CONF[$_EXTKEY] = array (
+$EM_CONF[$_EXTKEY] = array(
   'title' => 'Pixelant Frontend Editing',
   'description' => '',
   'category' => '',
@@ -8,17 +8,17 @@ $EM_CONF[$_EXTKEY] = array (
   'clearcacheonload' => true,
   'author' => 'Pixelant',
   'author_email' => '',
-  'constraints' => 
-  array (
-    'depends' => 
-    array (
+  'constraints' =>
+  array(
+    'depends' =>
+    array(
       'typo3' => '7.6.0-8.9.99',
     ),
-    'conflicts' => 
-    array (
+    'conflicts' =>
+    array(
     ),
-    'suggests' => 
-    array (
+    'suggests' =>
+    array(
     ),
   ),
 );

@@ -28,7 +28,7 @@ class SaveController
      *
      * @var boolean
      */
-    protected $forceReload = FALSE;
+    protected $forceReload = false;
 
     protected $table;
     protected $uid;
@@ -122,7 +122,6 @@ class SaveController
             if ($this->forceReload) {
                 $response .= '<script type="text/javascript">window.location.reload();</script>';
             }
-
         } catch (\Exception $e) {
             $response = $e->getMessage();
             header('HTTP/1.1 404 Not Found');
@@ -138,9 +137,8 @@ class SaveController
         if (!is_array($elements) || count($elements) == 0) {
             $response = Helper::ll('response.action.nothing-to-save');
         } else {
-
             foreach ($elements as $element) {
-                $this->directSave(unserialize($element), TRUE);
+                $this->directSave(unserialize($element), true);
             }
 
             $GLOBALS['BE_USER']->uc['aloha'][$GLOBALS['TSFE']->id] = array();
@@ -158,7 +156,6 @@ class SaveController
 
     private function updateSaveState()
     {
-
         $countOfElements = \Pixelant\Aloha\Utility\Integration::getCountOfUnsavedElements($GLOBALS['TSFE']->id);
         $response = '<script>
 						window.alohaQuery("#count").text("' . $countOfElements . '").' . ($countOfElements > 0 ? 'add' : 'remove') . 'Class("tobesaved");
@@ -171,7 +168,6 @@ class SaveController
 
     private function intermediateSave(array $request)
     {
-
         $GLOBALS['BE_USER']->uc['aloha'][$GLOBALS['TSFE']->id][$request['identifier']] = serialize($request);
         $GLOBALS['BE_USER']->writeUC();
 
@@ -193,11 +189,10 @@ class SaveController
         if (!is_array($elements) || count($elements) == 0) {
             $response = Helper::ll('response.action.discard-savings-nothing-to-save');
         } else {
-
             $GLOBALS['BE_USER']->uc['aloha'][$GLOBALS['TSFE']->id] = array();
             $GLOBALS['BE_USER']->writeUC();
 
-            $this->forceReload = TRUE;
+            $this->forceReload = true;
 
             $response = Helper::ll('response.action.discard-savings') . '<script>
 							window.alohaQuery("#count").text("0").removeClass("tobesaved");
@@ -217,7 +212,7 @@ class SaveController
      */
     private function changeVisibility($visibility)
     {
-        $this->forceReload = TRUE;
+        $this->forceReload = true;
 
         if ($visibility == 0) {
             $this->frontendEditingController->doUnhide($this->table, $this->uid);
@@ -235,7 +230,7 @@ class SaveController
      */
     private function delete()
     {
-        $this->forceReload = TRUE;
+        $this->forceReload = true;
         $this->frontendEditingController->doDelete($this->table, $this->uid);
 
         return Helper::ll('response.action.delete');
@@ -250,7 +245,7 @@ class SaveController
      */
     private function move($direction)
     {
-        $this->forceReload = TRUE;
+        $this->forceReload = true;
 
         if ($direction === 'down') {
             $this->frontendEditingController->doDown($this->table, $this->uid);
@@ -269,7 +264,7 @@ class SaveController
      * @param array $request POST request
      * @return string
      */
-    public function directSave(array $request, $initAgain = FALSE)
+    public function directSave(array $request, $initAgain = false)
     {
         // PIXELANT HACK - this function needs to be public
         // @todo do that nice again
@@ -279,7 +274,7 @@ class SaveController
         }
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'])) {
-            $finished = FALSE;
+            $finished = false;
             foreach ($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'] as $classData) {
                 if (!$finished) {
                     $hookObject = GeneralUtility::getUserObj($classData);
@@ -299,7 +294,7 @@ class SaveController
         so we have to decode them from Aloha otherwise we would encode twice.
         CHANGED from html_entity_decode to urldecode, after problem with encoding on some servers which broke content and flexform.
         */
-        $htmlEntityDecode = TRUE;
+        $htmlEntityDecode = true;
 
         $request['content'] = \Pixelant\Aloha\Utility\Integration::rteModification($this->table, $this->field, $this->uid, $GLOBALS['TSFE']->id, $request['content']);
 

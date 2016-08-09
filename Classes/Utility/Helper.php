@@ -7,7 +7,8 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
  * @package TYPO3
  * @subpackage tx_aloha
  */
-class Helper {
+class Helper
+{
 
     /**
      * Get a unique string by given arguments
@@ -17,7 +18,8 @@ class Helper {
      * @param string $id uid of element
      * @return string
      */
-    public static function getUniqueId($table, $field, $id) {
+    public static function getUniqueId($table, $field, $id)
+    {
         $out = implode('--', array($table, $field, $id));
 
         return $out;
@@ -29,12 +31,11 @@ class Helper {
      * @param string $key
      * @return string
      */
-    public static function ll($key, $file = 'locallang.xml') {
+    public static function ll($key, $file = 'locallang.xml')
+    {
         $text = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, "Aloha");
         $text = (!empty($text)) ? $text : '??? ' . $key . ' ???';
 
         return $text;
     }
 }
-
-?>

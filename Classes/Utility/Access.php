@@ -8,44 +8,47 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
  * @package TYPO3
  * @subpackage tx_aloha
  */
-class Access {
+class Access
+{
 
     /**
      * Checks if aloha editor is enabled, checking UserTsConfig and TS
      *
      * @return boolean
      */
-    public static function isEnabled() {
+    public static function isEnabled()
+    {
         // aloha needs to be enabled also by admins
         // this is the only way how to temporarly turn on/off the editor
         if (isset($GLOBALS['BE_USER']) && $GLOBALS['TSFE']->config['config']['aloha'] == 1) {
             return ($GLOBALS['BE_USER']->uc['tx_aloha_enable'] == 1);
         }
 
-        return FALSE;
+        return false;
     }
 
 
-    public static function checkAccess($table, array $dataArray, $config) {
+    public static function checkAccess($table, array $dataArray, $config)
+    {
         if (empty($table) || empty($dataArray) || empty($config)) {
-            return FALSE;
+            return false;
         }
 
         if (!isset($GLOBALS['BE_USER'])) {
-            return FALSE;
+            return false;
         }
 
         if ($GLOBALS['BE_USER']->isAdmin()) {
-            return TRUE;
+            return true;
         }
 
         // not needed: $GLOBALS['TSFE']->displayFieldEditIcons
         if (self::allowedToEdit($table, $dataArray, $config)
             && self::allowedToEditLanguage($table, $dataArray)
         ) {
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 
     /**
@@ -58,15 +61,16 @@ class Access {
      *                     to TRUE but doesn't makes sense when creating new records on a page.
      * @return    boolean
      */
-    protected function allowedToEdit($table, array $dataArray, array $conf, $checkEditAccessInternals = TRUE) {
+    protected function allowedToEdit($table, array $dataArray, array $conf, $checkEditAccessInternals = true)
+    {
         // Unless permissions specifically allow it, editing is not allowed.
-        $mayEdit = FALSE;
+        $mayEdit = false;
 
         // Basic check if use is allowed to edit a record of this kind (based on TCA configuration)
         if ($checkEditAccessInternals) {
-            $editAccessInternals = $GLOBALS['BE_USER']->recordEditAccessInternals($table, $dataArray, FALSE, FALSE);
+            $editAccessInternals = $GLOBALS['BE_USER']->recordEditAccessInternals($table, $dataArray, false, false);
         } else {
-            $editAccessInternals = TRUE;
+            $editAccessInternals = true;
         }
 
 
@@ -74,16 +78,16 @@ class Access {
             if ($table === 'pages') {
                 // 2 = permission to edit the page
                 if ($GLOBALS['BE_USER']->isAdmin() || $GLOBALS['BE_USER']->doesUserHaveAccess($dataArray, 2)) {
-                    $mayEdit = TRUE;
+                    $mayEdit = true;
                 }
             } elseif ($table === 'tt_content') {
                 // 16 = permission to edit content on the page
                 if ($GLOBALS['BE_USER']->isAdmin() || $GLOBALS['BE_USER']->doesUserHaveAccess(\TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $dataArray['pid']), 16)) {
-                    $mayEdit = TRUE;
+                    $mayEdit = true;
                 }
             } else {
                 // neither page nor content
-                $mayEdit = TRUE;
+                $mayEdit = true;
             }
 
             if (!$conf['onlyCurrentPid'] || ($dataArray['pid'] == $GLOBALS['TSFE']->id)) {
@@ -99,22 +103,20 @@ class Access {
 
                     // Can only display editbox if there are options in the menu
                     if (count($allow)) {
-                        $mayEdit = TRUE;
+                        $mayEdit = true;
                     }
                 } else {
-
                     if ($table === 'tt_content') {
                         // user may edit the content if he has an allowed edit action and if the permission for the content is odd and not 1
                         // explanation of permissions: show=1,edit=2,delete=4,new=8,editcontent=16
                         // assuming that show must be set to have content editable, each permission is odd, but show itself isn't sufficient
-                        $mayEdit = count($allow) && ($perms & 1 && $perms !== 1) ? TRUE : FALSE;
+                        $mayEdit = count($allow) && ($perms & 1 && $perms !== 1) ? true : false;
                     } else {
                         // user may edit the content if he has an allowed edit action and if the permission for the content is odd and not 1
                         // explanation of permissions: show=1,edit=2,delete=4,new=8,editcontent=16
                         // assuming that show must be set to have content editable, each permission is odd, but show itself isn't sufficient
                         $mayEdit = ($perms & 1 && $perms !== 1);
                     }
-
                 }
             }
         }
@@ -130,9 +132,10 @@ class Access {
      * @param    array        The record.
      * @return    boolean
      */
-    protected function allowedToEditLanguage($table, array $currentRecord) {
+    protected function allowedToEditLanguage($table, array $currentRecord)
+    {
         $languageUid = -1;
-        $languageAccess = FALSE;
+        $languageAccess = false;
 
         // If no access right to record languages, return immediately
         if ($table === 'pages') {
@@ -144,11 +147,9 @@ class Access {
         }
 
         if ($GLOBALS['BE_USER']->checkLanguageAccess($languageUid)) {
-            $languageAccess = TRUE;
+            $languageAccess = true;
         }
 
         return $languageAccess;
     }
 }
-
-?>

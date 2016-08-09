@@ -1,6 +1,7 @@
 <?php
 
 namespace TYPO3\CMS\FrontendEditing\Ckeditor;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -9,15 +10,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_aloha
  */
-class IntegrationController {
+class IntegrationController
+{
 
-    protected $table = NULL;
-    protected $field = NULL;
-    protected $uid = NULL;
+    protected $table = null;
+    protected $field = null;
+    protected $uid = null;
     protected $dataArray = array();
     protected $alohaConfig = array();
 
-    public function start($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject) {
+    public function start($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject)
+    {
         try {
             $alohaConfig = $configuration;
             $this->init($parentObject, $alohaConfig);
@@ -27,20 +30,20 @@ class IntegrationController {
                 if (empty($content)) {
                     $alohaConfig['class'] .= 'aloha-empty-content';
                 }
-                if ($this->dataArray['hidden'] == 1) {
-                    $alohaConfig['class'] .= ' aloha-preview-content';
-                }
+            if ($this->dataArray['hidden'] == 1) {
+                $alohaConfig['class'] .= ' aloha-preview-content';
+            }
 
-                $classList = array('alohaeditable');
-                $this->getAllowedActions($alohaConfig, $classList);
+            $classList = array('alohaeditable');
+            $this->getAllowedActions($alohaConfig, $classList);
 
-                $attributes = array(
+            $attributes = array(
                     'id' =>  11, //Tx_Aloha_Utility_Helper::getUniqueId($this->table, $this->field, $this->uid),
                     'class' => implode(' ', $classList),
                     'style' => $alohaConfig['style']
                 );
 
-                $content = \TYPO3\CMS\FrontendEditing\Utility\CkeditorUtilityIntegration::renderAlohaWrap($content, $attributes, $alohaConfig['tag']);
+            $content = \TYPO3\CMS\FrontendEditing\Utility\CkeditorUtilityIntegration::renderAlohaWrap($content, $attributes, $alohaConfig['tag']);
             //}
         } catch (Exception $e) {
             $errorMsg = sprintf('Error with AlohaEditor: %s', $e->getMessage());
@@ -57,7 +60,8 @@ class IntegrationController {
      * @param array $classList
      * @return void
      */
-    private function getAllowedActions(array $alohaConfig, array &$classList) {
+    private function getAllowedActions(array $alohaConfig, array &$classList)
+    {
         $allowedActions = array_flip(GeneralUtility::trimExplode(',', $alohaConfig['allow']));
 
         // Hiding in workspaces because implementation is incomplete
@@ -115,7 +119,8 @@ class IntegrationController {
      * @param array $alohaConfig
      * @return void
      */
-    private function init(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $parentObject, array $alohaConfig) {
+    private function init(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $parentObject, array $alohaConfig)
+    {
         list($table, $id) = GeneralUtility::trimExplode(':', $parentObject->currentRecord);
         $currentRecord = $parentObject->data;
 
@@ -145,13 +150,11 @@ class IntegrationController {
      * @param string $access access type
      * @return boolean
      */
-    private function checkAccess(array $allowedActions, $access) {
+    private function checkAccess(array $allowedActions, $access)
+    {
         if (isset($allowedActions['all']) || isset($allowedActions[$access])) {
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
-
 }
-
-?>
