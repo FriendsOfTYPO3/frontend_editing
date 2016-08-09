@@ -1,6 +1,6 @@
 <h1>Pixelant</h1>
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/pixelant/pxa_feediting/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pixelant/pxa_feediting/?branch=master)
+[![CircleCI](https://circleci.com/gh/pixelant/pxa_feediting.svg?style=svg)](https://circleci.com/gh/pixelant/pxa_feediting)
 
 <h2>Pixelant frontend editing (pxa_feediting)</h2>
 This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
