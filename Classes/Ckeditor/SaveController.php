@@ -69,6 +69,8 @@ class SaveController
         $request = GeneralUtility::_POST();
         $response = '';
 
+        var_dump($request);die;
+
         // aborting save
         if ($this->saveMethod === 'none') {
             return Helper::ll('response.action.save-method-none');
@@ -266,9 +268,6 @@ class SaveController
      */
     public function directSave(array $request, $initAgain = false)
     {
-        // PIXELANT HACK - this function needs to be public
-        // @todo do that nice again
-
         if ($initAgain) {
             $this->init($request);
         }
