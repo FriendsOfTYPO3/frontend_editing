@@ -1,8 +1,8 @@
 <?php
-namespace Pixelant\PxaFeediting\Tests\Unit\Controller;
+namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
 /**
- * Test case for class Pixelant\PxaFeediting\Controller\JustController.
+ * Test case for class TYPO3\CMS\FrontendEditing\Controller\JustController.
  */
 class JustControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {

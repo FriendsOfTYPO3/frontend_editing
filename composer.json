@@ -36,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Pixelant\\PxaFeediting\\": "Classes/"
+            "TYPO3\\CMS\\FrontendEditing\\": "Classes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Pixelant\\PxaFeediting\\Tests\\": "Tests/",
+            "TYPO3\\CMS\\FrontendEditing\\Tests\\": "Tests/",
             "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
             "TYPO3\\CMS\\Fluid\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
         }

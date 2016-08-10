@@ -14,12 +14,7 @@
   },
   "devDependencies": {
     "async": "^0.9.0",
-    "frisby": "^0.8.5",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-phpcs": "^0.4.0",
-    "grunt-phpunit": "^0.3.6"
+    "frisby": "^0.8.5"
   },
   "repository": {
     "type": "git",
