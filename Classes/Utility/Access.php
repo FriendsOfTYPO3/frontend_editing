@@ -82,18 +82,24 @@ class Access
                 }
             } elseif ($table === 'tt_content') {
                 // 16 = permission to edit content on the page
-                if ($GLOBALS['BE_USER']->isAdmin() || $GLOBALS['BE_USER']->doesUserHaveAccess(\TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $dataArray['pid']), 16)) {
+                if ($GLOBALS['BE_USER']->isAdmin() || $GLOBALS['BE_USER']->doesUserHaveAccess(
+                    \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('pages', $dataArray['pid']),
+                    16
+                )) {
                     $mayEdit = true;
                 }
             } else {
-                // neither page nor content
                 $mayEdit = true;
+                // neither page nor content
             }
 
+            // Permissions
             if (!$conf['onlyCurrentPid'] || ($dataArray['pid'] == $GLOBALS['TSFE']->id)) {
-
-                // Permissions:
-                $types = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', \TYPO3\CMS\Core\Utility\GeneralUtility::strtolower($conf['allow']), 1);
+                $types = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
+                    ',',
+                    \TYPO3\CMS\Core\Utility\GeneralUtility::strtolower($conf['allow']),
+                    1
+                );
                 $allow = array_flip($types);
 
                 $perms = $GLOBALS['BE_USER']->calcPerms($GLOBALS['TSFE']->page);
@@ -107,14 +113,18 @@ class Access
                     }
                 } else {
                     if ($table === 'tt_content') {
-                        // user may edit the content if he has an allowed edit action and if the permission for the content is odd and not 1
-                        // explanation of permissions: show=1,edit=2,delete=4,new=8,editcontent=16
-                        // assuming that show must be set to have content editable, each permission is odd, but show itself isn't sufficient
+                        // user may edit the content if he has an allowed edit action and if the permission
+                        // for the content is odd and not 1 explanation of permissions:
+                        // show=1,edit=2,delete=4,new=8,editcontent=16
+                        // assuming that show must be set to have content editable,
+                        // each permission is odd, but show itself isn't sufficient
                         $mayEdit = count($allow) && ($perms & 1 && $perms !== 1) ? true : false;
                     } else {
-                        // user may edit the content if he has an allowed edit action and if the permission for the content is odd and not 1
+                        // user may edit the content if he has an allowed edit action and
+                        // if the permission for the content is odd and not 1
                         // explanation of permissions: show=1,edit=2,delete=4,new=8,editcontent=16
-                        // assuming that show must be set to have content editable, each permission is odd, but show itself isn't sufficient
+                        // assuming that show must be set to have content editable,
+                        // each permission is odd, but show itself isn't sufficient
                         $mayEdit = ($perms & 1 && $perms !== 1);
                     }
                 }

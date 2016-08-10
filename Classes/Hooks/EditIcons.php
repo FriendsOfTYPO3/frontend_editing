@@ -2,13 +2,16 @@
 
 namespace TYPO3\CMS\FrontendEditing\Hooks;
 
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWrapHookInterface;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+
 /**
  * Hook to enable additional stdWrap function "aloha"
  *
  * @package TYPO3
  * @subpackage tx_aloha
  */
-class EditIcons implements \TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWrapHookInterface
+class EditIcons implements ContentObjectStdWrapHookInterface
 {
 
     /**
@@ -16,10 +19,10 @@ class EditIcons implements \TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWra
      *
      * @param string $content
      * @param array $configuration
-     * @param tslib_cObj $parentObject
+     * @param ContentObjectRenderer $parentObject
      * @return string
      */
-    public function stdWrapProcess($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject)
+    public function stdWrapProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         //var_dump($content);
         //var_dump($configuration);die;
@@ -36,10 +39,10 @@ class EditIcons implements \TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWra
      *
      * @param string $content
      * @param array $configuration
-     * @param tslib_cObj $parentObject
+     * @param ContentObjectRenderer $parentObject
      * @return string
      */
-    public function stdWrapPreProcess($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject)
+    public function stdWrapPreProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         return $content;
     }
@@ -49,10 +52,10 @@ class EditIcons implements \TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWra
      *
      * @param string $content
      * @param array $configuration
-     * @param tslib_cObj $parentObject
+     * @param ContentObjectRenderer $parentObject
      * @return string
      */
-    public function stdWrapOverride($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject)
+    public function stdWrapOverride($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         return $content;
     }
@@ -62,14 +65,15 @@ class EditIcons implements \TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWra
      *
      * @param string $content
      * @param array $configuration
-     * @param tslib_cObj $parentObject
+     * @param ContentObjectRenderer $parentObject
      * @return string
      */
-    public function stdWrapPostProcess($content, array $configuration, \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer &$parentObject)
+    public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         if ($configuration['frontendEditingPostProcess'] == 1) { //&& Tx_Aloha_Utility_Access::isEnabled()) {
-            //$alohaIntegration = t3lib_div::makeInstance('Tx_Aloha_Aloha_Integration');
-            //$content = $alohaIntegration->start($content, $configuration['frontendEditingPostProcess.'], $parentObject);
+            // $alohaIntegration = t3lib_div::makeInstance('Tx_Aloha_Aloha_Integration');
+            // $content =
+            // $alohaIntegration->start($content, $configuration['frontendEditingPostProcess.'], $parentObject);
         }
         return $content;
     }

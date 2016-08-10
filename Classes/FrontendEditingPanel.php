@@ -26,6 +26,8 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\View\AdminPanelView;
 
+// @codingStandardsIgnoreStart
+
 /**
  * View class for the edit panels in frontend editing.
  */
@@ -342,3 +344,5 @@ class FrontendEditingPanel
         return $status;
     }
 }
+
+// @codingStandardsIgnoreEnd

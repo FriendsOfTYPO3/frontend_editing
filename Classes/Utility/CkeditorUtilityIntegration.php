@@ -101,7 +101,17 @@ class CkeditorUtilityIntegration
 
             $RTEobj = t3lib_BEfunc::RTEgetObj();
             if (is_object($RTEobj)) {
-                $fieldContent = $RTEobj->transformContent('db', $fieldContent, $table, $vconf['field'], $currentRecord, $vconf['spec'], $thisConfig, $RTErelPath, $currentRecord['pid']);
+                $fieldContent = $RTEobj->transformContent(
+                    'db',
+                    $fieldContent,
+                    $table,
+                    $vconf['field'],
+                    $currentRecord,
+                    $vconf['spec'],
+                    $thisConfig,
+                    $RTErelPath,
+                    $currentRecord['pid']
+                );
             } else {
                 // @todo
                 debug('NO RTE OBJECT FOUND!');
@@ -115,10 +125,10 @@ class CkeditorUtilityIntegration
      * Returns the row of a record given by $table and $id and $fieldList (list of fields, may be '*')
      * NOTICE: No check for deleted or access!
      *
-     * @param	string		Table name
-     * @param	integer		UID of the record from $table
-     * @param	string		Field list for the SELECT query, eg. "*" or "uid,pid,..."
-     * @return	mixed		Returns the selected record on success, otherwise FALSE.
+     * @param string Table name
+     * @param integer UID of the record from $table
+     * @param string Field list for the SELECT query, eg. "*" or "uid,pid,..."
+     * @return mixed Returns the selected record on success, otherwise FALSE.
      */
     private function recordInfo($table, $id, $fieldList = '*')
     {
