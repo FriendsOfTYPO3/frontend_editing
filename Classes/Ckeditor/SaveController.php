@@ -4,6 +4,8 @@ namespace TYPO3\CMS\FrontendEditing\Ckeditor;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+// @codingStandardsIgnoreStart
+
 /**
  * Save the changes by using TCEmain
  *
@@ -45,7 +47,7 @@ class SaveController
         $this->tce = GeneralUtility::makeInstance('TYPO3\CMS\Core\DataHandling\DataHandler');
         $this->tce->stripslashes_values = 0;
 
-        $this->frontendEditingController = GeneralUtility::makeInstance('TYPO3\CMS\Core\FrontendEditing\FrontendEditingController');
+        $this->frontendEditingController = new \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController();
 
         $configurationArray = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['aloha']);
         $this->saveMethod = $configurationArray['saveMethod'];
@@ -68,8 +70,6 @@ class SaveController
     {
         $request = GeneralUtility::_POST();
         $response = '';
-
-        var_dump($request);die;
 
         // aborting save
         if ($this->saveMethod === 'none') {
@@ -404,3 +404,5 @@ class SaveController
         return $this->record;
     }
 }
+
+// @codingStandardsIgnoreEnd

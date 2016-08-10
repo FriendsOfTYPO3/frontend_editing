@@ -4,6 +4,8 @@ namespace TYPO3\CMS\FrontendEditing\Ckeditor;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+// @codingStandardsIgnoreStart
+
 /**
  * Integration class of aloha into TYPO3
  *
@@ -158,3 +160,5 @@ class IntegrationController
         return false;
     }
 }
+
+// @codingStandardsIgnoreEnd
