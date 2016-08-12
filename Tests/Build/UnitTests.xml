@@ -14,7 +14,7 @@
          verbose="false"
          cacheTokens="true">
     <testsuites>
-        <testsuite name="EXT:pxa_feediting tests">
+        <testsuite name="EXT:frontend_editing tests">
             <directory>../Unit/</directory>
         </testsuite>
     </testsuites>

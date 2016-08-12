@@ -1,5 +1,5 @@
 {
-    "name": "pixelant/pxa-feediting", 
+    "name": "pixelant/frontend-editingg",
     "type": "typo3-cms-extension",
     "description": "Enable editors to work with the content in the most intuitive way possible",
     "license": ["GPL-2.0+"],
@@ -32,7 +32,7 @@
         "mikey179/vfsStream": "~1.6.0"
     },
     "replace": {
-        "pxa_feediting": "self.version"
+        "frontend_editing": "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -53,7 +53,7 @@
     "scripts": {
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
-            "[ -L .Build/Web/typo3conf/ext/pxa_feediting ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/pxa_feediting"
+            "[ -L .Build/Web/typo3conf/ext/frontend_editing ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/frontend_editing"
         ]
     },
     "extra": {

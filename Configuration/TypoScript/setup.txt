@@ -5,9 +5,9 @@ page.javascriptLibs {
     jQuery.source = local
 }
 
-page.includeJSFooterlibs.ckeditor = EXT:pxa_feediting/Resources/Public/Javascript/ckeditor/ckeditor.js
-page.includeJSFooterlibs.ckeditor_jquery = EXT:pxa_feediting/Resources/Public/Javascript/ckeditor/adapters/jquery.js
-page.includeJSFooter.ckeditor_configuration = EXT:pxa_feediting/Resources/Public/configuration.js
+page.includeJSFooterlibs.ckeditor = EXT:frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js
+page.includeJSFooterlibs.ckeditor_jquery = EXT:frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js
+page.includeJSFooter.ckeditor_configuration = EXT:frontend_editing/Resources/Public/configuration.js
 
 # Additional page plugin for save requests as those need a BE-USER
 frontendEditing = PAGE
@@ -16,17 +16,22 @@ frontendEditing {
 
     config {
         disableAllHeaderCode = 1
+        debug = 0
         xhtml_cleaning = none
         admPanel = 0
         metaCharset = utf-8
         no_cache = 1
     }
 
-    includeLibs.aloha = EXT:pxa_feediting/Classes/Ckeditor/SaveController.php
-    10 = USER
-    10 {
-        userFunc = TYPO3\CMS\FrontendEditing\Ckeditor\SaveController->start
-    }
+
+
+    #includeLibs.aloha = EXT:pxa_feediting/Classes/Ckeditor/SaveController.php
+    #10 = USER
+    #10 {
+    #    userFunc = TYPO3\CMS\FrontendEditing\Ckeditor\SaveController->start
+    #}
+
+    10 < tt_content.list.20.frontendediting_frontend_editing
 }
 [global]
 
@@ -38,7 +43,7 @@ lib.fluidContent {
     }
     partialRootPaths {
         #1910 =  EXT:theme_t3kit/Resources/Private/Partials/ContentElements
-        200 = EXT:pxa_feediting/Resources/Private/Partials/FluidStyledContent/
+       # 200 = EXT:pxa_feediting/Resources/Private/Partials/FluidStyledContent/
     }
     layoutRootPaths {
         #1910 =  EXT:theme_t3kit/Resources/Private/Layouts/ContentElements

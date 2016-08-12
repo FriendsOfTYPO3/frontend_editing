@@ -1,5 +1,5 @@
 {
-  "name": "pxa_feediting",
+  "name": "frontend_editing",
   "version": "0.1.0",
   "description": "",
   "main": "gruntfile.js",
@@ -18,9 +18,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pixelant/pxa_feediting.git"
+    "url": "https://github.com/pixelant/frontend_editing.git"
   },
   "author": "Pixelant",
   "license": "ISC",
-  "homepage": "https://github.com/pixelant/pxa_feediting"
+  "homepage": "https://github.com/pixelant/frontend_editing"
 }
