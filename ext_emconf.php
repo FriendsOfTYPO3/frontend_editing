@@ -1,6 +1,6 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
-  'title' => 'Pixelant Frontend Editing',
+  'title' => 'TYPO3 Frontend Editing',
   'description' => '',
   'category' => '',
   'version' => '0.0.1',

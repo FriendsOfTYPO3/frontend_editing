@@ -6,3 +6,14 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['stdW
 
 // Register the edit panel view
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] = \TYPO3\CMS\FrontendEditing\FrontendEditingPanel::class;
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    'TYPO3\CMS.' . $_EXTKEY,
+    'frontend_editing',
+    [
+        'Save' => 'save'
+    ],
+    [
+        'Save' => 'save'
+    ]
+);
