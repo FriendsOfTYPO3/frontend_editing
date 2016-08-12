@@ -26,7 +26,8 @@
 			var data = {
 				'action': 'save',
 				'table': 'tt_content',
-				'identifier': '1',
+				'identifier': '9',
+				'field': 'bodytext',
 				'content': editor.getData()
 			};
 
@@ -43,6 +44,7 @@
 			$.ajax({
 				type: 'POST',
 				url: url,
+				dataType: 'JSONP',
 				data: data,
 				success: function(event) {
 					console.log(event);
