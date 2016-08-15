@@ -78,13 +78,16 @@ class SaveController extends ActionController
                 $this->throwStatus(400, null, 'Bad Request.');
         }
 
+        $this->createRequestMapping();
+
         return $actionName . 'Action';
     }
 
     /**
      * @throws \Exception
      */
-    protected function createRequestMapping() {
+    protected function createRequestMapping()
+    {
 
         $body = GeneralUtility::_POST();
 
@@ -120,16 +123,17 @@ class SaveController extends ActionController
     public function saveAction()
     {
         try {
-            $this->createRequestMapping();
-
             /*if (is_array($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'])) {
                 $finished = false;
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'] as $classData) {
+                foreach (
+                    $GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'] as $classData
+                ) {
                     if (!$finished) {
                         $hookObject = GeneralUtility::getUserObj($classData);
                         if (!($hookObject instanceof \Pixelant\Aloha\Hook\RequestPreProcessInterface)) {
                             throw new \UnexpectedValueException(
-                                $classData . ' must implement interface \Pixelant\Aloha\Hook\RequestPreProcessInterface',
+                                $classData .
+                                    ' must implement interface \Pixelant\Aloha\Hook\RequestPreProcessInterface',
                                 1274563549
                             );
                         }
@@ -138,39 +142,36 @@ class SaveController extends ActionController
                 }
             }*/
 
-            //Aloha automatically encodes entities, but typo3 automatically encodes them too,
-            //so we have to decode them from Aloha otherwise we would encode twice.
-            //CHANGED from html_entity_decode to urldecode, after problem with encoding on some servers which broke content and flexform.
-
             $htmlEntityDecode = false; // true
 
-            $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification($this->table, $this->field, $this->uid, $GLOBALS['TSFE']->id, $this->content);
+            $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
+                $this->table,
+                $this->field,
+                $this->uid,
+                $GLOBALS['TSFE']->id,
+                $this->content
+            );
 
             if ($htmlEntityDecode) {
                 $this->content = urldecode($this->content);
-                // Try to remove invalid utf-8 characters so content won't break if there are invalid characters in content
+                // Try to remove invalid utf-8 characters so content
+                // won't break if there are invalid characters in content
                 $this->content = iconv('UTF-8', 'UTF-8//IGNORE', $this->content);
             }
 
-            //if (!empty($request)) {
-                $data = array(
-                    $this->table => array(
-                        $this->uid => array(
-                            $this->field => $this->content
-                        )
-                    )
-                );
-            //}
+            $data = [
+                $this->table => [
+                    $this->uid => [
+                        $this->field => $this->content
+                    ]
+                ]
+            ];
 
             $this->dataHandler->start($data, array());
             $this->dataHandler->process_datamap();
-
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
-
-        //var_dump('asdasd');die;
-        //$this->view->assign('tags', $this->tagRepository->findAll());
     }
 
     /**
@@ -178,6 +179,5 @@ class SaveController extends ActionController
      */
     public function updateAction()
     {
-
     }
 }

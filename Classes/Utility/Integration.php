@@ -10,7 +10,8 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
  * @package TYPO3
  * @subpackage tx_aloha
  */
-class Integration {
+class Integration
+{
 
     /**
      * Get count of changed elements per page
@@ -18,7 +19,8 @@ class Integration {
      * @param integer $pageId page uid
      * @return integer
      */
-    public static function getCountOfUnsavedElements($pageId) {
+    public static function getCountOfUnsavedElements($pageId)
+    {
         $elements = $GLOBALS['BE_USER']->uc['aloha'][$pageId];
         if (is_array($elements)) {
             return count($elements);
@@ -32,7 +34,8 @@ class Integration {
      * @param integer $id page uid
      * @return void
      */
-    public static function removeStagedElements($id) {
+    public static function removeStagedElements($id)
+    {
         /*if (\Pixelant\Aloha\Utility\Access::isEnabled()) {
             $GLOBALS['BE_USER']->uc['aloha'][$id] = array();
             $GLOBALS['BE_USER']->writeUC();
@@ -48,7 +51,8 @@ class Integration {
      * @param string $tag
      * @return string
      */
-    public static function renderAlohaWrap($content, array $attributes, $tag = '') {
+    public static function renderAlohaWrap($content, array $attributes, $tag = '')
+    {
         $tag = (empty($tag)) ? 'div' : $tag;
 
         $attributesAsString = '';
@@ -71,7 +75,8 @@ class Integration {
      * @param string $fieldContent content
      * @return string
      */
-    public static function rteModification($table, $field, $id, $pageId, $fieldContent) {
+    public static function rteModification($table, $field, $id, $pageId, $fieldContent)
+    {
         $fieldConfig = $GLOBALS['TCA'][$table]['columns'][$field]['config']['wizards'];
         if (isset($fieldConfig['RTE'])) {
             $currentRecord = self::recordInfo($table, $id);
@@ -107,13 +112,13 @@ class Integration {
      * @param    string        Field list for the SELECT query, eg. "*" or "uid,pid,..."
      * @return    mixed        Returns the selected record on success, otherwise FALSE.
      */
-    private static function recordInfo($table, $id, $fieldList = '*') {
+    private static function recordInfo($table, $id, $fieldList = '*')
+    {
         if (is_array($GLOBALS['TCA'][$table])) {
             $record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow($fieldList, $table, 'uid=' . intval($id));
             return $record;
         }
 
-        return FALSE;
+        return false;
     }
-
 }
