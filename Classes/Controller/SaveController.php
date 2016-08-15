@@ -149,7 +149,7 @@ class SaveController extends ActionController
             if ($htmlEntityDecode) {
                 $this->content = urldecode($this->content);
                 // Try to remove invalid utf-8 characters so content won't break if there are invalid characters in content
-                $this->content = iconv("UTF-8", "UTF-8//IGNORE", $this->content);
+                $this->content = iconv('UTF-8', 'UTF-8//IGNORE', $this->content);
             }
 
             //if (!empty($request)) {
@@ -166,7 +166,7 @@ class SaveController extends ActionController
             $this->dataHandler->process_datamap();
 
         } catch (\Exception $exception) {
-            var_dump($exception->getMessage());die;
+            throw new \Exception($exception->getMessage());
         }
 
         //var_dump('asdasd');die;

@@ -91,17 +91,8 @@ class Integration {
             $RTEsetup = $GLOBALS['BE_USER']->getTSConfig('RTE', BackendUtility::getPagesTSconfig($pageId));
             $thisConfig = BackendUtility::RTEsetup($RTEsetup['properties'], $table, $vconf['field'], $theTypeString);
 
-            // @todo check that
-            $RTErelPath = is_array($eFile) ? dirname($eFile['relEditFile']) : '';
-
-            // @TODO: Object do not exist in TYPO3 8.0
-            //$RTEobj = BackendUtility::RTEgetObj();
-            if (is_object($RTEobj)) {
-                //$fieldContent = $RTEobj->transformContent('db', $fieldContent, $table, $vconf['field'], $currentRecord, $vconf['spec'], $thisConfig, $RTErelPath, $currentRecord['pid']);
-            } else {
-                // @todo
-                debug('NO RTE OBJECT FOUND!');
-            }
+            $rteHtmlParser = new \TYPO3\CMS\Core\Html\RteHtmlParser();
+            $fieldContent = $rteHtmlParser->RTE_transform($fieldContent, $vconf['spec'], 'db', $thisConfig);
         }
 
         return $fieldContent;

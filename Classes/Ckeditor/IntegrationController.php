@@ -47,7 +47,7 @@ class IntegrationController
 
             $content = \TYPO3\CMS\FrontendEditing\Utility\CkeditorUtilityIntegration::renderAlohaWrap($content, $attributes, $alohaConfig['tag']);
             //}
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $errorMsg = sprintf('Error with AlohaEditor: %s', $e->getMessage());
             $content .= '<div style="color:red;padding:2px;margin:2px;font-weight:bold;">' . htmlspecialchars($errorMsg) . '</div>';
         }
