@@ -84,31 +84,31 @@ class SaveController extends ActionController
     }
 
     /**
+     * Create the necessary data mapping for further usage for editing
+     *
      * @throws \Exception
      */
     protected function createRequestMapping()
     {
-
         $body = GeneralUtility::_POST();
 
-        // request is only allowed for POST request and a BE_USER is available
-        if (empty($request)) {
-            //throw new \BadFunctionCallException(Helper::ll('error.request.no-post'));
-        } elseif (!\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()) {
-            //throw new \BadFunctionCallException(Helper::ll('error.request.not-allowed'));
+        // Request is only allowed for POST request and a BE_USER is available
+        if (!isset($GLOBALS['BE_USER'])) {
+            throw new \Exception('This action is only allowed logged in to the backend!');
+        } elseif (empty($body)) {
+            throw new \Exception('A body is missing!');
         }
 
-        /*$split = explode('--', $request['identifier']);
-
-        if (count($split) != 3) {
-            throw new \Exception(Helper::ll('error.request.identifier'));
-        } elseif (empty($split[0])) {
-            throw new \Exception(Helper::ll('error.request.table'));
-        } elseif (empty($split[1])) {
-            throw new \Exception(Helper::ll('error.request.field'));
-        } elseif (!ctype_digit($split[2])) {
-            throw new \Exception(Helper::ll('error.request.uid'));
-        }*/
+        // Check body data
+        if (empty($body['table'])) {
+            throw new \Exception('Property "table" is missing from body!');
+        } elseif (empty($body['field'])) {
+            throw new \Exception('Property "field" is missing from body!');
+        } elseif (empty($body['identifier'])) {
+            throw new \Exception('Property "identifier" is missing from body!');
+        } elseif (empty($body['content'])) {
+            throw new \Exception('Property "content" is missing from body!');
+        }
 
         $this->table = $body['table'];
         $this->field = $body['field'];
