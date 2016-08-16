@@ -331,9 +331,9 @@ class _SaveController
         // request is only allowed for POST request and a BE_USER is available
         if (empty($request)) {
             throw new \BadFunctionCallException(Helper::ll('error.request.no-post'));
-        } /*elseif (!\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()) {
+        } elseif (!\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()) {
             throw new \BadFunctionCallException(Helper::ll('error.request.not-allowed'));
-        }*/
+        }
 
         $split = explode('--', $request['identifier']);
 

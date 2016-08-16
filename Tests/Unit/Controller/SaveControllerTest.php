@@ -2,9 +2,9 @@
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
 /**
- * Test case for class TYPO3\CMS\FrontendEditing\Controller\JustController.
+ * Test case for class TYPO3\CMS\FrontendEditing\Controller\SaveController.
  */
-class JustControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
     /**
      * @test

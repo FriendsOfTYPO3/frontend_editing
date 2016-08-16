@@ -23,14 +23,6 @@ frontendEditing {
         no_cache = 1
     }
 
-
-
-    #includeLibs.aloha = EXT:pxa_feediting/Classes/Ckeditor/SaveController.php
-    #10 = USER
-    #10 {
-    #    userFunc = TYPO3\CMS\FrontendEditing\Ckeditor\SaveController->start
-    #}
-
     10 < tt_content.list.20.frontendediting_frontend_editing
 }
 [global]

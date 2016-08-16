@@ -45,6 +45,20 @@ Then install the composer dependencies:
 ## Workflow
 For working with the extension, the following can be run to accomplish common tasks.
 
+### Test
+
+To run the PHP codesniffer run the following command:
+
+    npm run php:codesniffer
+
+To run the PHP Unit tests run the following command:
+
+    npm run php:unittests
+
+To simulate the full build process locally, then run this packaged command:
+
+    npm run build:suite --silent
+
 ### Publish
 
 To build the extension before a publish to TER use the following command:
