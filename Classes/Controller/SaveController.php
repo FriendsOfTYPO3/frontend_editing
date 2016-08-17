@@ -96,18 +96,18 @@ class SaveController extends ActionController
         if (!isset($GLOBALS['BE_USER'])) {
             throw new \Exception('This action is only allowed logged in to the backend!');
         } elseif (empty($body)) {
-            throw new \Exception('A body is missing!');
+            throw new \Exception('A body is missing in the request!');
         }
 
         // Check body data
         if (empty($body['table'])) {
-            throw new \Exception('Property "table" is missing from body!');
+            throw new \Exception('Property "table" is missing from the body!');
         } elseif (empty($body['field'])) {
-            throw new \Exception('Property "field" is missing from body!');
+            throw new \Exception('Property "field" is missing from the body!');
         } elseif (empty($body['identifier'])) {
-            throw new \Exception('Property "identifier" is missing from body!');
+            throw new \Exception('Property "identifier" is missing from the body!');
         } elseif (empty($body['content'])) {
-            throw new \Exception('Property "content" is missing from body!');
+            throw new \Exception('Property "content" is missing from the body!');
         }
 
         $this->table = $body['table'];

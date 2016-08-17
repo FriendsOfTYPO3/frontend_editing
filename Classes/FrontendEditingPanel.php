@@ -253,7 +253,13 @@ class FrontendEditingPanel
             $content .= $icon;
         }*/
 
-        $content = '<div contenteditable="true">' . $content . '</div>';
+        $content = sprintf(
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-identifier="%s">%s</div>',
+            $table,
+            $fieldList,
+            $editUid,
+            $content
+        );
 
         return $content;
     }
