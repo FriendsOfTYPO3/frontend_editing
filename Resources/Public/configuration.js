@@ -25,10 +25,10 @@
 					dataType: 'JSONP',
 					data: data,
 					success: function(event) {
-						console.log(event);
+						toastr.success('Content have been saved!', 'Content saved');
 					},
 					error: function(event) {
-						console.error(event);
+						toastr.error(event.message, 'Something went wrong');
 					}
 				});
 			}

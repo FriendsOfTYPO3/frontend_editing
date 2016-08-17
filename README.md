@@ -59,8 +59,19 @@ To simulate the full build process locally, then run this packaged command:
 
     npm run build:suite --silent
 
+### Add node_modules to Public/Resources folder
+
+Add the ckeditor node_module to Public/Resources folder:
+
+    npm run add:resource:ckeditor
+
+Add the toastr (notifications) node_module to Public/Resources folder:
+
+    npm run add:resource:toastr
+
 ### Publish
 
-To build the extension before a publish to TER use the following command:
+To build the extension before a publish to TER use the following command to copy all necessary
+node_modules into Public/Resources folder (is a bundle of all **add:resource** commands):
 
     npm run build:extension
