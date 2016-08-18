@@ -27,10 +27,29 @@ class SaveController extends ActionController
      */
     protected $frontendEditingController;
 
+    /**
+     * @var string
+     */
     protected $table;
-    protected $uid;
+
+    /**
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * @var string
+     */
     protected $field;
+
+    /**
+     * @var string
+     */
     protected $content;
+
+    /**
+     * @var string
+     */
     protected $record;
 
     /**
@@ -112,13 +131,16 @@ class SaveController extends ActionController
 
         $this->table = $body['table'];
         $this->field = $body['field'];
-        $this->uid = $body['identifier'];
+        $this->identifier = $body['identifier'];
         $this->content = $body['content'];
-        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
+        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->identifier);
     }
 
     /**
+     * Main method for saving records
+     *
      * @return void
+     * @throws \Exception
      */
     public function saveAction()
     {
@@ -147,7 +169,7 @@ class SaveController extends ActionController
             $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
                 $this->table,
                 $this->field,
-                $this->uid,
+                $this->identifier,
                 $GLOBALS['TSFE']->id,
                 $this->content
             );
@@ -161,7 +183,7 @@ class SaveController extends ActionController
 
             $data = [
                 $this->table => [
-                    $this->uid => [
+                    $this->identifier => [
                         $this->field => $this->content
                     ]
                 ]
@@ -172,6 +194,9 @@ class SaveController extends ActionController
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
+
+        //$this->throwStatus(200, null, 'Content saved!');
+        return json_encode(['success' => true]);
     }
 
     /**
