@@ -80,8 +80,6 @@ class Integration
         if (isset($fieldConfig['RTE'])) {
             $currentRecord = self::recordInfo($table, $id);
 
-            $RTEsetup = $GLOBALS['BE_USER']->getTSConfig('RTE', BackendUtility::getPagesTSconfig($pageId));
-
             $theTypeString = BackendUtility::getTCAtypeValue($table, $currentRecord);
 
             $types_fieldConfig2 = BackendUtility::getTCAtypes($table, $currentRecord);
