@@ -145,26 +145,7 @@ class SaveController extends ActionController
     public function saveAction()
     {
         try {
-            /*if (is_array($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'])) {
-                $finished = false;
-                foreach (
-                    $GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'] as $classData
-                ) {
-                    if (!$finished) {
-                        $hookObject = GeneralUtility::getUserObj($classData);
-                        if (!($hookObject instanceof \Pixelant\Aloha\Hook\RequestPreProcessInterface)) {
-                            throw new \UnexpectedValueException(
-                                $classData .
-                                    ' must implement interface \Pixelant\Aloha\Hook\RequestPreProcessInterface',
-                                1274563549
-                            );
-                        }
-                        $request = $hookObject->preProcess($request, $finished, $this);
-                    }
-                }
-            }*/
-
-            $htmlEntityDecode = false; // true
+            $htmlEntityDecode = true;
 
             $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
                 $this->table,

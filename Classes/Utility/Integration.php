@@ -65,8 +65,7 @@ class Integration
     }
 
     /**
-     * Modifiy content if it is RTE based
-     * by using core internal sick functions
+     * Modify content if it is RTE base by using RteHtmlParser functions
      *
      * @param string $table table name
      * @param string $field field name
