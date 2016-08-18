@@ -15,7 +15,7 @@
 					'action': 'save',
 					'table': dataSet.table,
 					'identifier': dataSet.identifier,
-					'field': 'bodytext',
+					'field': dataSet.field,
 					'content': editor.getData()
 				};
 
@@ -23,12 +23,12 @@
 					type: 'POST',
 					url: url,
 					dataType: 'JSONP',
-					data: data,
-					success: function(event) {
+					data: data
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					if (jqXHR.status === 200) {
 						toastr.success('Content have been saved!', 'Content saved');
-					},
-					error: function(event) {
-						toastr.error(event.message, 'Something went wrong');
+					} else {
+						toastr.error(textStatus, 'Something went wrong');
 					}
 				});
 			}

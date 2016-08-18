@@ -195,7 +195,6 @@ class SaveController extends ActionController
             throw new \Exception($exception->getMessage());
         }
 
-        //$this->throwStatus(200, null, 'Content saved!');
         return json_encode(['success' => true]);
     }
 

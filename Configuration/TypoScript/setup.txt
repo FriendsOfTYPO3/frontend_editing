@@ -25,6 +25,7 @@ frontendEditing {
         admPanel = 0
         metaCharset = utf-8
         no_cache = 1
+        additionalHeaders = Content-type:application/json
     }
 
     10 < tt_content.list.20.frontendediting_frontend_editing
