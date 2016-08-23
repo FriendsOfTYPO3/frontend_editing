@@ -49,7 +49,7 @@ class Cleanup implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\Re
             }
 
         }
-var_dump($content);
+        
         return $content;
     }
 }
