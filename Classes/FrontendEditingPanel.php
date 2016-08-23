@@ -252,17 +252,11 @@ class FrontendEditingPanel
         } else {
             $content .= $icon;
         }*/
-
-        $fieldListArray = explode(',', $fieldList);
-        // Entry number 1 is the active field
-        $contentFieldInDatabase = $fieldListArray[1];
-        // Trim whitespaces
-        $contentFieldInDatabase = trim($contentFieldInDatabase);
-
+var_dump($content);
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-identifier="%s">%s</div>',
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
-            $contentFieldInDatabase,
+            $fieldList,
             $editUid,
             $content
         );

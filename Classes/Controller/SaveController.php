@@ -35,7 +35,17 @@ class SaveController extends ActionController
     /**
      * @var string
      */
+    protected $uid;
+
+    /**
+     * @var string
+     */
     protected $identifier;
+
+    /**
+     * @var string
+     */
+    protected $fieldConfiguration;
 
     /**
      * @var string
@@ -72,6 +82,62 @@ class SaveController extends ActionController
     }
 
     /**
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param string $field
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecord()
+    {
+        return $this->record;
+    }
+
+    /**
      * Resolves and checks the current action method name
      *
      * @return string Method name of the current action
@@ -103,6 +169,17 @@ class SaveController extends ActionController
     }
 
     /**
+     * Get the field configuration from a field list
+     *
+     * @param string $fieldList
+     * @return array
+     */
+    private function getFieldConfiguration($fieldList) {
+        $fieldConfiguration = array_unique(GeneralUtility::trimExplode(',', $fieldList, true));
+        return $fieldConfiguration;
+    }
+
+    /**
      * Create the necessary data mapping for further usage for editing
      *
      * @throws \Exception
@@ -123,17 +200,38 @@ class SaveController extends ActionController
             throw new \Exception('Property "table" is missing from the body!');
         } elseif (empty($body['field'])) {
             throw new \Exception('Property "field" is missing from the body!');
-        } elseif (empty($body['identifier'])) {
-            throw new \Exception('Property "identifier" is missing from the body!');
+        } elseif (empty($body['uid'])) {
+            throw new \Exception('Property "uid" is missing from the body!');
         } elseif (empty($body['content'])) {
             throw new \Exception('Property "content" is missing from the body!');
         }
 
+        // Set the basic properties of editing
         $this->table = $body['table'];
-        $this->field = $body['field'];
-        $this->identifier = $body['identifier'];
+        $this->fieldConfiguration = $this->getFieldConfiguration($body['field']);
+        // Get the actual database to store the data into
+        $fieldNameArray = explode(' ', $this->fieldConfiguration[1]);
+        $this->field = $fieldNameArray[0];
+        $this->uid = $body['uid'];
+        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'])) {
+            $finished = FALSE;
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'] as $classData) {
+                if (!$finished) {
+                    $hookObject = GeneralUtility::getUserObj($classData);
+                    if (!($hookObject instanceof \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface)) {
+                        throw new \UnexpectedValueException(
+                            $classData . ' must implement interface ' . \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface::class,
+                            1274563549
+                        );
+                    }
+                    $body = $hookObject->preProcess($body, $finished, $this);
+                }
+            }
+        }
+
         $this->content = $body['content'];
-        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->identifier);
     }
 
     /**
@@ -145,12 +243,12 @@ class SaveController extends ActionController
     public function saveAction()
     {
         try {
-            $htmlEntityDecode = true;
+            $htmlEntityDecode = false;
 
             $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
                 $this->table,
                 $this->field,
-                $this->identifier,
+                $this->uid,
                 $GLOBALS['TSFE']->id,
                 $this->content
             );
@@ -164,13 +262,13 @@ class SaveController extends ActionController
 
             $data = [
                 $this->table => [
-                    $this->identifier => [
+                    $this->uid => [
                         $this->field => $this->content
                     ]
                 ]
             ];
 
-            $this->dataHandler->start($data, array());
+            $this->dataHandler->start($data, []);
             $this->dataHandler->process_datamap();
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
