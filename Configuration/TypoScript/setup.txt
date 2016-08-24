@@ -30,4 +30,7 @@ frontendEditing {
 
     10 < tt_content.list.20.frontendediting_frontend_editing
 }
+
+# Disable output of newlines
+lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines >
 [global]
