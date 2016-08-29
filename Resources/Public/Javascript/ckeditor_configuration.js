@@ -14,7 +14,7 @@
 				var data = {
 					'action': 'save',
 					'table': dataSet.table,
-					'identifier': dataSet.identifier,
+					'uid': dataSet.uid,
 					'field': dataSet.field,
 					'content': editor.getData()
 				};
