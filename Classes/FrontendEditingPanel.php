@@ -252,7 +252,7 @@ class FrontendEditingPanel
         } else {
             $content .= $icon;
         }*/
-var_dump($content);
+
         $content = sprintf(
             '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
