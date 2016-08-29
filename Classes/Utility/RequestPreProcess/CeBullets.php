@@ -5,21 +5,20 @@ use TYPO3\CMS\FrontendEditing\Controller\SaveController;
 
 /**
  * Hook for saving content element "bullets"
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
-class CeBullets implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface {
+class CeBullets implements RequestPreProcessInterface
+{
 
     /**
-     * Preprocess the request
+     * Pre process the request
      *
-     * @param array $request save request
-     * @param boolean $finished
+     * @param array $body save request
+     * @param bool $finished
      * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
      * @return array
      */
-    public function preProcess(array &$request, &$finished, SaveController &$parentObject) {
+    public function preProcess(array &$body, &$finished, SaveController &$parentObject)
+    {
         $record = $parentObject->getRecord();
 
         // only allowed for bullet element
@@ -30,7 +29,7 @@ class CeBullets implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\
             $finished = true;
 
             $domDocument = new \DOMDocument();
-            $domDocument->loadHTML('<?xml encoding="utf-8" ?>' . $request['content']);
+            $domDocument->loadHTML('<?xml encoding="utf-8" ?>' . $body['content']);
 
             $liCollection = $domDocument->getElementsByTagName('li');
             $tempLiElements = [];
@@ -40,9 +39,10 @@ class CeBullets implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\
                     $tempLiElements[] = $value;
                 }
             }
-            $request['content'] = implode(PHP_EOL, $tempLiElements);
+
+            $body['content'] = implode(PHP_EOL, $tempLiElements);
         }
 
-        return $request;
+        return $body;
     }
 }

@@ -5,21 +5,20 @@ use TYPO3\CMS\FrontendEditing\Controller\SaveController;
 
 /**
  * Hook for saving content element "header"
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
-class CeHeader implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface {
+class CeHeader implements RequestPreProcessInterface
+{
 
     /**
-     * Preprocess the request
+     * Pre process the request
      *
      * @param array $request save request
-     * @param boolean $finished
+     * @param bool $finished
      * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
      * @return array
      */
-    public function preProcess(array &$request, &$finished, SaveController &$parentObject) {
+    public function preProcess(array &$request, &$finished, SaveController &$parentObject)
+    {
         // Only allowed for field header
         if ($parentObject->getTable() === 'tt_content' && (
                 $parentObject->getField() === 'header'
@@ -54,7 +53,11 @@ class CeHeader implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\R
                         break;
                 }
                 // Do a direct save for the header-type field.
-                $headerTypeRequest['identifier'] = $parentObject->getTable() . '--header_layout--' . $parentObject->getUid();
+                $headerTypeRequest['identifier'] =
+                    $parentObject->getTable() .
+                    '--header_layout--' .
+                    $parentObject->getUid()
+                ;
                 // $parentObject->directSave($headerTypeRequest, TRUE);
 
                 $parentObject->setField('header');

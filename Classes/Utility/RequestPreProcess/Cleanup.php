@@ -5,21 +5,20 @@ use TYPO3\CMS\FrontendEditing\Controller\SaveController;
 
 /**
  * Hook for cleaning content
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
-class Cleanup implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface {
+class Cleanup implements RequestPreProcessInterface
+{
 
     /**
-     * Preprocess the request
+     * Pre process the request
      *
      * @param array $request save request
-     * @param boolean $finished
+     * @param bool $finished
      * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
      * @return array
      */
-    public function preProcess(array &$request, &$finished, SaveController &$parentObject) {
+    public function preProcess(array &$request, &$finished, SaveController &$parentObject)
+    {
         $request['content'] = $this->modifyContent($request['content']);
         return $request;
     }
@@ -30,7 +29,8 @@ class Cleanup implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\Re
      * @param string $content
      * @return string
      */
-    private function modifyContent($content) {
+    private function modifyContent($content)
+    {
         $content = trim($content);
         $lengthOfContent = strlen($content);
         $cleanUpWords = ['<br />', '<br>', '<br/>', '<br style="">'];
@@ -47,9 +47,8 @@ class Cleanup implements \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\Re
                 $newLengthOfContent = $lengthOfContent - $length;
                 $content = substr($content, 0, $newLengthOfContent);
             }
-
         }
-        
+
         return $content;
     }
 }

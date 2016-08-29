@@ -4,6 +4,7 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface;
 
 class SaveController extends ActionController
 {
@@ -174,7 +175,8 @@ class SaveController extends ActionController
      * @param string $fieldList
      * @return array
      */
-    private function getFieldConfiguration($fieldList) {
+    private function getFieldConfiguration($fieldList)
+    {
         $fieldConfiguration = array_unique(GeneralUtility::trimExplode(',', $fieldList, true));
         return $fieldConfiguration;
     }
@@ -215,14 +217,16 @@ class SaveController extends ActionController
         $this->uid = $body['uid'];
         $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
 
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'])) {
-            $finished = FALSE;
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'] as $classData) {
+        $requestPreProcessArray =
+            $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'];
+        if (is_array($requestPreProcessArray)) {
+            $finished = false;
+            foreach ($requestPreProcessArray as $classData) {
                 if (!$finished) {
                     $hookObject = GeneralUtility::getUserObj($classData);
-                    if (!($hookObject instanceof \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface)) {
+                    if (!($hookObject instanceof RequestPreProcessInterface)) {
                         throw new \UnexpectedValueException(
-                            $classData . ' must implement interface ' . \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface::class,
+                            $classData . ' must implement interface ' . RequestPreProcessInterface::class,
                             1274563549
                         );
                     }
