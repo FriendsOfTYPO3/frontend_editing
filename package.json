@@ -1,8 +1,7 @@
 {
   "name": "frontend_editing",
   "version": "0.1.0",
-  "description": "",
-  "main": "gruntfile.js",
+  "description": "Enable editors to work with the content in the most intuitive way possible",
   "scripts": {
     "add:resource:ckeditor": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
