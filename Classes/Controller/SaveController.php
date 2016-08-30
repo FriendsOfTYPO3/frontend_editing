@@ -227,7 +227,7 @@ class SaveController extends ActionController
                     if (!($hookObject instanceof RequestPreProcessInterface)) {
                         throw new \UnexpectedValueException(
                             $classData . ' must implement interface ' . RequestPreProcessInterface::class,
-                            1274563549
+                            1274563547
                         );
                     }
                     $body = $hookObject->preProcess($body, $finished, $this);
@@ -247,7 +247,7 @@ class SaveController extends ActionController
     public function saveAction()
     {
         try {
-            $htmlEntityDecode = false;
+            $htmlEntityDecode = true;
 
             $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
                 $this->table,

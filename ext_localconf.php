@@ -1,6 +1,8 @@
 <?php
 defined('TYPO3_MODE') or die();
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Hooks
  */
@@ -40,6 +42,13 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
 // Check link params in rte of text and textpic content elements
 $GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeRteLinks'] =
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeRteLinks::class;
+
+// If rtehtmlarea is loaded then reset the pageTSConfig
+if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
+    ExtensionManagementUtility::addPageTSConfig(
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:frontend_editing/Configuration/TypoScript/PageTSconfig/Proc/pageTSConfig.txt">'
+    );
+}
 
 /**
  * Frontend plugin

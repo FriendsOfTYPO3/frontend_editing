@@ -11,13 +11,13 @@ interface RequestPreProcessInterface
     /**
      * Pre process the request
      *
-     * @param array $request save request
+     * @param array $body save body
      * @param bool $finished
      * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
      * @return array
      */
     public function preProcess(
-        array &$request,
+        array &$body,
         &$finished,
         SaveController &$parentObject
     );
