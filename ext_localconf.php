@@ -43,8 +43,8 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
 $GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeRteLinks'] =
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeRteLinks::class;
 
-// If rtehtmlarea is loaded then reset the pageTSConfig
-if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
+// If rtehtmlarea is loaded and be user is logged in then reset the pageTSConfig
+if (ExtensionManagementUtility::isLoaded('rtehtmlarea') && $GLOBALS['BE_USER']->user) {
     ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:frontend_editing/Configuration/TypoScript/PageTSconfig/Proc/pageTSConfig.txt">'
     );
