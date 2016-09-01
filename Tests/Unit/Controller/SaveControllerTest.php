@@ -3,6 +3,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\FrontendEditing\FrontendEditingController;
+use TYPO3\CMS\FrontendEditing\Controller\SaveController;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Controller\SaveController.
@@ -22,7 +23,7 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     protected function setUp()
     {
         $this->subject = $this->getMock(
-            \TYPO3\CMS\FrontendEditing\Controller\SaveController::class,
+            SaveController::class,
             ['save'],
             [],
             '',
@@ -70,7 +71,7 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         try {
             $this->subject->saveAction();
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'A table name is missing for being able to save the data!');
+            $this->assertEquals($exception->getMessage(), 'A table name is missing, no possibility to save the data!');
             return;
         }
         $this->fail('Expected Exception has not been raised.');

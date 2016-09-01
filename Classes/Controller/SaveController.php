@@ -280,6 +280,10 @@ class SaveController extends ActionController
                 $this->content = iconv('UTF-8', 'UTF-8//IGNORE', $this->content);
             }
 
+            if (empty($this->table)) {
+                throw new \Exception('A table name is missing, no possibility to save the data!');
+            }
+
             $data = [
                 $this->table => [
                     $this->uid => [
@@ -288,13 +292,8 @@ class SaveController extends ActionController
                 ]
             ];
 
-            // Check that there set a table name within the data array
-            if (!empty($data[0])) {
-                $this->dataHandler->start($data, []);
-                $this->dataHandler->process_datamap();
-            } else {
-                throw new \Exception('A table name is missing for being able to save the data!');
-            }
+            $this->dataHandler->start($data, []);
+            $this->dataHandler->process_datamap();
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
