@@ -46,7 +46,7 @@ $GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess
  */
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'TYPO3\CMS.' . $_EXTKEY,
-    'frontend_editing',
+    'frontend_editingunderscore1',
     [
         'Save' => 'save'
     ],
