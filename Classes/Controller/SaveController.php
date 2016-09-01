@@ -83,6 +83,22 @@ class SaveController extends ActionController
     }
 
     /**
+     * @return \TYPO3\CMS\Core\DataHandling\DataHandler
+     */
+    public function getDataHandler()
+    {
+        return $this->dataHandler;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
+     */
+    public function getFrontendEditingController()
+    {
+        return $this->frontendEditingController;
+    }
+
+    /**
      * @return string
      */
     public function getTable()

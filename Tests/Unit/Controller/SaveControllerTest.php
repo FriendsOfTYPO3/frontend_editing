@@ -1,6 +1,9 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\FrontendEditing\FrontendEditingController;
+
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Controller\SaveController.
  */
@@ -23,7 +26,7 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             ['redirect', 'forward', 'addFlashMessage'],
             [],
             '',
-            false
+            true
         );
     }
 
@@ -38,7 +41,21 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function getTableValue()
+    public function getPropertiesInitializedInConstructor() {
+        $this->assertSame(
+            get_class($this->subject->getDataHandler()),
+            DataHandler::class
+        );
+        $this->assertSame(
+            get_class($this->subject->getFrontendEditingController()),
+            FrontendEditingController::class
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getTableName()
     {
         $this->assertSame(
             $this->subject->getTable(),
