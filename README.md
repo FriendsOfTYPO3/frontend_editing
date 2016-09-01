@@ -5,7 +5,7 @@
 <h2>Pixelant frontend editing (frontend_editing)</h2>
 This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
 
-[Dependencies](#dependencies) &nbsp; [Workflow](#workflow)&nbsp; [Documentation](#documentation) &nbsp;
+[Dependencies](#dependencies) &nbsp; [Workflow](#workflow)&nbsp;
 
 <a name="dependencies"/>
 ## Dependencies
@@ -14,14 +14,6 @@ We rely on node.js for a lot of our tooling. So if you haven't got it installed(
 To install tooling dependencies, run:
 
     npm install
-
-Grunt must be installed next. Try the following:
-
-    which grunt
-
-If you get no result from this command, then you must install grunt using the following command:
-
-    sudo npm install -g grunt-cli
 
 Composer must also be installed. Download it and install it from the composer website, then move it to your binary path.
 If you are unsure of where it is try echo "$PATH", it will usually be /usr/local/bin or /usr/local.

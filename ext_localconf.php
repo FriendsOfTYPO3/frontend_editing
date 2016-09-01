@@ -1,14 +1,14 @@
 <?php
 defined('TYPO3_MODE') or die();
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Hooks
  */
-// Add additional stdWrap properties
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['stdWrap'][$_EXTKEY] = \TYPO3\CMS\FrontendEditing\Hooks\EditIcons::class;
-
 // Register the edit panel view
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] = \TYPO3\CMS\FrontendEditing\FrontendEditingPanel::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] =
+    \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
 
 /**
  * Pre processors
@@ -38,8 +38,16 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeHeader::class;
 
 // Check link params in rte of text and textpic content elements
-$GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeRteLinks'] =
+$GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeRteLinks'] =
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeRteLinks::class;
+
+// If rtehtmlarea is loaded and be user is logged in then reset the pageTSConfig
+if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
+    ExtensionManagementUtility::addPageTSConfig(
+        '<INCLUDE_TYPOSCRIPT: source="' .
+            'FILE:EXT:frontend_editing/Configuration/TypoScript/PageTSconfig/Proc/pageTSConfig.txt">'
+    );
+}
 
 /**
  * Frontend plugin

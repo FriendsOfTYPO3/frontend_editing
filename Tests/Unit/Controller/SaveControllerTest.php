@@ -1,6 +1,9 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\FrontendEditing\FrontendEditingController;
+
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Controller\SaveController.
  */
@@ -20,10 +23,10 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->subject = $this->getMock(
             \TYPO3\CMS\FrontendEditing\Controller\SaveController::class,
-            ['redirect', 'forward', 'addFlashMessage'],
+            ['save'],
             [],
             '',
-            false
+            true
         );
     }
 
@@ -38,11 +41,38 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function getTableValue()
+    public function getPropertiesInitializedInConstructor() {
+        $this->assertSame(
+            get_class($this->subject->getDataHandler()),
+            DataHandler::class
+        );
+        $this->assertSame(
+            get_class($this->subject->getFrontendEditingController()),
+            FrontendEditingController::class
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getTableName()
     {
         $this->assertSame(
             $this->subject->getTable(),
             null
         );
+    }
+
+    /**
+     * @test
+     */
+    public function trySavingContentAndExpectAnException() {
+        try {
+            $this->subject->saveAction();
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'A table name is missing for being able to save the data!');
+            return;
+        }
+        $this->fail('Expected Exception has not been raised.');
     }
 }
