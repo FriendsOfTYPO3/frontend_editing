@@ -77,7 +77,7 @@ class SaveController extends ActionController
         // $this->saveMethod = $configurationArray['saveMethod'];
 
         if (!isset($GLOBALS['LANG'])) {
-            // DataHandler uses $GLOBALS['LANG'] when saving records, some users didn't have it set....
+            // DataHandler uses $GLOBALS['LANG'] when saving records
             \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
         }
     }
@@ -288,8 +288,13 @@ class SaveController extends ActionController
                 ]
             ];
 
-            $this->dataHandler->start($data, []);
-            $this->dataHandler->process_datamap();
+            // Check that there set a table name within the data array
+            if (!empty($data[0])) {
+                $this->dataHandler->start($data, []);
+                $this->dataHandler->process_datamap();
+            } else {
+                throw new \Exception('A table name is missing for being able to save the data!');
+            }
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

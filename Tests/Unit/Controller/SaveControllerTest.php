@@ -23,7 +23,7 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     {
         $this->subject = $this->getMock(
             \TYPO3\CMS\FrontendEditing\Controller\SaveController::class,
-            ['redirect', 'forward', 'addFlashMessage'],
+            ['save'],
             [],
             '',
             true
@@ -61,5 +61,18 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             $this->subject->getTable(),
             null
         );
+    }
+
+    /**
+     * @test
+     */
+    public function trySavingContentAndExpectAnException() {
+        try {
+            $this->subject->saveAction();
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'A table name is missing for being able to save the data!');
+            return;
+        }
+        $this->fail('Expected Exception has not been raised.');
     }
 }
