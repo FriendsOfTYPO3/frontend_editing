@@ -4,7 +4,10 @@
 
 	};
 
-	var url = 'http://localhost:8000/?type=1470741815';
+	var pageUrl = window.location.protocol + '//' + window.location.host;
+	var functionRoutes = {
+		'crud': '?type=1470741815'
+	};
 
 	CKEDITOR.on('instanceReady', function(event) {
 		var editor = event.editor;
@@ -21,11 +24,11 @@
 
 				$.ajax({
 					type: 'POST',
-					url: url,
+					url: pageUrl + functionRoutes.crud,
 					dataType: 'JSON',
 					data: data
 				}).done(function(data, textStatus, jqXHR) {
-					toastr.success('Content (' + data.message +') have been saved!', 'Content saved');
+					toastr.success('Content (uid: "' + data.message +'") have been saved!', 'Content saved');
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					toastr.error(errorThrown, 'Something went wrong');
 				});
