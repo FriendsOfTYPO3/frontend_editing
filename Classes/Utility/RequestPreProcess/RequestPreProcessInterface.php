@@ -1,7 +1,7 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess;
 
-use \TYPO3\CMS\FrontendEditing\Controller\SaveController;
+use \TYPO3\CMS\FrontendEditing\Controller\CrudController;
 
 /**
  * Interface RequestPreProcessInterface
@@ -13,12 +13,12 @@ interface RequestPreProcessInterface
      *
      * @param array $body save body
      * @param bool $finished
-     * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
+     * @param \TYPO3\CMS\FrontendEditing\Controller\CrudController $parentObject
      * @return array
      */
     public function preProcess(
         array &$body,
         &$finished,
-        SaveController &$parentObject
+        CrudController &$parentObject
     );
 }

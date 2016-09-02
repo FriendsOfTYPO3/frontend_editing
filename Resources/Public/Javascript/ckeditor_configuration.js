@@ -22,7 +22,7 @@
 				$.ajax({
 					type: 'POST',
 					url: url,
-					dataType: 'JSONP',
+					dataType: 'JSON',
 					data: data
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status === 200) {
