@@ -3,12 +3,12 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\FrontendEditing\FrontendEditingController;
-use TYPO3\CMS\FrontendEditing\Controller\SaveController;
+use TYPO3\CMS\FrontendEditing\Controller\CrudController;
 
 /**
- * Test case for class TYPO3\CMS\FrontendEditing\Controller\SaveController.
+ * Test case for class TYPO3\CMS\FrontendEditing\Controller\CrudController.
  */
-class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
     /**
      * @var \TYPO3\CMS\FrontendEditing\Controller\SaveController
@@ -23,7 +23,7 @@ class SaveControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     protected function setUp()
     {
         $this->subject = $this->getMock(
-            SaveController::class,
+            CrudController::class,
             ['save'],
             [],
             '',

@@ -56,9 +56,9 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing',
     [
-        'Save' => 'save'
+        'Crud' => 'save, read, delete'
     ],
     [
-        'Save' => 'save'
+        'Crud' => 'save, read, delete'
     ]
 );
