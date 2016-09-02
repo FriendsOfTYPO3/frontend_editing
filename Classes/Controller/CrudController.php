@@ -250,13 +250,13 @@ class CrudController extends ActionController
     }
 
     /**
-     * Main method for saving records
+     * Main method for saving/updating records
      *
-     * @return void
+     * @return array
      * @throws \Exception
      */
     public function saveAction()
-    {
+    { 
         try {
             $htmlEntityDecode = true;
 
@@ -289,11 +289,16 @@ class CrudController extends ActionController
 
             $this->dataHandler->start($data, []);
             $this->dataHandler->process_datamap();
+
+            $message = [
+                'success' => true,
+                'message' => $this->uid
+            ];
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
 
-        return json_encode(['success' => true]);
+        return json_encode($message);
     }
 
     /**

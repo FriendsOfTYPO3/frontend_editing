@@ -24,12 +24,10 @@
 					url: url,
 					dataType: 'JSON',
 					data: data
+				}).done(function(data, textStatus, jqXHR) {
+					toastr.success('Content (' + data.message +') have been saved!', 'Content saved');
 				}).fail(function(jqXHR, textStatus, errorThrown) {
-					if (jqXHR.status === 200) {
-						toastr.success('Content have been saved!', 'Content saved');
-					} else {
-						toastr.error(textStatus, 'Something went wrong');
-					}
+					toastr.error(errorThrown, 'Something went wrong');
 				});
 			}
 		});
