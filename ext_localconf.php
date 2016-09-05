@@ -37,10 +37,6 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
 $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeHeader'] =
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeHeader::class;
 
-// Check link params in rte of text and textpic content elements
-$GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeRteLinks'] =
-    \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeRteLinks::class;
-
 // If rtehtmlarea is loaded and be user is logged in then reset the pageTSConfig
 if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
     ExtensionManagementUtility::addPageTSConfig(

@@ -3,6 +3,7 @@
 	var editorConfig = {
 		entities_latin: false,
 		htmlEncodeOutput: false,
+		allowedContent: true,
 		toolbarGroups: [
 			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
 			{ name: 'editing', groups: [ 'find', 'selection' ] },

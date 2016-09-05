@@ -24,11 +24,6 @@ class CrudController extends ActionController
     protected $dataHandler;
 
     /**
-     * @var \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
-     */
-    protected $frontendEditingController;
-
-    /**
      * @var string
      */
     protected $table;
@@ -71,8 +66,6 @@ class CrudController extends ActionController
         $this->dataHandler = new \TYPO3\CMS\Core\DataHandling\DataHandler();
         $this->dataHandler->stripslashes_values = 0;
 
-        $this->frontendEditingController = new \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController();
-
         if (!isset($GLOBALS['LANG'])) {
             // DataHandler uses $GLOBALS['LANG'] when saving records
             \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
@@ -85,14 +78,6 @@ class CrudController extends ActionController
     public function getDataHandler()
     {
         return $this->dataHandler;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
-     */
-    public function getFrontendEditingController()
-    {
-        return $this->frontendEditingController;
     }
 
     /**

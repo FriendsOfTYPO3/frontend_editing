@@ -2,7 +2,6 @@
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Controller;
 
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\FrontendEditing\FrontendEditingController;
 use TYPO3\CMS\FrontendEditing\Controller\CrudController;
 
 /**
@@ -46,10 +45,6 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $this->assertSame(
             get_class($this->subject->getDataHandler()),
             DataHandler::class
-        );
-        $this->assertSame(
-            get_class($this->subject->getFrontendEditingController()),
-            FrontendEditingController::class
         );
     }
 
