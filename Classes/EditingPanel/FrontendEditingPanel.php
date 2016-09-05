@@ -126,6 +126,30 @@ class FrontendEditingPanel
         // Special content is about to be shown, so the cache must be disabled.
         $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
+        $editIconsToolBar = '';
+
+        $actionsMoveUpIcon = '<span title="'
+            . $this->backendUser->extGetLL('p_moveUp') . '">'
+            . $this->iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render()
+            . '</span>';
+
+        $actionsMoveDownIcon = '<span title="'
+            . $this->backendUser->extGetLL('p_moveDown') . '">'
+            . $this->iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render()
+            . '</span>';
+
+        $actionsSaveIcon = '<span title="'
+            . $this->backendUser->extGetLL('p_save') . '">'
+            . $this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL)->render()
+            . '</span>';
+
+        $actionsDeleteIcon = '<span title="'
+            . $this->backendUser->extGetLL('p_delete') . '">'
+            . $this->iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render()
+            . '</span>';
+
+        $editIconsToolBar = $actionsMoveUpIcon . $actionsMoveDownIcon . $actionsSaveIcon . $actionsDeleteIcon;
+
         $wrappedContent = sprintf(
             '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
@@ -134,7 +158,7 @@ class FrontendEditingPanel
             $content
         );
 
-        return $wrappedContent;
+        return $editIconsToolBar . $wrappedContent;
     }
 
     /**
