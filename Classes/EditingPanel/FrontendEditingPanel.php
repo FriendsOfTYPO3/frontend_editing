@@ -126,7 +126,7 @@ class FrontendEditingPanel
         // Special content is about to be shown, so the cache must be disabled.
         $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
-        $content = sprintf(
+        $wrappedContent = sprintf(
             '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
             $fieldList,
@@ -134,7 +134,7 @@ class FrontendEditingPanel
             $content
         );
 
-        return $content;
+        return $wrappedContent;
     }
 
     /**

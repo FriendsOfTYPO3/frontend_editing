@@ -1,7 +1,7 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess;
 
-use TYPO3\CMS\FrontendEditing\Controller\SaveController;
+use TYPO3\CMS\FrontendEditing\Controller\CrudController;
 
 /**
  * Hook for cleaning content
@@ -14,10 +14,10 @@ class Plaintext implements RequestPreProcessInterface
      *
      * @param array $request save request
      * @param bool $finished
-     * @param \TYPO3\CMS\FrontendEditing\Controller\SaveController $parentObject
+     * @param \TYPO3\CMS\FrontendEditing\Controller\CrudController $parentObject
      * @return array
      */
-    public function preProcess(array &$request, &$finished, SaveController &$parentObject)
+    public function preProcess(array &$request, &$finished, CrudController &$parentObject)
     {
         // Only allowed for "special" field "bodytext-plaintext"
         if ($parentObject->getTable() === 'tt_content' &&

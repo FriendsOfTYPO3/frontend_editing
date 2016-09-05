@@ -6,7 +6,7 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface;
 
-class SaveController extends ActionController
+class CrudController extends ActionController
 {
     /**
      * @var \TYPO3\CMS\Extbase\Mvc\View\JsonView
@@ -22,11 +22,6 @@ class SaveController extends ActionController
      * @var \TYPO3\CMS\Core\DataHandling\DataHandler
      */
     protected $dataHandler;
-
-    /**
-     * @var \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
-     */
-    protected $frontendEditingController;
 
     /**
      * @var string
@@ -71,11 +66,6 @@ class SaveController extends ActionController
         $this->dataHandler = new \TYPO3\CMS\Core\DataHandling\DataHandler();
         $this->dataHandler->stripslashes_values = 0;
 
-        $this->frontendEditingController = new \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController();
-
-        // $configurationArray = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['aloha']);
-        // $this->saveMethod = $configurationArray['saveMethod'];
-
         if (!isset($GLOBALS['LANG'])) {
             // DataHandler uses $GLOBALS['LANG'] when saving records
             \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
@@ -88,14 +78,6 @@ class SaveController extends ActionController
     public function getDataHandler()
     {
         return $this->dataHandler;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
-     */
-    public function getFrontendEditingController()
-    {
-        return $this->frontendEditingController;
     }
 
     /**
@@ -165,13 +147,11 @@ class SaveController extends ActionController
         switch ($this->request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                $actionName = 'save';
-                break;
-            case 'POST':
-                $actionName = 'save';
+                $actionName = 'read';
                 break;
             case 'PUT':
-                $actionName = 'update';
+            case 'POST':
+                $actionName = 'save';
                 break;
             case 'DELETE':
                 $actionName = 'delete';
@@ -255,9 +235,9 @@ class SaveController extends ActionController
     }
 
     /**
-     * Main method for saving records
+     * Main method for saving/updating records
      *
-     * @return void
+     * @return array
      * @throws \Exception
      */
     public function saveAction()
@@ -294,17 +274,31 @@ class SaveController extends ActionController
 
             $this->dataHandler->start($data, []);
             $this->dataHandler->process_datamap();
+
+            $message = [
+                'success' => true,
+                'message' => $this->uid
+            ];
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
 
-        return json_encode(['success' => true]);
+        return json_encode($message);
     }
 
     /**
-     * @return void
+     * @param string $uid
+     * @param string $table
      */
-    public function updateAction()
-    {
+    public function deleteAction($uid, $table) {
+
+    }
+
+    /**
+     * @param string $uid
+     * @param string $table
+     */
+    public function readAction($uid, $table) {
+
     }
 }
