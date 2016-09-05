@@ -127,12 +127,21 @@ class FrontendEditingPanel
         $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<div name="temp-2" contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
             $fieldList,
             $editUid,
             $content
         );
+
+        /*$temp = '<script type="text/javascript">
+//<![CDATA[
+   CKEDITOR.replace( \'temp-2\', {
+      uiColor : \'#000000\',
+      autoGrow_maxHeight : 400
+   });
+//]]>
+</script>';*/
 
         return $content;
     }

@@ -1,13 +1,23 @@
 (function($, w){
 
 	var editorConfig = {
-
+		entities_latin: false,
+		htmlEncodeOutput: false
 	};
 
 	var pageUrl = window.location.protocol + '//' + window.location.host;
 	var functionRoutes = {
 		'crud': '?type=1470741815'
 	};
+
+	// Add additional configuration to all 'contenteditable' instances
+	$('body').find("div[contenteditable='true']").each(function() {
+		$(this).ckeditor({
+			uiColor: '#000000',
+			entities_latin: false,
+			htmlEncodeOutput: false
+		});
+	});
 
 	CKEDITOR.on('instanceReady', function(event) {
 		var editor = event.editor;

@@ -7,7 +7,7 @@ page.javascriptLibs {
 
 page.includeJSFooterlibs.ckeditor = EXT:frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js
 page.includeJSFooterlibs.ckeditor_jquery = EXT:frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js
-page.includeJSFooter.ckeditor_configuration = EXT:frontend_editing/Resources/Public/Javascript/ckeditor_configuration.js
+page.includeJSFooter.app = EXT:frontend_editing/Resources/Public/Javascript/app.js
 
 # Add toastr for notifications
 page.includeCSS.toastr = EXT:frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css
