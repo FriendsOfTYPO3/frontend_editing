@@ -134,15 +134,6 @@ class FrontendEditingPanel
             $content
         );
 
-        /*$temp = '<script type="text/javascript">
-//<![CDATA[
-   CKEDITOR.replace( \'temp-2\', {
-      uiColor : \'#000000\',
-      autoGrow_maxHeight : 400
-   });
-//]]>
-</script>';*/
-
         return $content;
     }
 
