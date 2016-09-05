@@ -2,7 +2,20 @@
 
 	var editorConfig = {
 		entities_latin: false,
-		htmlEncodeOutput: false
+		htmlEncodeOutput: false,
+		toolbarGroups: [
+			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+			{ name: 'editing', groups: [ 'find', 'selection' ] },
+			{ name: 'links' },
+			{ name: 'insert' },
+			{ name: 'tools' },
+			{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+			{ name: 'others' },
+			'/',
+			{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+			{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+			{ name: 'styles' }
+		]
 	};
 
 	var pageUrl = window.location.protocol + '//' + window.location.host;
