@@ -11,12 +11,8 @@
 	};
 
 	// Add additional configuration to all 'contenteditable' instances
-	$('body').find("div[contenteditable='true']").each(function() {
-		$(this).ckeditor({
-			uiColor: '#000000',
-			entities_latin: false,
-			htmlEncodeOutput: false
-		});
+	$('body').find('div[contenteditable=\'true\']').each(function() {
+		$(this).ckeditor(editorConfig);
 	});
 
 	CKEDITOR.on('instanceReady', function(event) {
