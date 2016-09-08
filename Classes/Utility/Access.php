@@ -12,16 +12,15 @@ class Access
 {
 
     /**
-     * Checks if aloha editor is enabled, checking UserTsConfig and TS
+     * Checks if frontend editing is enabled, checking UserTsConfig and TS
      *
      * @return boolean
      */
     public static function isEnabled()
     {
-        // aloha needs to be enabled also by admins
-        // this is the only way how to temporarly turn on/off the editor
-        if (isset($GLOBALS['BE_USER']) && $GLOBALS['TSFE']->config['config']['aloha'] == 1) {
-            return ($GLOBALS['BE_USER']->uc['tx_aloha_enable'] == 1);
+        // Frontend editing needs to be enabled also by admins
+        if (isset($GLOBALS['BE_USER']) && $GLOBALS['TSFE']->config['config']['tx_frontend_editing'] == 1) {
+            return ($GLOBALS['BE_USER']->uc['tx_frontend_editing_enable'] == 1);
         }
 
         return false;

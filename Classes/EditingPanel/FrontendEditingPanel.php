@@ -65,36 +65,8 @@ class FrontendEditingPanel
         $this->frontendController = $frontendController ?: $GLOBALS['TSFE'];
         $this->backendUser = $backendUser ?: $GLOBALS['BE_USER'];
         $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
-        $this->cObj->start(array());
+        $this->cObj->start([]);
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-    }
-
-    /**
-     * Generates the "edit panels" which can be shown for a page or records on a page when the Admin Panel is enabled for a backend users surfing the frontend.
-     * With the "edit panel" the user will see buttons with links to editing, moving, hiding, deleting the element
-     * This function is used for the cObject EDITPANEL and the stdWrap property ".editPanel"
-     *
-     * @param string $content A content string containing the content related to the edit panel. For cObject "EDITPANEL" this is empty but not so for the stdWrap property. The edit panel is appended to this string and returned.
-     * @param array $conf TypoScript configuration properties for the editPanel
-     * @param string $currentRecord The "table:uid" of the record being shown. If empty string then $this->currentRecord is used. For new records (set by $conf['newRecordFromTable']) it's auto-generated to "[tablename]:NEW
-     * @param array $dataArr Alternative data array to use. Default is $this->data
-     * @param string $table
-     * @param array $allow
-     * @param int $newUID
-     * @param array $hiddenFields
-     * @return string The input content string with the editPanel appended. This function returns only an edit panel appended to the content string if a backend user is logged in (and has the correct permissions). Otherwise the content string is directly returned.
-     */
-    public function editPanel(
-        $content,
-        array $conf,
-        $currentRecord = '',
-        array $dataArr = array(),
-        $table = '',
-        array $allow = array(),
-        $newUID = 0,
-        array $hiddenFields = array()
-    ) {
-        return $finalOut;
     }
 
     /**
