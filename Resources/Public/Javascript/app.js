@@ -56,13 +56,4 @@
 		});
 	});
 
-	/*$('#sidebar').simplerSidebar({
-		opener: '#toggle-sidebar',
-		sidebar: {
-			align: 'right', //or 'right' - This option can be ignored, the sidebar will automatically align to right.
-			width: 300, //You can ignore this option, the sidebar will automatically size itself to 300px.
-			closingLinks: '.close-sidebar' // If you ignore this option, the plugin will look for all links and this can be buggy. Choose a class for every object inside the sidebar that once clicked will close the sidebar.
-		}
-	});*/
-
 })(jQuery, window);

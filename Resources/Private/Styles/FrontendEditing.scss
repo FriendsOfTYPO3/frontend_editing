@@ -1,0 +1,41 @@
+.frontend-editing-top-bar {
+  background: #111111;
+  color: #dddddd;
+  height: 45px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10999;
+}
+
+.frontend-editing-topbar-inner {
+  padding: 1px 10px 1px 0;
+  height: 30px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.frontend-editing-top-bar-left {
+  width: 50%;
+  float: left;
+}
+
+.frontend-editing-top-bar-right {
+  width: 50%;
+  float: right;
+  text-align: right;
+}
+
+.frontend-editing-right-bar {
+  background: #111111;
+  color: #dddddd;
+  height: 45px;
+  position: fixed;
+  top: 45px;
+  right: 0;
+  width: 200px;
+  min-height: 100%;
+  z-index: 10999;
+}
