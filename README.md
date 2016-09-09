@@ -76,6 +76,6 @@ While developing use the following watch command:
 ### Publish
 
 To build the extension before a publish to TER use the following command to copy all necessary
-node_modules into Public/Resources folder (is a bundle of all **add:resource** commands):
+node_modules into Public/Resources folder (is a bundle of all **add:resource** commands) and compile the SASS:
 
     npm run build:extension
