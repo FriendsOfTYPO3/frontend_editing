@@ -59,6 +59,9 @@ class ContentPostProc
 
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (isset($isFrontendEditing) && (bool)$isFrontendEditing === true) {
+                // To prevent further rendering
+            } else {
+
                 $this->typoScriptFrontendController = $parentObject;
 
                 $userIcon =
@@ -83,9 +86,14 @@ class ContentPostProc
                 <div class="frontend-editing-right-bar">
                 </div>';
 
-                $parentObject->content = str_ireplace('</body>', $output . '</body>', $parentObject->content);
-            } else {
-                $parentObject->content = '<iframe src="http://localhost:8000/index.php?id=2&no_cache=1&frontend_editing=true" width="100%" height="100%" frameborder="0" border="0"></iframe>';
+                $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
+                    'index.php?id=' . $this->typoScriptFrontendController->id .
+                    '&frontend_editing=true'
+                ;
+
+                // $parentObject->content = str_ireplace('</body>', $output . '</body>', $parentObject->content);
+
+                $parentObject->content = $output . '<iframe src="' . $iframeUrl . '" width="100%" height="100%" frameborder="0" border="0"></iframe>';
             }
         }
     }
