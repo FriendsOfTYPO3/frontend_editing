@@ -65,7 +65,7 @@ Add the toastr (notifications) node_module to Public/Resources folder:
 
 The extension are using SASS for compiling into CSS. 
 
-To build the stylesheets use the following command:
+To build the stylesheets use the following command: 
 
     npm run build-css
 

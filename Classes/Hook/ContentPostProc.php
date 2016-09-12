@@ -6,7 +6,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 
-class ContentPostProc {
+class ContentPostProc
+{
 
     const ll = 'LLL:EXT:aloha/Resources/Private/Language/locallang.xml:';
 
@@ -20,7 +21,7 @@ class ContentPostProc {
      *
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var \TYPO3\CMS\Core\Imaging\IconFactory
@@ -55,14 +56,17 @@ class ContentPostProc {
             && $parentObject->type === 0
             && !$this->httpRefererIsFromBackendViewModule()
         ) {
-            $this->typoScriptFrontendController = $parentObject;
 
-            $userIcon =
-                '<span title="User">' .
+            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
+            if (isset($isFrontendEditing) && (bool)$isFrontendEditing === true) {
+                $this->typoScriptFrontendController = $parentObject;
+
+                $userIcon =
+                    '<span title="User">' .
                     $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render() .
-                '</span>';
+                    '</span>';
 
-            $output = '
+                $output = '
                 <div class="frontend-editing-top-bar">
                     <div class="frontend-editing-topbar-inner">
                         <div class="frontend-editing-top-bar-left">
@@ -77,39 +81,12 @@ class ContentPostProc {
                     </div>
                 </div>
                 <div class="frontend-editing-right-bar">
-                    RIGHT!!!
                 </div>';
 
-            // Load head parts
-            //$this->loadResources();
-
-            // Clear staged elements
-            //\Pixelant\Aloha\Utility\Integration::removeStagedElements($GLOBALS['TSFE']->id);
-
-            // Generate output
-            /*$output = ' <div id="aloha-not-loaded" style="display:none"></div>
-						<div id="aloha-top-bar" style="display:none"><div id="aloha-topbar-inner">
-								<div class="aloha-top-bar-left">' . $this->getToolbarLeft() . '</div><!-- end ToolBarLeft -->
-								<div class="aloha-top-bar-right">' . $this->getToolbarRight() . '</div><!-- end ToolBarRight -->
-						</div></div>';*/
-
-            /*if (is_array($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Aloha/Integration.php']['toolbarPostProcess'])) {
-                $finished = FALSE;
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['Aloha']['Classes/Aloha/Integration.php']['toolbarPostProcess'] as $classData) {
-                    $hookObject = GeneralUtility::getUserObj($classData);
-                    if (!($hookObject instanceof \Pixelant\Aloha\Hook\ToolbarPostProcessInterface)) {
-                        throw new \UnexpectedValueException (
-                            $classData . ' must implement interface Tx_Aloha_Interfaces_ToolbarPostProcess',
-                            1274563549
-                        );
-                    }
-                    $request = $hookObject->postProcess($output, $this);
-                }
-            }*/
-
-            //$output = $rightSideBar;
-
-            $parentObject->content = str_ireplace('</body>', $output . '</body>', $parentObject->content);
+                $parentObject->content = str_ireplace('</body>', $output . '</body>', $parentObject->content);
+            } else {
+                $parentObject->content = '<iframe src="http://localhost:8000/index.php?id=2&no_cache=1&frontend_editing=true" width="100%" height="100%" frameborder="0" border="0"></iframe>';
+            }
         }
     }
 
