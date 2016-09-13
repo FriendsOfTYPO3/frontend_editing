@@ -26,10 +26,18 @@
 .frontend-editing-right-bar {
   background: #111111;
   color: #dddddd;
-  height: 45px;
   position: fixed;
   top: 45px;
   right: 0;
   width: 200px;
   min-height: 100%;
   z-index: 10999; }
+
+.frontend-editing-iframe-wrapper {
+  margin-top: 45px;
+  margin-right: 200px; }
+  .frontend-editing-iframe-wrapper.inactive {
+    margin-right: 0; }
+  .frontend-editing-iframe-wrapper iframe {
+    width: 100%;
+    height: 100%; }
