@@ -64,12 +64,14 @@ class ContentPostProc
 
                 $this->typoScriptFrontendController = $parentObject;
 
+                $output = $this->loadResources();
+
                 $userIcon =
                     '<span title="User">' .
                         $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render() .
                     '</span>';
 
-                $output = '
+                $output .= '
                     <div class="frontend-editing-top-bar">
                         <div class="frontend-editing-topbar-inner">
                             <div class="frontend-editing-top-bar-left">
@@ -107,45 +109,14 @@ class ContentPostProc
     }
 
     /**
-     * iframe  eeded js & css files before the end of the body tag
+     * Load the necessary resources for the toolbars
      *
-     * @return void
+     * @return string
      */
     private function loadResources() {
-        // Needed variables for ajax requests
-        $styles = '<script type="text/javascript">' . LF .
-            TAB . 'var alohaUrl = "' . GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . 'index.php?id=' . $this->typoScriptFrontendController->id . '&type=661' . '";' . LF .
-            TAB . 'var typo3BackendUrl = "' . GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . TYPO3_mainDir . '";' . LF .
-            '</script>' . LF;
+        $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
 
-        // Load template from given path (set in EM settings), fall back to shipped template if not specified
-        $configurationArray = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['aloha']);
-        if (is_array($configurationArray) && !empty($configurationArray['headerTemplate'])) {
-            $styles .= GeneralUtility::getUrl(GeneralUtility::getFileAbsFileName($configurationArray['headerTemplate']));
-        } else {
-            $styles .= GeneralUtility::getUrl(GeneralUtility::getFileAbsFileName('EXT:aloha/Configuration/Header/Default.html'));
-        }
-
-        $styles .= '
-			<script type="text/javascript">
-				(function( p, undefined ) {
-				    (function( v, undefined ) {
-						v.styleDesktop = "' . ($this->settings['responsiveView.']['buttons.']['desktop.']['minWidth'] ? 'min-width:' . $this->settings['responsiveView.']['buttons.']['desktop.']['minWidth'] . ';' : '') . ($this->settings['responsiveView.']['buttons.']['desktop.']['maxWidth'] ? 'max-width:' . $this->settings['responsiveView.']['buttons.']['desktop.']['maxWidth'] . ';' : '') . '";
-						v.styleLaptop = "' . ($this->settings['responsiveView.']['buttons.']['laptop.']['minWidth'] ? 'min-width:' . $this->settings['responsiveView.']['buttons.']['laptop.']['minWidth'] . ';' : '') . ($this->settings['responsiveView.']['buttons.']['laptop.']['maxWidth'] ? 'max-width:' . $this->settings['responsiveView.']['buttons.']['laptop.']['maxWidth'] . ';' : '') . '";
-						v.styleTablet = "' . ($this->settings['responsiveView.']['buttons.']['tablet.']['minWidth'] ? 'min-width:' . $this->settings['responsiveView.']['buttons.']['tablet.']['minWidth'] . ';' : '') . ($this->settings['responsiveView.']['buttons.']['tablet.']['maxWidth'] ? 'max-width:' . $this->settings['responsiveView.']['buttons.']['tablet.']['maxWidth'] . ';' : '') . '";
-						v.styleMobile = "' . ($this->settings['responsiveView.']['buttons.']['mobile.']['minWidth'] ? 'min-width:' . $this->settings['responsiveView.']['buttons.']['mobile.']['minWidth'] . ';' : '') . ($this->settings['responsiveView.']['buttons.']['mobile.']['maxWidth'] ? 'max-width:' . $this->settings['responsiveView.']['buttons.']['mobile.']['maxWidth'] . ';' : '') . '";
-					}( p.viewpage = p.viewpage || {} ));
-				}( window.pxa = window.pxa || {} ));
-			</script>
-			';
-        $styles .= '
-			<script type="text/javascript" src="/typo3conf/ext/aloha/Resources/Public/js/viewpage.js"></script>';
-
-        // Wrap it all in a comment for infos when looking at sources
-        // #aloha-resources is used in pxa.aloha.resizeViewFrame so it doesn't remove the resources when changing preview resolutions
-        $styles = LF . '<!-- Begin Aloha Files --><div id="aloha-resources">' . LF . $styles . LF . '</div><!-- End Aloha Files -->' . LF . LF;
-
-        $this->typoScriptFrontendController->content = str_ireplace('</body>', $styles . '</body>', $this->typoScriptFrontendController->content);
+        return $resources;
     }
 
     /**
