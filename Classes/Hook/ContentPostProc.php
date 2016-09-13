@@ -66,25 +66,25 @@ class ContentPostProc
 
                 $userIcon =
                     '<span title="User">' .
-                    $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render() .
+                        $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render() .
                     '</span>';
 
                 $output = '
-                <div class="frontend-editing-top-bar">
-                    <div class="frontend-editing-topbar-inner">
-                        <div class="frontend-editing-top-bar-left">
-                            <a href="/typo3">
-                                <img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
-                                To backend
-                            </a>
-                        </div>
-                        <div class="frontend-editing-top-bar-right">
-                            ' . $userIcon . $GLOBALS['BE_USER']->user['username'] . '
+                    <div class="frontend-editing-top-bar">
+                        <div class="frontend-editing-topbar-inner">
+                            <div class="frontend-editing-top-bar-left">
+                                <a href="/typo3">
+                                    <img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
+                                    To backend
+                                </a>
+                            </div>
+                            <div class="frontend-editing-top-bar-right">
+                                ' . $userIcon . $GLOBALS['BE_USER']->user['username'] . '
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="frontend-editing-right-bar">
-                </div>';
+                    <div class="frontend-editing-right-bar">
+                    </div>';
 
                 $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
                     'index.php?id=' . $this->typoScriptFrontendController->id .
@@ -93,7 +93,15 @@ class ContentPostProc
 
                 // $parentObject->content = str_ireplace('</body>', $output . '</body>', $parentObject->content);
 
-                $parentObject->content = $output . '<iframe src="' . $iframeUrl . '" width="100%" height="100%" frameborder="0" border="0"></iframe>';
+                $parentObject->content = sprintf(
+                    '%s<iframe src="%s" width="%s" height="%s" frameborder="%s" border="%s"></iframe>',
+                    $output,
+                    $iframeUrl,
+                    '100%',
+                    '100%',
+                    '0',
+                    '0'
+                );
             }
         }
     }
