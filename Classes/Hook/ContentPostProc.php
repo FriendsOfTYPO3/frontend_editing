@@ -89,17 +89,23 @@ class ContentPostProc
                     <!--<div class="frontend-editing-right-bar">
                     </div>-->';
 
+                $loadingIcon = '
+                    <div class="loading-screen">' .
+                        $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render() .
+                    '</div>';
+
                 $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
                     'index.php?id=' . $this->typoScriptFrontendController->id .
                     '&frontend_editing=true'
                 ;
 
                 $iframe = sprintf(
-                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="frontend-editing-iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>',
+                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="frontend-editing-iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>%s',
                     $output,
                     $iframeUrl,
                     '0',
-                    '0'
+                    '0',
+                    $loadingIcon
                 );
 
                 $frontendEditingJavascript =  '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>';

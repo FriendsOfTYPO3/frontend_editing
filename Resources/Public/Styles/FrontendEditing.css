@@ -43,3 +43,15 @@
   .frontend-editing-iframe-wrapper iframe {
     width: 100%;
     height: 100%; }
+
+.loading-screen {
+  float: left; }
+  .loading-screen .icon-spin .icon-markup {
+    animation: icon-spin 2s infinite linear;
+    display: block; }
+
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(359deg); } }
