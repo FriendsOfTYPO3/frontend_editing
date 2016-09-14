@@ -1,4 +1,5 @@
 .frontend-editing-top-bar {
+  background: #111111;
   color: #dddddd;
   height: 45px;
   position: fixed;
@@ -6,6 +7,8 @@
   left: 0;
   width: 100%;
   z-index: 10999; }
+  .frontend-editing-top-bar .cke {
+    top: 45px !important; }
 
 .frontend-editing-topbar-inner {
   padding: 1px 10px 1px 0;
@@ -40,9 +43,3 @@
   .frontend-editing-iframe-wrapper iframe {
     width: 100%;
     height: 100%; }
-
-body .cke {
-  top: 0px !important;
-  z-index: 200000000 !important;
-  display: block;
-  position: static; }

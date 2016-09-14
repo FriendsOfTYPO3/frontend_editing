@@ -102,7 +102,7 @@ class ContentPostProc
                 );
 
                 $frontendEditingJavascript =  '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>';
-                $frontendEditingJavascript .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditingTest.js" type="text/javascript"></script>';
+                $frontendEditingJavascript .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>';
 
                 $parentObject->content = $iframe . $frontendEditingJavascript;
 
