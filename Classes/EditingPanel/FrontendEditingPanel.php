@@ -11,6 +11,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Utility\Access;
 use TYPO3\CMS\Frontend\View\AdminPanelView;
 
 /**
@@ -95,42 +96,46 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-        // Special content is about to be shown, so the cache must be disabled.
-        $this->frontendController->set_no_cache('Display frontend edit icons', true);
+        if (Access::isEnabled()) {
+            // Special content is about to be shown, so the cache must be disabled.
+            $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
-        $editIconsToolBar = '';
+            $editIconsToolBar = '';
 
-        $actionsMoveUpIcon = '<span title="'
-            . $this->backendUser->extGetLL('p_moveUp') . '">'
-            . $this->iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render()
-            . '</span>';
+            $actionsMoveUpIcon = '<span title="'
+                . $this->backendUser->extGetLL('p_moveUp') . '">'
+                . $this->iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render()
+                . '</span>';
 
-        $actionsMoveDownIcon = '<span title="'
-            . $this->backendUser->extGetLL('p_moveDown') . '">'
-            . $this->iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render()
-            . '</span>';
+            $actionsMoveDownIcon = '<span title="'
+                . $this->backendUser->extGetLL('p_moveDown') . '">'
+                . $this->iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render()
+                . '</span>';
 
-        $actionsSaveIcon = '<span title="'
-            . $this->backendUser->extGetLL('p_save') . '">'
-            . $this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL)->render()
-            . '</span>';
+            $actionsSaveIcon = '<span title="'
+                . $this->backendUser->extGetLL('p_save') . '">'
+                . $this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL)->render()
+                . '</span>';
 
-        $actionsDeleteIcon = '<span title="'
-            . $this->backendUser->extGetLL('p_delete') . '">'
-            . $this->iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render()
-            . '</span>';
+            $actionsDeleteIcon = '<span title="'
+                . $this->backendUser->extGetLL('p_delete') . '">'
+                . $this->iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render()
+                . '</span>';
 
-        $editIconsToolBar = $actionsMoveUpIcon . $actionsMoveDownIcon . $actionsSaveIcon . $actionsDeleteIcon;
+            $editIconsToolBar = $actionsMoveUpIcon . $actionsMoveDownIcon . $actionsSaveIcon . $actionsDeleteIcon;
 
-        $wrappedContent = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
-            $table,
-            $fieldList,
-            $editUid,
-            $content
-        );
+            $wrappedContent = sprintf(
+                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+                $table,
+                $fieldList,
+                $editUid,
+                $content
+            );
 
-        return $editIconsToolBar . $wrappedContent;
+            return $wrappedContent;
+        } else {
+            return $content;
+        }
     }
 
     /**
