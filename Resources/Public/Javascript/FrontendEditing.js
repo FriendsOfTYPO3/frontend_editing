@@ -20,6 +20,7 @@
                     'field': this.field,
                     'content': CKEDITOR.instances[this.editorInstance].getData()
                 };
+
                 $.ajax({
                     type: 'POST',
                     url: pageUrl + functionRoutes.crud,
@@ -31,6 +32,8 @@
                     toastr.error(errorThrown, 'Something went wrong');
                 });
             });
+        } else {
+            toastr.info('There are currently no changes made to the content on the page!', 'No changes made');
         }
     });
 
