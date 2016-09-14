@@ -61,9 +61,21 @@ Add the toastr (notifications) node_module to Public/Resources folder:
 
     npm run add:resource:toastr
 
+### Styling
+
+The extension are using SASS for compiling into CSS. 
+
+To build the stylesheets use the following command: 
+
+    npm run build-css
+
+While developing use the following watch command:
+
+    npm run watch-css
+
 ### Publish
 
 To build the extension before a publish to TER use the following command to copy all necessary
-node_modules into Public/Resources folder (is a bundle of all **add:resource** commands):
+node_modules into Public/Resources folder (is a bundle of all **add:resource** commands) and compile the SASS:
 
     npm run build:extension
