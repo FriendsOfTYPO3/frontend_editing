@@ -80,6 +80,7 @@ class ContentPostProc
                                 </a>
                             </div>
                             <div class="frontend-editing-top-bar-right">
+                                <button type="submit" id="frontend-editing-save">Save</button> 
                                 ' . $userIcon . $GLOBALS['BE_USER']->user['username'] . '
                             </div>
                         </div>
@@ -92,13 +93,19 @@ class ContentPostProc
                     '&frontend_editing=true'
                 ;
 
-                $parentObject->content = sprintf(
-                    '%s<div class="frontend-editing-iframe-wrapper inactive"><iframe src="%s" frameborder="%s" border="%s"></iframe></div>',
+                $iframe = sprintf(
+                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="frontend-editing-iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>',
                     $output,
                     $iframeUrl,
                     '0',
                     '0'
                 );
+
+                $frontendEditingJavascript =  '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>';
+                $frontendEditingJavascript .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditingTest.js" type="text/javascript"></script>';
+
+                $parentObject->content = $iframe . $frontendEditingJavascript;
+
             }
         }
     }
@@ -110,6 +117,11 @@ class ContentPostProc
      */
     private function loadResources() {
         $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
+        $resources .= '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
+        $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-2.2.3.min.js" type="text/javascript"></script>';
+        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js" type="text/javascript"></script>';
+        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js" type="text/javascript"></script>';
+        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js" type="text/javascript"></script>';
 
         return $resources;
     }
