@@ -1,4 +1,4 @@
-.frontend-editing-top-bar {
+.t3-frontend-editing__top-bar {
   background: #111111;
   color: #dddddd;
   height: 45px;
@@ -7,25 +7,25 @@
   left: 0;
   width: 100%;
   z-index: 10999; }
-  .frontend-editing-top-bar .cke {
+  .t3-frontend-editing__top-bar .cke {
     top: 45px !important; }
 
-.frontend-editing-topbar-inner {
+.t3-frontend-editing__topbar-inner {
   padding: 1px 10px 1px 0;
   height: 30px;
   font-weight: 300;
   font-size: 13px; }
 
-.frontend-editing-top-bar-left {
+.t3-frontend-editing__top-bar-left {
   width: 50%;
   float: left; }
 
-.frontend-editing-top-bar-right {
+.t3-frontend-editing__top-bar-right {
   width: 50%;
   float: right;
   text-align: right; }
 
-.frontend-editing-right-bar {
+.t3-frontend-editing__right-bar {
   background: #111111;
   color: #dddddd;
   position: fixed;
@@ -35,11 +35,37 @@
   min-height: 100%;
   z-index: 10999; }
 
-.frontend-editing-iframe-wrapper {
+.t3-frontend-editing__iframe-wrapper {
   margin-top: 45px;
   margin-right: 200px; }
-  .frontend-editing-iframe-wrapper.inactive {
+  .t3-frontend-editing__iframe-wrapper.inactive {
     margin-right: 0; }
-  .frontend-editing-iframe-wrapper iframe {
+  .t3-frontend-editing__iframe-wrapper iframe {
     width: 100%;
     height: 100%; }
+
+.t3-frontend-editing__loading-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: -45px;
+  right: 0;
+  background: #FFF;
+  opacity: 0.8; }
+  .t3-frontend-editing__loading-screen .icon-spin .icon-markup {
+    filter: alpha(opacity=80);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -28px 0 0 -25px;
+    animation: icon-spin 2s infinite linear;
+    display: block; }
+
+@keyframes icon-spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(359deg); } }
+
+.hidden {
+  display: none; }
