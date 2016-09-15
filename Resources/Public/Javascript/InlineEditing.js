@@ -24,7 +24,7 @@
 	localStorage.removeItem(localStorageKey);
 
 	var deferred = $.Deferred();
-	var iframe = $('.frontend-editing-iframe-wrapper iframe').attr({
+	var iframe = $('.t3-frontend-editing__iframe-wrapper iframe').attr({
 		'src': iframeUrl
 	});
 
@@ -33,16 +33,18 @@
 	deferred.done(function() {
 
 		// Add custom configuration to ckeditor
-		$('.frontend-editing-iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
+		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
 			$(this).ckeditor(editorConfig);
 		});
+
+		$('.t3-frontend-editing__loading-screen').toggle('hidden');
 
 		CKEDITOR.on('instanceReady', function(event) {
 
 			// @TODO: This moves the dom instances of ckeditor into the top bar
-			$('.frontend-editing-iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
+			$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
 				var editorDomInstance = $(this).ckeditor().editor.id;
-				$('.' + editorDomInstance).detach().appendTo('.frontend-editing-top-bar');
+				$('.' + editorDomInstance).detach().appendTo('.t3-frontend-editing__top-bar');
 			});
 
 			var editor = event.editor;

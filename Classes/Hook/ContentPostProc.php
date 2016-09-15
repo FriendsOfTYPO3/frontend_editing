@@ -72,25 +72,25 @@ class ContentPostProc
                     '</span>';
 
                 $output .= '
-                    <div class="frontend-editing-top-bar">
-                        <div class="frontend-editing-topbar-inner">
-                            <div class="frontend-editing-top-bar-left">
+                    <div class="t3-frontend-editing__top-bar">
+                        <div class="t3-frontend-editing__topbar-inner">
+                            <div class="t3-frontend-editing__top-bar-left">
                                 <a href="/typo3">
                                     <img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
                                     To backend
                                 </a>
                             </div>
-                            <div class="frontend-editing-top-bar-right">
-                                <button type="submit" id="frontend-editing-save">Save</button> 
+                            <div class="t3-frontend-editing__top-bar-right">
+                                <button type="submit" class="t3-frontend-editing__save">Save</button> 
                                 ' . $userIcon . $GLOBALS['BE_USER']->user['username'] . '
                             </div>
                         </div>
                     </div>
-                    <!--<div class="frontend-editing-right-bar">
+                    <!--<div class="t3-frontend-editing__right-bar">
                     </div>-->';
 
                 $loadingIcon = '
-                    <div class="loading-screen">' .
+                    <div class="t3-frontend-editing__loading-screen">' .
                         $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render() .
                     '</div>';
 
@@ -100,7 +100,7 @@ class ContentPostProc
                 ;
 
                 $iframe = sprintf(
-                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="frontend-editing-iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>%s',
+                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="t3-frontend-editing__iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>%s',
                     $output,
                     $iframeUrl,
                     '0',
@@ -126,7 +126,6 @@ class ContentPostProc
         $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
         $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' . PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
-       // $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-2.2.3.min.js" type="text/javascript"></script>';
         $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js" type="text/javascript"></script>';
         $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js" type="text/javascript"></script>';
         $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js" type="text/javascript"></script>';

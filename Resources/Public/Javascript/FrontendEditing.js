@@ -6,13 +6,14 @@
     };
 
     // Saving content
-    $('#frontend-editing-save').click(function() {
+    $('.t3-frontend-editing__save').click(function() {
         var items = localStorage.getItem('TYPO3:FrontendEditing');
         if (items !== null && items !== '') {
             items = JSON.parse(items);
 
-            $.each(items, function(index) {
-                var itemDomElement = $('.' + this.editorInstance);
+            $('.t3-frontend-editing__loading-screen').toggle('hidden');
+
+            var interaction = $.each(items, function(index) {
                 var data = {
                     'action': this.action,
                     'table': this.table,
@@ -31,7 +32,14 @@
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     toastr.error(errorThrown, 'Something went wrong');
                 });
+
             });
+
+            // Wait until all ajax requests are done
+            $(document).ajaxStop(function () {
+                $('.t3-frontend-editing__loading-screen').toggle('hidden');
+            });
+
         } else {
             toastr.info('There are currently no changes made to the content on the page!', 'No changes made');
         }
