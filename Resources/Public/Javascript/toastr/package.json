@@ -1,11 +1,11 @@
 {
   "_args": [
     [
-      "toastr@2.1.2",
+      "toastr@^2.1.2",
       "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
-  "_from": "toastr@2.1.2",
+  "_from": "toastr@>=2.1.2 <3.0.0",
   "_id": "toastr@2.1.2",
   "_inCache": true,
   "_installable": true,
@@ -19,11 +19,11 @@
   "_phantomChildren": {},
   "_requested": {
     "name": "toastr",
-    "raw": "toastr@2.1.2",
-    "rawSpec": "2.1.2",
+    "raw": "toastr@^2.1.2",
+    "rawSpec": "^2.1.2",
     "scope": null,
-    "spec": "2.1.2",
-    "type": "version"
+    "spec": ">=2.1.2 <3.0.0",
+    "type": "range"
   },
   "_requiredBy": [
     "/"
@@ -31,7 +31,7 @@
   "_resolved": "https://registry.npmjs.org/toastr/-/toastr-2.1.2.tgz",
   "_shasum": "fd69066ae7578a5b3357725fc9c7c335e9b681df",
   "_shrinkwrap": null,
-  "_spec": "toastr@2.1.2",
+  "_spec": "toastr@^2.1.2",
   "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "bugs": {
     "url": "http://stackoverflow.com/questions/tagged/toastr"

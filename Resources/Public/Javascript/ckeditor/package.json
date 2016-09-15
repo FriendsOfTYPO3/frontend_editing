@@ -1,41 +1,41 @@
 {
   "_args": [
     [
-      "ckeditor@4.5.10",
+      "ckeditor@^4.5.10",
       "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
-  "_from": "ckeditor@4.5.10",
-  "_id": "ckeditor@4.5.10",
+  "_from": "ckeditor@>=4.5.10 <5.0.0",
+  "_id": "ckeditor@4.5.11",
   "_inCache": true,
   "_installable": true,
   "_location": "/ckeditor",
-  "_nodeVersion": "5.7.0",
+  "_nodeVersion": "6.5.0",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/ckeditor-4.5.10.tgz_1468418661689_0.8480386324226856"
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/ckeditor-4.5.11.tgz_1473255367184_0.9715864942409098"
   },
   "_npmUser": {
     "email": "npm@cksource.com",
     "name": "cksource"
   },
-  "_npmVersion": "3.8.6",
+  "_npmVersion": "2.6.1",
   "_phantomChildren": {},
   "_requested": {
     "name": "ckeditor",
-    "raw": "ckeditor@4.5.10",
-    "rawSpec": "4.5.10",
+    "raw": "ckeditor@^4.5.10",
+    "rawSpec": "^4.5.10",
     "scope": null,
-    "spec": "4.5.10",
-    "type": "version"
+    "spec": ">=4.5.10 <5.0.0",
+    "type": "range"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.10.tgz",
-  "_shasum": "944128336a9a26316640746687b530b716272d27",
+  "_resolved": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.11.tgz",
+  "_shasum": "5f3aef4f6b109d8d0b33e3532acb6d2f08537d12",
   "_shrinkwrap": null,
-  "_spec": "ckeditor@4.5.10",
+  "_spec": "ckeditor@^4.5.10",
   "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "author": {
     "name": "CKSource",
@@ -49,10 +49,10 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "944128336a9a26316640746687b530b716272d27",
-    "tarball": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.10.tgz"
+    "shasum": "5f3aef4f6b109d8d0b33e3532acb6d2f08537d12",
+    "tarball": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.11.tgz"
   },
-  "gitHead": "b889d7d3071a7a9d691e2e89170c745159f9f8c9",
+  "gitHead": "48155a1e1c7e84736b5a166ad3f33acea2a51255",
   "homepage": "http://ckeditor.com",
   "keywords": [
     "ckeditor",
@@ -80,5 +80,5 @@
     "url": "git+https://github.com/ckeditor/ckeditor-releases.git"
   },
   "scripts": {},
-  "version": "4.5.10"
+  "version": "4.5.11"
 }
