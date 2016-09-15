@@ -67,7 +67,7 @@
 						'editorInstance': editor.name
 					};
 
-					saveItems.push(data);
+					saveItems[parseInt(data.uid)] = data;
 					localStorage.setItem(localStorageKey, JSON.stringify(saveItems));
 				}
 			});

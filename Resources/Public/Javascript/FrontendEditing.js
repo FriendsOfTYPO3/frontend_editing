@@ -14,25 +14,27 @@
             $('.t3-frontend-editing__loading-screen').toggle('hidden');
 
             $.each(items, function(index) {
-                var data = {
-                    'action': this.action,
-                    'table': this.table,
-                    'uid': this.uid,
-                    'field': this.field,
-                    'content': CKEDITOR.instances[this.editorInstance].getData()
-                };
+                var item = items[index];
+                if (item !== null) {
+                    var data = {
+                        'action': item.action,
+                        'table': item.table,
+                        'uid': item.uid,
+                        'field': item.field,
+                        'content': CKEDITOR.instances[item.editorInstance].getData()
+                    };
 
-                $.ajax({
-                    type: 'POST',
-                    url: pageUrl + functionRoutes.crud,
-                    dataType: 'JSON',
-                    data: data
-                }).done(function(data, textStatus, jqXHR) {
-                    toastr.success('Content (uid: "' + data.message +'") have been saved!', 'Content saved');
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(errorThrown, 'Something went wrong');
-                });
-
+                    $.ajax({
+                        type: 'POST',
+                        url: pageUrl + functionRoutes.crud,
+                        dataType: 'JSON',
+                        data: data
+                    }).done(function(data, textStatus, jqXHR) {
+                        toastr.success('Content (uid: "' + data.message +'") have been saved!', 'Content saved');
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        toastr.error(errorThrown, 'Something went wrong');
+                    });
+                }
             });
 
             // Wait until all ajax requests are done
