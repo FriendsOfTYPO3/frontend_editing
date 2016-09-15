@@ -13,7 +13,7 @@
 
             $('.t3-frontend-editing__loading-screen').toggle('hidden');
 
-            var interaction = $.each(items, function(index) {
+            $.each(items, function(index) {
                 var data = {
                     'action': this.action,
                     'table': this.table,
