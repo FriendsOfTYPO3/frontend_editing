@@ -4,10 +4,11 @@
     var functionRoutes = {
         'crud': '?type=1470741815'
     };
+    var localStorageKey = 'TYPO3:FrontendEditing';
 
     // Saving content
     $('.t3-frontend-editing__save').click(function() {
-        var items = localStorage.getItem('TYPO3:FrontendEditing');
+        var items = localStorage.getItem(localStorageKey);
         if (items !== null && items !== '') {
             items = JSON.parse(items);
 
@@ -40,6 +41,8 @@
             // Wait until all ajax requests are done
             $(document).ajaxStop(function () {
                 $('.t3-frontend-editing__loading-screen').toggle('hidden');
+                // Clear local storage after save
+                localStorage.removeItem(localStorageKey);
             });
 
         } else {
