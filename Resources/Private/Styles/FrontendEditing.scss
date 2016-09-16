@@ -1,6 +1,6 @@
 @import "Constants";
 
-.t3-frontend-editing__top-bar {
+.#{$prefix}__top-bar {
   background: $black;
   color: $light-grey;
   height: $top-bar-height;
@@ -15,25 +15,25 @@
   }
 }
 
-.t3-frontend-editing__topbar-inner {
+.#{$prefix}__topbar-inner {
   padding: 1px 10px 1px 0;
   height: 30px;
   font-weight: 300;
   font-size: 13px;
 }
 
-.t3-frontend-editing__top-bar-left {
+.#{$prefix}__top-bar-left {
   width: 50%;
   float: left;
 }
 
-.t3-frontend-editing__top-bar-right {
+.#{$prefix}__top-bar-right {
   width: 50%;
   float: right;
   text-align: right;
 }
 
-.t3-frontend-editing__right-bar {
+.#{$prefix}__right-bar {
   background: $black;
   color: $light-grey;
   position: fixed;
@@ -44,7 +44,7 @@
   z-index: 10999;
 }
 
-.t3-frontend-editing__iframe-wrapper {
+.#{$prefix}__iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
 
@@ -58,7 +58,7 @@
   }
 }
 
-.t3-frontend-editing__loading-screen {
+.#{$prefix}__loading-screen {
   position: absolute;
   left: 0;
   top: 0;
