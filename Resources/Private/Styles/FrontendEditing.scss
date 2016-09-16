@@ -1,5 +1,9 @@
 @import "Constants";
 
+body {
+  margin: 0px;
+}
+
 .#{$prefix}__top-bar {
   background: $black;
   color: $light-grey;
