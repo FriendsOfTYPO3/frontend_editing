@@ -66,52 +66,26 @@ class ContentPostProc
 
                 $output = $this->loadResources();
 
-                $userIcon =
-                    '<span title="User">' .
-                        $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render() .
-                    '</span>';
-
-                $output .= '
-                    <div class="t3-frontend-editing__top-bar">
-                        <div class="t3-frontend-editing__topbar-inner">
-                            <div class="t3-frontend-editing__top-bar-left">
-                                <a href="/typo3">
-                                    <img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
-                                    To backend
-                                </a>
-                            </div>
-                            <div class="t3-frontend-editing__top-bar-right">
-                                <button type="submit" class="t3-frontend-editing__save">Save</button> 
-                                ' . $userIcon . $GLOBALS['BE_USER']->user['username'] . '
-                            </div>
-                        </div>
-                    </div>
-                    <!--<div class="t3-frontend-editing__right-bar">
-                    </div>-->';
-
-                $loadingIcon = '
-                    <div class="t3-frontend-editing__loading-screen">' .
-                        $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render() .
-                    '</div>';
-
                 $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
                     'index.php?id=' . $this->typoScriptFrontendController->id .
                     '&frontend_editing=true'
                 ;
 
-                $iframe = sprintf(
-                    '%s<script type="text/javascript">var iframeUrl = "%s";</script><div class="t3-frontend-editing__iframe-wrapper inactive"><iframe src="" frameborder="%s" border="%s"></iframe></div>%s',
-                    $output,
-                    $iframeUrl,
-                    '0',
-                    '0',
-                    $loadingIcon
-                );
+                $templatePath = GeneralUtility::getFileAbsFileName('typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html');
+                $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
+                $view->setTemplatePathAndFilename($templatePath);
+                $view->assignMultiple([
+                    'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
+                    'userName' => $GLOBALS['BE_USER']->user['username'],
+                    'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
+                    'iframeUrl' => $iframeUrl
+                ]);
+                $view->getRenderingContext()->setLegacyMode(false);
+                $renderedHtml = $view->render();
 
-                $frontendEditingJavascript =  '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>';
-                $frontendEditingJavascript .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>';
+                $output .= $renderedHtml;
 
-                $parentObject->content = $iframe . $frontendEditingJavascript;
+                $parentObject->content = $output;
 
             }
         }
