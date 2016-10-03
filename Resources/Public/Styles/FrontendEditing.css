@@ -1,18 +1,31 @@
+/* Toolbars */
+/* Topbar */
 .t3-frontend-editing__top-bar {
-  background: #111111;
-  color: #dddddd;
-  height: 45px;
+  background: #191919;
+  color: #fff;
+  height: 55px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10999; }
+  z-index: 10999;
+  font-family: Verdana, Helvetica, Arial, sans-serif; }
   .t3-frontend-editing__top-bar .cke {
-    top: 45px !important; }
+    top: 55px !important; }
+
+.t3-frontend-editing__save {
+  background-color: #FF8700;
+  color: #fff;
+  border: none;
+  text-align: center;
+  min-width: 140px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer; }
 
 .t3-frontend-editing__topbar-inner {
   padding: 1px 10px 1px 0;
-  height: 30px;
+  height: 55px;
   font-weight: 300;
   font-size: 13px; }
 
@@ -26,17 +39,17 @@
   text-align: right; }
 
 .t3-frontend-editing__right-bar {
-  background: #111111;
-  color: #dddddd;
+  background: #191919;
+  color: #fff;
   position: fixed;
-  top: 45px;
+  top: 55px;
   right: 0;
   width: 200px;
   min-height: 100%;
   z-index: 10999; }
 
 .t3-frontend-editing__iframe-wrapper {
-  margin-top: 45px;
+  margin-top: 55px;
   margin-right: 200px; }
   .t3-frontend-editing__iframe-wrapper.inactive {
     margin-right: 0; }
@@ -48,7 +61,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  bottom: -45px;
+  bottom: -55px;
   right: 0;
   background: #FFF;
   opacity: 0.8; }

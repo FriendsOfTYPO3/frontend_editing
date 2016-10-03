@@ -1,7 +1,25 @@
 // Colors
-$black: #111111;
-$light-grey: #dddddd;
+$orange_primary: #FF8700;
+$yellow: #E8A33D;
+$yellow-light: #FFC857;
+$gray-dark: #515151;
+$gray: #8C8C8C;
+$gray-light: #B9B9B9;
+$gray-bright: #EFEFEF;
+ 
+$black: #191919;
+$white: #fff;
 
-// Toolbars
-$top-bar-height: 45px;
+
+// Font
+$font-family-base: Verdana, Helvetica, Arial, sans-serif;
+
+/* Toolbars */
+$t3-frontend: t3-frontend-editing__;
+
+// Header top
+$header-top-bg-color: $black;
+$top-bar-height: 55px;
+
+// Right bar
 $right-bar-width: 200px;

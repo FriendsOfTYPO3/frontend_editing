@@ -1,41 +1,54 @@
 @import "Constants";
 
-.t3-frontend-editing__top-bar {
+/* Topbar */
+
+.#{$t3-frontend}top-bar {
   background: $black;
-  color: $light-grey;
+  color: $white;
   height: $top-bar-height;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 10999;
+  font-family: $font-family-base;
 
   .cke {
     top: $top-bar-height !important;
   }
 }
-
-.t3-frontend-editing__topbar-inner {
-  padding: 1px 10px 1px 0;
+.#{$t3-frontend}save{
+  background-color: $orange_primary;
+  color: $white;
+  border: none;
+  text-align: center;
+  min-width: 140px;
   height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.#{$t3-frontend}topbar-inner {
+  padding: 1px 10px 1px 0;
+  height: $top-bar-height;
   font-weight: 300;
   font-size: 13px;
 }
 
-.t3-frontend-editing__top-bar-left {
+.#{$t3-frontend}top-bar-left {
   width: 50%;
   float: left;
 }
 
-.t3-frontend-editing__top-bar-right {
+.#{$t3-frontend}top-bar-right {
   width: 50%;
   float: right;
   text-align: right;
 }
 
-.t3-frontend-editing__right-bar {
-  background: $black;
-  color: $light-grey;
+.#{$t3-frontend}right-bar {
+  background: $header-top-bg-color;
+  color: $white;
   position: fixed;
   top: $top-bar-height;
   right: 0;
@@ -44,7 +57,7 @@
   z-index: 10999;
 }
 
-.t3-frontend-editing__iframe-wrapper {
+.#{$t3-frontend}iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
 
@@ -58,11 +71,11 @@
   }
 }
 
-.t3-frontend-editing__loading-screen {
+.#{$t3-frontend}loading-screen {
   position: absolute;
   left: 0;
   top: 0;
-  bottom: -$top-bar-height;
+  bottom:-$top-bar-height;
   right: 0;
   background: #FFF;
   opacity: 0.8;
