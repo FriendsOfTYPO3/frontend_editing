@@ -1,0 +1,33 @@
+<div class="t3-frontend-editing__top-bar">
+    <div class="t3-frontend-editing__topbar-inner">
+        <div class="t3-frontend-editing__top-bar-left">
+            <a href="/typo3">
+                <img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
+                To backend
+            </a>
+        </div>
+        <div class="t3-frontend-editing__top-bar-right">
+            <button type="submit" class="t3-frontend-editing__save">Save</button>
+            <span title="User">
+                {userIcon -> f:format.html()} {userName -> f:format.html()}
+            </span>
+        </div>
+    </div>
+</div>
+<!--<div class="t3-frontend-editing__right-bar">
+</div>-->
+
+<script type="text/javascript">
+    var iframeUrl = "{iframeUrl -> f:format.raw()}";
+</script>
+
+<div class="t3-frontend-editing__iframe-wrapper inactive">
+    <iframe src="" frameborder="0" border="0"></iframe>
+</div>
+
+<div class="t3-frontend-editing__loading-screen">
+    {loadingIcon -> f:format.html()}
+</div>
+
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>
