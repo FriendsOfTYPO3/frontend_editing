@@ -2,8 +2,6 @@
 
 *[contenteditable="true"] {
 	&:focus{
-		outline: none;
-		border: 3px dotted #FF8700;
-		margin-bottom: 5px;
+		outline: 3px dotted #FF8700;
 	}
 }
