@@ -1,7 +1,6 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -13,7 +12,7 @@ class ContentPostProc
     /**
      * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
      */
-    protected $typoScriptFrontendController = NULL;
+    protected $typoScriptFrontendController = null;
 
     /**
      * "Plugin" settings
@@ -32,12 +31,13 @@ class ContentPostProc
      *
      * @var array
      */
-    protected $configuration = array();
+    protected $configuration = [];
 
     /**
      * ContentPostProc constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
     }
 
@@ -51,17 +51,14 @@ class ContentPostProc
      */
     public function main(array $params, \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $parentObject)
     {
-        if (
-            \TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()
+        if (\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()
             && $parentObject->type === 0
             && !$this->httpRefererIsFromBackendViewModule()
         ) {
-
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (isset($isFrontendEditing) && (bool)$isFrontendEditing === true) {
                 // To prevent further rendering
             } else {
-
                 $this->typoScriptFrontendController = $parentObject;
 
                 $output = $this->loadResources();
@@ -71,7 +68,9 @@ class ContentPostProc
                     '&frontend_editing=true'
                 ;
 
-                $templatePath = GeneralUtility::getFileAbsFileName('typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html');
+                $templatePath = GeneralUtility::getFileAbsFileName(
+                    'typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'
+                );
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
                 $view->assignMultiple([
@@ -86,7 +85,6 @@ class ContentPostProc
                 $output .= $renderedHtml;
 
                 $parentObject->content = $output;
-
             }
         }
     }
@@ -96,26 +94,22 @@ class ContentPostProc
      *
      * @return string
      */
-    private function loadResources() {
-        $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
-        $resources .= '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
-        $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' . PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
-        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js" type="text/javascript"></script>';
-        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js" type="text/javascript"></script>';
-        $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js" type="text/javascript"></script>';
+    private function loadResources()
+    {
+        $resources = '<link rel="stylesheet" type="text/css" href="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
+        $resources .= '<link rel="stylesheet" type="text/css" href="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
+        $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
+            PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js"></script>';
 
         return $resources;
-    }
-
-    /**
-     * Get the icon path
-     *
-     * @param string $icon
-     * @return string
-     * @todo do it correctly
-     */
-    public function getIcon($icon) {
-        return \TYPO3\CMS\Backend\Utility\IconUtility::skinImg('/' . TYPO3_mainDir, 'sysext/t3skin/icons/gfx/' . $icon, 'width="16" height="16"');
     }
 
     /**
@@ -123,7 +117,8 @@ class ContentPostProc
      *
      * @return bool
      */
-    protected function httpRefererIsFromBackendViewModule() {
+    protected function httpRefererIsFromBackendViewModule()
+    {
         $parsedReferer = parse_url($_SERVER['HTTP_REFERER']);
         $pathArray = explode('/', $parsedReferer['path']);
         $viewPageView = preg_match('/web_ViewpageView/i', $parsedReferer['query']);

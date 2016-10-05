@@ -10,7 +10,7 @@ use TYPO3\CMS\FrontendEditing\Controller\CrudController;
 class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
     /**
-     * @var \TYPO3\CMS\FrontendEditing\Controller\SaveController
+     * @var \TYPO3\CMS\FrontendEditing\Controller\CrudController
      */
     protected $subject = null;
 
@@ -24,9 +24,7 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $this->subject = $this->getMock(
             CrudController::class,
             ['save'],
-            [],
-            '',
-            true
+            []
         );
     }
 
@@ -41,7 +39,8 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function getPropertiesInitializedInConstructor() {
+    public function getPropertiesInitializedInConstructor()
+    {
         $this->assertSame(
             get_class($this->subject->getDataHandler()),
             DataHandler::class
@@ -62,7 +61,8 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     /**
      * @test
      */
-    public function trySavingContentAndExpectAnException() {
+    public function tryWrapContentAndExpectAnException()
+    {
         try {
             $this->subject->saveAction();
         } catch (\Exception $exception) {
