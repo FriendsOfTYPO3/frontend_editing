@@ -4,7 +4,7 @@ body {
   margin: 0px;
 }
 
-.#{$prefix}__top-bar {
+.t3-frontend-editing__top-bar {
   background: $black;
   color: $light-grey;
   height: $top-bar-height;
@@ -19,25 +19,25 @@ body {
   }
 }
 
-.#{$prefix}__topbar-inner {
+.t3-frontend-editing__topbar-inner {
   padding: 1px 10px 1px 0;
   height: 30px;
   font-weight: 300;
   font-size: 13px;
 }
 
-.#{$prefix}__top-bar-left {
+.t3-frontend-editing__top-bar-left {
   width: 50%;
   float: left;
 }
 
-.#{$prefix}__top-bar-right {
+.t3-frontend-editing__top-bar-right {
   width: 50%;
   float: right;
   text-align: right;
 }
 
-.#{$prefix}__right-bar {
+.t3-frontend-editing__right-bar {
   background: $black;
   color: $light-grey;
   position: fixed;
@@ -48,7 +48,7 @@ body {
   z-index: 10999;
 }
 
-.#{$prefix}__iframe-wrapper {
+.t3-frontend-editing__iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
 
@@ -62,7 +62,7 @@ body {
   }
 }
 
-.#{$prefix}__loading-screen {
+.t3-frontend-editing__loading-screen {
   position: absolute;
   left: 0;
   top: 0;
