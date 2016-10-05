@@ -13,6 +13,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\Access;
 use TYPO3\CMS\Frontend\View\AdminPanelView;
+use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
  * View class for the edit panels in frontend editing.
@@ -123,8 +124,7 @@ class FrontendEditingPanel
 
             $editIconsToolBar = $actionsMoveUpIcon . $actionsMoveDownIcon . $actionsSaveIcon . $actionsDeleteIcon;
 
-            $wrappedContent = sprintf(
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
                 $table,
                 $fieldList,
                 $editUid,

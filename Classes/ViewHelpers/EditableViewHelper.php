@@ -2,8 +2,7 @@
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\FrontendEditing\Utility\Access;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
  * Viewhelper to enable aloha for records in fluid
@@ -38,8 +37,7 @@ class EditableViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
         $content = htmlspecialchars_decode($content);
 
         if (Access::isEnabled()) {
-            $content = sprintf(
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            $content = ContentEditableWrapper::wrapContentToBeEditable(
                 $table,
                 $field,
                 $uid,
