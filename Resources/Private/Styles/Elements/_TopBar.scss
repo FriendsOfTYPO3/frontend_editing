@@ -1,0 +1,99 @@
+/* TopBar */
+
+.#{$t3-frontend}top-bar {
+  background: $black;
+  color: $white;
+  height: $top-bar-height;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10999;
+  font-family: $font-family-base;
+
+  .cke {
+    top: $top-bar-height !important;
+  }
+}
+.#{$t3-frontend}save{
+  background-color: $orange_primary;
+  color: $white;
+  border: none;
+  text-align: center;
+  min-width: 140px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.#{$t3-frontend}topbar-inner {
+  padding:0;
+  height: $top-bar-height;
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.#{$t3-frontend}top-bar-left {
+  width: 50%;
+  float: left;
+
+  .left-bar-button{
+    @extend .btn;
+    background:none;
+    border: none;
+    color: $white;
+    cursor: pointer;
+  }
+  .back-backend {
+    display: inline-block;
+    position: relative;
+
+    &:hover{
+      background-color: lighten($black, 20%);
+    }
+    a{
+      display: inline-block;
+      color: $white;
+      text-decoration: none;
+      padding: 5px 10px 14px 10px;
+
+    }
+    img{
+      position: relative;
+      top: 5px;
+    }
+  }
+}
+
+.#{$t3-frontend}top-bar-right {
+  width: 50%;
+  float: right;
+  text-align: right;
+
+  ul.top-bar-items{
+    float: right;
+    margin: 0;
+    padding: 0;
+
+    li.item{
+      float: left;
+      height: 45px;
+      position: relative;
+      list-style: none;
+      display: inline-block;
+    }
+  }
+  .user {
+    span.icon-avatar-default{
+      position: relative;
+      top: 6px;
+    }
+  }
+  .right-bar-button{
+    background:none;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+}

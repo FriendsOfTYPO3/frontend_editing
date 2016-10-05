@@ -1,0 +1,16 @@
+.btn{
+    background-color: #FF8700;
+    color: #fff;
+    border: none;
+    text-align: center;
+    min-width: 140px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-default{
+    @extend .btn;
+    border: 1px solid $gray-light;
+    background-color: transparent;
+}

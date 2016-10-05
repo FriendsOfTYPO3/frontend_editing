@@ -1,0 +1,42 @@
+/* RightBar */
+
+.#{$t3-frontend}right-bar {
+  display: none;
+  background: $header-top-bg-color;
+  color: $white;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: $right-bar-width;
+  min-height: 100%;
+  z-index: 10999;
+  font-family: $font-family-base;
+
+  .header{
+    height: 45px;
+    text-align: right;
+    h4{
+      padding: 12px;
+      margin: 0;
+    }
+  }
+}
+
+.push-toleft { 
+  right: $right-bar-width;
+  position: relative; 
+}
+
+div.panel {
+    padding: 0 18px;
+    display: none;
+}
+
+div.panel.show {
+    display: block;
+}
+
+.padding-wrapper{
+  padding:15px;
+  background-color: #515151;
+}

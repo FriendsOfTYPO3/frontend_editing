@@ -32,6 +32,12 @@
 
 	deferred.done(function() {
 
+		var $head = $(iframe).contents().find("head");
+
+  $head.append($("<link/>",
+                { rel: "stylesheet", href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css', type: "text/css" }
+              ));
+
 		// Add custom configuration to ckeditor
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
 			$(this).ckeditor(editorConfig);

@@ -97,7 +97,7 @@ class ContentPostProc
      * @return string
      */
     private function loadResources() {
-        $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
+        $resources = '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Styles/Main.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
         $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' . PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
         $resources .= '<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js" type="text/javascript"></script>';

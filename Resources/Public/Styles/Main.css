@@ -1,5 +1,26 @@
 /* Toolbars */
-/* Topbar */
+.btn, .btn-default, .t3-frontend-editing__top-bar-left .left-bar-button {
+  background-color: #FF8700;
+  color: #fff;
+  border: none;
+  text-align: center;
+  min-width: 140px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer; }
+
+.btn-default {
+  border: 1px solid #B9B9B9;
+  background-color: transparent; }
+
+div.panel {
+  padding: 0 18px;
+  display: none; }
+
+div.panel.show {
+  display: block; }
+
+/* TopBar */
 .t3-frontend-editing__top-bar {
   background: #191919;
   color: #fff;
@@ -75,7 +96,9 @@
     cursor: pointer;
     margin-top: 15px; }
 
+/* RightBar */
 .t3-frontend-editing__right-bar {
+  display: none;
   background: #191919;
   color: #fff;
   position: fixed;
@@ -83,8 +106,49 @@
   right: 0;
   width: 310px;
   min-height: 100%;
-  z-index: 10999; }
+  z-index: 10999;
+  font-family: Verdana, Helvetica, Arial, sans-serif; }
+  .t3-frontend-editing__right-bar .header {
+    height: 45px;
+    text-align: right; }
+    .t3-frontend-editing__right-bar .header h4 {
+      padding: 12px;
+      margin: 0; }
 
+.push-toleft {
+  right: 310px;
+  position: relative; }
+
+div.panel {
+  padding: 0 18px;
+  display: none; }
+
+div.panel.show {
+  display: block; }
+
+.padding-wrapper {
+  padding: 15px;
+  background-color: #515151; }
+
+/* LeftBar */
+.t3-frontend-editing__left-bar {
+  display: none;
+  background: #191919;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  min-height: 100%;
+  z-index: 10999;
+  opacity: 0.8;
+  font-family: Verdana, Helvetica, Arial, sans-serif; }
+
+.push-toright {
+  left: 250px;
+  position: relative; }
+
+/* iframe */
 .t3-frontend-editing__iframe-wrapper {
   margin-top: 45px;
   margin-right: 310px; }

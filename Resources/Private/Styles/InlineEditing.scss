@@ -1,4 +1,9 @@
+@import "Constants";
 
-	*[contenteditable="true"]:focus {
-    border: 4px dotted aquamarine;
+*[contenteditable="true"] {
+	&:focus{
+		outline: none;
+		border: 3px dotted #FF8700;
+		margin-bottom: 5px;
+	}
 }
