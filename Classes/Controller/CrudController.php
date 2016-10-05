@@ -206,10 +206,17 @@ class CrudController extends ActionController
 
         // Set the basic properties of editing
         $this->table = $body['table'];
-        $this->fieldConfiguration = $this->getFieldConfiguration($body['field']);
-        // Get the actual database to store the data into
-        $fieldNameArray = explode(' ', $this->fieldConfiguration[1]);
-        $this->field = $fieldNameArray[0];
+        // If content is rendered from "css_styled_content"
+        // Then find out which database field to save data into
+        if (strpos($body['field'], ' ') !== false) {
+            $this->fieldConfiguration = $this->getFieldConfiguration($body['field']);
+            // Get the actual database to store the data into
+            $fieldNameArray = explode(' ', $this->fieldConfiguration[1]);
+            $this->field = $fieldNameArray[0];
+        } else {
+            // If content is rendered from "fluid_styled_content"
+            $this->field = $body['field'];
+        }
         $this->uid = $body['uid'];
         $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
 
