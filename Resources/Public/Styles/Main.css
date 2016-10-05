@@ -34,16 +34,6 @@ div.panel.show {
   .t3-frontend-editing__top-bar .cke {
     top: 45px !important; }
 
-.t3-frontend-editing__save {
-  background-color: #FF8700;
-  color: #fff;
-  border: none;
-  text-align: center;
-  min-width: 140px;
-  height: 30px;
-  font-size: 16px;
-  cursor: pointer; }
-
 .t3-frontend-editing__topbar-inner {
   padding: 0;
   height: 45px;
@@ -99,7 +89,7 @@ div.panel.show {
 /* RightBar */
 .t3-frontend-editing__right-bar {
   display: none;
-  background: #191919;
+  background: #515151;
   color: #fff;
   position: fixed;
   top: 0;
@@ -108,27 +98,24 @@ div.panel.show {
   min-height: 100%;
   z-index: 10999;
   font-family: Verdana, Helvetica, Arial, sans-serif; }
-  .t3-frontend-editing__right-bar .header {
+  .t3-frontend-editing__right-bar .header, .t3-frontend-editing__right-bar .top-right-title {
     height: 45px;
-    text-align: right; }
-    .t3-frontend-editing__right-bar .header h4 {
+    text-align: center; }
+    .t3-frontend-editing__right-bar .header h4, .t3-frontend-editing__right-bar .top-right-title h4 {
       padding: 12px;
       margin: 0; }
+  .t3-frontend-editing__right-bar .top-right-title {
+    text-align: right;
+    background-color: #191919; }
+  .t3-frontend-editing__right-bar .save-discard-changes {
+    background-color: red; }
 
 .push-toleft {
   right: 310px;
   position: relative; }
 
-div.panel {
-  padding: 0 18px;
-  display: none; }
-
-div.panel.show {
-  display: block; }
-
 .padding-wrapper {
-  padding: 15px;
-  background-color: #515151; }
+  padding: 15px; }
 
 /* LeftBar */
 .t3-frontend-editing__left-bar {

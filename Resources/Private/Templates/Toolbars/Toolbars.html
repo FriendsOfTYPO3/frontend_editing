@@ -1,51 +1,5 @@
-<div class="t3-frontend-editing__top-bar">
-		<div class="t3-frontend-editing__topbar-inner">
-				<div class="t3-frontend-editing__top-bar-left">
-					<button class="left-bar-button"><<</button>
-
-					<div class="back-backend">
-							<a href="/typo3">
-									<img src="/typo3/sysext/backend/Resources/Public/Images/typo3-topbar@2x.png" height="22" width="22" />
-									<span title="To backend">To backend</span>
-							</a>
-						</div>
-				</div>
-				<div class="t3-frontend-editing__top-bar-right">
-							<ul class="top-bar-items">
-								<li class="dropdown item">
-									<div class="user">
-											{userIcon -> f:format.html()}
-											<span title="{userName -> f:format.html()}">{userName -> f:format.html()} </span>
-									</div>
-								</li>
-								<li class="fornow item">
-									<button class="right-bar-button">>></button>
-								</li>
-							</ul>
-				</div>
-		</div>
-</div>
-
-<div class="t3-frontend-editing__right-bar">
-		<div class=header>
-			<h4> TOOLS & PROPERTIES </h4> <span class="icon blabla"></span>
-		</div>
-		<div class="padding-wrapper">
-			<div class="page-seo">
-				<p>Page SEO Score</p>
-				<button class="btn-default">SEO GUIDE</button>
-			</div>
-		</div>
-		<div class="accordion">
-			Save area
-		</div>
-			<div class="panel">
-				<p>There are # unsaved elements</p>
-				<button type="submit" class="t3-frontend-editing__save">Save</button>
-				<button type="#" class="t3-frontend-editing__discard">Discard all</button>
-			</div>
-	</div>
-</div>
+<f:render partial="TopBar" arguments="{userIcon: userIcon, userName: userName}"></f:render>
+<f:render partial="RightBar" arguments="{userIcon: userIcon, userName: userName}"></f:render>
 
 <div class="t3-frontend-editing__left-bar">
 </div>

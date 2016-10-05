@@ -72,8 +72,10 @@ class ContentPostProc
                 ;
 
                 $templatePath = GeneralUtility::getFileAbsFileName('typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html');
+                $partialPath = GeneralUtility::getFileAbsFileName('typo3conf/ext/frontend_editing/Resources/Private/Partials');
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
+                $view->setPartialRootPaths(array(10 => $partialPath));
                 $view->assignMultiple([
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
                     'userName' => $GLOBALS['BE_USER']->user['username'],

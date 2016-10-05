@@ -15,16 +15,6 @@
     top: $top-bar-height !important;
   }
 }
-.#{$t3-frontend}save{
-  background-color: $orange_primary;
-  color: $white;
-  border: none;
-  text-align: center;
-  min-width: 140px;
-  height: 30px;
-  font-size: 16px;
-  cursor: pointer;
-}
 
 .#{$t3-frontend}topbar-inner {
   padding:0;

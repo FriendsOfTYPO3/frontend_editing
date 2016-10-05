@@ -2,7 +2,7 @@
 
 .#{$t3-frontend}right-bar {
   display: none;
-  background: $header-top-bg-color;
+  background: $gray-dark;
   color: $white;
   position: fixed;
   top: 0;
@@ -12,31 +12,31 @@
   z-index: 10999;
   font-family: $font-family-base;
 
-  .header{
-    height: 45px;
-    text-align: right;
-    h4{
-      padding: 12px;
-      margin: 0;
-    }
-  }
+	.header{
+		height: 45px;
+		text-align: center;
+		h4{
+			padding: 12px;
+			margin: 0;
+		}
+	}
+	.top-right-title{
+		@extend .header;
+		text-align: right;
+		background-color: $header-top-bg-color;
+	}
+	.save-discard-changes{
+		background-color: red;
+	}
 }
+
 
 .push-toleft { 
   right: $right-bar-width;
   position: relative; 
 }
 
-div.panel {
-    padding: 0 18px;
-    display: none;
-}
-
-div.panel.show {
-    display: block;
-}
 
 .padding-wrapper{
   padding:15px;
-  background-color: #515151;
 }
