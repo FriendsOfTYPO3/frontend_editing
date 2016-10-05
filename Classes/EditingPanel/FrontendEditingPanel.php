@@ -71,31 +71,30 @@ class FrontendEditingPanel
     }
 
     /**
-     * Adds an edit icon to the content string. The edit icon links to EditDocumentController with proper parameters for editing the table/fields of the context.
-     * This implements TYPO3 context sensitive editing facilities. Only backend users will have access (if properly configured as well).
+     * Adds an edit icon to the content string. The edit icon links to EditDocumentController
+     * with proper parameters for editing the table/fields of the context.
+     * This implements TYPO3 context sensitive editing facilities.
+     * Only backend users will have access (if properly configured as well).
      *
-     * @param string $content The content to which the edit icons should be appended
-     * @param string $params The parameters defining which table and fields to edit. Syntax is [tablename]:[fieldname],[fieldname],[fieldname],... OR [fieldname],[fieldname],[fieldname],... (basically "[tablename]:" is optional, default table is the one of the "current record" used in the function). The fieldlist is sent as "&columnsOnly=" parameter to EditDocumentController
-     * @param array $conf TypoScript properties for configuring the edit icons.
-     * @param string $currentRecord The "table:uid" of the record being shown. If empty string then $this->currentRecord is used. For new records (set by $conf['newRecordFromTable']) it's auto-generated to "[tablename]:NEW
-     * @param array $dataArr Alternative data array to use. Default is $this->data
-     * @param string $addUrlParamStr Additional URL parameters for the link pointing to EditDocumentController
-     * @param string $table
-     * @param int $editUid
-     * @param string $fieldList
-     * @return string The input content string, possibly with edit icons added (not necessarily in the end but just after the last string of normal content.
+     * @inheritdoc
+     * @return string
      */
     public function editIcons(
         $content,
         $params,
-        array $conf = array(),
-        $currentRecord = '',
-        array $dataArr = array(),
-        $addUrlParamStr = '',
+        array $conf,
+        $currentRecord,
+        array $dataArr,
+        $addUrlParamStr,
         $table,
         $editUid,
         $fieldList
     ) {
+        $conf = (count($conf) === 0) ? [] : $conf;
+        $currentRecord = ($currentRecord === '') ? '' : $currentRecord;
+        $dataArr = (count($dataArr) === 0) ? [] : $dataArr;
+        $addUrlParamStr = ($addUrlParamStr === '') ? '' : $addUrlParamStr;
+
         if (Access::isEnabled()) {
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
@@ -139,7 +138,8 @@ class FrontendEditingPanel
     }
 
     /**
-     * Returns TRUE if the input table/row would be hidden in the frontend, according to the current time and simulate user group
+     * Returns TRUE if the input table/row would be hidden in the frontend,
+     * according to the current time and simulate user group
      *
      * @param string $table The table name
      * @param array $row The data record
@@ -148,12 +148,12 @@ class FrontendEditingPanel
     protected function isDisabled($table, array $row)
     {
         $status = false;
-        if (
-            $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['disabled'] &&
+        if ($GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['disabled'] &&
             $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['disabled']] ||
             $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['fe_group'] &&
             $this->frontendController->simUserGroup &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['fe_group']] == $this->frontendController->simUserGroup ||
+            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['fe_group']]
+                == $this->frontendController->simUserGroup ||
             $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['starttime'] &&
             $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
             $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['endtime'] &&

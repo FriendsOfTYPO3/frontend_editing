@@ -297,15 +297,15 @@ class CrudController extends ActionController
      * @param string $uid
      * @param string $table
      */
-    public function deleteAction($uid, $table) {
-
+    public function deleteAction($uid, $table)
+    {
     }
 
     /**
      * @param string $uid
      * @param string $table
      */
-    public function readAction($uid, $table) {
-
+    public function readAction($uid, $table)
+    {
     }
 }

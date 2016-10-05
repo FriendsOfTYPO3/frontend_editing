@@ -14,9 +14,9 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * <fe:editable table="tt_content" field="bodytext" uid="{item.uid}"">
  *     {item.bodytext}
  * </fe:editable>
- *
  */
-class EditableViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+class EditableViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+{
 
     /**
      * @var string
@@ -31,13 +31,13 @@ class EditableViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
      * @param integer $uid uid of record
      * @return string
      */
-    public function render($table, $field, $uid) {
+    public function render($table, $field, $uid)
+    {
         $content = $this->renderChildren();
         // @TODO: Find out why the HTML is not rendered properly
         $content = htmlspecialchars_decode($content);
 
         if (Access::isEnabled()) {
-
             $content = sprintf(
                 '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
                 $table,
@@ -53,5 +53,4 @@ class EditableViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
 
         return $content;
     }
-
 }
