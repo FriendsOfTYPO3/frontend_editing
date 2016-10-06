@@ -2,7 +2,6 @@
 defined('TYPO3_MODE') or die();
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\FrontendEditing\Utility\Access;
 
 /**
  * Hooks
@@ -42,16 +41,18 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
 $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'][$_EXTKEY . '-CeHeader'] =
     \TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\CeHeader::class;
 
-if (Access::isEnabled()) {
-    ExtensionManagementUtility::addUserTSConfig('<INCLUDE_TYPOSCRIPT: source="' .
-        'FILE:EXT:frontend_editing/Configuration/TypoScript/UserTSconfig/userTSconfig.txt">');
-}
+/**
+ * Typoscript settings
+ */
+// Add UserTsConfig settings
+ExtensionManagementUtility::addUserTSConfig('<INCLUDE_TYPOSCRIPT: source="' .
+    'FILE:EXT:frontend_editing/Configuration/TypoScript/UserTsConfig/userTsConfig.ts">');
 
 // If rtehtmlarea is loaded and be user is logged in then reset the pageTSConfig
 if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
     ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="' .
-            'FILE:EXT:frontend_editing/Configuration/TypoScript/PageTSconfig/Proc/pageTSConfig.txt">'
+            'FILE:EXT:frontend_editing/Configuration/TypoScript/PageTsConfig/Proc/pageTsConfig.ts">'
     );
 }
 

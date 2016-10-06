@@ -91,11 +91,11 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-        $conf = (count($conf) === 0) ? [] : $conf;
+        /*$conf = (count($conf) === 0) ? [] : $conf;
         $currentRecord = ($currentRecord === '') ? '' : $currentRecord;
         $dataArr = (count($dataArr) === 0) ? [] : $dataArr;
         $addUrlParamStr = ($addUrlParamStr === '') ? '' : $addUrlParamStr;
-
+*/
         if (Access::isEnabled()) {
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
