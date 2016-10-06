@@ -4,9 +4,6 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
 /**
  * Check access of the user to display only those actions which are allowed
  * and needed
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
 class Access
 {
