@@ -36,10 +36,30 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('table', 'string', 'The database table name to be used for saving the content', true);
-        $this->registerArgument('field', 'string', 'The database table field name to be used for saving the content', true);
-        $this->registerArgument('uid', 'string', 'The database uid (identifier) to be used for the record and saving the content', true);
-        $this->registerArgument('disableAccessCheck', 'boolean', 'Deactive/Activate the access check for TYPO3 backend', false);
+        $this->registerArgument(
+            'table',
+            'string',
+            'The database table name to be used for saving the content',
+            true
+        );
+        $this->registerArgument(
+            'field',
+            'string',
+            'The database table field name to be used for saving the content',
+            true
+        );
+        $this->registerArgument(
+            'uid',
+            'string',
+            'The database uid (identifier) to be used for the record and saving the content',
+            true
+        );
+        $this->registerArgument(
+            'disableAccessCheck',
+            'boolean',
+            'Deactive/Activate the access check for TYPO3 backend',
+            false
+        );
         $this->registerUniversalTagAttributes();
     }
 

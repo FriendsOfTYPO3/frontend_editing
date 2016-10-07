@@ -64,7 +64,8 @@ class ContentEditableFixtures
      *
      * @return string
      */
-    public function getWrappedExpectedContent() {
+    public function getWrappedExpectedContent()
+    {
         $expectedOutput = sprintf(
             '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $this->table,
