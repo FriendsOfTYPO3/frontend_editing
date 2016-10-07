@@ -1,8 +1,6 @@
-/* RightBar */
-
 .#{$t3-frontend}right-bar {
   display: none;
-  background: $gray-dark;
+  background-color: $gray;
   color: $white;
   position: fixed;
   top: 0;
@@ -12,31 +10,66 @@
   z-index: 10999;
   font-family: $font-family-base;
 
-	.header{
-		height: 45px;
-		text-align: center;
-		h4{
-			padding: 12px;
-			margin: 0;
-		}
-	}
-	.top-right-title{
-		@extend .header;
-		text-align: right;
-		background-color: $header-top-bg-color;
-	}
-	.save-discard-changes{
-		background-color: red;
-	}
+  .header {
+    height: 45px;
+    text-align: center;
+
+    h4 {
+      padding: 12px;
+      margin: 0;
+    }
+  }
+
+  .top-right-title {
+    @extend .header;
+    text-align: right;
+    background-color: $header-top-bg-color;
+
+    .title-right {
+      font-size: 18px;
+      display: inline-block;
+      padding-right: 5px;
+    }
+
+    .icon-icons-04{
+      top: 7px;
+      position: relative;
+      font-size: 32px;
+      padding-right: 15px;
+      color: $orange-primary;
+    }
+  }
+
+  .page-seo {
+    padding: 15px 0;
+  }
+
+  .save-discard-changes {
+    padding: 15px 0;
+    text-align: center;
+
+    p {
+      text-transform: uppercase;
+      color: $orange-primary;
+      letter-spacing: -1px;
+    }
+
+    .title-center {
+      color: $orange-primary;
+      font-style: uppercase;
+    }
+
+    .number {
+      color: $white;
+    }
+  }
 }
 
-
-.push-toleft { 
+.push-toleft {
   right: $right-bar-width;
-  position: relative; 
+  position: relative;
 }
 
-
-.padding-wrapper{
-  padding:15px;
+.push-toleft-iframe {
+  width: calc(100% - 310px);
 }

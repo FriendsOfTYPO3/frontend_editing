@@ -1,20 +1,18 @@
-/* LeftBar */
-
 .#{$t3-frontend}left-bar {
-    display: none;
-    background: #191919;
-    color: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: $left-bar-width;
-    min-height: 100%;
-    z-index: 10999;
-    opacity: 0.8;
-    font-family: $font-family-base;
+  display: none;
+  background: $black;
+  color: $white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $left-bar-width;
+  min-height: 100%;
+  z-index: 10999;
+  opacity: .8;
+  font-family: $font-family-base;
 }
 
-.push-toright { 
+.push-toright {
   left: $left-bar-width;
-  position: relative; 
+  position: relative;
 }

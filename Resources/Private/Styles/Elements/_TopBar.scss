@@ -1,7 +1,5 @@
-/* TopBar */
-
 .#{$t3-frontend}top-bar {
-  background: $black;
+  background: $gray-dark;
   color: $white;
   height: $top-bar-height;
   position: fixed;
@@ -10,6 +8,7 @@
   width: 100%;
   z-index: 10999;
   font-family: $font-family-base;
+  font-size: 16px;
 
   .cke {
     top: $top-bar-height !important;
@@ -17,40 +16,47 @@
 }
 
 .#{$t3-frontend}topbar-inner {
-  padding:0;
+  padding: 0;
   height: $top-bar-height;
   font-weight: 300;
-  font-size: 13px;
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 .#{$t3-frontend}top-bar-left {
   width: 50%;
   float: left;
 
-  .left-bar-button{
-    @extend .btn;
-    background:none;
-    border: none;
+  .left-bar-button {
+    background: none;
+    border: 0;
     color: $white;
     cursor: pointer;
   }
+
   .back-backend {
     display: inline-block;
     position: relative;
+    border-right: 1px solid $black;
+    height: 45px;
 
-    &:hover{
+    &:hover {
       background-color: lighten($black, 20%);
     }
-    a{
+
+    a {
       display: inline-block;
       color: $white;
       text-decoration: none;
-      padding: 5px 10px 14px 10px;
-
+      padding: 10px 10px 14px;
     }
-    img{
+
+    .icon-icons-02 {
+      padding-right: 5px;
+      top: 2px;
       position: relative;
-      top: 5px;
+      font-size: 20px;
+      color: $orange-primary;
     }
   }
 }
@@ -60,12 +66,12 @@
   float: right;
   text-align: right;
 
-  ul.top-bar-items{
+  .top-bar-items {
     float: right;
     margin: 0;
     padding: 0;
 
-    li.item{
+    .item {
       float: left;
       height: 45px;
       position: relative;
@@ -73,15 +79,17 @@
       display: inline-block;
     }
   }
+
   .user {
-    span.icon-avatar-default{
+    .icon-avatar-default {
       position: relative;
       top: 6px;
     }
   }
-  .right-bar-button{
-    background:none;
-    border: none;
+
+  .right-bar-button {
+    background: none;
+    border: 0;
     color: $white;
     cursor: pointer;
     margin-top: 15px;

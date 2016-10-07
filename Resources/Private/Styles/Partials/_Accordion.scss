@@ -1,8 +1,13 @@
-div.panel {
-    padding: 0 18px;
-    display: none;
+.accordion {
+  border-top: 1px solid $black;
+  min-height: 49px;
 }
 
-div.panel.show {
+.panel {
+  padding: 10px 0;
+  display: none;
+
+  &.show {
     display: block;
+  }
 }

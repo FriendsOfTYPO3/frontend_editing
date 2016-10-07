@@ -1,0 +1,29 @@
+.padding-wrapper {
+  padding: 0 14px;
+}
+
+.dark-transparent-bg {
+  background-color: $transparent-opacity;
+}
+
+.title-default {
+  padding: 10px 0;
+}
+
+.title-center {
+  text-align: center;
+  padding: 10px;
+  display: block;
+}
+
+.title-right {
+  text-align: right;
+  padding: 10px;
+  display: block;
+}
+
+.title-left {
+  text-align: left;
+  padding: 10px;
+  display: block;
+}

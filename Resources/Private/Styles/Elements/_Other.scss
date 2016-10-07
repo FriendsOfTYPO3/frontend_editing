@@ -1,5 +1,3 @@
-/* iframe */
-
 .#{$t3-frontend}iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
@@ -18,26 +16,31 @@
   position: absolute;
   left: 0;
   top: 0;
-  bottom:-$top-bar-height;
+  bottom: -$top-bar-height;
   right: 0;
-  background: #FFF;
-  opacity: 0.8;
-  .icon-spin .icon-markup {
-    filter: alpha(opacity=80);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -28px 0 0 -25px;
+  background: $white;
+  opacity: .8;
 
-    animation: icon-spin 2s infinite linear;
-    display: block;
-  }
-  @keyframes icon-spin {
-    0% {
-      transform: rotate(0deg);
+  .icon-spin {
+
+    .icon-markup {
+      filter: alpha(opacity=80);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -28px 0 0 -25px;
+
+      animation: icon-spin 2s infinite linear;
+      display: block;
     }
-    100% {
-      transform: rotate(359deg);
+    @keyframes icon-spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(359deg);
+      }
     }
   }
 }
@@ -45,4 +48,3 @@
 .hidden {
   display: none;
 }
-

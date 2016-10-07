@@ -1,16 +1,18 @@
-.btn{
-    background-color: #FF8700;
-    color: #fff;
-    border: none;
-    text-align: center;
-    min-width: 140px;
-    height: 30px;
-    font-size: 16px;
-    cursor: pointer;
+.btn {
+  display: inline-block;
+  background-color: $orange-primary;
+  color: $white;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  min-width: 138px;
+  height: 35px;
+  font-size: 16px;
 }
 
-.btn-default{
-    @extend .btn;
-    border: 1px solid $gray-light;
-    background-color: transparent;
+.btn-default {
+  @extend .btn;
+  border: 1px solid $gray-light;
+  background-color: transparent;
 }
