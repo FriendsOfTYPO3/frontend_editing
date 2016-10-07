@@ -23,12 +23,12 @@
     ],
     "version": "0.0.1",
     "require": {
-        "php": ">=5.6.0"
+        "php": ">=7.0"
     },
     "require-dev": {
-        "typo3/cms": "^7.6",
+        "typo3/cms": "8.3.*",
         "squizlabs/php_codesniffer": "2.*",
-        "phpunit/phpunit": "~4.8.0",
+        "phpunit/phpunit": "^5.4",
         "mikey179/vfsStream": "~1.6.0"
     },
     "replace": {
@@ -48,7 +48,10 @@
     },
     "config": {
         "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
+        "bin-dir": ".Build/bin",
+        "preferred-install": {
+            "typo3/cms": "source"
+        }
     },
     "scripts": {
         "post-autoload-dump": [
