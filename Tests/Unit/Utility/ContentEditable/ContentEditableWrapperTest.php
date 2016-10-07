@@ -1,37 +1,24 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Utility\ContentEditable;
 
+use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Utility\ContentEditableWrapper.
  */
-class ContentEditableWrapperTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class ContentEditableWrapperTest extends UnitTestCase
 {
     /**
-     * @var \TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper
+     * @var ContentEditableWrapper
      */
     protected $subject = null;
 
     /**
-     * @var string
+     * @var ContentEditableFixtures
      */
-    protected $table = 'tt_content';
-
-    /**
-     * @var string
-     */
-    protected $field = 'bodytext';
-
-    /**
-     * @var string
-     */
-    protected $uid = 1;
-
-    /**
-     * @var string
-     */
-    protected $content = 'This is my content';
+    protected $fixtures = null;
 
     /**
      * Set up for the
@@ -41,6 +28,7 @@ class ContentEditableWrapperTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     protected function setUp()
     {
         $this->subject = new ContentEditableWrapper();
+        $this->fixtures = new ContentEditableFixtures();
     }
 
     /**
@@ -57,23 +45,15 @@ class ContentEditableWrapperTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function getWrappedContent()
     {
         $wrappedContent = $this->subject->wrapContentToBeEditable(
-            $this->table,
-            $this->field,
-            $this->uid,
-            $this->content
-        );
-
-        $expectedOutput = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
-            $this->table,
-            $this->field,
-            $this->uid,
-            $this->content
+            $this->fixtures->getTable(),
+            $this->fixtures->getField(),
+            $this->fixtures->getUid(),
+            $this->fixtures->getContent()
         );
 
         $this->assertSame(
             $wrappedContent,
-            $expectedOutput
+            $this->fixtures->getWrappedExpectedContent()
         );
     }
 
@@ -85,9 +65,9 @@ class ContentEditableWrapperTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         try {
             $wrappedContent = $this->subject->wrapContentToBeEditable(
                 '',
-                $this->field,
-                $this->uid,
-                $this->content
+                $this->fixtures->getField(),
+                $this->fixtures->getUid(),
+                $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
             $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
