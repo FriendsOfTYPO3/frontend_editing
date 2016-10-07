@@ -76,7 +76,9 @@ class ContentPostProc
                 );
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
-                $view->setPartialRootPaths([10 => $partialPath] );
+                $view->setPartialRootPaths([
+                    10 => $partialPath
+                ]);
                 $view->assignMultiple([
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
                     'userName' => $GLOBALS['BE_USER']->user['username'],
