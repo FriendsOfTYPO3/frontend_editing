@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ssh SERVER_USERNAME@SERVER_IP
+ssh $SERVER_USERNAME@$SERVER_IP
 
-cd /mnt/persist/www/docroot/
+cd $SERVER_PATH
 
 composer update
