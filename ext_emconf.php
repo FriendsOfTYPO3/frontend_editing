@@ -1,5 +1,5 @@
 <?php
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
   'title' => 'TYPO3 Frontend Editing',
   'description' => '',
   'category' => '',
@@ -9,16 +9,16 @@ $EM_CONF[$_EXTKEY] = array(
   'author' => 'Pixelant',
   'author_email' => '',
   'constraints' =>
-  array(
+  [
     'depends' =>
-    array(
+        [
       'typo3' => '7.6.0-8.9.99',
-    ),
+    ],
     'conflicts' =>
-    array(
-    ),
+        [
+    ],
     'suggests' =>
-    array(
-    ),
-  ),
-);
+    [
+    ],
+  ],
+];
