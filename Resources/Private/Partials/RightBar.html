@@ -1,38 +1,32 @@
 <div class="t3-frontend-editing__right-bar">
-		<div class="header top-right-title">
-			<span class="title-right">TOOLS & PROPERTIES </span> <span class="icons icon-icons-04"></span>
+		<div class="top-right-title">
+			<span class="title-right">TOOLS & PROPERTIES </span> <span class="icons icon-icons-tools-settings"></span>
 		</div>
-			<div class="padding-wrapper">
-				<div class="page-seo">
-					<span class="title-default">Page SEO Score</span>
-					<button class="btn-default">SEO GUIDE</button>
+		<div class="padding-wrapper">
+			<div class="page-seo">
+				<span class="title-default">Page SEO Score</span>
+				<span class="page-seo-score">26</span>
+				<button class="btn-default">SEO GUIDE</button>
+
+				<div class="page-seo-devices">
+						<span class="page-seo-lg-desktop icons icon-icons-lg-desktop active"></span>
+						<span class="page-seo-desktop icons icon-icons-desktop"></span>
+						<span class="page-seo-tablet icons icon-icons-tablet"></span>
+						<span class="page-seo-phone icons icon-icons-phone"></span>
 				</div>
 			</div>
-		<div class="dark-transparent-bg">
-				<div class="padding-wrapper">
-					<div class="save-discard-changes">
-							<span class="title-center">There are <span class="number">#</span> unsaved elements</span>
-							<button type="submit" class="t3-frontend-editing__save btn">Save</button>
-							<button type="#" class="t3-frontend-editing__discard btn-default">Discard all</button>
-					</div>
-				</div>
-
-
-		<div class="dark-transparent-bg">
-				<div class="padding-wrapper">
-					<div class="accordion active">
-							<span class="title-left">Typical Content Elements</span>
-					</div>
-					<div class="panel">
-						<button>STUFF</button>
-					</div>
-				</div>
 		</div>
+		<div class="dark-transparent-bg">
+			<div class="padding-wrapper">
+				<div class="save-discard-changes">
+						<span class="title-center">There are <span class="number">#</span> unsaved elements</span>
+						<button type="submit" class="t3-frontend-editing__save btn">Save</button>
+						<button type="#" class="t3-frontend-editing__discard btn-default">Discard all</button>
+				</div>
+			</div>
 		</div>
-<h1>Header1</h1>
-<h2>Header2</h2>
-<h3>Header3</h3>
-<h4>Header4</h4>
-<h5>Header5</h5>
-<p>Paragraph</p>
+		<div class="elements">
+			<f:render partial="TypicalContentElements" arguments="{_all}"></f:render>
+			<f:render partial="FormElements" arguments="{_all}"></f:render>
+		</div>
 </div>

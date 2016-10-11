@@ -1,0 +1,42 @@
+.content-icon {
+  background-color: $gray-icon-bg;
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  position: relative;
+  margin: 5px 5px 5px 0;
+  vertical-align: top;
+
+  img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+.accordion-content {
+
+  .description {
+    display: inline-block;
+    width: 200px;
+    display: none;
+
+    &.active{
+      display: inline-block;
+    }
+
+    .title-default {
+      display: inline-block;
+      width: 200px;
+      padding: 0;
+      line-height: 1.1;
+
+      &:first-of-type {
+        font-size: $font-size-large;
+        padding-top: 4px;
+      }
+    }
+  }
+}

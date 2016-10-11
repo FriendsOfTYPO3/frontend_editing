@@ -1,54 +1,54 @@
 @font-face {
-  font-family: 'icons';
-  src:  url('icons.eot?ytjj5m');
-  src:  url('icons.eot?ytjj5m#iefix') format('embedded-opentype'),
-    url('icons.ttf?ytjj5m') format('truetype'),
-    url('icons.woff?ytjj5m') format('woff'),
-    url('icons.svg?ytjj5m#icons') format('svg');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'icons';
+	src:  url('icons.eot?ybin2g');
+	src:  url('icons.eot?ybin2g#iefix') format('embedded-opentype'),
+		url('icons.ttf?ybin2g') format('truetype'),
+		url('icons.woff?ybin2g') format('woff'),
+		url('icons.svg?ybin2g#icons') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-  /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icons' !important;
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'icons' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
 
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-icons-01:before {
-  content: "\e900";
+.icon-icons-site-tree:before {
+	content: "\e900";
 }
-.icon-icons-02:before {
-  content: "\e901";
+.icon-icons-back:before {
+	content: "\e901";
 }
-.icon-icons-03:before {
-  content: "\e902";
+.icon-icons-workspace:before {
+	content: "\e902";
 }
-.icon-icons-04:before {
-  content: "\e903";
+.icon-icons-tools-settings:before {
+	content: "\e903";
 }
-.icon-icons-05:before {
-  content: "\e904";
+.icon-icons-lg-desktop:before {
+	content: "\e904";
 }
-.icon-icons-06:before {
-  content: "\e905";
+.icon-icons-desktop:before {
+	content: "\e905";
 }
-.icon-icons-07:before {
-  content: "\e906";
+.icon-icons-tablet:before {
+	content: "\e906";
 }
-.icon-icons-08:before {
-  content: "\e907";
+.icon-icons-phone:before {
+	content: "\e907";
 }
-.icon-icons-09:before {
-  content: "\e908";
+.icon-icons-page:before {
+	content: "\e908";
 }
 

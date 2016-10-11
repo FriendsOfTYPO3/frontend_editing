@@ -1,17 +1,11 @@
 @import "Constants";
-
-@font-face {
-  font-family: 'Share';
-  src: url('../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot');
-  src: url('../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.woff') format('woff'), url('../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.ttf') format('truetype'), url('../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.svg#Share-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @import "Icons";
 @import "Partials/Buttons";
+@import "Partials/Titles";
 @import "Partials/Accordion";
 @import "Partials/Wrappers";
+@import "Partials/Typography";
+@import "Partials/Elements";
 @import "Elements/TopBar";
 @import "Elements/RightBar";
 @import "Elements/LeftBar";

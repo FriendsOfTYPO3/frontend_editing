@@ -22,7 +22,7 @@
       "properties": {
         "order": 2,
         "id": 8,
-        "name": "icons-01",
+        "name": "icons-site-tree",
         "prevSize": 32,
         "code": 59648
       },
@@ -51,7 +51,7 @@
       "properties": {
         "order": 3,
         "id": 7,
-        "name": "icons-02",
+        "name": "icons-back",
         "prevSize": 32,
         "code": 59649
       },
@@ -80,7 +80,7 @@
       "properties": {
         "order": 4,
         "id": 6,
-        "name": "icons-03",
+        "name": "icons-workspace",
         "prevSize": 32,
         "code": 59650
       },
@@ -109,7 +109,7 @@
       "properties": {
         "order": 5,
         "id": 5,
-        "name": "icons-04",
+        "name": "icons-tools-settings",
         "prevSize": 32,
         "code": 59651
       },
@@ -144,7 +144,7 @@
       "properties": {
         "order": 6,
         "id": 4,
-        "name": "icons-05",
+        "name": "icons-lg-desktop",
         "prevSize": 32,
         "code": 59652
       },
@@ -176,7 +176,7 @@
       "properties": {
         "order": 7,
         "id": 3,
-        "name": "icons-06",
+        "name": "icons-desktop",
         "prevSize": 32,
         "code": 59653
       },
@@ -205,7 +205,7 @@
       "properties": {
         "order": 8,
         "id": 2,
-        "name": "icons-07",
+        "name": "icons-tablet",
         "prevSize": 32,
         "code": 59654
       },
@@ -234,7 +234,7 @@
       "properties": {
         "order": 9,
         "id": 1,
-        "name": "icons-08",
+        "name": "icons-phone",
         "prevSize": 32,
         "code": 59655
       },
@@ -263,7 +263,7 @@
       "properties": {
         "order": 10,
         "id": 0,
-        "name": "icons-09",
+        "name": "icons-page",
         "prevSize": 32,
         "code": 59656
       },
@@ -307,6 +307,7 @@
       "color": 0,
       "bgColor": 16777215
     },
-    "historySize": 100
+    "historySize": 100,
+    "gridSize": 16
   }
 }

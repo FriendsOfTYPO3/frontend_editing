@@ -8,7 +8,7 @@
   width: 100%;
   z-index: 10999;
   font-family: $font-family-base;
-  font-size: 16px;
+  font-size: $font-size-regular;
 
   .cke {
     top: $top-bar-height !important;
@@ -19,7 +19,7 @@
   padding: 0;
   height: $top-bar-height;
   font-weight: 300;
-  font-size: 16px;
+  font-size: $font-size-regular;
   text-transform: uppercase;
 }
 
@@ -51,7 +51,7 @@
       padding: 10px 10px 14px;
     }
 
-    .icon-icons-02 {
+    .icon-icons-back {
       padding-right: 5px;
       top: 2px;
       position: relative;

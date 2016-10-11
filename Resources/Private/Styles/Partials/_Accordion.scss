@@ -1,11 +1,17 @@
 .accordion {
-  border-top: 1px solid $black;
+  border-top: 1px solid $gray-light;
   min-height: 49px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
-.panel {
-  padding: 10px 0;
+.accordion-content {
+  padding: 10px 10px;
   display: none;
+  background-color: $black;
+  border-top: 1px solid $gray;
 
   &.show {
     display: block;

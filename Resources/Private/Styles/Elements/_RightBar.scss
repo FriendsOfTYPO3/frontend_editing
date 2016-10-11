@@ -9,29 +9,20 @@
   min-height: 100%;
   z-index: 10999;
   font-family: $font-family-base;
-
-  .header {
-    height: 45px;
-    text-align: center;
-
-    h4 {
-      padding: 12px;
-      margin: 0;
-    }
-  }
+  text-transform: uppercase;
 
   .top-right-title {
-    @extend .header;
     text-align: right;
     background-color: $header-top-bg-color;
+    height: $top-bar-height;
 
     .title-right {
-      font-size: 18px;
+      font-size: $font-size-large;
       display: inline-block;
       padding-right: 5px;
     }
 
-    .icon-icons-04{
+    .icon-icons-tools-settings {
       top: 7px;
       position: relative;
       font-size: 32px;
@@ -41,26 +32,120 @@
   }
 
   .page-seo {
-    padding: 15px 0;
+    padding: 15px 0 0;
+
+    .page-seo-score {
+      border: 4px solid $orange-primary;
+      font-size: 25px;
+      padding: 6px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      text-align: center;
+      display: inline-block;
+      margin: 0 8px;
+      position: relative;
+      top: 2px;
+    }
+
+    .btn-default {
+      margin-bottom: 8px;
+    }
+
+    .page-seo-devices {
+      padding-top: 12px;
+      font-size: 24px;
+      display: table;
+      margin: 0 auto;
+
+      .page-seo-lg-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: $gray-light;
+
+        &.active {
+          color: $white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: $white;
+        }
+      }
+
+      .page-seo-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: $gray-light;
+
+        &.active {
+          color: $white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: $white;
+        }
+      }
+
+      .page-seo-tablet {
+        font-size: 34px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        padding-right: 5px;
+        color: $gray-light;
+
+        &.active {
+          color: $white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: $white;
+        }
+      }
+
+      .page-seo-phone {
+        font-size: 26px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        top: 3px;
+        color: $gray-light;
+
+        &.active {
+          color: $white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: $white;
+        }
+      }
+    }
   }
 
   .save-discard-changes {
     padding: 15px 0;
     text-align: center;
 
-    p {
-      text-transform: uppercase;
-      color: $orange-primary;
-      letter-spacing: -1px;
-    }
-
     .title-center {
+      font-size: $font-size-large;
       color: $orange-primary;
-      font-style: uppercase;
     }
 
     .number {
       color: $white;
+    }
+
+    .btn,
+    .btn-default {
+      @extend %btn-min-width;
     }
   }
 }

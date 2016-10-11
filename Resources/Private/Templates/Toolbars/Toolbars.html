@@ -28,12 +28,19 @@ $(document).ready(function(){
 		$('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
 		$('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
 
-		$('.t3-frontend-editing__right-bar').toggle(100);
+		$('.t3-frontend-editing__right-bar').toggle(200);
 	});
+
 	$('.left-bar-button').click(function() {
 		$('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
-		$('.t3-frontend-editing__left-bar').toggle(100);
+		$('.t3-frontend-editing__left-bar').toggle(200);
 	});
+
+	$('.page-seo-devices span').click(function() {
+		$('span').removeClass('active');
+		$(this).addClass('active');
+	});
+
 var acc = document.getElementsByClassName("accordion");
 var i;
 
@@ -44,4 +51,12 @@ for (i = 0; i < acc.length; i++) {
   }
 }
 });
+
+	$('.sidebyside').click(function(){
+		$('.description').removeClass('active');
+  	});
+	$('.list-view').click(function(){
+		$('.description').addClass('active');
+  	});
+
 </script>

@@ -1,15 +1,8 @@
 /* Toolbars */
 @font-face {
-  font-family: 'Share';
-  src: url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot");
-  src: url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.woff") format("woff"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.ttf") format("truetype"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.svg#Share-Regular") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
-@font-face {
   font-family: 'icons';
-  src: url("Fonts/icons.eot?ytjj5m");
-  src: url("Fonts/icons.eot?ytjj5m#iefix") format("embedded-opentype"), url("Fonts/icons.ttf?ytjj5m") format("truetype"), url("Fonts/icons.woff?ytjj5m") format("woff"), url("Fonts/icons.svg?ytjj5m#icons") format("svg");
+  src: url("Fonts/icons.eot?ybin2g");
+  src: url("Fonts/icons.eot?ybin2g#iefix") format("embedded-opentype"), url("Fonts/icons.ttf?ybin2g") format("truetype"), url("Fonts/icons.woff?ybin2g") format("woff"), url("Fonts/icons.svg?ybin2g#icons") format("svg");
   font-weight: normal;
   font-style: normal; }
 
@@ -24,32 +17,35 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
-.icon-icons-01:before {
+.icon-icons-site-tree:before {
   content: "\e900"; }
 
-.icon-icons-02:before {
+.icon-icons-back:before {
   content: "\e901"; }
 
-.icon-icons-03:before {
+.icon-icons-workspace:before {
   content: "\e902"; }
 
-.icon-icons-04:before {
+.icon-icons-tools-settings:before {
   content: "\e903"; }
 
-.icon-icons-05:before {
+.icon-icons-lg-desktop:before {
   content: "\e904"; }
 
-.icon-icons-06:before {
+.icon-icons-desktop:before {
   content: "\e905"; }
 
-.icon-icons-07:before {
+.icon-icons-tablet:before {
   content: "\e906"; }
 
-.icon-icons-08:before {
+.icon-icons-phone:before {
   content: "\e907"; }
 
-.icon-icons-09:before {
+.icon-icons-page:before {
   content: "\e908"; }
+
+.t3-frontend-editing__right-bar .save-discard-changes .btn, .t3-frontend-editing__right-bar .save-discard-changes .btn-default {
+  min-width: 135px; }
 
 .btn, .btn-default {
   display: inline-block;
@@ -59,29 +55,15 @@
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  min-width: 138px;
+  font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   height: 35px;
-  font-size: 16px; }
+  font-size: 16px;
+  padding: 0 14px;
+  text-transform: uppercase; }
 
 .btn-default {
-  border: 1px solid #B9B9B9;
+  border: 1px solid #838383;
   background-color: transparent; }
-
-.accordion {
-  border-top: 1px solid #0f0f0f;
-  min-height: 49px; }
-
-.panel {
-  padding: 10px 0;
-  display: none; }
-  .panel.show {
-    display: block; }
-
-.padding-wrapper {
-  padding: 0 14px; }
-
-.dark-transparent-bg {
-  background-color: rgba(0, 0, 0, 0.6); }
 
 .title-default {
   padding: 10px 0; }
@@ -100,6 +82,64 @@
   text-align: left;
   padding: 10px;
   display: block; }
+
+.accordion {
+  border-top: 1px solid #838383;
+  min-height: 49px; }
+  .accordion:hover {
+    cursor: pointer; }
+
+.accordion-content {
+  padding: 10px 10px;
+  display: none;
+  background-color: #0f0f0f;
+  border-top: 1px solid #4c4c4c; }
+  .accordion-content.show {
+    display: block; }
+
+.padding-wrapper {
+  padding: 0 14px; }
+
+.dark-transparent-bg {
+  background-color: rgba(0, 0, 0, 0.6); }
+
+@font-face {
+  font-family: 'Share';
+  src: url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot");
+  src: url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.woff") format("woff"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.ttf") format("truetype"), url("../../../.Build/Web/typo3/sysext/t3skin/Resources/Public/Fonts/Share/share-regular-webfont.svg#Share-Regular") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+.content-icon {
+  background-color: #555f63;
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  position: relative;
+  margin: 5px 5px 5px 0;
+  vertical-align: top; }
+  .content-icon img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0; }
+
+.accordion-content .description {
+  display: inline-block;
+  width: 200px;
+  display: none; }
+  .accordion-content .description.active {
+    display: inline-block; }
+  .accordion-content .description .title-default {
+    display: inline-block;
+    width: 200px;
+    padding: 0;
+    line-height: 1.1; }
+    .accordion-content .description .title-default:first-of-type {
+      font-size: 18px;
+      padding-top: 4px; }
 
 .t3-frontend-editing__top-bar {
   background: #191919;
@@ -142,7 +182,7 @@
       color: #fff;
       text-decoration: none;
       padding: 10px 10px 14px; }
-    .t3-frontend-editing__top-bar-left .back-backend .icon-icons-02 {
+    .t3-frontend-editing__top-bar-left .back-backend .icon-icons-back {
       padding-right: 5px;
       top: 2px;
       position: relative;
@@ -183,38 +223,95 @@
   width: 310px;
   min-height: 100%;
   z-index: 10999;
-  font-family: "Share", Verdana, Helvetica, Arial, sans-serif; }
-  .t3-frontend-editing__right-bar .header, .t3-frontend-editing__right-bar .top-right-title {
-    height: 45px;
-    text-align: center; }
-    .t3-frontend-editing__right-bar .header h4, .t3-frontend-editing__right-bar .top-right-title h4 {
-      padding: 12px;
-      margin: 0; }
+  font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
+  text-transform: uppercase; }
   .t3-frontend-editing__right-bar .top-right-title {
     text-align: right;
-    background-color: #0f0f0f; }
+    background-color: #0f0f0f;
+    height: 45px; }
     .t3-frontend-editing__right-bar .top-right-title .title-right {
       font-size: 18px;
       display: inline-block;
       padding-right: 5px; }
-    .t3-frontend-editing__right-bar .top-right-title .icon-icons-04 {
+    .t3-frontend-editing__right-bar .top-right-title .icon-icons-tools-settings {
       top: 7px;
       position: relative;
       font-size: 32px;
       padding-right: 15px;
       color: #FF8700; }
   .t3-frontend-editing__right-bar .page-seo {
-    padding: 15px 0; }
+    padding: 15px 0 0; }
+    .t3-frontend-editing__right-bar .page-seo .page-seo-score {
+      border: 4px solid #FF8700;
+      font-size: 25px;
+      padding: 6px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      text-align: center;
+      display: inline-block;
+      margin: 0 8px;
+      position: relative;
+      top: 2px; }
+    .t3-frontend-editing__right-bar .page-seo .btn-default {
+      margin-bottom: 8px; }
+    .t3-frontend-editing__right-bar .page-seo .page-seo-devices {
+      padding-top: 12px;
+      font-size: 24px;
+      display: table;
+      margin: 0 auto; }
+      .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-lg-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: #838383; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-lg-desktop.active {
+          color: #fff; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-lg-desktop:hover {
+          cursor: pointer;
+          color: #fff; }
+      .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: #838383; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-desktop.active {
+          color: #fff; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-desktop:hover {
+          cursor: pointer;
+          color: #fff; }
+      .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-tablet {
+        font-size: 34px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        padding-right: 5px;
+        color: #838383; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-tablet.active {
+          color: #fff; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-tablet:hover {
+          cursor: pointer;
+          color: #fff; }
+      .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-phone {
+        font-size: 26px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        top: 3px;
+        color: #838383; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-phone.active {
+          color: #fff; }
+        .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-phone:hover {
+          cursor: pointer;
+          color: #fff; }
   .t3-frontend-editing__right-bar .save-discard-changes {
     padding: 15px 0;
     text-align: center; }
-    .t3-frontend-editing__right-bar .save-discard-changes p {
-      text-transform: uppercase;
-      color: #FF8700;
-      letter-spacing: -1px; }
     .t3-frontend-editing__right-bar .save-discard-changes .title-center {
-      color: #FF8700;
-      font-style: uppercase; }
+      font-size: 18px;
+      color: #FF8700; }
     .t3-frontend-editing__right-bar .save-discard-changes .number {
       color: #fff; }
 
