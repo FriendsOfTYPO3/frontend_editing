@@ -6,9 +6,3 @@ machine:
 test:
   override:
     - npm run build:suite --silent
-
-deployment:
-  production:
-    branch: master
-    commands:
-      - ./deploy_production.sh
