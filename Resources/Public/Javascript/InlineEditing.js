@@ -37,6 +37,10 @@
 			event.preventDefault();
 			var linkUrl = $(this).attr('href');
 			if (linkUrl) {
+				var numberOfItems = localStorage.getItem(localStorageKey);
+				if (numberOfItems !== null && numberOfItems !== '') {
+					confirm('You have some unsaved changes. They will disappear if you navigate away!')
+				}
 				window.location.href = linkUrl;
 			}
 		});
