@@ -33,10 +33,11 @@
 
 	deferred.done(function() {
 
+		// Suppress a tags (links) to redirect the normal way
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('a').click(function(event) {
 			event.preventDefault();
 			var linkUrl = $(this).attr('href');
-			if (linkUrl) {
+			if (linkUrl && linkUrl !== '#') {
 				var numberOfItems = localStorage.getItem(localStorageKey);
 				if (numberOfItems !== null && numberOfItems !== '') {
 					confirm('You have some unsaved changes. They will disappear if you navigate away!')
