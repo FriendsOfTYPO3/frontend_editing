@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh $SERVER_USERNAME@$SERVER_IP
+ssh -v $SERVER_USERNAME@$SERVER_IP
 
 cd $SERVER_PATH
 
