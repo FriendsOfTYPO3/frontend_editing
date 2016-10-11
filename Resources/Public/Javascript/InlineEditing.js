@@ -24,6 +24,7 @@
 	localStorage.removeItem(localStorageKey);
 
 	var deferred = $.Deferred();
+
 	var iframe = $('.t3-frontend-editing__iframe-wrapper iframe').attr({
 		'src': iframeUrl
 	});
@@ -31,6 +32,14 @@
 	iframe.load(deferred.resolve);
 
 	deferred.done(function() {
+
+		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('a').click(function(event) {
+			event.preventDefault();
+			var linkUrl = $(this).attr('href');
+			if (linkUrl) {
+				window.location.href = linkUrl;
+			}
+		});
 
 		// Add custom configuration to ckeditor
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
