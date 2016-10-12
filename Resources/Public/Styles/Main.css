@@ -1,4 +1,7 @@
 /* Toolbars */
+body {
+  margin: 0px; }
+
 @font-face {
   font-family: 'Share';
   src: url("./../../../../../../typo3/sysext/backend/Resources/Public/Fonts/Share/share-regular-webfont.eot");
