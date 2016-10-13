@@ -15,10 +15,18 @@
   font-size: $font-size-regular;
   padding: 0 14px;
   text-transform: uppercase;
+
+  &:hover {
+    background-color: lighten($orange-primary, 10%);
+  }
 }
 
 .btn-default {
   @extend .btn;
   border: 1px solid $gray-light;
   background-color: transparent;
+
+  &:hover {
+    background-color: lighten(transparentize($gray, .5), 50%);
+  }
 }

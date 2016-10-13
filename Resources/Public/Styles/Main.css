@@ -81,10 +81,14 @@
   font-size: 16px;
   padding: 0 14px;
   text-transform: uppercase; }
+  .btn:hover, .btn-default:hover {
+    background-color: #ff9f33; }
 
 .btn-default {
   border: 1px solid #838383;
   background-color: transparent; }
+  .btn-default:hover {
+    background-color: rgba(204, 204, 204, 0.5); }
 
 .title-default {
   padding: 10px 0; }
@@ -260,7 +264,8 @@
     display: inline-block;
     position: relative;
     border-right: 1px solid #0f0f0f;
-    height: 45px; }
+    height: 45px;
+    margin-left: 35px; }
     .t3-frontend-editing__top-bar-left .back-backend:hover {
       background-color: #424242; }
     .t3-frontend-editing__top-bar-left .back-backend a {
@@ -270,7 +275,7 @@
       padding: 10px 10px 14px; }
     .t3-frontend-editing__top-bar-left .back-backend .icon-icons-back {
       padding-right: 5px;
-      top: 2px;
+      top: 3px;
       position: relative;
       font-size: 20px;
       color: #FF8700; }
@@ -299,7 +304,8 @@
       display: inline-block; }
   .t3-frontend-editing__top-bar-right .user .icon-avatar-default {
     position: relative;
-    top: 6px; }
+    top: 6px;
+    vertical-align: middle; }
   .t3-frontend-editing__top-bar-right .right-bar-button {
     background: none;
     border: 0;
@@ -319,9 +325,12 @@
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   text-transform: uppercase; }
   .t3-frontend-editing__right-bar.open .top-right-title .icon-icons-arrow-double {
-    left: 0px;
+    left: 0;
     transition: left .2s;
-    transition-duration: .2s; }
+    transition-duration: .2s;
+    transform: rotate(0deg);
+    transform-origin: 50% 54%;
+    color: #fff; }
   .t3-frontend-editing__right-bar .top-right-title {
     text-align: right;
     background-color: #0f0f0f;
@@ -334,7 +343,7 @@
       cursor: pointer;
       float: left;
       display: block;
-      height: 45px;
+      height: 38px;
       width: 45px;
       text-align: center;
       position: absolute;
@@ -343,7 +352,9 @@
       font-size: 32px;
       left: -40;
       transition: left .2s;
-      transition-duration: .2s; }
+      transition-duration: .2s;
+      transform: rotate(178deg);
+      transform-origin: 50% 54%; }
     .t3-frontend-editing__right-bar .top-right-title .icon-icons-tools-settings {
       top: 7px;
       position: relative;
@@ -455,16 +466,22 @@
   top: 2px; }
 
 .t3-frontend-editing__left-bar {
-  display: none;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   position: fixed;
   top: 0;
-  left: 0;
+  left: -280px;
   width: 280px;
   min-height: 100%;
   z-index: 10999;
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif; }
+  .t3-frontend-editing__left-bar.open .top-left-title .icon-icons-arrow-double {
+    right: 0;
+    transition: right .2s;
+    transition-duration: .2s;
+    transform: rotate(178deg);
+    transform-origin: 50% 54%;
+    color: #fff; }
   .t3-frontend-editing__left-bar .icon-icons-site-tree {
     top: 7px;
     position: relative;
@@ -479,6 +496,22 @@
       padding: 10px 5px 10px 10px;
       font-size: 18px;
       display: inline-block; }
+    .t3-frontend-editing__left-bar .top-left-title .icon-icons-arrow-double {
+      cursor: pointer;
+      float: right;
+      display: block;
+      height: 38px;
+      width: 45px;
+      color: #838383;
+      text-align: center;
+      position: absolute;
+      right: -40px;
+      top: 0;
+      font-size: 32px;
+      padding-top: 7px;
+      transition: right .2s;
+      transition-duration: .2s;
+      transform: rotate(0deg); }
 
 .push-toright {
   left: 280px;

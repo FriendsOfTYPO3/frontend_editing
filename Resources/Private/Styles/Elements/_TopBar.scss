@@ -39,6 +39,7 @@
     position: relative;
     border-right: 1px solid $black;
     height: 45px;
+    margin-left: 35px;
 
     &:hover {
       background-color: lighten($black, 20%);
@@ -53,7 +54,7 @@
 
     .icon-icons-back {
       padding-right: 5px;
-      top: 2px;
+      top: 3px;
       position: relative;
       font-size: 20px;
       color: $orange-primary;
@@ -94,6 +95,8 @@
     .icon-avatar-default {
       position: relative;
       top: 6px;
+      vertical-align: middle;
+
     }
   }
 
