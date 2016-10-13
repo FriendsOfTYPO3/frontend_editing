@@ -1,14 +1,9 @@
 .accordion {
   border-top: 1px solid $gray-light;
-  min-height: 49px;
-
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .accordion-content {
-  padding: 10px 10px;
+  padding: 10px;
   display: none;
   background-color: $black;
   border-top: 1px solid $gray;

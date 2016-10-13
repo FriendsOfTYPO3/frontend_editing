@@ -2,9 +2,9 @@
 
 <f:render partial="TopBar" arguments="{_all}"></f:render>
 <f:render partial="RightBar" arguments="{_all}"></f:render>
+<f:render partial="LeftBar" arguments="{_all}"></f:render>
 
-<div class="t3-frontend-editing__left-bar">
-</div>
+
 <script type="text/javascript">
 		var iframeUrl = "{iframeUrl -> f:format.raw()}";
 </script>
@@ -21,42 +21,53 @@
 <script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
-	$('.t3-frontend-editing__right-bar').hide();
+	//$('.t3-frontend-editing__right-bar').hide();
 	$('.t3-frontend-editing__left-bar').hide();
 
-	$('.right-bar-button').click(function() {
-		$('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
-		$('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
+var t = 0;
 
-		$('.t3-frontend-editing__right-bar').toggle(200);
-	});
+$('.right-bar-button').on('click', function () {
+	$('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
+	$('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
+	$('.t3-frontend-editing__right-bar').toggleClass('open');
+	t = ++t % 2;
+	$('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -310 }, 200);
 
-	$('.left-bar-button').click(function() {
+});
+
+
+
+	$('.left-bar-button').on('click', function() {
 		$('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
 		$('.t3-frontend-editing__left-bar').toggle(200);
 	});
 
-	$('.page-seo-devices span').click(function() {
+	$('.page-seo-devices span').on('click', function() {
 		$('span').removeClass('active');
 		$(this).addClass('active');
 	});
 
-var acc = document.getElementsByClassName("accordion");
-var i;
 
-for (i = 0; i < acc.length; i++) {
-	acc[i].onclick = function(){
-		this.classList.toggle("active");
-		this.nextElementSibling.classList.toggle("show");
-  }
-}
+	$('.accordion .trigger').on('click', function(){
+		$(this).toggleClass('active');
+		$(this).closest('.accordion-container').find('.accordion-content').slideToggle(200);
+	});
+
+
+	$('.accordion .grid').on('click', function(){
+		$(this).closest('.accordion-container')
+			.removeClass('accordion-list').
+			addClass('accordion-grid');
+	});
+
+
+
+	$('.list-view').on('click', function(){
+		$(this).closest('.accordion-container')
+			.removeClass('accordion-grid').
+			addClass('accordion-list');
+  	});
+
 });
-
-	$('.sidebyside').click(function(){
-		$('.description').removeClass('active');
-  	});
-	$('.list-view').click(function(){
-		$('.description').addClass('active');
-  	});
 
 </script>

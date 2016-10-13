@@ -65,6 +65,15 @@
   width: 50%;
   float: right;
   text-align: right;
+  right: 0;
+  position: relative;
+  transition: cubic-bezier(0, 0, 0, 0) .2s;
+
+  &.push-toleft {
+    transition: cubic-bezier(0, 0, 0, 0) .2s;
+    right: 310px;
+    position: relative;
+  }
 
   .top-bar-items {
     float: right;
@@ -72,6 +81,7 @@
     padding: 0;
 
     .item {
+      padding-right: 40px;
       float: left;
       height: 45px;
       position: relative;

@@ -1,6 +1,6 @@
 .#{$t3-frontend}left-bar {
   display: none;
-  background: $black;
+  background: $transparent-opacity;
   color: $white;
   position: fixed;
   top: 0;
@@ -8,8 +8,27 @@
   width: $left-bar-width;
   min-height: 100%;
   z-index: 10999;
-  opacity: .8;
   font-family: $font-family-base;
+
+  .icon-icons-site-tree {
+    top: 7px;
+    position: relative;
+    font-size: 32px;
+    padding-left: 15px;
+    color: $orange-primary;
+  }
+
+  .top-left-title {
+    height: $top-bar-height;
+    background-color: $header-top-bg-color;
+
+    .title-left {
+      text-align: left;
+      padding: 10px 5px 10px 10px;
+      font-size: 18px;
+      display: inline-block;
+    }
+  }
 }
 
 .push-toright {

@@ -5,7 +5,6 @@
   display: inline-block;
   position: relative;
   margin: 5px 5px 5px 0;
-  vertical-align: top;
 
   img {
     position: absolute;
@@ -16,16 +15,14 @@
     right: 0;
   }
 }
-.accordion-content {
+
+.element {
+  display: inline-block;
+  margin-bottom: 10px;
 
   .description {
-    display: inline-block;
-    width: 200px;
+    width: 220px;
     display: none;
-
-    &.active{
-      display: inline-block;
-    }
 
     .title-default {
       display: inline-block;
@@ -40,3 +37,88 @@
     }
   }
 }
+
+.accordion {
+
+  .grid,
+  .list-view {
+    font-size: 32px;
+    position: relative;
+    top: 7px;
+    width: 22px;
+    display: inline-block;
+    cursor: pointer;
+    color: $gray;
+
+    &:hover,
+    &.active {
+      color: $white;
+    }
+  }
+
+  .trigger {
+    font-size: 26px;
+    position: relative;
+    top: 5px;
+    width: 30px;
+    display: inline-block;
+    cursor: pointer;
+    -ms-transform: rotate(0deg); /* IE 9 */
+    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
+    transform: rotate(0deg);
+    -webkit-transition-duration: .2s; /* Safari */
+    transition-duration: .2s;
+
+    &.active {
+      -ms-transform: rotate(180deg); /* IE 9 */
+      -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+      transform: rotate(180deg);
+      -webkit-transition-duration: .2s; /* Safari */
+      transition-duration: .2s;
+    }
+  }
+
+  .element-title {
+    display: inline-block;
+    padding: 3px 0;
+    max-width: 205px;
+  }
+
+  .element-action {
+    text-align: right;
+    width: auto;
+    display: inline-block;
+    float: right;
+    padding: 2px 10px;
+  }
+}
+
+.accordion-grid {
+  .grid {
+    color: $white;
+  }
+}
+
+.accordion-list {
+
+  .description {
+    display: inline-block;
+  }
+
+  .element {
+    display: block;
+    background-color: $gray;
+    margin: -10px;
+    padding: 10px;
+    margin-bottom: 15px;
+
+    .content-icon {
+      vertical-align: top;
+    }
+  }
+
+  .list-view {
+    color: $white;
+  }
+}
+

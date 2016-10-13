@@ -1,15 +1,27 @@
 .#{$t3-frontend}right-bar {
-  display: none;
+
   background-color: $gray;
   color: $white;
   position: fixed;
   top: 0;
-  right: 0;
+  right: -$right-bar-width;
   width: $right-bar-width;
   min-height: 100%;
   z-index: 10999;
   font-family: $font-family-base;
   text-transform: uppercase;
+
+    &.open {
+
+      .top-right-title {
+
+        .icon-icons-arrow-double {
+          left: 0px;
+          transition: left .2s;
+          transition-duration: .2s;
+        }
+      }
+    }
 
   .top-right-title {
     text-align: right;
@@ -20,6 +32,22 @@
       font-size: $font-size-large;
       display: inline-block;
       padding-right: 5px;
+    }
+
+    .icon-icons-arrow-double {
+      cursor: pointer;
+      float: left;
+      display: block;
+      height: 45px;
+      width: 45px;
+      text-align: center;
+      position: absolute;
+      padding-top: 7px;
+      color: $gray-light;
+      font-size: 32px;
+      left: -40;
+      transition: left .2s;
+      transition-duration: .2s;
     }
 
     .icon-icons-tools-settings {
@@ -153,8 +181,33 @@
 .push-toleft {
   right: $right-bar-width;
   position: relative;
+  width: 50%;
+  transition: cubic-bezier(0, 0, 0, 0) .36s;
 }
 
 .push-toleft-iframe {
+  transition: cubic-bezier(0, 0, 0, 0) .36s;
+  position: relative;
   width: calc(100% - 310px);
+}
+
+.#{$t3-frontend}save,
+ .#{$t3-frontend}discard {
+
+  .btn-text {
+    position: relative;
+    top: -3px;
+  }
+
+  .icon-icons-save {
+    font-size: 26px;
+    position: relative;
+    top: 1px;
+  }
+
+  .icon-icons-cancel{
+    font-size: 26px;
+    position: relative;
+    top: 2px;
+  }
 }
