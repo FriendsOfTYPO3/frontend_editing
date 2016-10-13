@@ -24,6 +24,7 @@
 	localStorage.removeItem(localStorageKey);
 
 	var deferred = $.Deferred();
+
 	var iframe = $('.t3-frontend-editing__iframe-wrapper iframe').attr({
 		'src': iframeUrl
 	});
@@ -37,6 +38,18 @@
   $head.append($("<link/>",
                 { rel: "stylesheet", href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css', type: "text/css" }
               ));
+		// Suppress a tags (links) to redirect the normal way
+		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('a').click(function(event) {
+			event.preventDefault();
+			var linkUrl = $(this).attr('href');
+			if (linkUrl && linkUrl !== '#') {
+				var numberOfItems = localStorage.getItem(localStorageKey);
+				if (numberOfItems !== null && numberOfItems !== '') {
+					confirm('You have some unsaved changes. They will disappear if you navigate away!')
+				}
+				window.location.href = linkUrl;
+			}
+		});
 
 		// Add custom configuration to ckeditor
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
