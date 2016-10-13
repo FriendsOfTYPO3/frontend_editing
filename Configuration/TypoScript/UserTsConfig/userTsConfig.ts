@@ -5,5 +5,5 @@ admPanel {
     module.edit.forceNoPopup = 0
     module.edit.forceDisplayFieldIcons = 1
     module.edit.forceDisplayIcons = 0
-    hide = 0
+    hide = 1
 }

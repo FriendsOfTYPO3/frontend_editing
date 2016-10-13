@@ -1,4 +1,7 @@
 /* Toolbars */
+body {
+  margin: 0px; }
+
 @font-face {
   font-family: 'icons';
   src: url("Fonts/icons.eot?fgsxdn");
