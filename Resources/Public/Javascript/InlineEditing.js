@@ -33,7 +33,7 @@
 
 	deferred.done(function() {
 
-		var $head = $(iframe).contents().find("head");
+		var $head = $(iframe).contents().find('head');
 
 		$head.append(
 			$(
@@ -53,9 +53,11 @@
 			if (linkUrl && linkUrl !== '#') {
 				var numberOfItems = localStorage.getItem(localStorageKey);
 				if (numberOfItems !== null && numberOfItems !== '') {
-					confirm('You have some unsaved changes. They will disappear if you navigate away!')
+					var confirmed = confirm('You have some unsaved changes. They will disappear if you navigate away!');
+					if (confirmed) {
+						window.location.href = linkUrl;
+					}
 				}
-				window.location.href = linkUrl;
 			}
 		});
 

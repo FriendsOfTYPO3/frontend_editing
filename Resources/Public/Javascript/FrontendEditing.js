@@ -50,6 +50,17 @@
         }
     });
 
+    // Discard button
+    $('.t3-frontend-editing__discard').click(function() {
+        var numberOfUnsavedItems = localStorage.getItem(localStorageKey);
+        if (numberOfUnsavedItems !== null && numberOfUnsavedItems !== '') {
+            var confirmed = confirm('Are you sure you want to remove all unsaved changes?');
+            if (confirmed) {
+                localStorage.removeItem(localStorageKey);
+            }
+        }
+    });
+
     var t = 0;
     var y = 0;
 
@@ -80,8 +91,8 @@
 
     $('.accordion .grid').on('click', function(){
         $(this).closest('.accordion-container')
-            .removeClass('accordion-list').
-        addClass('accordion-grid');
+            .removeClass('accordion-list')
+            .addClass('accordion-grid');
     });
 
     $('.list-view').on('click', function(){
