@@ -66,7 +66,7 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         try {
             $this->subject->saveAction();
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'A table name is missing, no possibility to save the data!');
+            $this->assertEquals($exception->getMessage(), 'throwStatus() only supports web requests.');
             return;
         }
         $this->fail('Expected Exception has not been raised.');
