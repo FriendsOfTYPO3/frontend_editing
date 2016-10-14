@@ -33,7 +33,7 @@
                     }).done(function(data, textStatus, jqXHR) {
                         toastr.success('Content (uid: "' + data.message +'") have been saved!', 'Content saved');
                     }).fail(function(jqXHR, textStatus, errorThrown) {
-                        toastr.error(errorThrown, 'Something went wrong');
+                        toastr.error(jqXHR.responseText, 'Something went wrong');
                     });
                 }
             });

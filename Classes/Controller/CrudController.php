@@ -190,18 +190,38 @@ class CrudController extends ActionController
         if (!isset($GLOBALS['BE_USER'])) {
             throw new \Exception('This action is only allowed logged in to the backend!');
         } elseif (empty($body)) {
-            throw new \Exception('A body is missing in the request!');
+            $this->throwStatus(
+                400,
+                null,
+                'A body is missing in the request!'
+            );
         }
 
         // Check body data
         if (empty($body['table'])) {
-            throw new \Exception('Property "table" is missing from the body!');
+            $this->throwStatus(
+                400,
+                null,
+                'Property "table" is missing from the body!'
+            );
         } elseif (empty($body['field'])) {
-            throw new \Exception('Property "field" is missing from the body!');
+            $this->throwStatus(
+                400,
+                null,
+                'Property "field" is missing from the body!'
+            );
         } elseif (empty($body['uid'])) {
-            throw new \Exception('Property "uid" is missing from the body!');
-        } elseif (empty($body['content'])) {
-            throw new \Exception('Property "content" is missing from the body!');
+            $this->throwStatus(
+                400,
+                null,
+                'Property "uid" is missing from the body!'
+            );
+        } elseif (!isset($body['content'])) {
+            $this->throwStatus(
+                400,
+                null,
+                'Property "content" is missing from the body!'
+            );
         }
 
         // Set the basic properties of editing
@@ -268,7 +288,11 @@ class CrudController extends ActionController
             }
 
             if (empty($this->table)) {
-                throw new \Exception('A table name is missing, no possibility to save the data!');
+                $this->throwStatus(
+                    400,
+                    'Missing table name',
+                    'A table name is missing, no possibility to save the data!'
+                );
             }
 
             $data = [
@@ -287,7 +311,11 @@ class CrudController extends ActionController
                 'message' => $this->uid
             ];
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            $this->throwStatus(
+                500,
+                $exception->getFile(),
+                $exception->getMessage()
+            );
         }
 
         return json_encode($message);
