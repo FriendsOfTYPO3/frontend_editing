@@ -1,22 +1,29 @@
 <div class="t3-frontend-editing__top-bar">
-		<div class="t3-frontend-editing__topbar-inner">
-				<div class="t3-frontend-editing__top-bar-left">
-					<div class="back-backend">
-							<a href="/typo3">
-									<span class="icons icon-icons-back"></span><span title="To backend">To backend</span>
-							</a>
-						</div>
-				</div>
-				<div class="t3-frontend-editing__top-bar-right">
-							<ul class="top-bar-items">
-								<li class="dropdown item">
-									<div class="user">
-											{userIcon -> f:format.html()}
-											<span title="{userName -> f:format.html()}">{userName -> f:format.html()} </span>
-									</div>
-								</li>
-
-							</ul>
-				</div>
+	<div class="t3-frontend-editing__topbar-inner">
+		<div class="t3-frontend-editing__top-bar-left">
+			<div class="back-backend">
+				<a href="/typo3">
+					<span class="icons icon-icons-back"></span><span title="To backend">To backend</span>
+				</a>
+			</div>
 		</div>
+		<div class="t3-frontend-editing__top-bar-right">
+			<ul class="top-bar-items">
+				<li class="dropdown item">
+					<div class="user">
+						{userIcon -> f:format.html()}
+						<span title="{userName -> f:format.html()}">{userName -> f:format.html()} </span>
+					</div>
+				</li>
+			</ul>
+			<div class="top-bar-action-buttons">
+				<button type="submit" class="t3-frontend-editing__save btn">
+					<span class="btn-text">Save All </span> <span class="icons icon-icons-save"></span>
+				</button>
+				<button type="#" class="t3-frontend-editing__discard btn-default">
+					<span class="btn-text">Discard All </span> <span class="icons icon-icons-cancel"></span>
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
