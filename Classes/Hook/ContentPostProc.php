@@ -71,8 +71,14 @@ class ContentPostProc
                 $templatePath = GeneralUtility::getFileAbsFileName(
                     'typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'
                 );
+                $partialPath = GeneralUtility::getFileAbsFileName(
+                    'typo3conf/ext/frontend_editing/Resources/Private/Partials'
+                );
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
+                $view->setPartialRootPaths([
+                    10 => $partialPath
+                ]);
                 $view->assignMultiple([
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
                     'userName' => $GLOBALS['BE_USER']->user['username'],
@@ -97,7 +103,7 @@ class ContentPostProc
     private function loadResources()
     {
         $resources = '<link rel="stylesheet" type="text/css" href="' .
-            '/typo3conf/ext/frontend_editing/Resources/Public/Styles/FrontendEditing.css" />';
+            '/typo3conf/ext/frontend_editing/Resources/Public/Styles/Main.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
         $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .

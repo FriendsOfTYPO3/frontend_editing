@@ -2,15 +2,17 @@
   "name": "frontend_editing",
   "version": "0.1.0",
   "description": "Enable editors to work with the content in the most intuitive way possible",
+  "sasslintConfig": "scss-lint.yml",
   "scripts": {
     "add:resource:ckeditor": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
     "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run build:css",
-    "build:css": "node-sass --include-path scss Resources/Private/Styles/FrontendEditing.scss Resources/Public/Styles/FrontendEditing.css",
+    "build:css": "npm run lint:css --silent && node-sass Resources/Private/Styles/ -o Resources/Public/Styles/",
     "watch:css": "nodemon -e scss -x npm run build:css",
+    "lint:css": "sass-lint Resources/Private/Styles/**/*.scss --verbose --no-exit",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c Tests/Build/UnitTests.xml",
-    "build:suite": "npm run php:codesniffer && npm run php:unittests"
+    "build:suite": "npm run php:codesniffer && npm run php:unittests && npm run lint:css"
   },
   "dependencies": {
     "ckeditor": "^4.5.10",
@@ -18,7 +20,8 @@
   },
   "devDependencies": {
     "node-sass": "^3.9.3",
-    "nodemon": "^1.10.2"
+    "nodemon": "^1.10.2",
+    "sass-lint": "^1.9.1"
   },
   "repository": {
     "type": "git",

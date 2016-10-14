@@ -1,0 +1,7 @@
+@import "Constants";
+
+*[contenteditable="true"] {
+	&:focus{
+		outline: 3px dotted #FF8700;
+	}
+}

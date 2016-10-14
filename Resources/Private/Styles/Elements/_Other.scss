@@ -1,0 +1,64 @@
+.#{$t3-frontend}iframe-wrapper {
+  margin-top: $top-bar-height;
+  margin-right: $right-bar-width;
+  @include transition(width .2s);
+  position: relative;
+  width: 100%;
+
+  &.push-toleft-iframe {
+    width: calc(100% - #{$right-bar-width});
+    @include transition(width .2s);
+    position: relative;
+  }
+
+  &.inactive {
+    margin-right: 0;
+  }
+
+  iframe {
+    width: 100%;
+    height: calc(100% - #{$top-bar-height});
+  }
+}
+
+.#{$t3-frontend}loading-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: -$top-bar-height;
+  right: 0;
+  background: $white;
+  opacity: .8;
+
+  .icon-spin {
+
+    .icon-markup {
+      filter: alpha(opacity=80);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -28px 0 0 -25px;
+
+      animation: icon-spin 2s infinite linear;
+      display: block;
+    }
+    @keyframes icon-spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(359deg);
+      }
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}

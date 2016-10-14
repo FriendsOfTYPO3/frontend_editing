@@ -1,7 +1,32 @@
 // Colors
-$black: #111111;
-$light-grey: #dddddd;
+$orange-primary: #FF8700;
+$gray-dark: #191919;
+$gray: #4c4c4c;
+$gray-light: #838383;
+$gray-bright: #EFEFEF;
+ 
+$gray-icon-bg: #555f63;
+$black: #0f0f0f;
+$white: #fff;
 
-// Toolbars
+$transparent-opacity: rgba(transparent, .6);
+
+// Font
+$font-family-base: "Share", Verdana, Helvetica, Arial, sans-serif;
+
+$font-size-regular: 16px;
+$font-size-large: 18px;
+
+/* Toolbars */
+$t3-frontend: t3-frontend-editing__;
+
+// Header top
+$header-top-bg-color: $black;
 $top-bar-height: 45px;
-$right-bar-width: 200px;
+
+// Right bar
+$right-bar-width: 310px;
+
+// Left bar
+$left-bar-width: 280px;
+

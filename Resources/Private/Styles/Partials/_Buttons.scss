@@ -1,0 +1,32 @@
+%btn-min-width {
+  min-width: 130px;
+}
+
+.btn {
+  display: inline-block;
+  background-color: $orange-primary;
+  color: $white;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  font-family: $font-family-base;
+  height: 35px;
+  font-size: $font-size-regular;
+  padding: 0 14px;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: lighten($orange-primary, 10%);
+  }
+}
+
+.btn-default {
+  @extend .btn;
+  border: 1px solid $gray-light;
+  background-color: transparent;
+
+  &:hover {
+    background-color: lighten(transparentize($gray, .5), 50%);
+  }
+}

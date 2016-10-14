@@ -1,0 +1,120 @@
+.content-icon {
+  background-color: $gray-icon-bg;
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  position: relative;
+  margin: 5px 5px 5px 0;
+
+  img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.element {
+  display: inline-block;
+  margin-bottom: 10px;
+
+  .description {
+    width: 220px;
+    display: none;
+
+    .title-default {
+      display: inline-block;
+      width: 200px;
+      padding: 0;
+      line-height: 1.1;
+
+      &:first-of-type {
+        font-size: $font-size-large;
+        padding-top: 4px;
+      }
+    }
+  }
+}
+
+.accordion {
+
+  .grid,
+  .list-view {
+    font-size: 32px;
+    position: relative;
+    top: 7px;
+    width: 22px;
+    display: inline-block;
+    cursor: pointer;
+    color: $gray;
+
+    &:hover,
+    &.active {
+      color: $white;
+    }
+  }
+
+  .trigger {
+    font-size: 26px;
+    position: relative;
+    top: 5px;
+    width: 30px;
+    display: inline-block;
+    cursor: pointer;
+    @include rotate(0);
+    @include transition-duration(.2s);
+    @include transform-origin(center);
+
+    &.active {
+      @include rotate(180);
+      @include transition-duration(.2s);
+      @include transform-origin (center);
+    }
+  }
+
+  .element-title {
+    display: inline-block;
+    padding: 3px 0;
+    max-width: 205px;
+  }
+
+  .element-action {
+    text-align: right;
+    width: auto;
+    display: inline-block;
+    float: right;
+    padding: 2px 10px;
+  }
+}
+
+.accordion-grid {
+  .grid {
+    color: $white;
+  }
+}
+
+.accordion-list {
+
+  .description {
+    display: inline-block;
+  }
+
+  .element {
+    display: block;
+    background-color: $gray;
+    margin: -10px;
+    padding: 10px;
+    margin-bottom: 15px;
+
+    .content-icon {
+      vertical-align: top;
+    }
+  }
+
+  .list-view {
+    color: $white;
+  }
+}
+
