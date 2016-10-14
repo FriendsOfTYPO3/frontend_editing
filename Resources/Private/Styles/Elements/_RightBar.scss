@@ -2,7 +2,7 @@
 
   background-color: $gray;
   color: $white;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: -$right-bar-width;
   width: $right-bar-width;
@@ -10,6 +10,10 @@
   z-index: 10999;
   font-family: $font-family-base;
   text-transform: uppercase;
+
+  .top-right-bar-wrapper {
+    margin-top: $top-bar-height;
+  }
 
   &.open {
 
@@ -30,6 +34,10 @@
     text-align: right;
     background-color: $header-top-bg-color;
     height: $top-bar-height;
+    position: fixed;
+    margin-top: -$top-bar-height;
+    width: $right-bar-width;
+    z-index: 1;
 
     .title-right {
       font-size: $font-size-large;
