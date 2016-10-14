@@ -216,7 +216,7 @@ class CrudController extends ActionController
                 null,
                 'Property "uid" is missing from the body!'
             );
-        } elseif (empty($body['content'])) {
+        } elseif (!isset($body['content'])) {
             $this->throwStatus(
                 400,
                 null,
