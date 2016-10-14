@@ -1,13 +1,15 @@
 .#{$t3-frontend}iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
-  transition: cubic-bezier(0, 0, 0, 0) .2s;
+  //transition: cubic-bezier(0, 0, 0, 0) .2s;
+  @include transition(width .2s);
   position: relative;
   width: 100%;
 
   &.push-toleft-iframe {
     width: calc(100% - 310px);
-    transition: cubic-bezier(0, 0, 0, 0) .2s;
+    //transition: cubic-bezier(0, 0, 0, 0) .2s;
+    @include transition(width .2s);
     position: relative;
   }
 
@@ -56,4 +58,8 @@
 
 .hidden {
   display: none;
+}
+
+body {
+  margin: 0px;
 }

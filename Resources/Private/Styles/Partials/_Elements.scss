@@ -63,18 +63,14 @@
     width: 30px;
     display: inline-block;
     cursor: pointer;
-    -ms-transform: rotate(0deg); /* IE 9 */
-    -webkit-transform: rotate(0deg); /* Chrome, Safari, Opera */
-    transform: rotate(0deg);
-    -webkit-transition-duration: .2s; /* Safari */
-    transition-duration: .2s;
+    @include rotate(0);
+    @include transition-duration(.2s);
+    @include transform-origin(center);
 
     &.active {
-      -ms-transform: rotate(180deg); /* IE 9 */
-      -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
-      transform: rotate(180deg);
-      -webkit-transition-duration: .2s; /* Safari */
-      transition-duration: .2s;
+      @include rotate(180);
+      @include transition-duration(.2s);
+      @include transform-origin (center);
     }
   }
 

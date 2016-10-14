@@ -1,7 +1,4 @@
 /* Toolbars */
-body {
-  margin: 0px; }
-
 @font-face {
   font-family: 'icons';
   src: url("Fonts/icons.eot?fgsxdn");
@@ -69,7 +66,7 @@ body {
   content: "\e908"; }
 
 .t3-frontend-editing__right-bar .save-discard-changes .btn, .t3-frontend-editing__right-bar .save-discard-changes .btn-default {
-  min-width: 135px; }
+  min-width: 130px; }
 
 .btn, .btn-default {
   display: inline-block;
@@ -186,23 +183,37 @@ body {
   width: 30px;
   display: inline-block;
   cursor: pointer;
-  -ms-transform: rotate(0deg);
-  /* IE 9 */
   -webkit-transform: rotate(0deg);
-  /* Chrome, Safari, Opera */
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
   transform: rotate(0deg);
-  -webkit-transition-duration: .2s;
-  /* Safari */
-  transition-duration: .2s; }
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -ms-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -moz-transform-origin: center;
+  -o-transform-origin: center;
+  -ms-transform-origin: center;
+  -webkit-transform-origin: center;
+  transform-origin: center; }
   .accordion .trigger.active {
-    -ms-transform: rotate(180deg);
-    /* IE 9 */
     -webkit-transform: rotate(180deg);
-    /* Chrome, Safari, Opera */
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
     transform: rotate(180deg);
-    -webkit-transition-duration: .2s;
-    /* Safari */
-    transition-duration: .2s; }
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -moz-transform-origin: center;
+    -o-transform-origin: center;
+    -ms-transform-origin: center;
+    -webkit-transform-origin: center;
+    transform-origin: center; }
 
 .accordion .element-title {
   display: inline-block;
@@ -299,7 +310,7 @@ body {
     margin: 0;
     padding: 0; }
     .t3-frontend-editing__top-bar-right .top-bar-items .item {
-      padding-right: 40px;
+      margin-right: 50px;
       float: left;
       height: 45px;
       position: relative;
@@ -329,10 +340,26 @@ body {
   text-transform: uppercase; }
   .t3-frontend-editing__right-bar.open .top-right-title .icon-icons-arrow-double {
     left: 0;
-    transition: left .2s;
-    transition-duration: .2s;
+    -webkit-transition: left 0.2s;
+    -moz-transition: left 0.2s;
+    -ms-transition: left 0.2s;
+    -o-transition: left 0.2s;
+    transition: left 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
     transform: rotate(0deg);
-    transform-origin: 50% 54%;
+    -moz-transform-origin: center;
+    -o-transform-origin: center;
+    -ms-transform-origin: center;
+    -webkit-transform-origin: center;
+    transform-origin: center;
     color: #fff; }
   .t3-frontend-editing__right-bar .top-right-title {
     text-align: right;
@@ -346,18 +373,37 @@ body {
       cursor: pointer;
       float: left;
       display: block;
-      height: 38px;
+      height: 40px;
       width: 45px;
       text-align: center;
       position: absolute;
-      padding-top: 7px;
+      padding-top: 5px;
       color: #838383;
       font-size: 32px;
-      left: -40;
-      transition: left .2s;
-      transition-duration: .2s;
-      transform: rotate(178deg);
-      transform-origin: 50% 54%; }
+      left: -45px;
+      -webkit-transition: left 0.2s;
+      -moz-transition: left 0.2s;
+      -ms-transition: left 0.2s;
+      -o-transition: left 0.2s;
+      transition: left 0.2s;
+      -webkit-transition-duration: 0.2s;
+      -moz-transition-duration: 0.2s;
+      -ms-transition-duration: 0.2s;
+      -o-transition-duration: 0.2s;
+      transition-duration: 0.2s;
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      transform: rotate(180deg);
+      -moz-transform-origin: center;
+      -o-transform-origin: center;
+      -ms-transform-origin: center;
+      -webkit-transform-origin: center;
+      transform-origin: center; }
+      .t3-frontend-editing__right-bar .top-right-title .icon-icons-arrow-double:hover {
+        background-color: #292929;
+        color: #fff; }
     .t3-frontend-editing__right-bar .top-right-title .icon-icons-tools-settings {
       top: 7px;
       position: relative;
@@ -440,17 +486,6 @@ body {
     .t3-frontend-editing__right-bar .save-discard-changes .number {
       color: #fff; }
 
-.push-toleft {
-  right: 310px;
-  position: relative;
-  width: 50%;
-  transition: cubic-bezier(0, 0, 0, 0) 0.36s; }
-
-.push-toleft-iframe {
-  transition: cubic-bezier(0, 0, 0, 0) 0.36s;
-  position: relative;
-  width: calc(100% - 310px); }
-
 .t3-frontend-editing__save .btn-text,
 .t3-frontend-editing__discard .btn-text {
   position: relative;
@@ -477,13 +512,31 @@ body {
   width: 280px;
   min-height: 100%;
   z-index: 10999;
-  font-family: "Share", Verdana, Helvetica, Arial, sans-serif; }
+  font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px); }
   .t3-frontend-editing__left-bar.open .top-left-title .icon-icons-arrow-double {
     right: 0;
-    transition: right .2s;
-    transition-duration: .2s;
-    transform: rotate(178deg);
-    transform-origin: 50% 54%;
+    -webkit-transition: right 0.2s;
+    -moz-transition: right 0.2s;
+    -ms-transition: right 0.2s;
+    -o-transition: right 0.2s;
+    transition: right 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -moz-transform-origin: center;
+    -o-transform-origin: center;
+    -ms-transform-origin: center;
+    -webkit-transform-origin: center;
+    transform-origin: center;
     color: #fff; }
   .t3-frontend-editing__left-bar .icon-icons-site-tree {
     top: 7px;
@@ -503,18 +556,38 @@ body {
       cursor: pointer;
       float: right;
       display: block;
-      height: 38px;
+      height: 40px;
       width: 45px;
-      color: #838383;
       text-align: center;
       position: absolute;
-      right: -40px;
-      top: 0;
+      padding-top: 5px;
+      color: #838383;
       font-size: 32px;
-      padding-top: 7px;
-      transition: right .2s;
-      transition-duration: .2s;
-      transform: rotate(0deg); }
+      right: -45px;
+      top: 0;
+      -webkit-transition: right 0.2s;
+      -moz-transition: right 0.2s;
+      -ms-transition: right 0.2s;
+      -o-transition: right 0.2s;
+      transition: right 0.2s;
+      -webkit-transition-duration: 0.2s;
+      -moz-transition-duration: 0.2s;
+      -ms-transition-duration: 0.2s;
+      -o-transition-duration: 0.2s;
+      transition-duration: 0.2s;
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -moz-transform-origin: center;
+      -o-transform-origin: center;
+      -ms-transform-origin: center;
+      -webkit-transform-origin: center;
+      transform-origin: center; }
+      .t3-frontend-editing__left-bar .top-left-title .icon-icons-arrow-double:hover {
+        background-color: #292929;
+        color: #fff; }
 
 .push-toright {
   left: 280px;
@@ -523,12 +596,20 @@ body {
 .t3-frontend-editing__iframe-wrapper {
   margin-top: 45px;
   margin-right: 310px;
-  transition: cubic-bezier(0, 0, 0, 0) 0.2s;
+  -webkit-transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -ms-transition: width 0.2s;
+  -o-transition: width 0.2s;
+  transition: width 0.2s;
   position: relative;
   width: 100%; }
   .t3-frontend-editing__iframe-wrapper.push-toleft-iframe {
     width: calc(100% - 310px);
-    transition: cubic-bezier(0, 0, 0, 0) 0.2s;
+    -webkit-transition: width 0.2s;
+    -moz-transition: width 0.2s;
+    -ms-transition: width 0.2s;
+    -o-transition: width 0.2s;
+    transition: width 0.2s;
     position: relative; }
   .t3-frontend-editing__iframe-wrapper.inactive {
     margin-right: 0; }
@@ -561,3 +642,6 @@ body {
 
 .hidden {
   display: none; }
+
+body {
+  margin: 0px; }

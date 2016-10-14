@@ -1,10 +1,6 @@
 @import "Constants";
-
-body {
-  margin: 0px;
-}
-
 @import "Icons";
+@import "Partials/Base";
 @import "Partials/Buttons";
 @import "Partials/Titles";
 @import "Partials/Accordion";

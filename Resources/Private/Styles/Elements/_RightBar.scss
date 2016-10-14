@@ -17,10 +17,10 @@
 
       .icon-icons-arrow-double {
         left: 0;
-        transition: left .2s;
-        transition-duration: .2s;
-        transform: rotate(0deg);
-        transform-origin: 50% 54%;
+        @include transition(left .2s);
+        @include transition-duration(.2s);
+        @include rotate(0);
+        @include transform-origin (center);
         color: $white;
       }
     }
@@ -41,18 +41,23 @@
       cursor: pointer;
       float: left;
       display: block;
-      height: 38px;
+      height: 40px;
       width: 45px;
       text-align: center;
       position: absolute;
-      padding-top: 7px;
+      padding-top: 5px;
       color: $gray-light;
       font-size: 32px;
-      left: -40;
-      transition: left .2s;
-      transition-duration: .2s;
-      transform: rotate(178deg);
-      transform-origin: 50% 54%;
+      left: -45px;
+      @include transition(left .2s);
+      @include transition-duration(.2s);
+      @include rotate(180);
+      @include transform-origin (center);
+
+      &:hover {
+        background-color: lighten($black, 10%);
+        color: $white;
+      }
     }
 
     .icon-icons-tools-settings {
@@ -181,19 +186,6 @@
       @extend %btn-min-width;
     }
   }
-}
-
-.push-toleft {
-  right: $right-bar-width;
-  position: relative;
-  width: 50%;
-  transition: cubic-bezier(0, 0, 0, 0) .36s;
-}
-
-.push-toleft-iframe {
-  transition: cubic-bezier(0, 0, 0, 0) .36s;
-  position: relative;
-  width: calc(100% - 310px);
 }
 
 .#{$t3-frontend}save,

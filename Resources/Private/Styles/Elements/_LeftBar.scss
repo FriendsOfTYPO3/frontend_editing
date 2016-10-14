@@ -8,6 +8,8 @@
   min-height: 100%;
   z-index: 10999;
   font-family: $font-family-base;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 
   &.open {
 
@@ -15,10 +17,10 @@
 
       .icon-icons-arrow-double {
         right: 0;
-        transition: right .2s;
-        transition-duration: .2s;
-        transform: rotate(178deg);
-        transform-origin: 50% 54%;
+        @include transition(right .2s);
+        @include transition-duration(.2s);
+        @include rotate(180);
+        @include transform-origin (center);
         color: $white;
       }
     }
@@ -47,19 +49,24 @@
       cursor: pointer;
       float: right;
       display: block;
-      height: 38px;
+      height: 40px;
       width: 45px;
-      color: $gray-light;
       text-align: center;
       position: absolute;
-      right: -40px;
-      top: 0;
+      padding-top: 5px;
+      color: $gray-light;
       font-size: 32px;
-      padding-top: 7px;
-      transition: right .2s;
-      transition-duration: .2s;
-      transform: rotate(0deg);
+      right: -45px;
+      top: 0;
+      @include transition(right .2s);
+      @include transition-duration(.2s);
+      @include rotate(0);
+      @include transform-origin (center);
 
+      &:hover {
+        background-color: lighten($black, 10%);
+        color: $white;
+      }
     }
   }
 }
