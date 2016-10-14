@@ -35,9 +35,17 @@
 
 		var $head = $(iframe).contents().find("head");
 
-  $head.append($("<link/>",
-                { rel: "stylesheet", href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css', type: "text/css" }
-              ));
+		$head.append(
+			$(
+				'<link/>',
+				{
+					rel: 'stylesheet',
+					href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css',
+					type: 'text/css'
+				}
+			)
+		);
+
 		// Suppress a tags (links) to redirect the normal way
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('a').click(function(event) {
 			event.preventDefault();
