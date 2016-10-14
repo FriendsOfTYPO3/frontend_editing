@@ -1,14 +1,12 @@
 .#{$t3-frontend}iframe-wrapper {
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
-  //transition: cubic-bezier(0, 0, 0, 0) .2s;
   @include transition(width .2s);
   position: relative;
   width: 100%;
 
   &.push-toleft-iframe {
     width: calc(100% - #{$right-bar-width});
-    //transition: cubic-bezier(0, 0, 0, 0) .2s;
     @include transition(width .2s);
     position: relative;
   }
