@@ -80,8 +80,8 @@
     });
 
     $('.page-seo-devices span').on('click', function() {
-        //$('span').removeClass('active');
-        //$(this).addClass('active');
+        $('span').removeClass('active');
+        $(this).addClass('active');
         $('.t3-frontend-editing__iframe-wrapper iframe').animate({
             'width': $(this).data('width'),
             'height': $(this).data('height')
