@@ -18,6 +18,9 @@
   iframe {
     width: 100%;
     height: calc(100% - #{$top-bar-height});
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0px 0px 15px 0px #888888;
   }
 }
 

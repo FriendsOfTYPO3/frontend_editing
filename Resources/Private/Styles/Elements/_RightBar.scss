@@ -175,25 +175,6 @@
       }
     }
   }
-
-  .save-discard-changes {
-    padding: 15px 0;
-    text-align: center;
-
-    .title-center {
-      font-size: $font-size-large;
-      color: $orange-primary;
-    }
-
-    .number {
-      color: $white;
-    }
-
-    .btn,
-    .btn-default {
-      @extend %btn-min-width;
-    }
-  }
 }
 
 .#{$t3-frontend}save,
