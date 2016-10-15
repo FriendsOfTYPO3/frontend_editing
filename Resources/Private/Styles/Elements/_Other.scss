@@ -18,6 +18,8 @@
   iframe {
     width: 100%;
     height: calc(100% - #{$top-bar-height});
+    margin: 0 auto;
+    display: block;
   }
 }
 
