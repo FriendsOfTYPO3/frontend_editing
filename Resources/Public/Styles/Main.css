@@ -77,7 +77,8 @@
   height: 35px;
   font-size: 16px;
   padding: 0 14px;
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  outline: none; }
   .btn:hover, .btn-default:hover {
     background-color: #ff9f33; }
 

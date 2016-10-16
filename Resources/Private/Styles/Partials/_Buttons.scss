@@ -15,6 +15,7 @@
   font-size: $font-size-regular;
   padding: 0 14px;
   text-transform: uppercase;
+  outline: none;
 
   &:hover {
     background-color: lighten($orange-primary, 10%);
