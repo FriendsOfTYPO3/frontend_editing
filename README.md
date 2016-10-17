@@ -5,7 +5,14 @@
 <h2>Pixelant frontend editing (frontend_editing)</h2>
 This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
 
-[Dependencies](#dependencies) &nbsp; [Workflow](#workflow)&nbsp;
+[Documentation](#documentation) &nbsp; [Dependencies](#dependencies) &nbsp; [Workflow](#workflow)&nbsp;
+
+<a name="documentation"/>
+## Documentation
+
+For all kind of documentation which covers install to how to develop the extension:
+
+https://pixelant.gitbooks.io/typo3-frontend-editing/
 
 <a name="dependencies"/>
 ## Dependencies
