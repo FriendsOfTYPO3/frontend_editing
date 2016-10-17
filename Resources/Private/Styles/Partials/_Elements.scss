@@ -57,15 +57,15 @@
   }
 
   .trigger {
+    @include rotate(0);
+    @include transition-duration(.2s);
+    @include transform-origin(center);
     font-size: 26px;
     position: relative;
     top: 5px;
     width: 30px;
     display: inline-block;
     cursor: pointer;
-    @include rotate(0);
-    @include transition-duration(.2s);
-    @include transform-origin(center);
 
     &.active {
       @include rotate(180);

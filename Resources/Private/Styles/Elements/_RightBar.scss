@@ -20,11 +20,11 @@
     .top-right-title {
 
       .icon-icons-arrow-double {
-        left: 0;
         @include transition(left .2s);
         @include transition-duration(.2s);
         @include rotate(0);
         @include transform-origin (center);
+        left: 0;
         color: $white;
       }
     }
@@ -46,6 +46,10 @@
     }
 
     .icon-icons-arrow-double {
+      @include transition(left .2s);
+      @include transition-duration(.2s);
+      @include rotate(180);
+      @include transform-origin (center);
       cursor: pointer;
       float: left;
       display: block;
@@ -57,10 +61,6 @@
       color: $gray-light;
       font-size: 32px;
       left: -45px;
-      @include transition(left .2s);
-      @include transition-duration(.2s);
-      @include rotate(180);
-      @include transform-origin (center);
 
       &:hover {
         background-color: lighten($black, 10%);
