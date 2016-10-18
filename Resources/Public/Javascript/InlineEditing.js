@@ -33,8 +33,8 @@
 
 	deferred.done(function() {
 
+		// Include Inline editing styles after iframe has loaded
 		var $head = $(iframe).contents().find('head');
-
 		$head.append(
 			$(
 				'<link/>',
