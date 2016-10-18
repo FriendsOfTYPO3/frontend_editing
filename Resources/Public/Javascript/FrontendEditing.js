@@ -5,6 +5,7 @@
         'crud': '?type=1470741815'
     };
     var localStorageKey = 'TYPO3:FrontendEditing';
+    var toastrOptions = {'positionClass': 'toast-top-left'};
 
     // Saving content
     $('.t3-frontend-editing__save').click(function() {
@@ -31,9 +32,17 @@
                         dataType: 'JSON',
                         data: data
                     }).done(function(data, textStatus, jqXHR) {
-                        toastr.success('Content (uid: "' + data.message +'") have been saved!', 'Content saved');
+                        toastr.success(
+                            'Content (uid: "' + data.message +'") have been saved!',
+                            'Content saved',
+                            toastrOptions
+                        );
                     }).fail(function(jqXHR, textStatus, errorThrown) {
-                        toastr.error(jqXHR.responseText, 'Something went wrong');
+                        toastr.error(
+                            jqXHR.responseText,
+                            'Something went wrong',
+                            toastrOptions
+                        );
                     });
                 }
             });
@@ -46,7 +55,11 @@
             });
 
         } else {
-            toastr.info('There are currently no changes made to the content on the page!', 'No changes made');
+            toastr.info(
+                'There are currently no changes made to the content on the page!',
+                'No changes made',
+                toastrOptions
+            );
         }
     });
 
