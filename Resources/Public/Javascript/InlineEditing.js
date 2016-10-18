@@ -53,8 +53,6 @@
 					if (confirmed) {
 						window.location.href = linkUrl;
 					}
-				} else {
-					window.location.href = linkUrl;
 				}
 			}
 		});
