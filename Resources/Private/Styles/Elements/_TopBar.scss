@@ -11,7 +11,8 @@
   font-size: $font-size-regular;
 
   .cke {
-    top: $top-bar-height !important;
+    top: 1px !important;
+    left: 180px !important;
   }
 }
 
