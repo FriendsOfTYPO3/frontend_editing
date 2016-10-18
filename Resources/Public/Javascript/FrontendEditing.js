@@ -5,7 +5,10 @@
         'crud': '?type=1470741815'
     };
     var localStorageKey = 'TYPO3:FrontendEditing';
-    var toastrOptions = {'positionClass': 'toast-top-left'};
+    var toastrOptions = {
+        'positionClass': 'toast-top-left',
+        'preventDuplicates': true
+    };
 
     // Saving content
     $('.t3-frontend-editing__save').click(function() {
