@@ -7,5 +7,13 @@
 		<span class="icons icon-icons-arrow-double left-bar-button"></span>
 	</div>
 	<div class="padding-wrapper">
+		<table>
+			<f:for each="{pageTree}" as="page">
+				<tr class="db_list_normal">
+					<td>{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw> {page.row.title}</td>
+					<td>{page.row.uid}</td>
+				</tr>
+			</f:for>
+		</table>
 	</div>
 </div>
