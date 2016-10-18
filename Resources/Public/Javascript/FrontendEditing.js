@@ -36,14 +36,14 @@
                         data: data
                     }).done(function(data, textStatus, jqXHR) {
                         toastr.success(
-                            'Content (uid: "' + data.message +'") have been saved!',
-                            'Content saved',
+                            contentSaveDescriptionLabel + data.message,
+                            contentSaveTitleLabel,
                             toastrOptions
                         );
                     }).fail(function(jqXHR, textStatus, errorThrown) {
                         toastr.error(
                             jqXHR.responseText,
-                            'Something went wrong',
+                            contentSaveWentWrongLabel,
                             toastrOptions
                         );
                     });
@@ -59,8 +59,8 @@
 
         } else {
             toastr.info(
-                'There are currently no changes made to the content on the page!',
-                'No changes made',
+                contentNoChangesDescriptionLabel,
+                contentNoChangesTitleLabel,
                 toastrOptions
             );
         }
@@ -70,7 +70,7 @@
     $('.t3-frontend-editing__discard').click(function() {
         var numberOfUnsavedItems = localStorage.getItem(localStorageKey);
         if (numberOfUnsavedItems !== null && numberOfUnsavedItems !== '') {
-            var confirmed = confirm('Are you sure you want to remove all unsaved changes?');
+            var confirmed = confirm(contentRemoveAllChangesLabel);
             if (confirmed) {
                 localStorage.removeItem(localStorageKey);
             }

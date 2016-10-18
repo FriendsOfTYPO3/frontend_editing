@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing">
+        <header/>
+        <body>
+            <trans-unit id="top-bar.to-backend">
+                <source>To backend</source>
+            </trans-unit>
+            <trans-unit id="top-bar.save-all">
+                <source>Save All</source>
+            </trans-unit>
+            <trans-unit id="top-bar.discard-all">
+                <source>Discard All</source>
+            </trans-unit>
+
+            <trans-unit id="left-bar.site-tree">
+                <source>SITE TREE</source>
+            </trans-unit>
+
+            <trans-unit id="right-bar.tools-properties">
+                <source>TOOLS &amp; PROPERTIES</source>
+            </trans-unit>
+            <trans-unit id="right-bar.page-seo-score">
+                <source>Page SEO Score</source>
+            </trans-unit>
+            <trans-unit id="right-bar.seo-guide">
+                <source>SEO GUIDE</source>
+            </trans-unit>
+
+            <trans-unit id="notifications.save-title">
+                <source>Content saved</source>
+            </trans-unit>
+            <trans-unit id="notifications.save-description">
+                <source>Saved the content with identifier: </source>
+            </trans-unit>
+            <trans-unit id="notifications.save-went-wrong">
+                <source>Something went wrong</source>
+            </trans-unit>
+            <trans-unit id="notifications.no-changes-title">
+                <source>No changes made</source>
+            </trans-unit>
+            <trans-unit id="notifications.no-changes-description">
+                <source>There are currently no changes made to the content on the page!</source>
+            </trans-unit>
+            <trans-unit id="notifications.remove-all-changes">
+                <source>Are you sure you want to remove all unsaved changes?</source>
+            </trans-unit>
+            <trans-unit id="notifications.unsaved-changes">
+                <source>You have some unsaved changes. They will disappear if you navigate away!</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
