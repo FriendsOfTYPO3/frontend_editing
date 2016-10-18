@@ -49,7 +49,7 @@
 			if (linkUrl && linkUrl !== '#') {
 				var numberOfItems = localStorage.getItem(localStorageKey);
 				if (numberOfItems !== null && numberOfItems !== '') {
-					var confirmed = confirm('You have some unsaved changes. They will disappear if you navigate away!');
+					var confirmed = confirm(contentUnsavedChangesLabel);
 					if (confirmed) {
 						window.location.href = linkUrl;
 					}
