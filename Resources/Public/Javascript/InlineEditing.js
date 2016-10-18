@@ -12,7 +12,6 @@
 			{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 			{ name: 'others' },
 			{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-			{ name: 'styles' }
 		]
 	};
 
