@@ -5,17 +5,13 @@
 		htmlEncodeOutput: false,
 		allowedContent: true,
 		toolbarGroups: [
-			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-			{ name: 'editing', groups: [ 'find', 'selection' ] },
+			{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 			{ name: 'links' },
 			{ name: 'insert' },
 			{ name: 'tools' },
 			{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
 			{ name: 'others' },
-			'/',
-			{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 			{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-			{ name: 'styles' }
 		]
 	};
 
@@ -33,8 +29,8 @@
 
 	deferred.done(function() {
 
+		// Include Inline editing styles after iframe has loaded
 		var $head = $(iframe).contents().find('head');
-
 		$head.append(
 			$(
 				'<link/>',

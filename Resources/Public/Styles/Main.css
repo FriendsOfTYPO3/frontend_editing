@@ -255,7 +255,8 @@
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   font-size: 16px; }
   .t3-frontend-editing__top-bar .cke {
-    top: 45px !important; }
+    top: 1px !important;
+    left: 180px !important; }
 
 .t3-frontend-editing__topbar-inner {
   padding: 0;
