@@ -1,13 +1,19 @@
 .#{$t3-frontend}page-tree-wrapper {
   height: 100%;
+  width: $left-bar-width - 14px;
+  white-space: nowrap;
   overflow-y: auto;
+  overflow-x: hidden;
   position: absolute;
 
   .#{$t3-frontend}page-tree {
     list-style-type: none;
     padding: 0;
+    font-size: $font-size-small;
 
     li {
+      white-space: nowrap;
+
       &:hover {
         cursor: pointer;
       }

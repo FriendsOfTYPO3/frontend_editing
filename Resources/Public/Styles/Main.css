@@ -245,13 +245,19 @@
 
 .t3-frontend-editing__page-tree-wrapper {
   height: 100%;
+  width: 266px;
+  white-space: nowrap;
   overflow-y: auto;
+  overflow-x: hidden;
   position: absolute; }
   .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree {
     list-style-type: none;
-    padding: 0; }
-    .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
-      cursor: pointer; }
+    padding: 0;
+    font-size: 14px; }
+    .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li {
+      white-space: nowrap; }
+      .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
+        cursor: pointer; }
 
 .treeline-icon {
   position: relative;
