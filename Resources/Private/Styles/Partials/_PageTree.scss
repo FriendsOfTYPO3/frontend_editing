@@ -6,6 +6,12 @@
   .#{$t3-frontend}page-tree {
     list-style-type: none;
     padding: 0;
+
+    li {
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }
 

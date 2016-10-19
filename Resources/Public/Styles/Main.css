@@ -250,6 +250,8 @@
   .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree {
     list-style-type: none;
     padding: 0; }
+    .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
+      cursor: pointer; }
 
 .treeline-icon {
   position: relative;
