@@ -77,6 +77,22 @@
         }
     });
 
+    // Add check for page tree navigation
+    $('.t3-frontend-editing__page-tree li').click(function() {
+        var linkUrl = $(this).data('url');
+        if (linkUrl && linkUrl !== '#') {
+            var numberOfItems = localStorage.getItem(localStorageKey);
+            if (numberOfItems !== null && numberOfItems !== '') {
+                var confirmed = confirm(contentUnsavedChangesLabel);
+                if (confirmed) {
+                    window.location.href = linkUrl;
+                }
+            } else {
+                window.location.href = linkUrl;
+            }
+        }
+    });
+
     var t = 0;
     var y = 0;
 

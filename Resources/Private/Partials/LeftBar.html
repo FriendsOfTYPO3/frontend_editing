@@ -7,5 +7,14 @@
 		<span class="icons icon-icons-arrow-double left-bar-button"></span>
 	</div>
 	<div class="padding-wrapper">
+		<div class="t3-frontend-editing__page-tree-wrapper">
+			<ul class="t3-frontend-editing__page-tree">
+				<f:for each="{pageTree}" as="page">
+					<li data-url="{f:uri.page(pageUid: page.row.uid)}">
+						{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw> {page.row.title}
+					</li>
+				</f:for>
+			</ul>
+		</div>
 	</div>
 </div>

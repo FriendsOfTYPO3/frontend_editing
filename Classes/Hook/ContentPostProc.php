@@ -83,7 +83,8 @@ class ContentPostProc
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
                     'userName' => $GLOBALS['BE_USER']->user['username'],
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-                    'iframeUrl' => $iframeUrl
+                    'iframeUrl' => $iframeUrl,
+                    'pageTree' => $this->getPageTreeStructure()
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
@@ -129,5 +130,44 @@ class ContentPostProc
         $pathArray = explode('/', $parsedReferer['path']);
         $viewPageView = preg_match('/web_ViewpageView/i', $parsedReferer['query']);
         return (strtolower($pathArray[1]) === 'typo3' && $viewPageView);
+    }
+
+    /**
+     * Get the page tree structure of the current tree
+     *
+     * @return array
+     */
+    public function getPageTreeStructure()
+    {
+        // Get page record for tree starting point
+        // from where we currently are navigated
+        $startingPoint = $GLOBALS['TSFE']->rootLine[0]['uid'];
+        $pageRecord = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord(
+            'pages',
+            $startingPoint
+        );
+
+        // Create and initialize the tree object
+        $tree = new \TYPO3\CMS\Backend\Tree\View\PageTreeView();
+        $tree->init('AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1));
+
+        // Creating the icon for the current page and add it to the tree
+        $html = $this->iconFactory->getIconForRecord(
+            'pages',
+            $pageRecord,
+            Icon::SIZE_SMALL
+        );
+
+        $tree->tree[] = [
+            'row' => $pageRecord,
+            'HTML' => $html
+        ];
+
+        // Create the page tree, from the starting point, infinite levels down
+        $tree->getTree(
+            $startingPoint
+        );
+
+        return $tree->tree;
     }
 }

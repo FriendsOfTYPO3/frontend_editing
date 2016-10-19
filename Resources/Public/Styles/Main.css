@@ -243,6 +243,60 @@
 .accordion-list .list-view {
   color: #fff; }
 
+.t3-frontend-editing__page-tree-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  position: absolute; }
+  .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree {
+    list-style-type: none;
+    padding: 0; }
+    .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
+      cursor: pointer; }
+
+.treeline-icon {
+  position: relative;
+  display: block;
+  float: left;
+  margin-top: -6px;
+  margin-bottom: -6px;
+  margin-right: 2px;
+  padding: 0;
+  height: 31px;
+  width: 16px;
+  white-space: nowrap;
+  overflow: hidden; }
+  .treeline-icon::before {
+    top: 0;
+    height: 100%;
+    width: 2px;
+    margin-left: -1px;
+    border-left: 1px dotted #fff; }
+  .treeline-icon::after {
+    border-top: 1px dotted #fff;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    margin-top: -1px; }
+  .treeline-icon::after, .treeline-icon::before {
+    position: absolute;
+    content: '';
+    left: 50%; }
+
+.treeline-icon-jointop::before {
+  top: 50%; }
+
+.treeline-icon-joinbottom::before {
+  top: -50%; }
+
+.treeline-icon-line::after {
+  display: none; }
+
+.treeline-icon-blank {
+  display: none; }
+
+.treeline-icon-clear::before, .treeline-icon-clear::after {
+  display: none; }
+
 .t3-frontend-editing__top-bar {
   background: #191919;
   color: #fff;
