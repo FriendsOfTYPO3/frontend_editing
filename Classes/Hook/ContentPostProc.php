@@ -140,7 +140,7 @@ class ContentPostProc
     public function getPageTreeStructure()
     {
         // Get page record for tree starting point
-        // where we currently are navigated
+        // from where we currently are navigated
         $startingPoint = $GLOBALS['TSFE']->rootLine[0]['uid'];
         $pageRecord = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord(
             'pages',
@@ -163,12 +163,9 @@ class ContentPostProc
             'HTML' => $html
         ];
 
-        // Create the page tree, from the starting point, 2 levels deep
-        $depth = 2;
+        // Create the page tree, from the starting point, infinite levels down
         $tree->getTree(
-            $startingPoint,
-            $depth,
-            ''
+            $startingPoint
         );
 
         return $tree->tree;
