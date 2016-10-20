@@ -25,7 +25,7 @@
 		'src': iframeUrl
 	});
 
-	iframe.load(deferred.resolve);
+	iframe.on('load', deferred.resolve);
 
 	deferred.done(function() {
 
