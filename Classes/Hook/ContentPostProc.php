@@ -60,6 +60,10 @@ class ContentPostProc
             if (isset($isFrontendEditing) && (bool)$isFrontendEditing === true) {
                 // To prevent further rendering
             } else {
+
+                // Special content is about to be shown, so the cache must be disabled.
+                $parentObject->set_no_cache('Display frontend editing', true);
+
                 $this->typoScriptFrontendController = $parentObject;
 
                 $output = $this->loadResources();
