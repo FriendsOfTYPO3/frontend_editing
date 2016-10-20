@@ -48,6 +48,7 @@ class ContentPostProc
      * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $parentObject
      * @throws \UnexpectedValueException
      * @return void
+     * @throws \Exception
      */
     public function main(array $params, \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $parentObject)
     {
@@ -68,14 +69,26 @@ class ContentPostProc
                     '&frontend_editing=true'
                 ;
 
-                $templatePath = GeneralUtility::getFileAbsFileName(
-                    'typo3conf/ext/frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'
+                //\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance
+                $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
+                $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+                $settings = $configurationManager->getConfiguration(
+                    \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
                 );
-                $partialPath = GeneralUtility::getFileAbsFileName(
-                    'typo3conf/ext/frontend_editing/Resources/Private/Partials'
-                );
+
+                if (!isset($settings['plugin.']['tx_frontendediting.'])) {
+                    throw new \Exception('Configuration settings are missing for Frontend Editing!');
+                }
+
+                $layoutPath = $settings['plugin.']['tx_frontendediting.']['view.']['layoutRootPath'];
+                $templatePath = $settings['plugin.']['tx_frontendediting.']['view.']['templateRootPath'];
+                $partialPath = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPath'];
+
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
+                $view->setLayoutRootPaths([
+                    10 => $layoutPath
+                ]);
                 $view->setPartialRootPaths([
                     10 => $partialPath
                 ]);

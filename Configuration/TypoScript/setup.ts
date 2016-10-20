@@ -1,3 +1,11 @@
+plugin.tx_frontendediting {
+    view {
+        layoutRootPath = {$plugin.tx_frontendediting.view.layoutRootPath}
+        templateRootPath = {$plugin.tx_frontendediting.view.templateRootPath}
+        partialRootPath = {$plugin.tx_frontendediting.view.partialRootPath}
+    }
+}
+
 [globalVar = TSFE : beUserLogin > 0]
 # Additional page plugin for save requests as those need a BE-USER
 frontendEditing = PAGE
