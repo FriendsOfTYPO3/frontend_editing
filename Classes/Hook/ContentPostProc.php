@@ -84,7 +84,8 @@ class ContentPostProc
                     'userName' => $GLOBALS['BE_USER']->user['username'],
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
                     'iframeUrl' => $iframeUrl,
-                    'pageTree' => $this->getPageTreeStructure()
+                    'pageTree' => $this->getPageTreeStructure(),
+                    'currentTime' => time()
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();

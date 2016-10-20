@@ -11,7 +11,10 @@
 			<ul class="t3-frontend-editing__page-tree">
 				<f:for each="{pageTree}" as="page">
 					<li data-url="{f:uri.page(pageUid: page.row.uid)}">
-						{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw> {page.row.title}
+						{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw>
+						<span class="page-tree-item{f:if(condition: page.row.hidden, then: ' page-tree-status-hidden')}{f:if(condition: '{page.row.starttime} >= {currentTime}', then: ' page-tree-status-hidden')}">
+							{page.row.title}
+						</span>
 					</li>
 				</f:for>
 			</ul>

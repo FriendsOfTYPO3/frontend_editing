@@ -246,7 +246,6 @@
 .t3-frontend-editing__page-tree-wrapper {
   height: 100%;
   width: 266px;
-  white-space: nowrap;
   overflow-y: auto;
   overflow-x: hidden;
   position: absolute; }
@@ -302,6 +301,20 @@
 
 .treeline-icon-clear::before, .treeline-icon-clear::after {
   display: none; }
+
+.icon-overlay img {
+  width: 12px;
+  height: 12px;
+  position: relative;
+  left: -16px;
+  top: 1px; }
+
+.page-tree-item {
+  position: relative;
+  top: -2px; }
+
+.page-tree-status-hidden {
+  left: -16px; }
 
 .t3-frontend-editing__top-bar {
   background: #191919;
