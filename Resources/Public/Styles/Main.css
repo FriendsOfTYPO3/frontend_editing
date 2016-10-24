@@ -165,7 +165,7 @@
   font-size: 32px;
   position: relative;
   top: 7px;
-  width: 22px;
+  width: 24px;
   display: inline-block;
   cursor: pointer;
   color: #4c4c4c; }
@@ -193,7 +193,6 @@
   font-size: 26px;
   position: relative;
   top: 5px;
-  width: 30px;
   display: inline-block;
   cursor: pointer; }
   .accordion .trigger.active {
@@ -352,6 +351,8 @@
     border: 0;
     color: #fff;
     cursor: pointer; }
+  .t3-frontend-editing__top-bar-left.push-toright .back-backend {
+    margin-left: 0; }
   .t3-frontend-editing__top-bar-left .back-backend {
     display: inline-block;
     position: relative;
@@ -383,6 +384,8 @@
     transition: cubic-bezier(0, 0, 0, 0) 0.2s;
     right: 310px;
     position: relative; }
+    .t3-frontend-editing__top-bar-right.push-toleft .top-bar-items .item {
+      margin-right: 10px; }
   .t3-frontend-editing__top-bar-right .top-bar-action-buttons {
     float: right;
     margin-top: 5px;
