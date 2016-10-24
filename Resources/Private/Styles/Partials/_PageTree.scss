@@ -12,6 +12,12 @@
 
     li {
       white-space: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 95%;
+      display: inline-block;
+      line-height: 1;
 
       &:hover {
         cursor: pointer;
@@ -102,5 +108,5 @@
 }
 
 .page-tree-status-hidden {
-  left: -16px;
+  margin-left: -16px;
 }
