@@ -135,6 +135,8 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/adapters/jquery.js"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/immutable/dist/immutable.min.js"></script>';
 
         return $resources;
     }

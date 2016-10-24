@@ -6,7 +6,8 @@
   "scripts": {
     "add:resource:ckeditor": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
-    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run build:css",
+    "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
+    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css",
     "build:css": "npm run lint:css --silent && node-sass Resources/Private/Styles/ -o Resources/Public/Styles/",
     "watch:css": "nodemon -e scss -x npm run build:css",
     "lint:css": "sass-lint Resources/Private/Styles/**/*.scss --verbose --no-exit",
@@ -16,7 +17,8 @@
   },
   "dependencies": {
     "ckeditor": "^4.5.10",
-    "toastr": "^2.1.2"
+    "toastr": "^2.1.2",
+    "immutable": "^3.8"
   },
   "devDependencies": {
     "node-sass": "^3.9.3",

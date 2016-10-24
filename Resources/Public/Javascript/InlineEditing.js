@@ -81,9 +81,9 @@
 					var saveItems = localStorage.getItem(localStorageKey);
 
 					if (saveItems === null || saveItems === '') {
-						saveItems = [];
+						saveItems = Immutable.Map({});
 					} else {
-						saveItems = JSON.parse(saveItems);
+						saveItems = Immutable.Map(JSON.parse(saveItems));
 					}
 
 					var data = {
@@ -94,8 +94,8 @@
 						'editorInstance': editor.name
 					};
 
-					saveItems[parseInt(data.uid)] = data;
-					localStorage.setItem(localStorageKey, JSON.stringify(saveItems));
+					var processedSaveItems = saveItems.set(data.uid, data);
+					localStorage.setItem(localStorageKey, JSON.stringify(processedSaveItems));
 				}
 			});
 		});
