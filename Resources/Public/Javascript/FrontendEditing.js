@@ -51,6 +51,8 @@
             // Wait until all ajax requests are done
             $(document).ajaxStop(function () {
                 $('.t3-frontend-editing__loading-screen').toggle('hidden');
+                // Remove counter for number of unsaved elements for save button
+                $('.top-bar-action-buttons .items-counter').html('');
                 // Clear local storage after save
                 localStorage.removeItem(localStorageKey);
             });
