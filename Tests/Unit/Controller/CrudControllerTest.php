@@ -21,11 +21,8 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     protected function setUp()
     {
-        $this->subject = $this->getMock(
-            CrudController::class,
-            ['save'],
-            []
-        );
+        $this->subject = $this->getMockBuilder(CrudController::class)
+            ->setMethods(['save'])->getMock();
     }
 
     /**
