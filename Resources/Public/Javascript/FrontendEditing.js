@@ -15,44 +15,44 @@
         var items = localStorage.getItem(localStorageKey);
         if (items !== null && items !== '') {
             items = JSON.parse(items);
+            items = Immutable.Map(items);
 
             $('.t3-frontend-editing__loading-screen').toggle('hidden');
 
-            $.each(items, function(index) {
-                var item = items[index];
-                if (item !== null) {
-                    var data = {
-                        'action': item.action,
-                        'table': item.table,
-                        'uid': item.uid,
-                        'field': item.field,
-                        'content': CKEDITOR.instances[item.editorInstance].getData()
-                    };
+            items.forEach(function(item) {
+                var data = {
+                    'action': item.action,
+                    'table': item.table,
+                    'uid': item.uid,
+                    'field': item.field,
+                    'content': CKEDITOR.instances[item.editorInstance].getData()
+                };
 
-                    $.ajax({
-                        type: 'POST',
-                        url: pageUrl + functionRoutes.crud,
-                        dataType: 'JSON',
-                        data: data
-                    }).done(function(data, textStatus, jqXHR) {
-                        toastr.success(
-                            contentSaveDescriptionLabel + data.message,
-                            contentSaveTitleLabel,
-                            toastrOptions
-                        );
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
-                        toastr.error(
-                            jqXHR.responseText,
-                            contentSaveWentWrongLabel,
-                            toastrOptions
-                        );
-                    });
-                }
+                $.ajax({
+                    type: 'POST',
+                    url: pageUrl + functionRoutes.crud,
+                    dataType: 'JSON',
+                    data: data
+                }).done(function(data, textStatus, jqXHR) {
+                    toastr.success(
+                        contentSaveDescriptionLabel + data.message,
+                        contentSaveTitleLabel,
+                        toastrOptions
+                    );
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    toastr.error(
+                        jqXHR.responseText,
+                        contentSaveWentWrongLabel,
+                        toastrOptions
+                    );
+                });
             });
 
             // Wait until all ajax requests are done
             $(document).ajaxStop(function () {
                 $('.t3-frontend-editing__loading-screen').toggle('hidden');
+                // Remove counter for number of unsaved elements for save button
+                $('.top-bar-action-buttons .items-counter').html('');
                 // Clear local storage after save
                 localStorage.removeItem(localStorageKey);
             });
@@ -72,6 +72,8 @@
         if (numberOfUnsavedItems !== null && numberOfUnsavedItems !== '') {
             var confirmed = confirm(contentRemoveAllChangesLabel);
             if (confirmed) {
+                // Remove counter for number of unsaved elements for save button
+                $('.top-bar-action-buttons .items-counter').html('');
                 localStorage.removeItem(localStorageKey);
             }
         }
