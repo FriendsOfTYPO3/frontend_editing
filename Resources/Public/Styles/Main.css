@@ -254,7 +254,13 @@
     padding: 0;
     font-size: 14px; }
     .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li {
-      white-space: nowrap; }
+      white-space: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 95%;
+      display: inline-block;
+      line-height: 1; }
       .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
         cursor: pointer; }
 
@@ -314,7 +320,7 @@
   top: -2px; }
 
 .page-tree-status-hidden {
-  left: -16px; }
+  margin-left: -16px; }
 
 .t3-frontend-editing__top-bar {
   background: #191919;
