@@ -72,6 +72,8 @@
         if (numberOfUnsavedItems !== null && numberOfUnsavedItems !== '') {
             var confirmed = confirm(contentRemoveAllChangesLabel);
             if (confirmed) {
+                // Remove counter for number of unsaved elements for save button
+                $('.top-bar-action-buttons .items-counter').html('');
                 localStorage.removeItem(localStorageKey);
             }
         }
