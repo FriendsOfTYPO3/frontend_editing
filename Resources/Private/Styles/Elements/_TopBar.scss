@@ -35,6 +35,12 @@
     cursor: pointer;
   }
 
+  &.push-toright {
+
+    .back-backend {
+      margin-left: 0;
+    }
+  }
   .back-backend {
     display: inline-block;
     position: relative;
@@ -75,6 +81,13 @@
     transition: cubic-bezier(0, 0, 0, 0) .2s;
     right: 310px;
     position: relative;
+
+    .top-bar-items {
+
+      .item {
+        margin-right: 10px;
+      }
+    }
   }
 
   .top-bar-action-buttons {
