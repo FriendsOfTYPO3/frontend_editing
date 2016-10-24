@@ -88,7 +88,6 @@ class ContentPostProc
                     $layoutPath = $settings['plugin.']['tx_frontendediting.']['view.']['layoutRootPath'];
                     $templatePath = $settings['plugin.']['tx_frontendediting.']['view.']['templateRootPath'];
                     $partialPath = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPath'];
-
                 }
 
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
