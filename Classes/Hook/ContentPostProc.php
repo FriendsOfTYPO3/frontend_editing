@@ -96,7 +96,8 @@ class ContentPostProc
                 ]);
 
                 $view->assign(
-                    'FrontendEditing', json_encode($this->getJavascriptForFrontendEditing())
+                    'FrontendEditing',
+                    json_encode($this->getJavascriptForFrontendEditing())
                 );
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
@@ -138,12 +139,14 @@ class ContentPostProc
     protected function getLocalizedFrontendLabels()
     {
         $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
-        $parsedLocallang = $languageFactory->getParsedData('EXT:frontend_editing/Resources/Private/Language/locallang.xlf', 'default');
+        $parsedLocallang = $languageFactory->getParsedData(
+            'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
+            'default'
+        );
         $localizedLabels = [];
         foreach (array_keys($parsedLocallang['default']) as $key) {
             if (strpos($key, 'notifications.') === 0 ||
-                strpos($key, 'top-bar.') === 0)
-            {
+                strpos($key, 'top-bar.') === 0) {
                 $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
             }
         }
