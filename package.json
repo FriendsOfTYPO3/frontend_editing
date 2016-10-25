@@ -7,7 +7,7 @@
     "add:resource:ckeditor": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
-    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css",
+    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css && npm run build:js",
     "build:css": "npm run lint:css --silent && node-sass Resources/Private/Styles/ -o Resources/Public/Styles/",
     "build:js": "browserify Resources/Private/Javascript/client.js -o Resources/Public/Javascript/Bundle.js -t [ babelify --presets [ es2015 react ] ]",
     "watch:css": "nodemon -e scss -x npm run build:css",
