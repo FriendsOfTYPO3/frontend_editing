@@ -1,7 +1,4 @@
-<f:render partial="TopBar" arguments="{_all}"></f:render>
-<f:render partial="RightBar" arguments="{_all}"></f:render>
-<f:render partial="LeftBar" arguments="{_all}"></f:render>
-
+<div id="t3-frontend-editing"></div>
 <script type="text/javascript">
 	var iframeUrl = "{iframeUrl -> f:format.raw()}";
 	var contentSaveTitleLabel = "{f:translate(key: 'notifications.save-title', extensionName: 'FrontendEditing')}";
@@ -13,13 +10,8 @@
 	var contentUnsavedChangesLabel = "{f:translate(key: 'notifications.unsaved-changes', extensionName: 'FrontendEditing')}";
 </script>
 
-<div class="t3-frontend-editing__iframe-wrapper inactive">
-	<iframe src="" frameborder="0" border="0"></iframe>
-</div>
 
-<div class="t3-frontend-editing__loading-screen">
-	{loadingIcon -> f:format.html()}
-</div>
 
 <script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>
 <script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/Bundle.js" type="text/javascript"></script>
