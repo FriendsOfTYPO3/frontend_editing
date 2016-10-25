@@ -80,9 +80,13 @@ To build the stylesheets use the following command:
 
     npm run build:css
 
-While developing use the following watch command:
+While developing use the following watch for css changes command:
 
     npm run watch:css
+
+To build the javascript use the following command (a watcher is still to be added): 
+
+    npm run build:js
 
 ### Publish
 
