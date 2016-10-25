@@ -1,7 +1,7 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import Toolbars from "./components/Toolbars"
+import Toolbars from './components/Toolbars'
 
 ReactDOM.render(
     <Toolbars />, 
