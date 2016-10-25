@@ -732,3 +732,29 @@
 body {
   margin: 0;
   overflow-x: hidden; }
+
+.cke_float .cke_top {
+  box-shadow: none !important;
+  background-image: none !important;
+  background-color: #FF8700 !important;
+  padding: 8px 8px 5px !important;
+  border: 0 !important; }
+
+.cke_bottom {
+  background-image: none !important; }
+
+.cke_toolgroup {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  background-image: none !important; }
+
+.cke_dialog_title {
+  background: #FF8700 !important;
+  background-image: none !important;
+  color: #0f0f0f !important;
+  text-shadow: 0 1px 0 #9d9d9d !important; }
+
+.cke_dialog_footer {
+  background: #FF8700 !important;
+  background-image: none !important; }
