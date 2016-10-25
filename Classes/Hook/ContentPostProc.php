@@ -5,6 +5,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class ContentPostProc
 {
@@ -67,11 +68,6 @@ class ContentPostProc
 
                 $output = $this->loadResources();
 
-                $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
-                    'index.php?id=' . $this->typoScriptFrontendController->id .
-                    '&frontend_editing=true'
-                ;
-
                 //\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
                 $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
@@ -98,14 +94,10 @@ class ContentPostProc
                 $view->setPartialRootPaths([
                     10 => $partialPath
                 ]);
-                $view->assignMultiple([
-                    'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
-                    'userName' => $GLOBALS['BE_USER']->user['username'],
-                    'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-                    'iframeUrl' => $iframeUrl,
-                    'pageTree' => $this->getPageTreeStructure(),
-                    'currentTime' => time()
-                ]);
+
+                $view->assign(
+                    'FrontendEditing', json_encode($this->getJavascriptForFrontendEditing())
+                );
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
 
@@ -114,6 +106,48 @@ class ContentPostProc
                 $parentObject->content = $output;
             }
         }
+    }
+
+    /**
+     * Get all kind of javascript needed in FE
+     *
+     * @return array
+     */
+    protected function getJavascriptForFrontendEditing()
+    {
+        $jsArray = [
+            'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
+            'userName' => $GLOBALS['BE_USER']->user['username'],
+            'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
+            'iframeUrl' => GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
+                    'index.php?id=' . $this->typoScriptFrontendController->id .
+                    '&frontend_editing=true',
+            'pageTree' => $this->getPageTreeStructure(),
+            'currentTime' => time(),
+            'labels' => $this->getLocalizedFrontendLabels(),
+        ];
+
+        return $jsArray;
+    }
+
+    /**
+     * Localize labels
+     *
+     * @return array
+     */
+    protected function getLocalizedFrontendLabels()
+    {
+        $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
+        $parsedLocallang = $languageFactory->getParsedData('EXT:frontend_editing/Resources/Private/Language/locallang.xlf', 'default');
+        $localizedLabels = [];
+        foreach (array_keys($parsedLocallang['default']) as $key) {
+            if (strpos($key, 'notifications.') === 0 ||
+                strpos($key, 'top-bar.') === 0)
+            {
+                $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
+            }
+        }
+        return $localizedLabels;
     }
 
     /**

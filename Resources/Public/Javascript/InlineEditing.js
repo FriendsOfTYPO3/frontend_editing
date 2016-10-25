@@ -22,7 +22,7 @@
 	var deferred = $.Deferred();
 
 	var iframe = $('.t3-frontend-editing__iframe-wrapper iframe').attr({
-		'src': iframeUrl
+		'src': FrontendEditing.iframeUrl
 	});
 
 	iframe.on('load', deferred.resolve);
