@@ -2,20 +2,17 @@
   "name": "frontend_editing",
   "version": "0.1.0",
   "description": "Enable editors to work with the content in the most intuitive way possible",
-  "sasslintConfig": "scss-lint.yml",
   "scripts": {
     "add:resource:ckeditor": "NODE_ENV=production npm install && cp -a ./node_modules/ckeditor ./Resources/Public/Javascript",
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
-    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css && npm run build:js",
-    "build:css": "npm run lint:css --silent && node-sass Resources/Private/Styles/ -o Resources/Public/Styles/",
-    "build:js": "webpack -d",
-    "watch:css": "nodemon -e scss -x npm run build:css",
-    "watch:js": "webpack -d --watch",
+    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run build",
+    "build": "webpack -p --progress --colors",
+    "watch": "webpack -d --progress --colors --watch",
     "lint:css": "sass-lint Resources/Private/Styles/**/*.scss --verbose --no-exit",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c Tests/Build/UnitTests.xml",
-    "build:suite": "npm run php:codesniffer && npm run php:unittests && npm run lint:css"
+    "build:suite": "npm run php:codesniffer && npm run php:unittests && npm run build"
   },
   "dependencies": {
     "ckeditor": "^4.5.10",
@@ -31,9 +28,16 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-es2016": "^6.16.0",
     "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
     "node-sass": "^3.9.3",
     "nodemon": "^1.10.2",
-    "sass-lint": "^1.9.1"
+    "sass-lint": "^1.9.1",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "stylelint-webpack-plugin": "^0.4.0"
   },
   "repository": {
     "type": "git",

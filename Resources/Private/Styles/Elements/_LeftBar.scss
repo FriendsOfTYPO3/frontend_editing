@@ -12,14 +12,13 @@
   -webkit-backdrop-filter: blur(3px);
 
   &.open {
-
     .top-left-title {
-
       .icon-icons-arrow-double {
         @include transition(right .2s);
         @include transition-duration(.2s);
         @include rotate(180);
-        @include transform-origin (center);
+        @include transform-origin(center);
+
         right: 0;
         color: $white;
       }
@@ -49,7 +48,8 @@
       @include transition(right .2s);
       @include transition-duration(.2s);
       @include rotate(0);
-      @include transform-origin (center);
+      @include transform-origin(center);
+
       cursor: pointer;
       float: right;
       display: block;

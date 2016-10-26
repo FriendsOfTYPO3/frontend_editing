@@ -39,7 +39,6 @@
 }
 
 .accordion {
-
   .grid,
   .list-view {
     font-size: 32px;
@@ -60,6 +59,7 @@
     @include rotate(0);
     @include transition-duration(.2s);
     @include transform-origin(center);
+
     font-size: 26px;
     position: relative;
     top: 5px;
@@ -95,7 +95,6 @@
 }
 
 .accordion-list {
-
   .description {
     display: inline-block;
   }

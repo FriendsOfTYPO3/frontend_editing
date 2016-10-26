@@ -161,7 +161,7 @@ class ContentPostProc
     private function loadResources()
     {
         $resources = '<link rel="stylesheet" type="text/css" href="' .
-            '/typo3conf/ext/frontend_editing/Resources/Public/Styles/Main.css" />';
+            '/typo3conf/ext/frontend_editing/Resources/Public/App/Main.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
         $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .

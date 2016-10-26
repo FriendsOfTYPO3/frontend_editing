@@ -72,21 +72,17 @@ Add the immutable (https://facebook.github.io/immutable-js/) node_module to Publ
 
     npm run add:resource:immutable
 
-### Styling
+### Develop
 
-The extension are using SASS for compiling into CSS. 
+The extension are using SASS for compiling into CSS and React as javascript. 
 
-To build the stylesheets use the following command: 
+To build the resources use the following command: 
 
-    npm run build:css
+    npm run build
 
-While developing use the following watch for css changes command:
+While developing use the following watch for all kinds of changes command:
 
-    npm run watch:css
-
-To build the javascript use the following command (a watcher is still to be added): 
-
-    npm run build:js
+    npm run watch
 
 ### Publish
 
