@@ -4,8 +4,8 @@ export default class RightBar extends React.Component {
 
     render () {
         return (
-            <div>
-                <div className="t3-frontend-editing__right-bar">
+            <div className="t3-frontend-editing__right-bar">
+                <div>
                     <div className="top-right-bar-wrapper">
                         <div className="top-right-title">
                             <span className="icons icon-icons-arrow-double right-bar-button"></span>
