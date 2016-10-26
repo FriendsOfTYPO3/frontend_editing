@@ -92,7 +92,7 @@
   .top-bar-action-buttons {
     float: right;
     margin-top: 5px;
-    margin-right: 10px;
+    margin-right: 5px;
   }
 
   .top-bar-items {
@@ -115,6 +115,7 @@
       position: relative;
       top: 6px;
       vertical-align: middle;
+      margin-right: 5px;
     }
   }
 
@@ -124,5 +125,11 @@
     color: $white;
     cursor: pointer;
     margin-top: 15px;
+  }
+
+  .#{$t3-frontend}save {
+    .items-counter {
+      padding: 0 2px 0 5px;
+    }
   }
 }
