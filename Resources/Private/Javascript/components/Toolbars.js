@@ -6,7 +6,7 @@ export default class Toolbars extends React.Component {
     constructor() {
         super();
         this.state = {
-            numberOfUnsavedItems: 100
+            numberOfUnsavedItems: 0
         }
     }
 

@@ -21985,7 +21985,7 @@
 	        var _this = _possibleConstructorReturn(this, (Toolbars.__proto__ || Object.getPrototypeOf(Toolbars)).call(this));
 	
 	        _this.state = {
-	            numberOfUnsavedItems: 100
+	            numberOfUnsavedItems: 0
 	        };
 	        return _this;
 	    }
@@ -22017,7 +22017,7 @@
   \********************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -22047,85 +22047,86 @@
 	    }
 	
 	    _createClass(TopBar, [{
-	        key: "handleClick",
+	        key: 'handleClick',
 	        value: function handleClick(e) {
 	            this.props.discardAllChanges();
 	        }
 	    }, {
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
+	            var unsavedText = this.props.numberOfUnsavedItems > 0 ? '(' + this.props.numberOfUnsavedItems + ')' : '';
 	            return _react2.default.createElement(
-	                "div",
-	                { className: "t3-frontend-editing__top-bar" },
+	                'div',
+	                { className: 't3-frontend-editing__top-bar' },
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "t3-frontend-editing__topbar-inner" },
+	                    'div',
+	                    { className: 't3-frontend-editing__topbar-inner' },
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "t3-frontend-editing__top-bar-left" },
+	                        'div',
+	                        { className: 't3-frontend-editing__top-bar-left' },
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "back-backend" },
+	                            'div',
+	                            { className: 'back-backend' },
 	                            _react2.default.createElement(
-	                                "a",
-	                                { href: "/typo3" },
-	                                _react2.default.createElement("span", { className: "icons icon-icons-back" }),
+	                                'a',
+	                                { href: '/typo3' },
+	                                _react2.default.createElement('span', { className: 'icons icon-icons-back' }),
 	                                _react2.default.createElement(
-	                                    "span",
-	                                    { title: "{FrontendEditing.labels['top-bar.to-backend']}" },
+	                                    'span',
+	                                    { title: '{FrontendEditing.labels[\'top-bar.to-backend\']}' },
 	                                    FrontendEditing.labels['top-bar.to-backend']
 	                                )
 	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "t3-frontend-editing__top-bar-right" },
+	                        'div',
+	                        { className: 't3-frontend-editing__top-bar-right' },
 	                        _react2.default.createElement(
-	                            "ul",
-	                            { className: "top-bar-items" },
+	                            'ul',
+	                            { className: 'top-bar-items' },
 	                            _react2.default.createElement(
-	                                "li",
-	                                { className: "dropdown item" },
+	                                'li',
+	                                { className: 'dropdown item' },
 	                                _react2.default.createElement(
-	                                    "div",
-	                                    { className: "user" },
-	                                    "[userIcon]",
+	                                    'div',
+	                                    { className: 'user' },
+	                                    _react2.default.createElement('span', { dangerouslySetInnerHTML: { __html: FrontendEditing.userIcon } }),
 	                                    _react2.default.createElement(
-	                                        "span",
-	                                        { title: "{FrontendEditing.userName}" },
+	                                        'span',
+	                                        { title: FrontendEditing.userName },
 	                                        FrontendEditing.userName
 	                                    )
 	                                )
 	                            )
 	                        ),
 	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "top-bar-action-buttons" },
+	                            'div',
+	                            { className: 'top-bar-action-buttons' },
 	                            _react2.default.createElement(
-	                                "button",
-	                                { type: "submit", className: "t3-frontend-editing__save btn" },
+	                                'button',
+	                                { type: 'submit', className: 't3-frontend-editing__save btn' },
 	                                _react2.default.createElement(
-	                                    "span",
-	                                    { className: "btn-text" },
+	                                    'span',
+	                                    { className: 'btn-text' },
 	                                    FrontendEditing.labels['top-bar.save-all']
 	                                ),
 	                                _react2.default.createElement(
-	                                    "span",
-	                                    { className: "items-counter btn-text" },
-	                                    this.props.numberOfUnsavedItems
+	                                    'span',
+	                                    { className: 'items-counter btn-text' },
+	                                    unsavedText
 	                                ),
-	                                _react2.default.createElement("span", { className: "icons icon-icons-save" })
+	                                _react2.default.createElement('span', { className: 'icons icon-icons-save' })
 	                            ),
 	                            _react2.default.createElement(
-	                                "button",
-	                                { onClick: this.handleClick.bind(this), type: "#", className: "t3-frontend-editing__discard btn-default" },
+	                                'button',
+	                                { onClick: this.handleClick.bind(this), type: '#', className: 't3-frontend-editing__discard btn-default' },
 	                                _react2.default.createElement(
-	                                    "span",
-	                                    { className: "btn-text" },
+	                                    'span',
+	                                    { className: 'btn-text' },
 	                                    FrontendEditing.labels['top-bar.discard-all']
 	                                ),
-	                                _react2.default.createElement("span", { className: "icons icon-icons-cancel" })
+	                                _react2.default.createElement('span', { className: 'icons icon-icons-cancel' })
 	                            )
 	                        )
 	                    )
