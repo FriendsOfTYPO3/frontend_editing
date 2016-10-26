@@ -5,6 +5,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 
 /**
  * Class ContentPostProc
@@ -93,10 +94,6 @@ class ContentPostProc
                     $partialPath = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPath'];
                 }
 
-                $contentController = GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController::class
-                );
-
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
                 $view->setLayoutRootPaths([
@@ -112,7 +109,7 @@ class ContentPostProc
                     'iframeUrl' => $iframeUrl,
                     'pageTree' => $this->getPageTreeStructure(),
                     'currentTime' => time(),
-                    'contentItems' => $contentController->wizardArray()
+                    'contentItems' => $this->getContentItems()
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
@@ -167,7 +164,7 @@ class ContentPostProc
      *
      * @return array
      */
-    public function getPageTreeStructure()
+    protected function getPageTreeStructure()
     {
         // Get page record for tree starting point
         // from where we currently are navigated
@@ -199,5 +196,31 @@ class ContentPostProc
         );
 
         return $tree->tree;
+    }
+
+    /**
+     * Get the available content elements from TYPO3 backend
+     *
+     * @return array
+     */
+    protected function getContentItems()
+    {
+        $contentController = GeneralUtility::makeInstance(
+            NewContentElementController::class
+        );
+        $wizardItems = $contentController->wizardArray();
+        $contentItems = [];
+        foreach ($wizardItems as $wizardItem) {
+            if (!isset($wizardItem['header'])) {
+                $contentItems[] = array_merge(
+                    $wizardItem,
+                    [
+                        'iconHtml' => $this->iconFactory->getIcon($wizardItem['iconIdentifier'])->render()
+                    ]
+                );
+            }
+        }
+
+        return $contentItems;
     }
 }

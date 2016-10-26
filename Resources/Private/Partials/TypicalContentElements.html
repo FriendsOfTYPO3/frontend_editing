@@ -1,5 +1,4 @@
 <div class="dark-transparent-bg accordion-container accordion-grid">
-	
 	<div class="accordion ">
 		<div class="element-title">
 			<span class="title-left">Typical Content Elements</span>
@@ -11,32 +10,16 @@
 		</div>
 	</div>
 	<div class="accordion-content">
-		<div class="element">
-			<span class="content-icon">
-				<img src="/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg" width="32" height="32">
-			</span>
-			<div class="description">
-				<span class="title-default">Header</span>
-				<span class="title-default">Adds a header only</span>
+		<f:for each="{contentItems}" as="contentItem">
+			<div class="element">
+				<span class="content-icon">
+					{contentItem.iconHtml -> f:format.html()}
+				</span>
+				<div class="description">
+					<span class="title-default">{contentItem.title}</span>
+					<span class="title-default">{contentItem.description}</span>
+				</div>
 			</div>
-		</div>
-		<div class="element">
-			<span class="content-icon">
-				<img src="/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg" width="32" height="32">
-			</span>
-			<div class="description">
-				<span class="title-default">Text & Media</span>
-				<span class="title-default">Any number of media wrapped right around a regular text element.</span>
-			</div>
-		</div>
-		<div class="element">
-			<span class="content-icon">
-				<img src="/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg" width="32" height="32">
-			</span>
-			<div class="description">
-				<span class="title-default">Text & Media</span>
-				<span class="title-default">Any number of media wrapped right around a regular text element.</span>
-			</div>
-		</div>
+		</f:for>
 	</div>
 </div>
