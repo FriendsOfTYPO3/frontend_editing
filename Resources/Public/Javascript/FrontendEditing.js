@@ -98,7 +98,8 @@
     var t = 0;
     var y = 0;
 
-    $('.right-bar-button').on('click', function () {
+
+    $('#t3-frontend-editing').on('click', '.right-bar-button', function () {
         $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
         $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
         $('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -106,7 +107,7 @@
         $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -310 }, 200);
     });
 
-    $('.left-bar-button').on('click', function() {
+    $('#t3-frontend-editing').on('click', '.left-bar-button', function () {
         $('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
         $('.t3-frontend-editing__left-bar').toggleClass('open');
         y = ++y % 2;

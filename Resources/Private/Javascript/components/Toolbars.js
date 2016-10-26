@@ -1,13 +1,15 @@
 import React from 'react';
 
 import TopBar from './Toolbars/TopBar';
+import RightBar from './Toolbars/RightBar';
+import LeftBar from './Toolbars/LeftBar';
 
 export default class Toolbars extends React.Component {
     constructor() {
         super();
         this.state = {
             numberOfUnsavedItems: 0
-        }
+        };
     }
 
     discardAllChanges () {
@@ -19,7 +21,11 @@ export default class Toolbars extends React.Component {
 
     render() {
         return (
-            <TopBar numberOfUnsavedItems={this.state.numberOfUnsavedItems} discardAllChanges={this.discardAllChanges.bind(this)} />
+            <div>
+                <TopBar numberOfUnsavedItems={this.state.numberOfUnsavedItems} discardAllChanges={this.discardAllChanges.bind(this)} />
+                <RightBar />
+                <LeftBar />
+            </div>
         );
     }
 }

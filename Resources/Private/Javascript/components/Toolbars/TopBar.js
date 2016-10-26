@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default class TopBar extends React.Component {
 
@@ -48,6 +48,6 @@ export default class TopBar extends React.Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }

@@ -21968,6 +21968,14 @@
 	
 	var _TopBar2 = _interopRequireDefault(_TopBar);
 	
+	var _RightBar = __webpack_require__(/*! ./Toolbars/RightBar */ 174);
+	
+	var _RightBar2 = _interopRequireDefault(_RightBar);
+	
+	var _LeftBar = __webpack_require__(/*! ./Toolbars/LeftBar */ 175);
+	
+	var _LeftBar2 = _interopRequireDefault(_LeftBar);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22001,7 +22009,13 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(_TopBar2.default, { numberOfUnsavedItems: this.state.numberOfUnsavedItems, discardAllChanges: this.discardAllChanges.bind(this) });
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_TopBar2.default, { numberOfUnsavedItems: this.state.numberOfUnsavedItems, discardAllChanges: this.discardAllChanges.bind(this) }),
+	                _react2.default.createElement(_RightBar2.default, null),
+	                _react2.default.createElement(_LeftBar2.default, null)
+	            );
 	        }
 	    }]);
 	
@@ -22139,6 +22153,380 @@
 	}(_react2.default.Component);
 	
 	exports.default = TopBar;
+
+/***/ },
+/* 174 */
+/*!**********************************************************************!*\
+  !*** ./Resources/Private/Javascript/components/Toolbars/RightBar.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RightBar = function (_React$Component) {
+	    _inherits(RightBar, _React$Component);
+	
+	    function RightBar() {
+	        _classCallCheck(this, RightBar);
+	
+	        return _possibleConstructorReturn(this, (RightBar.__proto__ || Object.getPrototypeOf(RightBar)).apply(this, arguments));
+	    }
+	
+	    _createClass(RightBar, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "t3-frontend-editing__right-bar" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "top-right-bar-wrapper" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "top-right-title" },
+	                            _react2.default.createElement("span", { className: "icons icon-icons-arrow-double right-bar-button" }),
+	                            _react2.default.createElement(
+	                                "span",
+	                                { className: "title-right" },
+	                                FrontendEditing.labels['right-bar.tools-properties']
+	                            ),
+	                            _react2.default.createElement("span", { className: "icons icon-icons-tools-settings" })
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "padding-wrapper" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "page-seo" },
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    FrontendEditing.labels['right-bar.page-seo-score']
+	                                ),
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "page-seo-score" },
+	                                    "85"
+	                                ),
+	                                _react2.default.createElement(
+	                                    "button",
+	                                    { className: "btn-default" },
+	                                    FrontendEditing.labels['right-bar.seo-guide']
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "page-seo-devices" },
+	                                    _react2.default.createElement("span", { className: "page-seo-lg-desktop icons icon-icons-lg-desktop active", "data-width": "100%", "data-height": "100%" }),
+	                                    _react2.default.createElement("span", { className: "page-seo-desktop icons icon-icons-desktop", "data-width": "1280px", "data-height": "100%" }),
+	                                    _react2.default.createElement("span", { className: "page-seo-tablet icons icon-icons-tablet", "data-width": "960px", "data-height": "100%" }),
+	                                    _react2.default.createElement("span", { className: "page-seo-phone icons icon-icons-phone", "data-width": "640px", "data-height": "100%" })
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "elements" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "dark-transparent-bg accordion-container accordion-grid" },
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "accordion " },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "element-title" },
+	                                    _react2.default.createElement(
+	                                        "span",
+	                                        { className: "title-left" },
+	                                        "Typical Content Elements"
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "element-action" },
+	                                    _react2.default.createElement("span", { className: "icons icon-icons-grid grid " }),
+	                                    _react2.default.createElement("span", { className: "icons icon-icons-list list-view" }),
+	                                    _react2.default.createElement("span", { className: "icons icon-icons-arrow-down trigger" })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "accordion-content" },
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "element" },
+	                                    _react2.default.createElement(
+	                                        "span",
+	                                        { className: "content-icon" },
+	                                        _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "description" },
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Header"
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Adds a header only"
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "element" },
+	                                    _react2.default.createElement(
+	                                        "span",
+	                                        { className: "content-icon" },
+	                                        _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "description" },
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Text & Media"
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Any number of media wrapped right around a regular text element."
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    "div",
+	                                    { className: "element" },
+	                                    _react2.default.createElement(
+	                                        "span",
+	                                        { className: "content-icon" },
+	                                        _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        "div",
+	                                        { className: "description" },
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Text & Media"
+	                                        ),
+	                                        _react2.default.createElement(
+	                                            "span",
+	                                            { className: "title-default" },
+	                                            "Any number of media wrapped right around a regular text element."
+	                                        )
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "dark-transparent-bg accordion-container accordion-grid" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "accordion " },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "element-title" },
+	                            _react2.default.createElement(
+	                                "span",
+	                                { className: "title-left" },
+	                                "Form Elements"
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "element-action" },
+	                            _react2.default.createElement("span", { className: "icons icon-icons-grid grid " }),
+	                            _react2.default.createElement("span", { className: "icons icon-icons-list list-view" }),
+	                            _react2.default.createElement("span", { className: "icons icon-icons-arrow-down trigger" })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "accordion-content" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "element" },
+	                            _react2.default.createElement(
+	                                "span",
+	                                { className: "content-icon" },
+	                                _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "description" },
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Header"
+	                                ),
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Adds a header only"
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "element" },
+	                            _react2.default.createElement(
+	                                "span",
+	                                { className: "content-icon" },
+	                                _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "description" },
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Text & Media"
+	                                ),
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Any number of media wrapped right around a regular text element."
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "element" },
+	                            _react2.default.createElement(
+	                                "span",
+	                                { className: "content-icon" },
+	                                _react2.default.createElement("img", { src: "/typo3conf/ext/bootstrap_package/Resources/Public/Icons/ContentElements/texticon.svg", width: "32", height: "32" })
+	                            ),
+	                            _react2.default.createElement(
+	                                "div",
+	                                { className: "description" },
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Text & Media"
+	                                ),
+	                                _react2.default.createElement(
+	                                    "span",
+	                                    { className: "title-default" },
+	                                    "Any number of media wrapped right around a regular text element."
+	                                )
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return RightBar;
+	}(_react2.default.Component);
+	
+	exports.default = RightBar;
+
+/***/ },
+/* 175 */
+/*!*********************************************************************!*\
+  !*** ./Resources/Private/Javascript/components/Toolbars/LeftBar.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var RightBar = function (_React$Component) {
+	    _inherits(RightBar, _React$Component);
+	
+	    function RightBar() {
+	        _classCallCheck(this, RightBar);
+	
+	        return _possibleConstructorReturn(this, (RightBar.__proto__ || Object.getPrototypeOf(RightBar)).apply(this, arguments));
+	    }
+	
+	    _createClass(RightBar, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "t3-frontend-editing__left-bar" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "top-left-title" },
+	                    _react2.default.createElement("span", { className: "icons icon-icons-site-tree" }),
+	                    _react2.default.createElement(
+	                        "span",
+	                        { className: "title-left" },
+	                        FrontendEditing.labels['left-bar.site-tree']
+	                    ),
+	                    _react2.default.createElement("span", { className: "icons icon-icons-arrow-double left-bar-button" })
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "padding-wrapper" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "t3-frontend-editing__page-tree-wrapper" },
+	                        _react2.default.createElement(
+	                            "ul",
+	                            { className: "t3-frontend-editing__page-tree" },
+	                            "[@TODO: Use FrontendEditing.pageTree to render pageTree]..."
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return RightBar;
+	}(_react2.default.Component);
+	
+	exports.default = RightBar;
 
 /***/ }
 /******/ ]);
