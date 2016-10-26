@@ -6,6 +6,10 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 
+/**
+ * Class ContentPostProc
+ * @package TYPO3\CMS\FrontendEditing\Hook
+ */
 class ContentPostProc
 {
 
@@ -72,7 +76,6 @@ class ContentPostProc
                     '&frontend_editing=true'
                 ;
 
-                //\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
                 $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
                 $settings = $configurationManager->getConfiguration(
@@ -90,6 +93,10 @@ class ContentPostProc
                     $partialPath = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPath'];
                 }
 
+                $contentController = GeneralUtility::makeInstance(
+                    \TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController::class
+                );
+
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
                 $view->setTemplatePathAndFilename($templatePath);
                 $view->setLayoutRootPaths([
@@ -104,7 +111,8 @@ class ContentPostProc
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
                     'iframeUrl' => $iframeUrl,
                     'pageTree' => $this->getPageTreeStructure(),
-                    'currentTime' => time()
+                    'currentTime' => time(),
+                    'contentItems' => $contentController->wizardArray()
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
