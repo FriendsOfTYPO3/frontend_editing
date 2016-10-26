@@ -36,7 +36,7 @@
 				'<link/>',
 				{
 					rel: 'stylesheet',
-					href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css',
+					href: '/typo3conf/ext/frontend_editing/Resources/Public/App/InlineEditing.css',
 					type: 'text/css'
 				}
 			)

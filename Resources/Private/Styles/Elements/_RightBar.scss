@@ -1,5 +1,4 @@
 .#{$t3-frontend}right-bar {
-
   background-color: $gray;
   color: $white;
   position: absolute;
@@ -16,14 +15,13 @@
   }
 
   &.open {
-
     .top-right-title {
-
       .icon-icons-arrow-double {
         @include transition(left .2s);
         @include transition-duration(.2s);
         @include rotate(0);
-        @include transform-origin (center);
+        @include transform-origin(center);
+
         left: 0;
         color: $white;
       }
@@ -49,7 +47,8 @@
       @include transition(left .2s);
       @include transition-duration(.2s);
       @include rotate(180);
-      @include transform-origin (center);
+      @include transform-origin(center);
+
       cursor: pointer;
       float: left;
       display: block;
@@ -179,7 +178,6 @@
 
 .#{$t3-frontend}save,
 .#{$t3-frontend}discard {
-
   .btn-text {
     position: relative;
     top: -3px;
