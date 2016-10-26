@@ -5,6 +5,7 @@ import RightBar from './Toolbars/RightBar';
 import LeftBar from './Toolbars/LeftBar';
 
 export default class Toolbars extends React.Component {
+
     constructor() {
         super();
         this.state = {
