@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "ckeditor": "^4.5.10",
+    "es6-promise": "^4.0.5",
     "immutable": "^3.8",
+    "isomorphic-fetch": "^2.2.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "toastr": "^2.1.2",
