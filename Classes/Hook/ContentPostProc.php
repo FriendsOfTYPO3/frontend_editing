@@ -68,7 +68,6 @@ class ContentPostProc
 
                 $output = $this->loadResources();
 
-                //\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
                 $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
                 $settings = $configurationManager->getConfiguration(
@@ -96,7 +95,8 @@ class ContentPostProc
                 ]);
 
                 $view->assign(
-                    'FrontendEditing', json_encode($this->getJavascriptForFrontendEditing())
+                    'FrontendEditing',
+                    json_encode($this->getJavascriptForFrontendEditing())
                 );
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
@@ -115,7 +115,7 @@ class ContentPostProc
      */
     protected function getJavascriptForFrontendEditing()
     {
-        $jsArray = [
+        $javascriptArray = [
             'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
             'userName' => $GLOBALS['BE_USER']->user['username'],
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
@@ -127,7 +127,7 @@ class ContentPostProc
             'labels' => $this->getLocalizedFrontendLabels(),
         ];
 
-        return $jsArray;
+        return $javascriptArray;
     }
 
     /**
@@ -138,14 +138,13 @@ class ContentPostProc
     protected function getLocalizedFrontendLabels()
     {
         $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
-        $parsedLocallang = $languageFactory->getParsedData('EXT:frontend_editing/Resources/Private/Language/locallang.xlf', 'default');
+        $parsedLocallang = $languageFactory->getParsedData(
+            'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
+            'default'
+        );
         $localizedLabels = [];
         foreach (array_keys($parsedLocallang['default']) as $key) {
-            if (strpos($key, 'notifications.') === 0 ||
-                strpos($key, 'top-bar.') === 0)
-            {
-                $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
-            }
+            $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
         }
         return $localizedLabels;
     }
