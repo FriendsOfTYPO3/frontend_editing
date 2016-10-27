@@ -211,6 +211,7 @@ class ContentPostProc
         $wizardItems = $contentController->wizardArray();
         $contentItems = [];
         foreach ($wizardItems as $wizardItem) {
+            // If the wizard element is not a grouping item
             if (!isset($wizardItem['header'])) {
                 $contentItems[] = array_merge(
                     $wizardItem,
