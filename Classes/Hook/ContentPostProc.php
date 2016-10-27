@@ -5,7 +5,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 
+/**
+ * Class ContentPostProc
+ * @package TYPO3\CMS\FrontendEditing\Hook
+ */
 class ContentPostProc
 {
 
@@ -72,7 +77,6 @@ class ContentPostProc
                     '&frontend_editing=true'
                 ;
 
-                //\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
                 $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
                 $settings = $configurationManager->getConfiguration(
@@ -104,7 +108,8 @@ class ContentPostProc
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
                     'iframeUrl' => $iframeUrl,
                     'pageTree' => $this->getPageTreeStructure(),
-                    'currentTime' => time()
+                    'currentTime' => time(),
+                    'contentItems' => $this->getContentItems()
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
@@ -159,7 +164,7 @@ class ContentPostProc
      *
      * @return array
      */
-    public function getPageTreeStructure()
+    protected function getPageTreeStructure()
     {
         // Get page record for tree starting point
         // from where we currently are navigated
@@ -191,5 +196,32 @@ class ContentPostProc
         );
 
         return $tree->tree;
+    }
+
+    /**
+     * Get the available content elements from TYPO3 backend
+     *
+     * @return array
+     */
+    protected function getContentItems()
+    {
+        $contentController = GeneralUtility::makeInstance(
+            NewContentElementController::class
+        );
+        $wizardItems = $contentController->wizardArray();
+        $contentItems = [];
+        foreach ($wizardItems as $wizardItem) {
+            // If the wizard element is not a grouping item
+            if (!isset($wizardItem['header'])) {
+                $contentItems[] = array_merge(
+                    $wizardItem,
+                    [
+                        'iconHtml' => $this->iconFactory->getIcon($wizardItem['iconIdentifier'])->render()
+                    ]
+                );
+            }
+        }
+
+        return $contentItems;
     }
 }
