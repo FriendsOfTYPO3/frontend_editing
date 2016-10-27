@@ -17,8 +17,6 @@
             items = JSON.parse(items);
             items = Immutable.Map(items);
 
-            $('.t3-frontend-editing__loading-screen').toggle('hidden');
-
             items.forEach(function(item) {
                 var data = {
                     'action': item.action,
@@ -50,7 +48,6 @@
 
             // Wait until all ajax requests are done
             $(document).ajaxStop(function () {
-                $('.t3-frontend-editing__loading-screen').toggle('hidden');
                 // Remove counter for number of unsaved elements for save button
                 $('.top-bar-action-buttons .items-counter').html('');
                 // Clear local storage after save

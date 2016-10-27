@@ -186,6 +186,14 @@ class CrudController extends ActionController
     {
         $body = GeneralUtility::_POST();
 
+        // Temp hack (?): Can't manage to POST an array with isomorphic-fetch, just a string so need to json_decode it
+        if (is_array($body) &&
+            !empty($body) &&
+            strpos(array_keys($body)[0], '{') === 0
+        ) {
+            $body = json_decode(array_keys($body)[0], true);
+        }
+
         // Request is only allowed for POST request and a BE_USER is available
         if (!isset($GLOBALS['BE_USER'])) {
             throw new \Exception('This action is only allowed logged in to the backend!');

@@ -64,8 +64,6 @@
 			$(this).ckeditor(editorConfig);
 		});
 
-		$('.t3-frontend-editing__loading-screen').toggle('hidden');
-
 		CKEDITOR.on('instanceReady', function(event) {
 
 			// @TODO: This moves the dom instances of ckeditor into the top bar
