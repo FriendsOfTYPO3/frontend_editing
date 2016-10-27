@@ -4,10 +4,8 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface;
 use TYPO3\CMS\Backend\Tree\Pagetree\Commands;
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
-use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * Class PageTreeCrudController
