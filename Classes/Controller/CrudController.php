@@ -6,6 +6,10 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface;
 
+/**
+ * Class CrudController
+ * @package TYPO3\CMS\FrontendEditing\Controller
+ */
 class CrudController extends ActionController
 {
     /**
