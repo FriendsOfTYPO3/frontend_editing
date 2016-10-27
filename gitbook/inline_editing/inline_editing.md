@@ -11,7 +11,7 @@ If the installation are using the well known (and old) extension which is called
 css_styled_content are being used. The functionality comes straight out of the
 box and the editing can start directly.
 
-## Fluid Styled Contet (fluid_styled_content)
+## Fluid Styled Content (fluid_styled_content)
 
 When it comes to fluid_styled_content there are some things that needs to be
 adjusted to your template to get the editing to work. First of all there is
