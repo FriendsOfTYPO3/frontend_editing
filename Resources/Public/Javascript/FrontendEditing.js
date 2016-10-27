@@ -2,7 +2,8 @@
 
     var pageUrl = window.location.protocol + '//' + window.location.host;
     var functionRoutes = {
-        'crud': '?type=1470741815'
+        'crud': '?type=1470741815',
+        'pageTreeCrud': '?type=1477569731'
     };
     var localStorageKey = 'TYPO3:FrontendEditing';
     var toastrOptions = {
