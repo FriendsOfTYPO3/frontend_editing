@@ -21,7 +21,7 @@ var config = {
             {
                 test: /\.js?/,
                 include: APP_DIR,
-                loader: 'babel'
+                loader: 'babel!eslint-loader'
             },
             {
                 test: /\.[s]?css$/,
@@ -46,6 +46,9 @@ var config = {
         includePaths: [
             APP_DIR + '/Styles'
         ]
+    },
+    eslint: {
+        configFile: '.eslintrc'
     }
 };
 
