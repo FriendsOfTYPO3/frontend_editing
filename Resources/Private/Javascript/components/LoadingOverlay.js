@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
     return {
@@ -21,5 +21,9 @@ class LoadingOverlay extends React.Component {
         }
     }
 }
+
+LoadingOverlay.propTypes = {
+    showLoadingOverlay: React.PropTypes.bool
+};
 
 export default connect(mapStateToProps)(LoadingOverlay);

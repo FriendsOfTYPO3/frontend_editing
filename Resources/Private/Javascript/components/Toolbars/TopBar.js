@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 
 import * as actions from '../../actions/contentActions';
 
@@ -20,7 +20,6 @@ class TopBar extends React.Component {
     }
 
     render () {
-        const numberOfUnsavedItems = Object.keys(this.props.unsavedElements).length;
         return (
             <div className="t3-frontend-editing__top-bar">
                 <div className="t3-frontend-editing__topbar-inner">
@@ -48,7 +47,7 @@ class TopBar extends React.Component {
                                 <span className="btn-text">
                                     {FrontendEditing.labels['top-bar.save-all']}
                                 </span>
-                                <span className="items-counter btn-text">{}</span>
+                                <span className="items-counter btn-text"></span>
                                 <span className="icons icon-icons-save"></span>
                             </button>
                             <button onClick={this.discardAllChanges.bind(this)} type="#" className="t3-frontend-editing__discard btn-default">
@@ -64,5 +63,10 @@ class TopBar extends React.Component {
         );
     }
 }
+
+TopBar.propTypes = {
+    dispatch: React.PropTypes.func,
+    unsavedElements: React.PropTypes.object
+};
 
 export default connect(mapStateToProps)(TopBar);

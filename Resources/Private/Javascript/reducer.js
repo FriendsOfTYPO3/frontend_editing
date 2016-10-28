@@ -6,7 +6,6 @@ const contentReducer = (state, action) => {
             return Object.assign({}, state, {
                 showLoadingOverlay: true,
             });
-            break;
         case SAVE_CONTENT_ERROR:
             return Object.assign({}, state, {
                 showLoadingOverlay: false,

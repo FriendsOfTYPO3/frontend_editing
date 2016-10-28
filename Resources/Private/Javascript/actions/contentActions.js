@@ -47,7 +47,7 @@ export const saveAllChanges = () => {
         if (items !== null && items !== '') {
             items = JSON.parse(items);
             items = Immutable.Map(items);
-            items.forEach(function(item) {
+            items.forEach(item => {
                 var data = {
                     'action': item.action,
                     'table': item.table,
