@@ -13,7 +13,7 @@
 
   .top-right-bar-wrapper {
     height: 100vh;
-    max-height: calc(100vh - 45px);
+    max-height: calc(100vh - #{$top-bar-height});
     overflow-y: scroll;
     margin-top: $top-bar-height;
   }
