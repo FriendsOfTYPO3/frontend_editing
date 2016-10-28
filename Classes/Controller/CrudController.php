@@ -5,6 +5,9 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterface;
+use TYPO3\CMS\Extbase\Mvc\View\JsonView;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * Class CrudController
@@ -13,17 +16,17 @@ use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterfa
 class CrudController extends ActionController
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Mvc\View\JsonView
+     * @var JsonView
      */
     protected $view;
 
     /**
      * @var string
      */
-    protected $defaultViewObjectName = \TYPO3\CMS\Extbase\Mvc\View\JsonView::class;
+    protected $defaultViewObjectName = JsonView::class;
 
     /**
-     * @var \TYPO3\CMS\Core\DataHandling\DataHandler
+     * @var DataHandler
      */
     protected $dataHandler;
 
@@ -67,12 +70,12 @@ class CrudController extends ActionController
      */
     public function __construct()
     {
-        $this->dataHandler = new \TYPO3\CMS\Core\DataHandling\DataHandler();
+        $this->dataHandler = new DataHandler();
         $this->dataHandler->stripslashes_values = 0;
 
         if (!isset($GLOBALS['LANG'])) {
             // DataHandler uses $GLOBALS['LANG'] when saving records
-            \TYPO3\CMS\Frontend\Utility\EidUtility::initLanguage();
+            EidUtility::initLanguage();
         }
     }
 
@@ -151,7 +154,8 @@ class CrudController extends ActionController
         switch ($this->request->getMethod()) {
             case 'HEAD':
             case 'GET':
-                $actionName = 'read';
+                $actionName = 'delete';
+                //$actionName = 'read';
                 break;
             case 'PUT':
             case 'POST':
@@ -163,8 +167,6 @@ class CrudController extends ActionController
             default:
                 $this->throwStatus(400, null, 'Bad Request.');
         }
-
-        $this->createRequestMapping();
 
         return $actionName . 'Action';
     }
@@ -186,7 +188,7 @@ class CrudController extends ActionController
      *
      * @throws \Exception
      */
-    protected function createRequestMapping()
+    protected function createRequestMappingForSaveAction()
     {
         $body = GeneralUtility::_POST();
 
@@ -274,6 +276,8 @@ class CrudController extends ActionController
     public function saveAction()
     {
         try {
+            $this->createRequestMappingForSaveAction();
+
             $htmlEntityDecode = true;
 
             $this->content = \TYPO3\CMS\FrontendEditing\Utility\Integration::rteModification(
@@ -329,8 +333,10 @@ class CrudController extends ActionController
      * @param string $uid
      * @param string $table
      */
-    public function deleteAction($uid, $table)
+    public function deleteAction()
     {
+        // $uid, $table
+        var_dump('shit');die;
     }
 
     /**
