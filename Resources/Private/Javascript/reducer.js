@@ -1,4 +1,4 @@
-import { SAVE_CONTENT_START, SAVE_CONTENT_ERROR, SAVE_CONTENT_SUCCESS} from '../actions/contentActions';
+import { SAVE_CONTENT_START, SAVE_CONTENT_ERROR, SAVE_CONTENT_SUCCESS} from './actions/contentActions';
 
 const contentReducer = (state, action) => {
     switch (action.type) {

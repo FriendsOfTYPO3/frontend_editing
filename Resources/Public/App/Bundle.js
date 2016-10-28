@@ -25021,9 +25021,9 @@
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
-	var _contentReducer = __webpack_require__(/*! ./reducers/contentReducer */ 217);
+	var _reducer = __webpack_require__(/*! ./reducer.js */ 217);
 	
-	var _contentReducer2 = _interopRequireDefault(_contentReducer);
+	var _reducer2 = _interopRequireDefault(_reducer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -25036,7 +25036,7 @@
 	    error: null
 	};
 	
-	var store = (0, _redux.createStore)(_contentReducer2.default, initialState, middleware);
+	var store = (0, _redux.createStore)(_reducer2.default, initialState, middleware);
 	exports.default = store;
 
 /***/ },
@@ -25941,9 +25941,9 @@
 
 /***/ },
 /* 217 */
-/*!*****************************************************************!*\
-  !*** ./Resources/Private/Javascript/reducers/contentReducer.js ***!
-  \*****************************************************************/
+/*!*************************************************!*\
+  !*** ./Resources/Private/Javascript/reducer.js ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25952,7 +25952,7 @@
 	    value: true
 	});
 	
-	var _contentActions = __webpack_require__(/*! ../actions/contentActions */ 203);
+	var _contentActions = __webpack_require__(/*! ./actions/contentActions */ 203);
 	
 	var contentReducer = function contentReducer(state, action) {
 	    switch (action.type) {

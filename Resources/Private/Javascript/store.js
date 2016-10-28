@@ -1,7 +1,7 @@
 import logger from 'redux-logger';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk'
-import contentReducer from './reducers/contentReducer'
+import reducer from './reducer.js';
 
 const middleware = applyMiddleware(thunk, logger());
 
@@ -12,5 +12,5 @@ const initialState = {
     error: null,
 };
 
-const store = createStore(contentReducer, initialState, middleware);
+const store = createStore(reducer, initialState, middleware);
 export default store;
