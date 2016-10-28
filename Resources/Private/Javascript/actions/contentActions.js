@@ -56,6 +56,10 @@ export const saveAllChanges = () => {
                     'content': CKEDITOR.instances[item.editorInstance].getData()
                 };
 
+                const body = Object.keys(data).map(
+                    key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])
+                ).join('&');
+
                 dispatch(saveContentStart());
 
                 fetch(pageUrl + functionRoutes.crud, {
@@ -65,7 +69,7 @@ export const saveAllChanges = () => {
                         'Accept': 'text/plain, text/html',
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     },
-                    body: JSON.stringify(data),
+                    body: body,
                 })
                 .then(response => {
                     if (response.status >= 400) {
