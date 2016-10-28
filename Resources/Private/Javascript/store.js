@@ -1,9 +1,8 @@
-import logger from 'redux-logger';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk'
 import reducer from './reducer.js';
 
-const middleware = applyMiddleware(thunk, logger());
+const middleware = applyMiddleware(thunk);
 
 // Initial state for the whole app
 const initialState = {
