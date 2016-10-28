@@ -1,5 +1,7 @@
 .#{$t3-frontend}page-tree-wrapper {
-  height: 100%;
+  height: 100vh;
+  max-height: calc(100vh - 45px);
+  overflow-y: scroll;
   width: $left-bar-width - 14px;
   overflow-y: auto;
   overflow-x: hidden;

@@ -6,14 +6,15 @@
   top: 0;
   right: -$right-bar-width;
   width: $right-bar-width;
-  height: 100vh;
-  max-height: 100vh;
-  overflow-y: scroll;
+  min-height: 100%;
   z-index: 10999;
   font-family: $font-family-base;
   text-transform: uppercase;
 
   .top-right-bar-wrapper {
+    height: 100vh;
+    max-height: calc(100vh - 45px);
+    overflow-y: scroll;
     margin-top: $top-bar-height;
   }
 
