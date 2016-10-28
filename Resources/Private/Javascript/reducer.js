@@ -1,4 +1,4 @@
-import { SAVE_CONTENT_START, SAVE_CONTENT_ERROR, SAVE_CONTENT_SUCCESS} from './actions/contentActions';
+import { SAVE_CONTENT_START, SAVE_CONTENT_FINISH} from './actions/contentActions';
 
 const contentReducer = (state, action) => {
     switch (action.type) {
@@ -6,11 +6,7 @@ const contentReducer = (state, action) => {
             return Object.assign({}, state, {
                 showLoadingOverlay: true,
             });
-        case SAVE_CONTENT_ERROR:
-            return Object.assign({}, state, {
-                showLoadingOverlay: false,
-            });
-        case SAVE_CONTENT_SUCCESS:
+        case SAVE_CONTENT_FINISH:
             return Object.assign({}, state, {
                 showLoadingOverlay: false,
             });

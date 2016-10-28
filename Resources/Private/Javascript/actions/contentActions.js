@@ -41,12 +41,22 @@ function saveContentSuccess(message) {
     };
 }
 
+export const SAVE_CONTENT_FINISH = 'SAVE_CONTENT_FINISH';
+function saveContentFinish() {
+    return {
+        type: SAVE_CONTENT_FINISH,
+    };
+}
+
 export const saveAllChanges = () => {
     return function (dispatch) {
         var items = localStorage.getItem(localStorageKey);
         if (items !== null && items !== '') {
             items = JSON.parse(items);
             items = Immutable.Map(items);
+
+            let numberOfRequestsLeft = items.count();
+            dispatch(saveContentStart());
             items.forEach(item => {
                 var data = {
                     'action': item.action,
@@ -60,18 +70,21 @@ export const saveAllChanges = () => {
                     key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])
                 ).join('&');
 
-                dispatch(saveContentStart());
-
                 fetch(pageUrl + functionRoutes.crud, {
                     credentials: 'include',
                     method: 'post',
                     headers: {
-                        'Accept': 'text/plain, text/html',
+                        'Accept': 'text/plain, text/html, application/json; charset=utf-8',
                         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
                     },
                     body: body,
                 })
                 .then(response => {
+                    numberOfRequestsLeft--;
+                    if (numberOfRequestsLeft === 0) {
+                        localStorage.removeItem(localStorageKey);
+                        dispatch(saveContentFinish());
+                    }
                     if (response.status >= 400) {
                         throw new Error(response.statusText); // @TODO: This is not catching the ThrowStatus in CrudController!
                     } else {
@@ -80,7 +93,6 @@ export const saveAllChanges = () => {
                 })
                 .then(response => {
                     dispatch(saveContentSuccess(response.message));
-                    localStorage.removeItem(localStorageKey);
                 })
                 .catch(err => dispatch(saveContentError(err)));
             });
