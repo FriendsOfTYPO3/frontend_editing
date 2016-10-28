@@ -330,13 +330,21 @@ class CrudController extends ActionController
     }
 
     /**
-     * @param string $uid
-     * @param string $table
      */
     public function deleteAction()
     {
+        $this->table = 'tt_content';
+        $this->uid = '181';
+
+        $this->dataHandler->deleteAction($this->table, $this->uid);
+
+        $message = [
+            'success' => true,
+            'message' => 'Content deleted (' . $this->uid . ')'
+        ];
+
         // $uid, $table
-        var_dump('shit');die;
+        return json_encode($message);
     }
 
     /**
