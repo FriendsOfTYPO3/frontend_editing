@@ -12,7 +12,7 @@
   text-transform: uppercase;
 
   .top-right-bar-wrapper {
-    height: 100vh;
+    height: calc(100vh - #{$top-bar-height});
     max-height: calc(100vh - #{$top-bar-height});
     overflow-y: scroll;
     margin-top: $top-bar-height;

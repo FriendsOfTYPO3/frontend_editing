@@ -248,7 +248,7 @@
   color: #fff; }
 
 .t3-frontend-editing__page-tree-wrapper {
-  height: 100vh;
+  height: calc(100vh - 45px);
   max-height: calc(100vh - 45px);
   overflow-y: scroll;
   width: 266px;
@@ -431,7 +431,7 @@
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   text-transform: uppercase; }
   .t3-frontend-editing__right-bar .top-right-bar-wrapper {
-    height: 100vh;
+    height: calc(100vh - 45px);
     max-height: calc(100vh - 45px);
     overflow-y: scroll;
     margin-top: 45px; }
