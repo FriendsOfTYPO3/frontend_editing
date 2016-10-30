@@ -72,6 +72,8 @@ class CrudController extends ActionController
     {
         $this->dataHandler = new DataHandler();
         $this->dataHandler->stripslashes_values = 0;
+        // Initialize backend user for data handler
+        $this->dataHandler->BE_USER = $GLOBALS['BE_USER'];
 
         if (!isset($GLOBALS['LANG'])) {
             // DataHandler uses $GLOBALS['LANG'] when saving records
@@ -330,6 +332,9 @@ class CrudController extends ActionController
     }
 
     /**
+     * Delete a record through the data handler
+     *
+     * @return array
      */
     public function deleteAction()
     {
