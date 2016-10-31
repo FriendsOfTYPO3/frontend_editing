@@ -150,28 +150,7 @@ class CrudController extends ActionController
      *
      * @return string Method name of the current action
      */
-    protected function resolveActionMethodName()
-    {
-        $actionName = '';
-        switch ($this->request->getMethod()) {
-            case 'HEAD':
-            case 'GET':
-                $actionName = 'delete';
-                //$actionName = 'read';
-                break;
-            case 'PUT':
-            case 'POST':
-                $actionName = 'save';
-                break;
-            case 'DELETE':
-                $actionName = 'delete';
-                break;
-            default:
-                $this->throwStatus(400, null, 'Bad Request.');
-        }
 
-        return $actionName . 'Action';
-    }
 
     /**
      * Get the field configuration from a field list
@@ -346,6 +325,65 @@ class CrudController extends ActionController
             $message = [
                 'success' => true,
                 'message' => 'Content deleted (' . $uid . ')'
+            ];
+        } catch (\Exception $exception) {
+            $this->throwStatus(
+                500,
+                $exception->getFile(),
+                $exception->getMessage()
+            );
+        }
+
+        return json_encode($message);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $table
+     * @param integer $beforeUid
+     * @param integer $pid
+     * @param integer $columnPosition
+     * @param integer $container
+     * @return string
+     */
+    public function moveContentAction(
+        $uid,
+        $table = 'tt_content',
+        $beforeUid = 0,
+        $pid = 0,
+        $columnPosition = -2,
+        $container = 0
+    ) {
+        try {
+            $command = [];
+            $data = [];
+            $data[$table][$uid][''] = $pid;
+
+            // Add mapping for which id is should be move to
+            if ($beforeUid) {
+                $command[$table][$uid]['move'] = '-' . $beforeUid;
+            } else {
+                // Otherwise to another page (pid)
+                $command[$table][$uid]['move'] = $pid;
+            }
+
+            if ($columnPosition > -2) {
+                $data[$table][$uid]['colPos'] = $columnPosition;
+            }
+
+            if ($container) {
+                $data[$table][$uid]['colPos'] = -1;
+            }
+
+            var_dump($data); var_dump($command);die;
+
+            $this->dataHandler->start($data, $command);
+            $this->dataHandler->process_cmdmap();
+            $this->dataHandler->process_datamap();
+
+            $message = [
+                'success' => true,
+                'message' => 'Content moved (uid: ' . $uid . ')'
             ];
         } catch (\Exception $exception) {
             $this->throwStatus(

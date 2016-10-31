@@ -63,12 +63,10 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing',
     [
-        'Crud' => 'save, read, delete',
-        'PageTreeCrud' => 'update, save, read, delete'
+        'Crud' => 'save, read, delete, moveContent'
     ],
     [
-        'Crud' => 'save, read, delete',
-        'PageTreeCrud' => 'update, save, read, delete'
+        'Crud' => 'save, read, delete, moveContent'
     ]
 );
 
@@ -79,6 +77,6 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
         'PageTreeCrud' => 'update, save, read, delete'
     ],
     [
-        'Crud' => 'save, read, delete'
+        'PageTreeCrud' => 'update, save, read, delete'
     ]
 );
