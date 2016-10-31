@@ -169,7 +169,7 @@ class CrudController extends ActionController
      *
      * @throws \Exception
      */
-    protected function createRequestMappingForSaveAction()
+    protected function createRequestMappingForUpdateAction()
     {
         $body = GeneralUtility::_POST();
 
@@ -249,15 +249,15 @@ class CrudController extends ActionController
     }
 
     /**
-     * Main method for saving/updating records
+     * Main method for updating records
      *
      * @return array
      * @throws \Exception
      */
-    public function saveAction()
+    public function updateAction()
     {
         try {
-            $this->createRequestMappingForSaveAction();
+            $this->createRequestMappingForUpdateAction();
 
             $htmlEntityDecode = true;
 
@@ -394,13 +394,5 @@ class CrudController extends ActionController
         }
 
         return json_encode($message);
-    }
-
-    /**
-     * @param string $uid
-     * @param string $table
-     */
-    public function readAction($uid, $table)
-    {
     }
 }

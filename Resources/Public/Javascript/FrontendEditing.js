@@ -34,7 +34,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: pageUrl + functionRoutes.crud.url + 'save',
+                    url: pageUrl + functionRoutes.crud.url + 'update',
                     dataType: 'JSON',
                     data: data
                 }).done(function(data, textStatus, jqXHR) {
