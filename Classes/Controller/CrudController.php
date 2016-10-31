@@ -338,6 +338,8 @@ class CrudController extends ActionController
     }
 
     /**
+     * Move a content to another position (columnPosition, colpos)
+     *
      * @param string $uid
      * @param string $table
      * @param integer $beforeUid
@@ -374,8 +376,6 @@ class CrudController extends ActionController
             if ($container) {
                 $data[$table][$uid]['colPos'] = -1;
             }
-
-            var_dump($data); var_dump($command);die;
 
             $this->dataHandler->start($data, $command);
             $this->dataHandler->process_cmdmap();
