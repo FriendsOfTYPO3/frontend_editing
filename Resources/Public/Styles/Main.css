@@ -260,7 +260,7 @@
   .t3-frontend-editing__page-tree-wrapper::-webkit-scrollbar-corner {
     background-color: rgba(63, 63, 63, 0.6); }
   .t3-frontend-editing__page-tree-wrapper::-webkit-scrollbar-thumb {
-    background-color: rgba(34, 34, 34, 0.6);
+    background-color: #0f0f0f;
     border: 1px solid #3f3f3f; }
   .t3-frontend-editing__page-tree-wrapper::-webkit-scrollbar-track {
     background-color: rgba(63, 63, 63, 0.6); }
@@ -271,7 +271,6 @@
     .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li {
       white-space: nowrap;
       overflow: hidden;
-      white-space: nowrap;
       text-overflow: ellipsis;
       width: 95%;
       display: inline-block;
@@ -450,7 +449,7 @@
     .t3-frontend-editing__right-bar .top-right-bar-wrapper::-webkit-scrollbar-corner {
       background-color: #3f3f3f; }
     .t3-frontend-editing__right-bar .top-right-bar-wrapper::-webkit-scrollbar-thumb {
-      background-color: #222;
+      background-color: #0f0f0f;
       border: 1px solid #3f3f3f; }
     .t3-frontend-editing__right-bar .top-right-bar-wrapper::-webkit-scrollbar-track {
       background-color: #3f3f3f; }
@@ -732,16 +731,6 @@
     margin: 0 auto;
     display: block;
     box-shadow: 0 0 15px 0 #4c4c4c; }
-    .t3-frontend-editing__iframe-wrapper iframe::-webkit-scrollbar {
-      width: 8px;
-      height: 8px; }
-    .t3-frontend-editing__iframe-wrapper iframe::-webkit-scrollbar-corner {
-      background-color: #3f3f3f; }
-    .t3-frontend-editing__iframe-wrapper iframe::-webkit-scrollbar-thumb {
-      background-color: #222;
-      border: 1px solid #3f3f3f; }
-    .t3-frontend-editing__iframe-wrapper iframe::-webkit-scrollbar-track {
-      background-color: #3f3f3f; }
 
 .t3-frontend-editing__loading-screen {
   position: absolute;
