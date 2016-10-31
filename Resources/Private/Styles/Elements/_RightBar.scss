@@ -12,9 +12,23 @@
   text-transform: uppercase;
 
   .top-right-bar-wrapper {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    &::-webkit-scrollbar-corner {
+      background-color: #3f3f3f;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #222;
+      border: 1px solid #3f3f3f;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #3f3f3f;
+    }
     height: calc(100vh - #{$top-bar-height});
     max-height: calc(100vh - #{$top-bar-height});
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-top: $top-bar-height;
   }
 
@@ -82,6 +96,7 @@
 
   .page-seo {
     padding: 15px 0 0;
+    text-align: center;
 
     .page-seo-score {
       border: 4px solid $orange-primary;
@@ -92,7 +107,7 @@
       height: 35px;
       text-align: center;
       display: inline-block;
-      margin: 0 8px;
+      margin: 0 7px;
       position: relative;
       top: 2px;
     }
