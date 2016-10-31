@@ -57,8 +57,9 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
 }
 
 /**
- * Frontend plugin
+ * Frontend plugins
  */
+// Content crud actions
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing',
@@ -70,6 +71,7 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
     ]
 );
 
+// Page tree crud actions
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing_page_tree',
