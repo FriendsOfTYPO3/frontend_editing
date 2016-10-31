@@ -1,7 +1,15 @@
 @import "Constants";
 
 *[contenteditable="true"] {
-	&:focus{
-		outline: 3px dotted #FF8700;
-	}
+  &:focus{
+    outline: 3px dotted #FF8700;
+  }
+}
+
+.#{$t3-frontend}inline-actions {
+  .icon {
+    &:hover {
+     cursor: pointer;
+    }
+  }
 }
