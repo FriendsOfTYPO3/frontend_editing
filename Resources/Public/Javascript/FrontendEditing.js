@@ -121,8 +121,7 @@
         $('.page-seo-devices').find('span').removeClass('active');
         $(this).addClass('active');
         $('.t3-frontend-editing__iframe-wrapper iframe').animate({
-            'width': $(this).data('width'),
-            'height': $(this).data('height')
+            'width': $(this).data('width')
         });
     });
 

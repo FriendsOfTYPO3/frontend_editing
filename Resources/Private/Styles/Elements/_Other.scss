@@ -17,7 +17,7 @@
 
   iframe {
     width: 100%;
-    height: calc(100% - #{$top-bar-height});
+    height: calc(100vh - #{$top-bar-height});
     margin: 0 auto;
     display: block;
     box-shadow: 0 0 15px 0 $gray;
