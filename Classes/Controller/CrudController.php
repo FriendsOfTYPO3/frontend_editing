@@ -364,6 +364,5 @@ class CrudController extends ActionController
      */
     public function readAction($uid, $table)
     {
-
     }
 }
