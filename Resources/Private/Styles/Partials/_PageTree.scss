@@ -1,5 +1,20 @@
 .#{$t3-frontend}page-tree-wrapper {
-  height: 100%;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: rgba(63,63,63,0.60);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(34,34,34,0.60);
+    border: 1px solid #3f3f3f;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(63,63,63,0.60);
+  }
+  height: calc(100vh - #{$top-bar-height});
+  max-height: calc(100vh - #{$top-bar-height});
   width: $left-bar-width - 14px;
   overflow-y: auto;
   overflow-x: hidden;
