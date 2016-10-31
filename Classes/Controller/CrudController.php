@@ -334,21 +334,27 @@ class CrudController extends ActionController
     /**
      * Delete a record through the data handler
      *
+     * @param string $table
+     * @param string $uid
      * @return array
      */
-    public function deleteAction()
+    public function deleteAction($table, $uid)
     {
-        $this->table = 'tt_content';
-        $this->uid = '181';
+        try {
+            $this->dataHandler->deleteAction($table, $uid);
 
-        $this->dataHandler->deleteAction($this->table, $this->uid);
+            $message = [
+                'success' => true,
+                'message' => 'Content deleted (' . $uid . ')'
+            ];
+        } catch (\Exception $exception) {
+            $this->throwStatus(
+                500,
+                $exception->getFile(),
+                $exception->getMessage()
+            );
+        }
 
-        $message = [
-            'success' => true,
-            'message' => 'Content deleted (' . $this->uid . ')'
-        ];
-
-        // $uid, $table
         return json_encode($message);
     }
 
@@ -358,5 +364,6 @@ class CrudController extends ActionController
      */
     public function readAction($uid, $table)
     {
+
     }
 }
