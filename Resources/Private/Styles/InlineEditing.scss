@@ -2,14 +2,28 @@
 
 *[contenteditable="true"] {
   &:focus{
-    outline: 3px dotted #FF8700;
+    outline: 3px dotted $orange-primary;
   }
 }
 
 .#{$t3-frontend}inline-actions {
+  //visibility: hidden;
+  background: $orange-primary;
+  height: 26px;
+  display: none;
+  width: 60px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  top: -3px;
+
   .icon {
     &:hover {
      cursor: pointer;
     }
+  }
+
+  .icon-actions-edit-delete {
+    margin-left: 2px;
   }
 }

@@ -100,7 +100,11 @@
 			var editor = event.editor;
 
 			editor.editable().on('click', function(event) {
-				//$(event.sender.$).prev().toggle('hidden');
+				$(event.sender.$).prev().css('display', 'block');
+			});
+
+			editor.editable().on('blur', function(event) {
+				$(event.sender.$).prev().css('display', 'none');
 			});
 
 			editor.on('change', function(changeEvent) {

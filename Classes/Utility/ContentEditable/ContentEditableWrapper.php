@@ -37,12 +37,15 @@ class ContentEditableWrapper
 
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-        $editIcon = $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render();
+        $inlineIcons =
+            $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
+            $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
+            $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();
 
         $content = sprintf(
             '<span class="t3-frontend-editing__inline-actions">%s</span>' .
                 '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
-            $editIcon,
+            $inlineIcons,
             $table,
             $field,
             $uid,
