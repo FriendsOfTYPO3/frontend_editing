@@ -26,7 +26,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
     /**
      * @var string
      */
-    protected $tagName = 'div';
+    protected $tagName = '';
 
     /**
      * Initialize arguments
@@ -85,7 +85,7 @@ class EditableViewHelper extends AbstractTagBasedViewHelper
             $this->tag->setContent($content);
             $this->tag->forceClosingTag(true);
 
-            return $this->tag->render();
+            return $this->tag->getContent();
         }
 
         return $content;
