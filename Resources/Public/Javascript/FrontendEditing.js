@@ -1,142 +1,102 @@
-(function($, w){
+var FrontendEditing = (function($){
 
-    var pageUrl = window.location.protocol + '//' + window.location.host;
-    var functionRoutes = {
-        'crud': '?type=1470741815',
-        'pageTreeCrud': '?type=1477569731'
+    'use strict';
+
+    // Private variables
+    var listeners = {};
+    var storage = null;
+
+    // Default for event-listening and triggering
+    var events = {
+        CONTENT_CHANGE: 'CONTENT_CHANGE'
     };
-    var localStorageKey = 'TYPO3:FrontendEditing';
-    var toastrOptions = {
-        'positionClass': 'toast-top-left',
-        'preventDuplicates': true
+
+    // Add default events and a function to add other events
+    FrontendEditing.events = events;
+    FrontendEditing.addEvent = function(key, value) {
+        FrontendEditing.events[key] = value;
     };
 
-    // Saving content
-    $('.t3-frontend-editing__save').click(function() {
-        var items = localStorage.getItem(localStorageKey);
-        if (items !== null && items !== '') {
-            items = JSON.parse(items);
-            items = Immutable.Map(items);
+    function FrontendEditing(options) {
+        this.init(options);
 
-            $('.t3-frontend-editing__loading-screen').toggle('hidden');
-
-            items.forEach(function(item) {
-                var data = {
-                    'action': item.action,
-                    'table': item.table,
-                    'uid': item.uid,
-                    'field': item.field,
-                    'content': CKEDITOR.instances[item.editorInstance].getData()
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: pageUrl + functionRoutes.crud,
-                    dataType: 'JSON',
-                    data: data
-                }).done(function(data, textStatus, jqXHR) {
-                    toastr.success(
-                        contentSaveDescriptionLabel + data.message,
-                        contentSaveTitleLabel,
-                        toastrOptions
-                    );
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    toastr.error(
-                        jqXHR.responseText,
-                        contentSaveWentWrongLabel,
-                        toastrOptions
-                    );
-                });
-            });
-
-            // Wait until all ajax requests are done
-            $(document).ajaxStop(function () {
-                $('.t3-frontend-editing__loading-screen').toggle('hidden');
-                // Remove counter for number of unsaved elements for save button
-                $('.top-bar-action-buttons .items-counter').html('');
-                // Clear local storage after save
-                localStorage.removeItem(localStorageKey);
-            });
-
-        } else {
-            toastr.info(
-                contentNoChangesDescriptionLabel,
-                contentNoChangesTitleLabel,
-                toastrOptions
-            );
+        // Assign every event to the FrontendEditing class for API use
+        for (var key in events) {
+            this[key] = events[key];
         }
-    });
+    };
 
-    // Discard button
-    $('.t3-frontend-editing__discard').click(function() {
-        var numberOfUnsavedItems = localStorage.getItem(localStorageKey);
-        if (numberOfUnsavedItems !== null && numberOfUnsavedItems !== '') {
-            var confirmed = confirm(contentRemoveAllChangesLabel);
-            if (confirmed) {
-                // Remove counter for number of unsaved elements for save button
-                $('.top-bar-action-buttons .items-counter').html('');
-                localStorage.removeItem(localStorageKey);
+    // Public API
+    FrontendEditing.prototype = {
+        init: function(options) {
+            // Create an array of listeners for every event and assign it to the intance
+            for (var key in FrontendEditing.events) {
+                listeners[events[key]] = [];
+                this[key] = events[key];
             }
-        }
-    });
 
-    // Add check for page tree navigation
-    $('.t3-frontend-editing__page-tree li').click(function() {
-        var linkUrl = $(this).data('url');
-        if (linkUrl && linkUrl !== '#') {
-            var numberOfItems = localStorage.getItem(localStorageKey);
-            if (numberOfItems !== null && numberOfItems !== '') {
-                var confirmed = confirm(contentUnsavedChangesLabel);
-                if (confirmed) {
-                    window.location.href = linkUrl;
+            storage = options.storage;
+        },
+        error: function (message) {
+            console.error(message);
+        },
+        trigger: function(event, data) {
+            if (!listeners[event]) {
+                this.error('Invalid event', event);
+                return;
+            }
+            for (var i = 0; i < listeners[event].length; i++) {
+                listeners[event][i](data);
+            }
+        },
+        getStorage: function() {
+            return storage;
+        },
+        confirm: function(message) {
+            return confirm(message);
+        },
+        on: function(events, callback) {
+            if (typeof callback === 'function') {
+                if (Array.isArray(events)) {
+                    for (var i = 0; i < events.length; i++) {
+                        listeners[events[i]].push(callback);
+                    }
+                } else {
+                    listeners[events].push(callback);
                 }
             } else {
-                window.location.href = linkUrl;
+                this.error('Callback is not a function');
             }
+        },
+        navigate: function(linkUrl) {
+            if (linkUrl && linkUrl !== '#') {
+                if (this.getStorage().isEmpty()) {
+                    window.location.href = linkUrl;
+                } else {
+                    if (confirm(contentUnsavedChangesLabel)) {
+                        window.location.href = linkUrl;
+                    }
+                }
+            }
+        },
+        post: function (url, data, callbacks) {
+            callbacks = callbacks || {};
+            var done = callbacks.done || function(){};
+            var fail = callbacks.fail || function(){};
+            var always = callbacks.always || function(){};
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'JSON',
+                data: data
+            })
+            .done(done)
+            .fail(fail)
+            .always(always);
         }
-    });
+    };
 
-    var t = 0;
-    var y = 0;
+    return FrontendEditing;
 
-    $('.right-bar-button').on('click', function () {
-        $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
-        $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
-        $('.t3-frontend-editing__right-bar').toggleClass('open');
-        t = ++t % 2;
-        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -310 }, 200);
-    });
-
-    $('.left-bar-button').on('click', function() {
-        $('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
-        $('.t3-frontend-editing__left-bar').toggleClass('open');
-        y = ++y % 2;
-        $('.t3-frontend-editing__left-bar').stop().animate({ left: y ? 0 : -280 }, 200);
-    });
-
-    $('.page-seo-devices span').on('click', function() {
-        $('.page-seo-devices').find('span').removeClass('active');
-        $(this).addClass('active');
-        $('.t3-frontend-editing__iframe-wrapper iframe').animate({
-            'width': $(this).data('width')
-        });
-    });
-
-    $('.accordion .trigger').on('click', function(){
-        $(this).toggleClass('active');
-        $(this).closest('.accordion-container').find('.accordion-content').slideToggle(200);
-    });
-
-    $('.accordion .grid').on('click', function(){
-        $(this).closest('.accordion-container')
-            .removeClass('accordion-list')
-            .addClass('accordion-grid');
-    });
-
-    $('.list-view').on('click', function(){
-        $(this).closest('.accordion-container')
-            .removeClass('accordion-grid')
-            .addClass('accordion-list');
-    });
-
-})(jQuery, window);
+}(jQuery));
