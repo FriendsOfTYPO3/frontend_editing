@@ -1,7 +1,27 @@
 @import "Constants";
 
 *[contenteditable="true"] {
-	&:focus{
-		outline: 3px dotted #FF8700;
-	}
+  &:focus{
+    outline: 3px dotted $orange-primary;
+  }
+}
+
+.#{$t3-frontend}inline-actions {
+  visibility: hidden;
+  background: $orange-primary;
+  height: 26px;
+  display: block;
+  width: 60px;
+  margin: 0 0 0 auto;
+  padding: 0;
+
+  .icon {
+    &:hover {
+     cursor: pointer;
+    }
+  }
+
+  .icon-actions-edit-delete {
+    margin-left: 2px;
+  }
 }

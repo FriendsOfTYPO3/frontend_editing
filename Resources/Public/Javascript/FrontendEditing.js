@@ -1,16 +1,5 @@
 (function($, w){
 
-    var pageUrl = window.location.protocol + '//' + window.location.host;
-    var functionRoutes = {
-        'crud': '?type=1470741815',
-        'pageTreeCrud': '?type=1477569731'
-    };
-    var localStorageKey = 'TYPO3:FrontendEditing';
-    var toastrOptions = {
-        'positionClass': 'toast-top-left',
-        'preventDuplicates': true
-    };
-
     // Saving content
     $('.t3-frontend-editing__save').click(function() {
         var items = localStorage.getItem(localStorageKey);
@@ -31,7 +20,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: pageUrl + functionRoutes.crud,
+                    url: pageUrl + functionRoutes.crud.url + 'update',
                     dataType: 'JSON',
                     data: data
                 }).done(function(data, textStatus, jqXHR) {
