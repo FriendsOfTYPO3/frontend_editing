@@ -4,19 +4,6 @@
 
 <script type="text/javascript">
 	var iframeUrl = "{iframeUrl -> f:format.raw()}";
-	var pageUrl = window.location.protocol + '//' + window.location.host;
-	var functionRoutes = {
-		'crud': {
-			'prefix': '&tx_frontendediting_frontend_editing',
-			'url': '?type=1470741815&tx_frontendediting_frontend_editing[controller]Crud&tx_frontendediting_frontend_editing[action]='
-		},
-		'pageTreeCrud': '?type=1477569731'
-	};
-	var localStorageKey = 'TYPO3:FrontendEditing';
-	var toastrOptions = {
-		'positionClass': 'toast-top-left',
-		'preventDuplicates': true
-	};
 	var inlineActionButtonsClass = '.t3-frontend-editing__inline-actions';
 	var contentSaveTitleLabel = "{f:translate(key: 'notifications.save-title', extensionName: 'FrontendEditing')}";
 	var contentSaveDescriptionLabel= "{f:translate(key: 'notifications.save-description', extensionName: 'FrontendEditing')}";
@@ -36,4 +23,8 @@
 </div>
 
 <script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>
-<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/InlineEditing.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.Storage.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.Crud.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.GUI.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/Editor.js" type="text/javascript"></script>
+<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/Main.js" type="text/javascript"></script>
