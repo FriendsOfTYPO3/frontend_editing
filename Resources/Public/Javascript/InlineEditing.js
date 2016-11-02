@@ -64,7 +64,7 @@
 			var that = $(this);
 			// Inline editing -> delete action
 			that.prev().find('.icon-actions-edit-delete').click(function() {
-				/*var requestUrl = pageUrl + functionRoutes.crud.url + 'delete'
+				var requestUrl = pageUrl + functionRoutes.crud.url + 'delete'
 					+ functionRoutes.crud.prefix + '[table]=' + that.data('table')
 					+ functionRoutes.crud.prefix + '[uid]=' + that.data('uid');
 				$.ajax({
@@ -83,8 +83,7 @@
 						contentSaveWentWrongLabel,
 						toastrOptions
 					);
-				});*/
-				console.log('NICE!');
+				});
 			});
 		});
 
