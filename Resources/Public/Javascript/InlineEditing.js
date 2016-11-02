@@ -64,18 +64,18 @@
 			var that = $(this);
 			// Inline editing -> delete action
 			that.prev().find('.icon-actions-edit-delete').click(function() {
-				var requestUrl = pageUrl + functionRoutes.crud.url + 'delete'
+				/*var requestUrl = pageUrl + functionRoutes.crud.url + 'delete'
 					+ functionRoutes.crud.prefix + '[table]=' + that.data('table')
 					+ functionRoutes.crud.prefix + '[uid]=' + that.data('uid');
 				$.ajax({
 					type: 'GET',
 					url: requestUrl
 				}).done(function(data, textStatus, jqXHR) {
-					/*toastr.success(
+					toastr.success(
 						contentSaveDescriptionLabel + data.message,
 						contentSaveTitleLabel,
 						toastrOptions
-					);*/
+					);
 					alert('STUFF DELETED!!!');
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					toastr.error(
@@ -83,7 +83,8 @@
 						contentSaveWentWrongLabel,
 						toastrOptions
 					);
-				});
+				});*/
+				console.log('NICE!');
 			});
 		});
 
@@ -100,11 +101,11 @@
 			var editor = event.editor;
 
 			editor.editable().on('click', function(event) {
-				$(event.sender.$).prev().css('display', 'block');
+				$(event.sender.$).prev().css('visibility', 'visible');
 			});
 
 			editor.editable().on('blur', function(event) {
-				$(event.sender.$).prev().css('display', 'none');
+				$(event.sender.$).prev().css('visibility', 'hidden');
 			});
 
 			editor.on('change', function(changeEvent) {

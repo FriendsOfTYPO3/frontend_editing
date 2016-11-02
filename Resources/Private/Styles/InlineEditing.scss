@@ -7,10 +7,10 @@
 }
 
 .#{$t3-frontend}inline-actions {
-  //visibility: hidden;
+  visibility: hidden;
   background: $orange-primary;
   height: 26px;
-  display: none;
+  display: block;
   width: 60px;
   margin: 0 0 0 auto;
   padding: 0;

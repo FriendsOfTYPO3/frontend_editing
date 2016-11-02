@@ -3,9 +3,10 @@
   outline: 3px dotted #FF8700; }
 
 .t3-frontend-editing__inline-actions {
+  visibility: hidden;
   background: #FF8700;
   height: 26px;
-  display: none;
+  display: block;
   width: 60px;
   margin: 0 0 0 auto;
   padding: 0;
