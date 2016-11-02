@@ -24,12 +24,12 @@ var FrontendEditing = (function($){
         for (var key in events) {
             this[key] = events[key];
         }
-    };
+    }
 
     // Public API
     FrontendEditing.prototype = {
         init: function(options) {
-            // Create an array of listeners for every event and assign it to the intance
+            // Create an array of listeners for every event and assign it to the instance
             for (var key in FrontendEditing.events) {
                 listeners[events[key]] = [];
                 this[key] = events[key];
@@ -102,7 +102,7 @@ var FrontendEditing = (function($){
             $.ajax({
                 type: 'GET',
                 url: url,
-                dataType: 'JSON',
+                dataType: 'JSON'
             })
             .done(done)
             .fail(fail)

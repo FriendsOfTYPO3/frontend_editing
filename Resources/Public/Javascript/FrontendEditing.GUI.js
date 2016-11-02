@@ -16,7 +16,7 @@
     var messageTypes = {
         OK: 'OK',
         ERROR: 'ERROR',
-        WARNING: 'WARNING',
+        WARNING: 'WARNING'
     };
 
     var toastrOptions = {
@@ -166,7 +166,7 @@
 
     function refreshIframe() {
         loadPageIntoIframe(iframeUrl, iframeLoadedCallback);
-    };
+    }
 
     function showLoadingScreen() {
         $loadingScreen.removeClass(CLASS_HIDDEN);
@@ -178,7 +178,7 @@
 
     function flashMessage(type, title, message) {
         var toastrFunction;
-        switch(type) {
+        switch (type) {
             case messageTypes.OK:
                 toastrFunction = 'success';
                 break;
