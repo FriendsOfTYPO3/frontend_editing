@@ -101,10 +101,17 @@
 			var editor = event.editor;
 
 			editor.editable().on('click', function(event) {
-				$(event.sender.$).prev().css('visibility', 'visible');
+				// Move inline action icons into the content editable div
+				$.when($(event.sender.$).prepend($(event.sender.$).prev(inlineActionButtonsClass))).done(function() {
+					// Then set the icons to be visible
+					$(event.sender.$).find(inlineActionButtonsClass).css('visibility', 'visible');
+				});
 			});
 
 			editor.editable().on('blur', function(event) {
+				// Once again move the inline action icons back to outside the content editable div
+				$(event.sender.$).before($(event.sender.$).find(inlineActionButtonsClass));
+				// The hide the icons once again
 				$(event.sender.$).prev().css('visibility', 'hidden');
 			});
 

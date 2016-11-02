@@ -9,9 +9,7 @@
   display: block;
   width: 60px;
   margin: 0 0 0 auto;
-  padding: 0;
-  position: relative;
-  top: -3px; }
+  padding: 0; }
   .t3-frontend-editing__inline-actions .icon:hover {
     cursor: pointer; }
   .t3-frontend-editing__inline-actions .icon-actions-edit-delete {
