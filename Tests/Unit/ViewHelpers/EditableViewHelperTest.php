@@ -46,7 +46,7 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
         $mockTagBuilder = $this->getMockBuilder(TagBuilder::class)
             ->setMethods(['setTagName'])
             ->getMock();
-        $mockTagBuilder->expects($this->once())->method('setTagName')->with('div');
+        $mockTagBuilder->expects($this->once())->method('setTagName')->with('');
         $this->viewHelper->_set('tag', $mockTagBuilder);
 
         $this->viewHelper->expects($this->once())
@@ -74,12 +74,6 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
 
         $this->viewHelper->setRenderChildrenClosure(
             function () {
-                return 'default';
-            }
-        );
-
-        $this->viewHelper->setRenderChildrenClosure(
-            function () {
                 return $this->fixtures->getContent();
             }
         );
@@ -97,7 +91,7 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
         $actualResult = $this->viewHelper->initializeArgumentsAndRender();
 
         $this->assertEquals(
-            '<div>' . $this->fixtures->getWrappedExpectedContent() . '</div>',
+            $this->fixtures->getWrappedExpectedContent(),
             $actualResult
         );
     }
