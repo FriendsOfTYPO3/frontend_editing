@@ -109,7 +109,8 @@ class ContentPostProc
                     'iframeUrl' => $iframeUrl,
                     'pageTree' => $this->getPageTreeStructure(),
                     'currentTime' => time(),
-                    'contentItems' => $this->getContentItems()
+                    'contentItems' => $this->getContentItems(),
+                    'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay']
                 ]);
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();

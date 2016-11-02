@@ -438,6 +438,33 @@
   z-index: 10999;
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   text-transform: uppercase; }
+  .t3-frontend-editing__right-bar.t3-frontend-editing__right-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); }
+    .t3-frontend-editing__right-bar.t3-frontend-editing__right-overlay.open .top-right-title .icon-icons-arrow-double {
+      -webkit-transition: left 0.2s;
+      -moz-transition: left 0.2s;
+      -ms-transition: left 0.2s;
+      -o-transition: left 0.2s;
+      transition: left 0.2s;
+      -webkit-transition-duration: 0.2s;
+      -moz-transition-duration: 0.2s;
+      -ms-transition-duration: 0.2s;
+      -o-transition-duration: 0.2s;
+      transition-duration: 0.2s;
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -moz-transform-origin: center;
+      -o-transform-origin: center;
+      -ms-transform-origin: center;
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      left: 0;
+      color: #fff; }
   .t3-frontend-editing__right-bar .top-right-bar-wrapper {
     height: calc(100vh - 45px);
     max-height: calc(100vh - 45px);
@@ -715,6 +742,8 @@
   margin-right: 310px;
   position: relative;
   width: 100%; }
+  .t3-frontend-editing__iframe-wrapper.t3-frontend-editing__iframe-overlay.push-toleft-iframe {
+    width: 100%; }
   .t3-frontend-editing__iframe-wrapper.push-toleft-iframe {
     -webkit-transition: width 0.2s;
     -moz-transition: width 0.2s;

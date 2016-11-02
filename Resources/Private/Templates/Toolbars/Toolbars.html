@@ -13,7 +13,7 @@
 	var contentUnsavedChangesLabel = "{f:translate(key: 'notifications.unsaved-changes', extensionName: 'FrontendEditing')}";
 </script>
 
-<div class="t3-frontend-editing__iframe-wrapper inactive">
+<div class="t3-frontend-editing__iframe-wrapper inactive {f:if(condition:overlayOption, then: 't3-frontend-editing__iframe-overlay')}">
 	<iframe src="" frameborder="0" border="0"></iframe>
 </div>
 
