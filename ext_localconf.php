@@ -57,21 +57,21 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
 }
 
 /**
- * Frontend plugin
+ * Frontend plugins
  */
+// Content crud actions
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing',
     [
-        'Crud' => 'save, read, delete',
-        'PageTreeCrud' => 'update, save, read, delete'
+        'Crud' => 'update, delete, moveContent'
     ],
     [
-        'Crud' => 'save, read, delete',
-        'PageTreeCrud' => 'update, save, read, delete'
+        'Crud' => 'update, delete, moveContent'
     ]
 );
 
+// Page tree crud actions
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'TYPO3\CMS.' . $_EXTKEY,
     'frontend_editing_page_tree',
@@ -79,6 +79,6 @@ if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
         'PageTreeCrud' => 'update, save, read, delete'
     ],
     [
-        'Crud' => 'save, read, delete'
+        'PageTreeCrud' => 'update, save, read, delete'
     ]
 );

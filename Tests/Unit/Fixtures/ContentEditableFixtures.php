@@ -1,6 +1,8 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
 
+use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+
 /**
  * Fixtures for ContentEditableProperties
  */
@@ -67,7 +69,9 @@ class ContentEditableFixtures
     public function getWrappedExpectedContent()
     {
         $expectedOutput = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<span class="t3-frontend-editing__inline-actions">%s</span>' .
+                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            ContentEditableWrapper::renderInlineActionIcons(),
             $this->table,
             $this->field,
             $this->uid,

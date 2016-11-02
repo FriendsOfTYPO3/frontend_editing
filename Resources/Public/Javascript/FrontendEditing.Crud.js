@@ -4,10 +4,10 @@
 
     // Extend FrontendEditing with additional events
     var events = {
-        SAVE_START: 'SAVE_START',
-        SAVE_CONTENT_COMPLETE: 'SAVE_CONTENT_COMPLETE',
-        SAVE_COMPLETE: 'SAVE_COMPLETE',
-        SAVE_ERROR: 'SAVE_ERROR'
+        REQUEST_START: 'REQUEST_START',
+        REQUEST_COMPLETE: 'REQUEST_COMPLETE',
+        UPDATE_CONTENT_COMPLETE: 'UPDATE_CONTENT_COMPLETE',
+        REQUEST_ERROR: 'REQUEST_ERROR'
     };
 
     // Add custom events to FrontendEditing
@@ -17,13 +17,56 @@
 
     // Extend FrontendEditing with the following functions
     FrontendEditing.prototype.saveAll = saveAll;
+    FrontendEditing.prototype.delete = deleteRecord;
 
+    var numberOfRequestsLeft;
     var pageUrl = window.location.protocol + '//' + window.location.host;
-    var numberOfPostRequests;
     var functionRoutes = {
-        'crud': '?type=1470741815',
+        'crud': {
+            'prefix': 'tx_frontendediting_frontend_editing',
+            'url': '?type=1470741815&tx_frontendediting_frontend_editing[controller]=Crud&tx_frontendediting_frontend_editing[action]='
+        },
         'pageTreeCrud': '?type=1477569731'
     };
+
+    function getCrudUrl(action, data) {
+        var url = pageUrl + functionRoutes.crud.url + action;
+        for (var key in data) {
+            url += '&' + functionRoutes.crud.prefix + '[' + key + ']=' + data[key];
+        }
+        return url;
+    };
+
+    function deleteRecord(uid, table) {
+        this.trigger(F.REQUEST_START);
+
+        var url = getCrudUrl('delete', {
+            uid: uid,
+            table: table
+        });
+
+        F.get(url, {
+            done: function(data) {
+                F.trigger(
+                    F.UPDATE_CONTENT_COMPLETE,
+                    {  
+                        message: data.message
+                    } 
+                );
+            },
+            fail: function(jqXHR, textStatus, errorThrown) {
+                F.trigger(
+                    F.REQUEST_ERROR,
+                    {  
+                        message: jqXHR.responseText,
+                    } 
+                );
+            },
+            always: function() {
+                F.trigger(F.REQUEST_COMPLETE);
+            }
+        });
+    }
 
     function saveAll() {
         var storage = F.getStorage();
@@ -32,10 +75,9 @@
             return this.error('Function saveAll called but no items to save');
         }
 
-        this.trigger(F.SAVE_START);
+        F.trigger(F.REQUEST_START);
 
-        var _this = this;
-        numberOfPostRequests = items.count();
+        numberOfRequestsLeft = items.count();
         items.forEach(function(item) {
             var data = {
                 'action': item.action,
@@ -44,32 +86,30 @@
                 'field': item.field,
                 'content': CKEDITOR.instances[item.editorInstance].getData()
             };
-            _this.post(
-                functionRoutes.crud,
-                data,
-                {
+            F.post(
+                getCrudUrl('update'), data, {
                     done: function(data) {
-                        _this.trigger(
-                            F.SAVE_CONTENT_COMPLETE,
+                        F.trigger(
+                            F.UPDATE_CONTENT_COMPLETE,
                             {  
-                                uid: parseInt(data.message)
+                                message: data.message
                             } 
                         );
                     },
                     fail: function(jqXHR, textStatus, errorThrown) {
-                        _this.trigger(
-                            F.SAVE_ERROR,
+                        F.trigger(
+                            F.REQUEST_ERROR,
                             {  
-                                message: jqXHR.responseText,
+                                message: jqXHR.responseText
                             } 
                         );
                     },
                     always: function() {
-                        numberOfPostRequests--;
-                        if (numberOfPostRequests === 0) {
+                        numberOfRequestsLeft--;
+                        if (numberOfRequestsLeft === 0) {
                             storage.clear();
-                            _this.trigger(F.SAVE_COMPLETE);
-                            _this.trigger(F.CONTENT_CHANGE);
+                            F.trigger(F.REQUEST_COMPLETE);
+                            F.trigger(F.CONTENT_CHANGE);
                         }
                     }
                 }

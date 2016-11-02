@@ -55,14 +55,12 @@ var FrontendEditing = (function($){
         confirm: function(message) {
             return confirm(message);
         },
-        on: function(events, callback) {
+        on: function(event, callback) {
             if (typeof callback === 'function') {
-                if (Array.isArray(events)) {
-                    for (var i = 0; i < events.length; i++) {
-                        listeners[events[i]].push(callback);
-                    }
+                if (listeners[event]) {
+                    listeners[event].push(callback);
                 } else {
-                    listeners[events].push(callback);
+                    this.error('On called with invalid event:', event);
                 }
             } else {
                 this.error('Callback is not a function');
@@ -90,6 +88,21 @@ var FrontendEditing = (function($){
                 url: url,
                 dataType: 'JSON',
                 data: data
+            })
+            .done(done)
+            .fail(fail)
+            .always(always);
+        },
+        get: function(url, callbacks) {
+            callbacks = callbacks || {};
+            var done = callbacks.done || function(){};
+            var fail = callbacks.fail || function(){};
+            var always = callbacks.always || function(){};
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'JSON',
             })
             .done(done)
             .fail(fail)

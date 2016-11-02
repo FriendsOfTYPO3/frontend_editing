@@ -44,25 +44,25 @@
     }
 
     function initListeners() {
-        F.on(F.SAVE_START, function() {
+        F.on(F.REQUEST_START, function() {
             showLoadingScreen();
         });
 
-        F.on(F.SAVE_CONTENT_COMPLETE, function(data) {
+        F.on(F.UPDATE_CONTENT_COMPLETE, function(data) {
             showSuccess(
                 contentSaveTitleLabel,
-                contentSaveDescriptionLabel + data.uid
+                data.message
             );
         });
 
-        F.on(F.SAVE_ERROR, function(data) {
+        F.on(F.REQUEST_ERROR, function(data) {
             showError(
                 data.message,
                 contentSaveWentWrongLabel
             );
         });
 
-        F.on(F.SAVE_COMPLETE, function() {
+        F.on(F.REQUEST_COMPLETE, function() {
             refreshIframe();
         });
 

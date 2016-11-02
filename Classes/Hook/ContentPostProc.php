@@ -102,15 +102,24 @@ class ContentPostProc
                 $view->setPartialRootPaths([
                     10 => $partialPath
                 ]);
-                $view->assignMultiple([
+
+                $icons = [
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
-                    'userName' => $GLOBALS['BE_USER']->user['username'],
-                    'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-                    'iframeUrl' => $iframeUrl,
-                    'pageTree' => $this->getPageTreeStructure(),
-                    'currentTime' => time(),
-                    'contentItems' => $this->getContentItems()
-                ]);
+                    'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
+                ];
+
+                $view->assignMultiple(
+                    array_merge(
+                        [
+                            'userName' => $GLOBALS['BE_USER']->user['username'],
+                            'iframeUrl' => $iframeUrl,
+                            'pageTree' => $this->getPageTreeStructure(),
+                            'currentTime' => time(),
+                            'contentItems' => $this->getContentItems()
+                        ],
+                        $icons
+                    )
+                );
                 $view->getRenderingContext()->setLegacyMode(false);
                 $renderedHtml = $view->render();
 

@@ -22,7 +22,7 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     protected function setUp()
     {
         $this->subject = $this->getMockBuilder(CrudController::class)
-            ->setMethods(['save'])->getMock();
+            ->setMethods(['update'])->getMock();
     }
 
     /**
@@ -61,7 +61,7 @@ class CrudControllerTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
     public function tryWrapContentAndExpectAnException()
     {
         try {
-            $this->subject->saveAction();
+            $this->subject->updateAction();
         } catch (\Exception $exception) {
             $this->assertEquals($exception->getMessage(), 'throwStatus() only supports web requests.');
             return;
