@@ -80,7 +80,7 @@
 
   &.push-toleft {
     transition: cubic-bezier(0, 0, 0, 0) .2s;
-    right: 310px;
+    right: $right-bar-width;
     position: relative;
 
     .top-bar-items {

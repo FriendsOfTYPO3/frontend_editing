@@ -104,7 +104,7 @@
         $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
         $('.t3-frontend-editing__right-bar').toggleClass('open');
         t = ++t % 2;
-        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -310 }, 200);
+        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
     });
 
     $('.left-bar-button').on('click', function() {

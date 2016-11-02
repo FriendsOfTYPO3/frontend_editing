@@ -15,22 +15,6 @@
     background: $transparent-opacity;
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-
-      &.open {
-
-    .top-right-title {
-
-      .icon-icons-arrow-double {
-        @include transition(left .2s);
-        @include transition-duration(.2s);
-        @include rotate(0);
-        @include transform-origin (center);
-        left: 0;
-        color: $white;
-      }
-    }
-  }
-  
   }
 
   .top-right-bar-wrapper {
@@ -77,7 +61,7 @@
     text-align: right;
     background-color: $header-top-bg-color;
     height: $top-bar-height;
-    position: fixed;
+    position: absolute;
     margin-top: -$top-bar-height;
     width: $right-bar-width;
     z-index: 1;
