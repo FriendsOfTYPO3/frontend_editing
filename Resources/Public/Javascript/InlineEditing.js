@@ -15,7 +15,6 @@
 		]
 	};
 
-	var localStorageKey = 'TYPO3:FrontendEditing';
 	// Clear local storage on page load
 	localStorage.removeItem(localStorageKey);
 
@@ -62,6 +61,30 @@
 		// Add custom configuration to ckeditor
 		$('.t3-frontend-editing__iframe-wrapper iframe').contents().find('div[contenteditable=\'true\']').each(function() {
 			$(this).ckeditor(editorConfig);
+			var that = $(this);
+			// Inline editing -> delete action
+			that.prev().find('.icon-actions-edit-delete').click(function() {
+				var requestUrl = pageUrl + functionRoutes.crud.url + 'delete'
+					+ functionRoutes.crud.prefix + '[table]=' + that.data('table')
+					+ functionRoutes.crud.prefix + '[uid]=' + that.data('uid');
+				$.ajax({
+					type: 'GET',
+					url: requestUrl
+				}).done(function(data, textStatus, jqXHR) {
+					toastr.success(
+						contentSaveDescriptionLabel + data.message,
+						contentSaveTitleLabel,
+						toastrOptions
+					);
+					alert('STUFF DELETED!!!');
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					toastr.error(
+						jqXHR.responseText,
+						contentSaveWentWrongLabel,
+						toastrOptions
+					);
+				});
+			});
 		});
 
 		$('.t3-frontend-editing__loading-screen').toggle('hidden');
@@ -75,6 +98,22 @@
 			});
 
 			var editor = event.editor;
+
+			editor.editable().on('click', function(event) {
+				// Move inline action icons into the content editable div
+				$.when($(event.sender.$).prepend($(event.sender.$).prev(inlineActionButtonsClass))).done(function() {
+					// Then set the icons to be visible
+					$(event.sender.$).find(inlineActionButtonsClass).css('visibility', 'visible');
+				});
+			});
+
+			editor.editable().on('blur', function(event) {
+				// Once again move the inline action icons back to outside the content editable div
+				$(event.sender.$).before($(event.sender.$).find(inlineActionButtonsClass));
+				// The hide the icons once again
+				$(event.sender.$).prev().css('visibility', 'hidden');
+			});
+
 			editor.on('change', function(changeEvent) {
 				if (typeof editor.element !== 'undefined') {
 					var dataSet = editor.element.$.dataset;

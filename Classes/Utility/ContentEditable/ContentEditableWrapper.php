@@ -1,6 +1,10 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Utility\ContentEditable;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+
 /**
  * Class ContentEditableWrapper
  * A class for adding wrapping for a content element to be editable
@@ -32,7 +36,9 @@ class ContentEditableWrapper
         }
 
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<span class="t3-frontend-editing__inline-actions">%s</span>' .
+                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            self::renderInlineActionIcons(),
             $table,
             $field,
             $uid,
@@ -40,5 +46,22 @@ class ContentEditableWrapper
         );
 
         return $content;
+    }
+
+    /**
+     * Renders the inline action icons
+     *
+     * @return string
+     */
+    public static function renderInlineActionIcons()
+    {
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+
+        $inlineIcons =
+            $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
+            $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
+            $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();
+
+        return $inlineIcons;
     }
 }
