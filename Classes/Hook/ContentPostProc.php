@@ -79,7 +79,7 @@ class ContentPostProc
                 ;
 
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
-                $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+                $configurationManager = $objectManager->get(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class);
                 $settings = $configurationManager->getConfiguration(
                     \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
                 );
@@ -139,7 +139,7 @@ class ContentPostProc
      */
     protected function getLocalizedFrontendLabels()
     {
-        $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
+        $languageFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Localization\LocalizationFactory::class);
         $parsedLocallang = $languageFactory->getParsedData(
             'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
             'default'
