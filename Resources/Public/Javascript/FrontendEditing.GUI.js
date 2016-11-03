@@ -10,6 +10,7 @@
     FrontendEditing.prototype.showSuccess = showSuccess;
     FrontendEditing.prototype.showError = showError;
     FrontendEditing.prototype.showWarning = showWarning;
+    FrontendEditing.prototype.confirm = confirm;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -202,6 +203,17 @@
     }
     function showWarning (message, title) {
         flashMessage(messageTypes.WARNING, message, title);
+    }
+    function confirm(message) {
+        // confirm dialog
+        return alertify
+        .confirm(message, function () {
+            // user clicked "ok"
+            return true;
+        }, function() {
+            return false;
+            // user clicked "cancel"
+        });
     }
 
 }(jQuery));
