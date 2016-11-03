@@ -79,7 +79,9 @@ class ContentPostProc
                 ;
 
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
-                $configurationManager = $objectManager->get(\TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class);
+                $configurationManager = $objectManager->get(
+                    \TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class
+                );
                 $settings = $configurationManager->getConfiguration(
                     \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
                 );
