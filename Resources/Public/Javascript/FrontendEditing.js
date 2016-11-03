@@ -71,7 +71,7 @@ var FrontendEditing = (function($){
                 if (this.getStorage().isEmpty()) {
                     window.location.href = linkUrl;
                 } else {
-                    if (confirm(contentUnsavedChangesLabel)) {
+                    if (this.confirm(contentUnsavedChangesLabel)) {
                         window.location.href = linkUrl;
                     }
                 }
