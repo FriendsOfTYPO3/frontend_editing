@@ -2,7 +2,7 @@
   "_args": [
     [
       "immutable@^3.8",
-      "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
+      "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
   "_from": "immutable@>=3.8.0 <4.0.0",
@@ -36,7 +36,7 @@
   "_shasum": "200807f11ab0f72710ea485542de088075f68cd2",
   "_shrinkwrap": null,
   "_spec": "immutable@^3.8",
-  "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
+  "_where": "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing",
   "author": {
     "name": "Lee Byron",
     "url": "https://github.com/leebyron"
@@ -105,11 +105,11 @@
     "node": ">=0.10.0"
   },
   "files": [
-    "dist",
-    "contrib",
-    "README.md",
     "LICENSE",
-    "PATENTS"
+    "PATENTS",
+    "README.md",
+    "contrib",
+    "dist"
   ],
   "gitHead": "e96d73f7e1fbeff00d03b09aa4352e04de61abb3",
   "homepage": "https://facebook.github.com/immutable-js",
@@ -122,23 +122,23 @@
     ]
   },
   "keywords": [
-    "immutable",
-    "persistent",
-    "lazy",
+    "collection",
     "data",
     "datastructure",
     "functional",
-    "collection",
-    "stateless",
+    "immutable",
+    "iteration",
+    "lazy",
+    "persistent",
     "sequence",
-    "iteration"
+    "stateless"
   ],
   "license": "BSD-3-Clause",
   "main": "dist/immutable.js",
   "maintainers": [
     {
-      "email": "lee@leebyron.com",
-      "name": "leebyron"
+      "name": "leebyron",
+      "email": "lee@leebyron.com"
     }
   ],
   "name": "immutable",
