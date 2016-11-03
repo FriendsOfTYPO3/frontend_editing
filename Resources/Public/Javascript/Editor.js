@@ -1,4 +1,4 @@
-var Editor = (function($, FE){
+var Editor = (function($){
 
     "use strict";
 
@@ -103,4 +103,4 @@ var Editor = (function($, FE){
         init: init,
     }
 
-})(jQuery, FrontendEditing);
+})(jQuery);
