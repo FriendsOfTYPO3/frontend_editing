@@ -4,16 +4,14 @@
 
     // The global F object for API calls
     window.F = new FrontendEditing({
-
         // LocalStorage for changes in editors
-        storage: new FrontendEditing.Storage('TYPO3:FrontendEditing'),
-
+        storage: new FrontendEditing.Storage('TYPO3:FrontendEditing')
     });
 
     // Initialize the GUI
     F.initGUI({
         iframeUrl: iframeUrl,
-        iframeLoadedCallback: Editor.init,
+        iframeLoadedCallback: Editor.init
     });
 
 })(window);

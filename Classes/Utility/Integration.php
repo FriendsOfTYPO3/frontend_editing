@@ -29,42 +29,6 @@ class Integration
     }
 
     /**
-     * Remove staged changes
-     *
-     * @param integer $id page uid
-     * @return void
-     */
-    public static function removeStagedElements($id)
-    {
-        /*if (\Pixelant\Aloha\Utility\Access::isEnabled()) {
-            $GLOBALS['BE_USER']->uc['aloha'][$id] = array();
-            $GLOBALS['BE_USER']->writeUC();
-        }*/
-    }
-
-    /**
-     * Render an element (div/span) around given content,
-     * including given attributes
-     *
-     * @param string $content
-     * @param array $attributes
-     * @param string $tag
-     * @return string
-     */
-    public static function renderAlohaWrap($content, array $attributes, $tag = '')
-    {
-        $tag = (empty($tag)) ? 'div' : $tag;
-
-        $attributesAsString = '';
-        foreach ($attributes as $attributeKey => $value) {
-            if (!empty($value)) {
-                $attributesAsString .= ' ' . $attributeKey . '="' . htmlspecialchars($value) . '"';
-            }
-        }
-        return '<' . $tag . $attributesAsString . '>' . $content . '</' . $tag . '>';
-    }
-
-    /**
      * Modify content if it is RTE base by using RteHtmlParser functions
      *
      * @param string $table table name
@@ -104,12 +68,12 @@ class Integration
      * Returns the row of a record given by $table and $id and $fieldList (list of fields, may be '*')
      * NOTICE: No check for deleted or access!
      *
-     * @param    string        Table name
-     * @param    integer        UID of the record from $table
-     * @param    string        Field list for the SELECT query, eg. "*" or "uid,pid,..."
-     * @return    mixed        Returns the selected record on success, otherwise FALSE.
+     * @param string $table
+     * @param integer $id
+     * @param string $fieldList field list for the SELECT query, eg. "*" or "uid,pid,..."
+     * @return mixed Returns the selected record on success, otherwise false.
      */
-    private static function recordInfo($table, $id, $fieldList = '*')
+    public static function recordInfo($table, $id, $fieldList = '*')
     {
         if (is_array($GLOBALS['TCA'][$table])) {
             $record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow($fieldList, $table, 'uid=' . intval($id));
