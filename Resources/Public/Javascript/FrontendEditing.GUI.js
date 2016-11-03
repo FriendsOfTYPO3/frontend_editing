@@ -50,8 +50,8 @@
 
         F.on(F.UPDATE_CONTENT_COMPLETE, function(data) {
             showSuccess(
-                contentSaveTitleLabel,
-                data.message
+                data.message,
+                contentSaveTitleLabel
             );
         });
 
@@ -82,8 +82,8 @@
                 F.saveAll();
             } else {
                 showWarning(
-                    contentNoChangesTitleLabel, 
-                    contentNoChangesDescriptionLabel
+                    contentNoChangesDescriptionLabel,
+                    contentNoChangesTitleLabel
                 );
             }
         });
@@ -176,7 +176,7 @@
         $loadingScreen.addClass(CLASS_HIDDEN);
     }
 
-    function flashMessage(type, title, message) {
+    function flashMessage(type, message, title) {
         var toastrFunction;
         switch(type) {
             case messageTypes.OK:
@@ -194,14 +194,14 @@
         toastr[toastrFunction](message, title, toastrOptions);
     }
 
-    function showSuccess(title, message) {
-        flashMessage(messageTypes.OK, title, message);
+    function showSuccess(message, title) {
+        flashMessage(messageTypes.OK, message, title);
     }
-    function showError (title, message) {
-        flashMessage(messageTypes.ERROR, title, message);
+    function showError (message, title) {
+        flashMessage(messageTypes.ERROR, message, title);
     }
-    function showWarning (title, message) {
-        flashMessage(messageTypes.WARNING, title, message);
+    function showWarning (message, title) {
+        flashMessage(messageTypes.WARNING, message, title);
     }
 
 }(jQuery));
