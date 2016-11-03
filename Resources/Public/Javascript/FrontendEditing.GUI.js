@@ -51,14 +51,14 @@
         F.on(F.UPDATE_CONTENT_COMPLETE, function(data) {
             showSuccess(
                 data.message,
-                contentSaveTitleLabel
+                F.translate('notifications.save-title')
             );
         });
 
         F.on(F.REQUEST_ERROR, function(data) {
             showError(
                 data.message,
-                contentSaveWentWrongLabel
+                F.translate('notifications.save-went-wrong')
             );
         });
 
@@ -82,14 +82,14 @@
                 F.saveAll();
             } else {
                 showWarning(
-                    contentNoChangesDescriptionLabel,
-                    contentNoChangesTitleLabel
+                    F.translate('notifications.no-changes-description'),
+                    F.translate('notifications.no-changes-title')
                 );
             }
         });
 
         $('.t3-frontend-editing__discard').on('click', function() {
-            if (!storage.isEmpty() && F.confirm(contentRemoveAllChangesLabel)){
+            if (!storage.isEmpty() && F.confirm(F.translate('notifications.remove-all-changes'))){
                 storage.clear();
                 F.refreshIframe();
                 F.trigger(F.CONTENT_CHANGE);
