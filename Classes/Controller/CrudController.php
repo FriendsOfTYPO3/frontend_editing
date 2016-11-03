@@ -297,7 +297,7 @@ class CrudController extends ActionController
 
             $message = [
                 'success' => true,
-                'message' => $this->uid
+                'message' => 'Content updated (' . $this->uid . ')'
             ];
         } catch (\Exception $exception) {
             $this->throwStatus(
