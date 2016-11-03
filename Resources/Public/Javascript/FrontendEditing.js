@@ -76,7 +76,7 @@ var FrontendEditing = (function($){
                 if (this.getStorage().isEmpty()) {
                     window.location.href = linkUrl;
                 } else {
-                    if (this.confirm(contentUnsavedChangesLabel)) {
+                    if (this.confirm(F.translate('notifications.unsaved-changes'))) {
                         window.location.href = linkUrl;
                     }
                 }
