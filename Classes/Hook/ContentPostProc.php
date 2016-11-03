@@ -6,6 +6,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
+use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class ContentPostProc
@@ -115,7 +116,8 @@ class ContentPostProc
                             'iframeUrl' => $iframeUrl,
                             'pageTree' => $this->getPageTreeStructure(),
                             'currentTime' => time(),
-                            'contentItems' => $this->getContentItems()
+                            'contentItems' => $this->getContentItems(),
+                            'languageLabels' => json_encode($this->getLocalizedFrontendLabels())
                         ],
                         $icons
                     )
@@ -128,6 +130,25 @@ class ContentPostProc
                 $parentObject->content = $output;
             }
         }
+    }
+
+    /**
+     * Returns an array with labels from translation file
+     *
+     * @return array
+     */
+    protected function getLocalizedFrontendLabels()
+    {
+        $languageFactory = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\LocalizationFactory');
+        $parsedLocallang = $languageFactory->getParsedData(
+            'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
+            'default'
+        );
+        $localizedLabels = [];
+        foreach (array_keys($parsedLocallang['default']) as $key) {
+            $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
+        }
+        return $localizedLabels;
     }
 
     /**

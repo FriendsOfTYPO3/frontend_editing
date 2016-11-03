@@ -2,9 +2,14 @@ var FrontendEditing = (function($){
 
     'use strict';
 
-    // Private variables
+    // Hold event listeners and the callbacks
     var listeners = {};
+
+    // LocalStorage for changes that are to be saved
     var storage = null;
+
+    // JSON object holding key => label for labels
+    var translationLabels = {};
 
     // Default for event-listening and triggering
     var events = {
@@ -75,6 +80,16 @@ var FrontendEditing = (function($){
                         window.location.href = linkUrl;
                     }
                 }
+            }
+        },
+        setTranslationLabels: function(labels) {
+            translationLabels = labels;
+        },
+        translate: function(key) {
+            if (translationLabels[key]) {
+                return translationLabels[key];
+            } else {
+                F.error('Invalid translation key: ' + key);
             }
         },
         post: function (url, data, callbacks) {
