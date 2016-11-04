@@ -85,7 +85,7 @@ var FrontendEditing = (function($){
                     window.location.href = linkUrl;
                 } else {
                     this.confirm(F.translate('notifications.unsaved-changes'), {
-                        yes: function(){
+                        yes: function() {
                             window.location.href = linkUrl;
                         }
                     });

@@ -108,6 +108,7 @@
         $('.t3-frontend-editing__page-tree li').click(function() {
             var linkUrl = $(this).data('url');
             F.navigate(linkUrl);
+            F.showLoadingScreen();
         });
 
         $('.right-bar-button').on('click', function () {
