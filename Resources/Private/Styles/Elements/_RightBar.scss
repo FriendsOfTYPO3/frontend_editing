@@ -11,6 +11,12 @@
   font-family: $font-family-base;
   text-transform: uppercase;
 
+  &.#{$t3-frontend}right-overlay {
+    background: $transparent-opacity;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
   .top-right-bar-wrapper {
     &::-webkit-scrollbar {
       width: 8px;
@@ -55,7 +61,7 @@
     text-align: right;
     background-color: $header-top-bg-color;
     height: $top-bar-height;
-    position: fixed;
+    position: absolute;
     margin-top: -$top-bar-height;
     width: $right-bar-width;
     z-index: 1;

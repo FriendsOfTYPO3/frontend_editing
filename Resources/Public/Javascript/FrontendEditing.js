@@ -104,9 +104,9 @@ var FrontendEditing = (function($){
                 dataType: 'JSON',
                 data: data
             })
-            .done(done)
-            .fail(fail)
-            .always(always);
+                .done(done)
+                .fail(fail)
+                .always(always);
         },
         get: function(url, callbacks) {
             callbacks = callbacks || {};
@@ -119,9 +119,9 @@ var FrontendEditing = (function($){
                 url: url,
                 dataType: 'JSON'
             })
-            .done(done)
-            .fail(fail)
-            .always(always);
+                .done(done)
+                .fail(fail)
+                .always(always);
         }
     };
 

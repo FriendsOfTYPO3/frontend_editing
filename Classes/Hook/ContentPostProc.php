@@ -119,6 +119,7 @@ class ContentPostProc
                             'pageTree' => $this->getPageTreeStructure(),
                             'currentTime' => time(),
                             'contentItems' => $this->getContentItems(),
+                            'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels())
                         ],
                         $icons

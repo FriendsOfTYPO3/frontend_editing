@@ -144,6 +144,8 @@
                 .removeClass('accordion-grid')
                 .addClass('accordion-list');
         });
+
+        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
     }
 
     function loadPageIntoIframe(url, callback) {

@@ -71,16 +71,19 @@
 }
 
 .#{$t3-frontend}top-bar-right {
+  @include transition(left .2s);
+  @include transition-duration(.2s);
   width: 50%;
   float: right;
   text-align: right;
   right: 0;
   position: relative;
-  transition: cubic-bezier(0, 0, 0, 0) .2s;
+
 
   &.push-toleft {
-    transition: cubic-bezier(0, 0, 0, 0) .2s;
-    right: 310px;
+    @include transition(right .2s);
+    @include transition-duration(.2s);
+    right: $right-bar-width;
     position: relative;
 
     .top-bar-items {

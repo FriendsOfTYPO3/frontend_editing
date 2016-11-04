@@ -1,4 +1,11 @@
 .#{$t3-frontend}iframe-wrapper {
+
+  &.#{$t3-frontend}iframe-overlay {
+    &.push-toleft-iframe  {
+      width: 100%;
+    }
+  }
+
   @include transition(width .2s);
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
@@ -64,4 +71,5 @@
 body {
   margin: 0;
   overflow-x: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
