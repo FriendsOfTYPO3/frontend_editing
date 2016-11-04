@@ -15,4 +15,4 @@ with the page tree.
 
 The settings can be changes in the Users personal settings:
 
- <img src="images/activate-rightbar-overlay.png" alt="Activate the right toolbar as overlay" />
+ <img src="../images/activate-rightbar-overlay.png" alt="Activate the right toolbar as overlay" />
