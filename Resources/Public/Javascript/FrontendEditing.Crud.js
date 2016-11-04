@@ -35,7 +35,7 @@
             url += '&' + functionRoutes.crud.prefix + '[' + key + ']=' + data[key];
         }
         return url;
-    };
+    }
 
     function deleteRecord(uid, table) {
         this.trigger(F.REQUEST_START);
@@ -58,7 +58,7 @@
                 F.trigger(
                     F.REQUEST_ERROR,
                     {  
-                        message: jqXHR.responseText,
+                        message: jqXHR.responseText
                     } 
                 );
             },

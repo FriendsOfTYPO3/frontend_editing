@@ -8,6 +8,8 @@ use TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess\RequestPreProcessInterfa
 use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Cache\CacheUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class CrudController
@@ -144,13 +146,6 @@ class CrudController extends ActionController
     {
         return $this->record;
     }
-
-    /**
-     * Resolves and checks the current action method name
-     *
-     * @return string Method name of the current action
-     */
-
 
     /**
      * Get the field configuration from a field list
@@ -320,7 +315,12 @@ class CrudController extends ActionController
     public function deleteAction($table, $uid)
     {
         try {
+            // Find the page (pid) on which the record exists
+            $pageUid = Integration::recordInfo($table, $uid, 'pid');
+            // Delete the record
             $this->dataHandler->deleteAction($table, $uid);
+            // Clear the page (pid) cache
+            CacheUtility::clearPageCache([$pageUid['pid']]);
 
             $message = [
                 'success' => true,

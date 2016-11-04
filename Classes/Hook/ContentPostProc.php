@@ -6,6 +6,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
+use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class ContentPostProc
@@ -78,7 +79,9 @@ class ContentPostProc
                 ;
 
                 $objectManager = new \TYPO3\CMS\Extbase\Object\ObjectManager();
-                $configurationManager = $objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManager');
+                $configurationManager = $objectManager->get(
+                    \TYPO3\CMS\Extbase\Configuration\ConfigurationManager::class
+                );
                 $settings = $configurationManager->getConfiguration(
                     \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
                 );
@@ -115,7 +118,9 @@ class ContentPostProc
                             'iframeUrl' => $iframeUrl,
                             'pageTree' => $this->getPageTreeStructure(),
                             'currentTime' => time(),
-                            'contentItems' => $this->getContentItems()
+                            'contentItems' => $this->getContentItems(),
+                            'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
+                            'languageLabels' => json_encode($this->getLocalizedFrontendLabels())
                         ],
                         $icons
                     )
@@ -128,6 +133,25 @@ class ContentPostProc
                 $parentObject->content = $output;
             }
         }
+    }
+
+    /**
+     * Returns an array with labels from translation file
+     *
+     * @return array
+     */
+    protected function getLocalizedFrontendLabels()
+    {
+        $languageFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Localization\LocalizationFactory::class);
+        $parsedLocallang = $languageFactory->getParsedData(
+            'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
+            'default'
+        );
+        $localizedLabels = [];
+        foreach (array_keys($parsedLocallang['default']) as $key) {
+            $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
+        }
+        return $localizedLabels;
     }
 
     /**

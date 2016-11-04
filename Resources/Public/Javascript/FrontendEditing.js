@@ -2,9 +2,14 @@ var FrontendEditing = (function($){
 
     'use strict';
 
-    // Private variables
+    // Hold event listeners and the callbacks
     var listeners = {};
+
+    // LocalStorage for changes that are to be saved
     var storage = null;
+
+    // JSON object holding key => label for labels
+    var translationLabels = {};
 
     // Default for event-listening and triggering
     var events = {
@@ -24,12 +29,12 @@ var FrontendEditing = (function($){
         for (var key in events) {
             this[key] = events[key];
         }
-    };
+    }
 
     // Public API
     FrontendEditing.prototype = {
         init: function(options) {
-            // Create an array of listeners for every event and assign it to the intance
+            // Create an array of listeners for every event and assign it to the instance
             for (var key in FrontendEditing.events) {
                 listeners[events[key]] = [];
                 this[key] = events[key];
@@ -79,12 +84,22 @@ var FrontendEditing = (function($){
                 if (this.getStorage().isEmpty()) {
                     window.location.href = linkUrl;
                 } else {
-                    this.confirm(contentUnsavedChangesLabel, {
+                    this.confirm(F.translate('notifications.unsaved-changes'), {
                         yes: function(){
                             window.location.href = linkUrl;
                         }
                     });
                 }
+            }
+        },
+        setTranslationLabels: function(labels) {
+            translationLabels = labels;
+        },
+        translate: function(key) {
+            if (translationLabels[key]) {
+                return translationLabels[key];
+            } else {
+                F.error('Invalid translation key: ' + key);
             }
         },
         post: function (url, data, callbacks) {
@@ -99,9 +114,9 @@ var FrontendEditing = (function($){
                 dataType: 'JSON',
                 data: data
             })
-            .done(done)
-            .fail(fail)
-            .always(always);
+                .done(done)
+                .fail(fail)
+                .always(always);
         },
         get: function(url, callbacks) {
             callbacks = callbacks || {};
@@ -112,11 +127,11 @@ var FrontendEditing = (function($){
             $.ajax({
                 type: 'GET',
                 url: url,
-                dataType: 'JSON',
+                dataType: 'JSON'
             })
-            .done(done)
-            .fail(fail)
-            .always(always);
+                .done(done)
+                .fail(fail)
+                .always(always);
         }
     };
 
