@@ -53,8 +53,12 @@ var Editor = (function($){
             var that = $(this);
             // Inline editing -> delete action
             that.prev().find('.icon-actions-edit-delete').on('click', function() {
-                F.delete(that.data('uid'), that.data('table'));
-            });
+                F.confirm(F.translate('notifications.delete-content-element'), {
+                    yes: function() {
+                        F.delete(that.data('uid'), that.data('table'));
+                    }
+                });
+            })
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');
