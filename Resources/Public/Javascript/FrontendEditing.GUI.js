@@ -10,6 +10,7 @@
     FrontendEditing.prototype.showSuccess = showSuccess;
     FrontendEditing.prototype.showError = showError;
     FrontendEditing.prototype.showWarning = showWarning;
+    FrontendEditing.prototype.confirm = confirm;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -89,10 +90,14 @@
         });
 
         $('.t3-frontend-editing__discard').on('click', function() {
-            if (!storage.isEmpty() && F.confirm(F.translate('notifications.remove-all-changes'))){
-                storage.clear();
-                F.refreshIframe();
-                F.trigger(F.CONTENT_CHANGE);
+            if (!storage.isEmpty()) {
+                F.confirm(F.translate('notifications.remove-all-changes'), {
+                    yes: function() {
+                        storage.clear();
+                        F.refreshIframe();
+                        F.trigger(F.CONTENT_CHANGE);
+                    }
+                });
             }
         });
 
@@ -204,6 +209,22 @@
     }
     function showWarning (message, title) {
         flashMessage(messageTypes.WARNING, message, title);
+    }
+    function confirm(message, callbacks) {
+        callbacks = callbacks || {};
+
+        // Confirm dialog
+        alertify
+        .confirm(message, function () {
+            // User clicked "ok"
+            if (typeof callbacks.yes === 'function') {
+                callbacks.yes();
+            }
+        }, function() {
+            if (typeof callbacks.no === 'function') {
+                callbacks.no();
+            }
+        });
     }
 
 }(jQuery));

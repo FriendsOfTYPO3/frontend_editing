@@ -72,6 +72,10 @@ Add the immutable (https://facebook.github.io/immutable-js/) node_module to Publ
 
     npm run add:resource:immutable
 
+Add the alertify.js (modals) node_module to Public/Resources folder:
+
+    npm run add:resource:alertify
+
 ### Styling
 
 The extension are using SASS for compiling into CSS. 
