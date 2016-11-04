@@ -52,8 +52,16 @@ var FrontendEditing = (function($){
         getStorage: function() {
             return storage;
         },
-        confirm: function(message) {
-            return confirm(message);
+        confirm: function(message, callbacks) {
+            var confirmed = confirm(message);
+
+            callbacks = callbacks || {};
+            if (confirmed && typeof callbacks.yes === 'function') {
+                callbacks.yes();
+            }
+            if (!confirmed && typeof callbacks.no === 'function') {
+                callbacks.no();
+            }
         },
         on: function(event, callback) {
             if (typeof callback === 'function') {
@@ -71,9 +79,11 @@ var FrontendEditing = (function($){
                 if (this.getStorage().isEmpty()) {
                     window.location.href = linkUrl;
                 } else {
-                    if (this.confirm(contentUnsavedChangesLabel)) {
-                        window.location.href = linkUrl;
-                    }
+                    this.confirm(contentUnsavedChangesLabel, {
+                        yes: function(){
+                            window.location.href = linkUrl;
+                        }
+                    });
                 }
             }
         },

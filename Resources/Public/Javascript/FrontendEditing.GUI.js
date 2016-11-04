@@ -90,10 +90,14 @@
         });
 
         $('.t3-frontend-editing__discard').on('click', function() {
-            if (!storage.isEmpty() && F.confirm(contentRemoveAllChangesLabel)){
-                storage.clear();
-                F.refreshIframe();
-                F.trigger(F.CONTENT_CHANGE);
+            if (!storage.isEmpty()) {
+                F.confirm(contentRemoveAllChangesLabel, {
+                    yes: function() {
+                        storage.clear();
+                        F.refreshIframe();
+                        F.trigger(F.CONTENT_CHANGE);
+                    }
+                });
             }
         });
 
@@ -204,15 +208,21 @@
     function showWarning (message, title) {
         flashMessage(messageTypes.WARNING, message, title);
     }
-    function confirm(message) {
-        // confirm dialog
-        return alertify
+    function confirm(message, callbacks) {
+        callbacks = callbacks || {};
+
+        // Confirm dialog
+        alertify
         .confirm(message, function () {
-            // user clicked "ok"
-            return true;
+            // User clicked "ok"
+            if(typeof callbacks.yes === 'function') { 
+                callbacks.yes();
+            }
+
         }, function() {
-            return false;
-            // user clicked "cancel"
+            if(typeof callbacks.no === 'function') { 
+                callbacks.no();
+            }
         });
     }
 
