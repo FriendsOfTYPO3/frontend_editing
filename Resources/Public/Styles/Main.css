@@ -349,7 +349,8 @@
   font-size: 16px; }
   .t3-frontend-editing__top-bar .cke {
     top: 1px !important;
-    left: 180px !important; }
+    left: 180px !important;
+    right: auto !important; }
 
 .t3-frontend-editing__topbar-inner {
   padding: 0;
@@ -790,7 +791,7 @@ body {
 .cke_float .cke_top {
   box-shadow: none !important;
   background-image: none !important;
-  background-color: #FF8700 !important;
+  background-color: #191919 !important;
   padding: 8px 8px 5px !important;
   border: 0 !important; }
 
@@ -804,11 +805,6 @@ body {
   background-image: none !important; }
 
 .cke_dialog_title {
-  background: #FF8700 !important;
   background-image: none !important;
   color: #0f0f0f !important;
   text-shadow: 0 1px 0 #9d9d9d !important; }
-
-.cke_dialog_footer {
-  background: #FF8700 !important;
-  background-image: none !important; }

@@ -3,7 +3,7 @@
   .cke_top {
     box-shadow: none !important;
     background-image: none !important;
-    background-color: $orange-primary !important;
+    background-color: $gray-dark !important;
     padding: 8px 8px 5px !important;
     border: 0 !important;
   }
@@ -21,13 +21,7 @@
 }
 
 .cke_dialog_title {
-  background: $orange-primary !important;
   background-image: none !important;
   color: $black !important;
   text-shadow: 0 1px 0 lighten($gray-light, 10%) !important;
-}
-
-.cke_dialog_footer {
-  background: $orange-primary !important;
-  background-image: none !important;
 }
