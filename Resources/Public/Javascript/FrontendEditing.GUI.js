@@ -217,12 +217,11 @@
         alertify
         .confirm(message, function () {
             // User clicked "ok"
-            if(typeof callbacks.yes === 'function') { 
+            if (typeof callbacks.yes === 'function') {
                 callbacks.yes();
             }
-
         }, function() {
-            if(typeof callbacks.no === 'function') { 
+            if (typeof callbacks.no === 'function') {
                 callbacks.no();
             }
         });
