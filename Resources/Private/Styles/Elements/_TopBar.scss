@@ -30,6 +30,10 @@
 }
 
 .#{$t3-frontend}top-bar-left {
+  @include transition(left .2s);
+  @include transition-duration(.2s);
+  position: relative;
+  left: 0;
   width: 50%;
   float: left;
 
@@ -41,7 +45,8 @@
   }
 
   &.push-toright {
-
+  @include transition(left .2s);
+  @include transition-duration(.2s);
     .back-backend {
       margin-left: 0;
     }
