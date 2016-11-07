@@ -351,6 +351,8 @@
     top: 1px !important;
     left: 180px !important;
     right: auto !important; }
+    .t3-frontend-editing__top-bar .cke.left-open {
+      left: 420px !important; }
 
 .t3-frontend-editing__topbar-inner {
   padding: 0;
@@ -374,7 +376,7 @@
     position: relative;
     border-right: 1px solid #0f0f0f;
     height: 45px;
-    margin-left: 35px; }
+    margin-left: 45px; }
     .t3-frontend-editing__top-bar-left .back-backend:hover {
       background-color: #424242; }
     .t3-frontend-editing__top-bar-left .back-backend a {

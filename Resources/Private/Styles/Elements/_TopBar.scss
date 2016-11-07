@@ -14,6 +14,10 @@
     top: 1px !important;
     left: 180px !important;
     right: auto !important;
+
+    &.left-open {
+      left: 420px !important;
+    }
   }
 }
 
@@ -48,7 +52,7 @@
     position: relative;
     border-right: 1px solid $black;
     height: 45px;
-    margin-left: 35px;
+    margin-left: 45px;
 
     &:hover {
       background-color: lighten($black, 20%);
