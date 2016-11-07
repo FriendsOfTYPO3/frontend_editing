@@ -76,7 +76,7 @@
 }
 
 .#{$t3-frontend}top-bar-right {
-  @include transition(left .2s);
+  @include transition(right .2s);
   @include transition-duration(.2s);
   width: 50%;
   float: right;
