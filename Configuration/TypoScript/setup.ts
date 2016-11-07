@@ -1,8 +1,8 @@
 plugin.tx_frontendediting {
     view {
-        layoutRootPath = {$plugin.tx_frontendediting.view.layoutRootPath}
-        templateRootPath = {$plugin.tx_frontendediting.view.templateRootPath}
-        partialRootPath = {$plugin.tx_frontendediting.view.partialRootPath}
+        layoutRootPaths.10 = {$plugin.tx_frontendediting.view.layoutRootPaths.10}
+        templateRootPaths.10 = {$plugin.tx_frontendediting.view.templateRootPaths.10}
+        partialRootPaths.10 = {$plugin.tx_frontendediting.view.partialRootPaths.10}
     }
 }
 

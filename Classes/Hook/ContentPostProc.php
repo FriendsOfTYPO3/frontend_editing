@@ -88,23 +88,20 @@ class ContentPostProc
 
                 // No configuration found
                 if (!isset($settings['plugin.']['tx_frontendediting.'])) {
-                    $layoutPath =  'EXT:frontend_editing/Resources/Private/Layouts/';
-                    $templatePath = 'EXT:frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html';
-                    $partialPath = 'EXT:frontend_editing/Resources/Private/Partials/';
+                    $layoutPaths = ['EXT:frontend_editing/Resources/Private/Layouts/'];
+                    $templatePaths = ['EXT:frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'];
+                    $partialPaths = ['EXT:frontend_editing/Resources/Private/Partials/'];
                 } else {
-                    $layoutPath = $settings['plugin.']['tx_frontendediting.']['view.']['layoutRootPath'];
-                    $templatePath = $settings['plugin.']['tx_frontendediting.']['view.']['templateRootPath'];
-                    $partialPath = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPath'];
+                    $layoutPaths = $settings['plugin.']['tx_frontendediting.']['view.']['layoutRootPaths.'];
+                    $templatePaths = $settings['plugin.']['tx_frontendediting.']['view.']['templateRootPaths.'];
+                    $partialPaths = $settings['plugin.']['tx_frontendediting.']['view.']['partialRootPaths.'];
                 }
 
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
-                $view->setTemplatePathAndFilename($templatePath);
-                $view->setLayoutRootPaths([
-                    10 => $layoutPath
-                ]);
-                $view->setPartialRootPaths([
-                    10 => $partialPath
-                ]);
+                $view->setTemplatePathAndFilename($templatePaths[0]);
+                $view->setLayoutRootPaths($layoutPaths);
+                $view->setPartialRootPaths($partialPaths);
+                $view->setTemplateRootPaths($templatePaths);
 
                 $icons = [
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
