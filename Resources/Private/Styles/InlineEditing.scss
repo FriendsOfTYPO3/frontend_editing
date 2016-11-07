@@ -16,8 +16,10 @@
   padding: 0;
 
   .icon {
-    &:hover {
-     cursor: pointer;
+    .icon-markup {
+      img {
+        cursor: pointer;
+      }
     }
   }
 
