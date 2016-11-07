@@ -58,7 +58,12 @@ var Editor = (function($){
                         F.delete(that.data('uid'), that.data('table'));
                     }
                 });
-            })
+            });
+
+            // Inline editing -> move up action
+            that.prev().find('.icon-actions-move-up').on('click', function() {
+                console.log('YES');
+            });
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');
@@ -104,7 +109,7 @@ var Editor = (function($){
     }
 
     return {
-        init: init,
+        init: init
     }
 
 })(jQuery);
