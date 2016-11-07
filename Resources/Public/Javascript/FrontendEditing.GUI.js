@@ -116,12 +116,13 @@
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
             t = ++t % 2;
-            $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -310 }, 200);
+            $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
         });
 
         $('.left-bar-button').on('click', function() {
             $('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
             $('.t3-frontend-editing__left-bar').toggleClass('open');
+            $('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
             y = ++y % 2;
             $('.t3-frontend-editing__left-bar').stop().animate({ left: y ? 0 : -280 }, 200);
         });
