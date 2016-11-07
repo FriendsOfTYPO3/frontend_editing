@@ -125,7 +125,6 @@
             $('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
             y = ++y % 2;
             $('.t3-frontend-editing__left-bar').stop().animate({ left: y ? 0 : -280 }, 200);
-
         });
 
         $('.page-seo-devices span').on('click', function() {
@@ -154,8 +153,6 @@
         });
 
         $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
-
-
     }
 
     function loadPageIntoIframe(url, callback) {
