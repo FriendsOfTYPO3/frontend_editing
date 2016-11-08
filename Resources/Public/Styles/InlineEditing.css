@@ -7,10 +7,10 @@
   background: #FF8700;
   height: 26px;
   display: block;
-  width: 60px;
+  width: 85px;
   margin: 0 0 0 auto;
   padding: 0; }
   .t3-frontend-editing__inline-actions .icon:hover {
     cursor: pointer; }
-  .t3-frontend-editing__inline-actions .icon-actions-edit-delete {
+  .t3-frontend-editing__inline-actions .icon-actions-edit-delete, .t3-frontend-editing__inline-actions .icon-actions-edit-add {
     margin-left: 2px; }

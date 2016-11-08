@@ -59,6 +59,14 @@ var Editor = (function($){
                     }
                 });
             })
+
+            that.prev().find('.icon-actions-edit-add').on('click', function() {
+                F.confirm(F.translate('notifications.add-content-element'), {
+                    yes: function() {
+                        alertify.confirm('test');
+                    }
+                });
+            })
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');

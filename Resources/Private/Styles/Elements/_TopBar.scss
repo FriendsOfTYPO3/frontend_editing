@@ -45,8 +45,9 @@
   }
 
   &.push-toright {
-  @include transition(left .2s);
-  @include transition-duration(.2s);
+    @include transition(left .2s);
+    @include transition-duration(.2s);
+
     .back-backend {
       margin-left: 0;
     }
