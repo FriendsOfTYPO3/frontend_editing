@@ -1,8 +1,6 @@
 <?php
 defined('TYPO3_MODE') or die();
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
 /**
  * Hooks
  */
@@ -45,12 +43,12 @@ $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProc
  * Typoscript settings
  */
 // Add UserTsConfig settings
-ExtensionManagementUtility::addUserTSConfig('<INCLUDE_TYPOSCRIPT: source="' .
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('<INCLUDE_TYPOSCRIPT: source="' .
     'FILE:EXT:frontend_editing/Configuration/TypoScript/UserTsConfig/userTsConfig.ts">');
 
 // If rtehtmlarea is loaded and be user is logged in then reset the pageTSConfig
-if (ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
-    ExtensionManagementUtility::addPageTSConfig(
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rtehtmlarea')) {
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="' .
             'FILE:EXT:frontend_editing/Configuration/TypoScript/PageTsConfig/Proc/pageTsConfig.ts">'
     );
