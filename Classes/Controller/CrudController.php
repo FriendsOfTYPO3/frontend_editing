@@ -13,7 +13,6 @@ use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class CrudController
- * @package TYPO3\CMS\FrontendEditing\Controller
  */
 class CrudController extends ActionController
 {

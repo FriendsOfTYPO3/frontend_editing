@@ -32,7 +32,7 @@ var Editor = (function($){
                 '<link/>',
                 {
                     rel: 'stylesheet',
-                    href: '/typo3conf/ext/frontend_editing/Resources/Public/Styles/InlineEditing.css',
+                    href: '/typo3conf/ext/frontend_editing/Resources/Public/Css/InlineEditing.css',
                     type: 'text/css'
                 }
             )
