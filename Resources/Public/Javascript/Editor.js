@@ -64,17 +64,26 @@ var Editor = (function($){
 
             // Inline editing -> move up action
             that.prev().find('.icon-actions-move-up').on('click', function() {
-                F.confirm(F.translate('notifications.move-content-element'), {
-                    yes: function () {
-                        var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
-                        if (previousEditorInstance) {
-                            var previousDomElementUid = previousEditorInstance.ui.contentsElement.$.dataset.uid;
-                            var currentDomElementUid = that.data('uid');
-                            var currentDomElementTable = that.data('table');
-                            F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
-                        }
-                    }
-                });
+                // Find the previous editor instance element
+                var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
+                if (previousEditorInstance) {
+                    var previousDomElementUid = previousEditorInstance.ui.contentsElement.$.dataset.uid;
+                    var currentDomElementUid = that.data('uid');
+                    var currentDomElementTable = that.data('table');
+                    F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
+                }
+            });
+
+            // Inline editing -> move down action
+            that.prev().find('.icon-actions-move-down').on('click', function() {
+                // Find the next editor instance element
+                var nextEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex + 1)];
+                if (nextEditorInstance) {
+                    var nextDomElementUid = nextEditorInstance.ui.contentsElement.$.dataset.uid;
+                    var currentDomElementUid = that.data('uid');
+                    var currentDomElementTable = that.data('table');
+                    F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
+                }
             });
         });
 
