@@ -3,9 +3,6 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
 
 /**
  * Basic helper class
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
 class Helper
 {

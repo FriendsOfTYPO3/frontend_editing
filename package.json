@@ -9,9 +9,9 @@
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
     "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js ./Resources/Public/Javascript",
     "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run build:css",
-    "build:css": "npm run lint:css --silent && node-sass Resources/Private/Styles/ -o Resources/Public/Styles/",
+    "build:css": "npm run lint:css --silent && node-sass Resources/Private/Css/ -o Resources/Public/Css/",
     "watch:css": "nodemon -e scss -x npm run build:css",
-    "lint:css": "sass-lint Resources/Private/Styles/**/*.scss --verbose --no-exit",
+    "lint:css": "sass-lint Resources/Private/Css/**/*.scss --verbose --no-exit",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c Tests/Build/UnitTests.xml",
     "build:suite": "npm run php:codesniffer && npm run php:unittests && npm run lint:css"

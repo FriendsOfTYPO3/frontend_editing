@@ -7,8 +7,6 @@ use TYPO3\CMS\Extbase\Service\CacheService;
 /**
  * Class CacheUtility
  * Handling cache operations for TYPO3
- *
- * @package TYPO3\CMS\FrontendEditing\Utility\Cache
  */
 class CacheUtility
 {
