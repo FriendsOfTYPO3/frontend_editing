@@ -51,6 +51,9 @@
             <trans-unit id="notifications.delete-content-element">
                 <source>Are you sure you want to delete the content element?</source>
             </trans-unit>
+            <trans-unit id="notifications.move-content-element">
+                <source>Are you sure you want to move the content element?</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

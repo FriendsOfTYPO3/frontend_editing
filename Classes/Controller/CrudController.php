@@ -380,6 +380,11 @@ class CrudController extends ActionController
             $this->dataHandler->process_cmdmap();
             $this->dataHandler->process_datamap();
 
+            // Find the page (pid) on which the record exists
+            $pageUid = Integration::recordInfo($table, $uid, 'pid');
+            // Clear the page (pid) cache
+            CacheUtility::clearPageCache([$pageUid['pid']]);
+
             $message = [
                 'success' => true,
                 'message' => 'Content moved (uid: ' . $uid . ')'

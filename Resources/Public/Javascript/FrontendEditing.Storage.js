@@ -5,9 +5,9 @@
     var FrontendEditing = w.FrontendEditing || {};
 
     FrontendEditing.Storage = function(storageKey) {
-        this.storageKey = storageKey
+        this.storageKey = storageKey;
 
-        // Always empty the storage when it's contructed
+        // Always empty the storage when it's constructed
         this.clear();
     };
 

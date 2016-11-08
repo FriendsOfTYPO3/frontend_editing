@@ -47,10 +47,12 @@ var Editor = (function($){
 
         // Add custom configuration to ckeditor
         var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
-        $contenteditable.each(function() {
-            $(this).ckeditor(editorConfig);
-
+        $contenteditable.each(function(index) {
             var that = $(this);
+            var editorPrefix = 'editor';
+            var thatIndex = index + 1;
+            that.ckeditor(editorConfig);
+
             // Inline editing -> delete action
             that.prev().find('.icon-actions-edit-delete').on('click', function() {
                 F.confirm(F.translate('notifications.delete-content-element'), {
@@ -62,7 +64,17 @@ var Editor = (function($){
 
             // Inline editing -> move up action
             that.prev().find('.icon-actions-move-up').on('click', function() {
-                console.log('YES');
+                F.confirm(F.translate('notifications.move-content-element'), {
+                    yes: function () {
+                        var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
+                        if (previousEditorInstance) {
+                            var previousDomElementUid = previousEditorInstance.ui.contentsElement.$.dataset.uid;
+                            var currentDomElementUid = that.data('uid');
+                            var currentDomElementTable = that.data('table');
+                            F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
+                        }
+                    }
+                });
             });
         });
 
