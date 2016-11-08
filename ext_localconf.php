@@ -9,7 +9,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php'
     \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
 
 // Hook to render toolbars
-$TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][$_EXTKEY] =
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][$_EXTKEY] =
     'TYPO3\\CMS\\FrontendEditing\\Hook\\ContentPostProc->main';
 
 /**
