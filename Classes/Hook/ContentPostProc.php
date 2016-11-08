@@ -123,7 +123,7 @@ class ContentPostProc
                     )
                 );
                 $view->getRenderingContext()->setLegacyMode(false);
-                $renderedHtml = $view->render();
+                $renderedHtml = $view->render('Toolbars');
 
                 $output .= $renderedHtml;
 
