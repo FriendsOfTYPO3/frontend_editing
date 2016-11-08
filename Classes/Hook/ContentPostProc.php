@@ -10,7 +10,6 @@ use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class ContentPostProc
- * @package TYPO3\CMS\FrontendEditing\Hook
  */
 class ContentPostProc
 {

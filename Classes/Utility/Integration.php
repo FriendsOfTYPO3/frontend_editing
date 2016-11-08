@@ -6,9 +6,6 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 /**
  * Check access of the user to display only those actions which are allowed
  * and needed
- *
- * @package TYPO3
- * @subpackage tx_aloha
  */
 class Integration
 {
