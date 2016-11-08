@@ -89,7 +89,7 @@ class ContentPostProc
                 // No configuration found
                 if (!isset($settings['plugin.']['tx_frontendediting.'])) {
                     $layoutPaths = ['EXT:frontend_editing/Resources/Private/Layouts/'];
-                    $templatePaths = ['EXT:frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'];
+                    $templatePaths = [10 =>'EXT:frontend_editing/Resources/Private/Templates/Toolbars/Toolbars.html'];
                     $partialPaths = ['EXT:frontend_editing/Resources/Private/Partials/'];
                 } else {
                     $layoutPaths = $settings['plugin.']['tx_frontendediting.']['view.']['layoutRootPaths.'];
@@ -98,7 +98,7 @@ class ContentPostProc
                 }
 
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
-                $view->setTemplatePathAndFilename($templatePaths[0]);
+                $view->setTemplatePathAndFilename($templatePaths[10]);
                 $view->setLayoutRootPaths($layoutPaths);
                 $view->setPartialRootPaths($partialPaths);
                 $view->setTemplateRootPaths($templatePaths);
@@ -123,7 +123,7 @@ class ContentPostProc
                     )
                 );
                 $view->getRenderingContext()->setLegacyMode(false);
-                $renderedHtml = $view->render('Toolbars');
+                $renderedHtml = $view->render();
 
                 $output .= $renderedHtml;
 
