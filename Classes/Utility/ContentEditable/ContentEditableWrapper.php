@@ -8,8 +8,6 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 /**
  * Class ContentEditableWrapper
  * A class for adding wrapping for a content element to be editable
- *
- * @package TYPO3\CMS\FrontendEditing\Utility\ContentEditable
  */
 class ContentEditableWrapper
 {

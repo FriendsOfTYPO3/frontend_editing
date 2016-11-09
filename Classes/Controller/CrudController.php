@@ -13,7 +13,6 @@ use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class CrudController
- * @package TYPO3\CMS\FrontendEditing\Controller
  */
 class CrudController extends ActionController
 {
@@ -380,6 +379,11 @@ class CrudController extends ActionController
             $this->dataHandler->start($data, $command);
             $this->dataHandler->process_cmdmap();
             $this->dataHandler->process_datamap();
+
+            // Find the page (pid) on which the record exists
+            $pageUid = Integration::recordInfo($table, $uid, 'pid');
+            // Clear the page (pid) cache
+            CacheUtility::clearPageCache([$pageUid['pid']]);
 
             $message = [
                 'success' => true,

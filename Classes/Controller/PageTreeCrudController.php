@@ -9,7 +9,6 @@ use TYPO3\CMS\Extbase\Mvc\View\JsonView;
 
 /**
  * Class PageTreeCrudController
- * @package TYPO3\CMS\FrontendEditing\Controller
  */
 class PageTreeCrudController extends ActionController
 {
