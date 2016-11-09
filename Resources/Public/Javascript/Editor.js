@@ -47,10 +47,12 @@ var Editor = (function($){
 
         // Add custom configuration to ckeditor
         var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
-        $contenteditable.each(function() {
-            $(this).ckeditor(editorConfig);
-
+        $contenteditable.each(function(index) {
             var that = $(this);
+            var editorPrefix = 'editor';
+            var thatIndex = index + 1;
+            that.ckeditor(editorConfig);
+
             // Inline editing -> delete action
             that.prev().find('.icon-actions-edit-delete').on('click', function() {
                 F.confirm(F.translate('notifications.delete-content-element'), {
@@ -58,7 +60,31 @@ var Editor = (function($){
                         F.delete(that.data('uid'), that.data('table'));
                     }
                 });
-            })
+            });
+
+            // Inline editing -> move up action
+            that.prev().find('.icon-actions-move-up').on('click', function() {
+                // Find the previous editor instance element
+                var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
+                if (previousEditorInstance) {
+                    var previousDomElementUid = previousEditorInstance.ui.contentsElement.$.dataset.uid;
+                    var currentDomElementUid = that.data('uid');
+                    var currentDomElementTable = that.data('table');
+                    F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
+                }
+            });
+
+            // Inline editing -> move down action
+            that.prev().find('.icon-actions-move-down').on('click', function() {
+                // Find the next editor instance element
+                var nextEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex + 1)];
+                if (nextEditorInstance) {
+                    var nextDomElementUid = nextEditorInstance.ui.contentsElement.$.dataset.uid;
+                    var currentDomElementUid = that.data('uid');
+                    var currentDomElementTable = that.data('table');
+                    F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
+                }
+            });
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');
@@ -104,7 +130,7 @@ var Editor = (function($){
     }
 
     return {
-        init: init,
+        init: init
     }
 
 })(jQuery);
