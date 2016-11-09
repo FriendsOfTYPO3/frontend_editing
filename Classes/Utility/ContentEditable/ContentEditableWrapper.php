@@ -56,6 +56,7 @@ class ContentEditableWrapper
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
         $inlineIcons =
+            $iconFactory->getIcon('actions-edit-add', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();

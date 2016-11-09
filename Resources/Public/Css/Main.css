@@ -362,6 +362,18 @@
   text-transform: uppercase; }
 
 .t3-frontend-editing__top-bar-left {
+  -webkit-transition: left 0.2s;
+  -moz-transition: left 0.2s;
+  -ms-transition: left 0.2s;
+  -o-transition: left 0.2s;
+  transition: left 0.2s;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -ms-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  position: relative;
+  left: 0;
   width: 50%;
   float: left; }
   .t3-frontend-editing__top-bar-left .left-bar-button {
@@ -369,8 +381,19 @@
     border: 0;
     color: #fff;
     cursor: pointer; }
-  .t3-frontend-editing__top-bar-left.push-toright .back-backend {
-    margin-left: 0; }
+  .t3-frontend-editing__top-bar-left.push-toright {
+    -webkit-transition: left 0.2s;
+    -moz-transition: left 0.2s;
+    -ms-transition: left 0.2s;
+    -o-transition: left 0.2s;
+    transition: left 0.2s;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s; }
+    .t3-frontend-editing__top-bar-left.push-toright .back-backend {
+      margin-left: 0; }
   .t3-frontend-editing__top-bar-left .back-backend {
     display: inline-block;
     position: relative;
@@ -392,11 +415,11 @@
       color: #FF8700; }
 
 .t3-frontend-editing__top-bar-right {
-  -webkit-transition: left 0.2s;
-  -moz-transition: left 0.2s;
-  -ms-transition: left 0.2s;
-  -o-transition: left 0.2s;
-  transition: left 0.2s;
+  -webkit-transition: right 0.2s;
+  -moz-transition: right 0.2s;
+  -ms-transition: right 0.2s;
+  -o-transition: right 0.2s;
+  transition: right 0.2s;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;
   -ms-transition-duration: 0.2s;
@@ -789,6 +812,13 @@ body {
   margin: 0;
   overflow-x: hidden;
   -webkit-font-smoothing: subpixel-antialiased; }
+
+.alertify {
+  font-family: "Share", Verdana, Helvetica, Arial, sans-serif; }
+  .alertify button {
+    font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
+    font-size: 16px !important;
+    border: 1px solid #838383 !important; }
 
 .cke_float .cke_top {
   box-shadow: none !important;

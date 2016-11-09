@@ -51,6 +51,9 @@
             <trans-unit id="notifications.delete-content-element">
                 <source>Are you sure you want to delete the content element?</source>
             </trans-unit>
+            <trans-unit id="notifications.add-content-element">
+                <source>You would have the option to add an element now, if this feature was implemented.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

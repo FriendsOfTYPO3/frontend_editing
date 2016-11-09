@@ -62,6 +62,15 @@ var Editor = (function($){
                 });
             });
 
+            // Inline editing -> add new action
+            that.prev().find('.icon-actions-edit-add').on('click', function() {
+                F.confirm(F.translate('notifications.add-content-element'), {
+                    yes: function() {
+                        
+                    }
+                });
+            });
+
             // Inline editing -> move up action
             that.prev().find('.icon-actions-move-up').on('click', function() {
                 // Find the previous editor instance element
