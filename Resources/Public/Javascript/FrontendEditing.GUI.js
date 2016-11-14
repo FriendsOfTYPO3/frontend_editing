@@ -11,6 +11,7 @@
     FrontendEditing.prototype.showError = showError;
     FrontendEditing.prototype.showWarning = showWarning;
     FrontendEditing.prototype.confirm = confirm;
+    FrontendEditing.prototype.modal = modal;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -206,12 +207,15 @@
     function showSuccess(message, title) {
         flashMessage(messageTypes.OK, message, title);
     }
-    function showError (message, title) {
+
+    function showError(message, title) {
         flashMessage(messageTypes.ERROR, message, title);
     }
-    function showWarning (message, title) {
+
+    function showWarning(message, title) {
         flashMessage(messageTypes.WARNING, message, title);
     }
+
     function confirm(message, callbacks) {
         callbacks = callbacks || {};
 
@@ -227,6 +231,23 @@
                 callbacks.no();
             }
         });
+    }
+
+    function modal(content, callbacks) {
+        callbacks = callbacks || {};
+
+        alertify.log(content);
+
+            /*.confirm(message, function () {
+                // User clicked "ok"
+                if (typeof callbacks.yes === 'function') {
+                    callbacks.yes();
+                }
+            }, function() {
+                if (typeof callbacks.no === 'function') {
+                    callbacks.no();
+                }
+            });*/
     }
 
 }(jQuery));

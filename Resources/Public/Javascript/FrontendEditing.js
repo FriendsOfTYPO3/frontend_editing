@@ -42,9 +42,11 @@ var FrontendEditing = (function($){
 
             storage = options.storage;
         },
+
         error: function (message) {
             console.error(message);
         },
+
         trigger: function(event, data) {
             if (!listeners[event]) {
                 this.error('Invalid event', event);
@@ -54,9 +56,11 @@ var FrontendEditing = (function($){
                 listeners[event][i](data);
             }
         },
+
         getStorage: function() {
             return storage;
         },
+
         confirm: function(message, callbacks) {
             var confirmed = confirm(message);
 
@@ -68,6 +72,7 @@ var FrontendEditing = (function($){
                 callbacks.no();
             }
         },
+
         on: function(event, callback) {
             if (typeof callback === 'function') {
                 if (listeners[event]) {
@@ -79,6 +84,7 @@ var FrontendEditing = (function($){
                 this.error('Callback is not a function');
             }
         },
+
         navigate: function(linkUrl) {
             if (linkUrl && linkUrl !== '#') {
                 if (this.getStorage().isEmpty()) {
@@ -92,9 +98,11 @@ var FrontendEditing = (function($){
                 }
             }
         },
+
         setTranslationLabels: function(labels) {
             translationLabels = labels;
         },
+
         translate: function(key) {
             if (translationLabels[key]) {
                 return translationLabels[key];
@@ -102,6 +110,7 @@ var FrontendEditing = (function($){
                 F.error('Invalid translation key: ' + key);
             }
         },
+
         post: function (url, data, callbacks) {
             callbacks = callbacks || {};
             var done = callbacks.done || function(){};
@@ -118,6 +127,7 @@ var FrontendEditing = (function($){
                 .fail(fail)
                 .always(always);
         },
+
         get: function(url, callbacks) {
             callbacks = callbacks || {};
             var done = callbacks.done || function(){};

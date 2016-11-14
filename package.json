@@ -19,10 +19,10 @@
   "dependencies": {
     "ckeditor": "^4.5.10",
     "toastr": "^2.1.2",
-    "immutable": "^3.8"
+    "immutable": "^3.8",
+    "alertify.js": "^1.0.12"
   },
   "devDependencies": {
-    "alertify.js": "^1.0.12",
     "node-sass": "^3.9.3",
     "nodemon": "^1.10.2",
     "sass-lint": "^1.9.1"
