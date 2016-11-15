@@ -4,6 +4,7 @@ namespace TYPO3\CMS\FrontendEditing\Utility\ContentEditable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Class ContentEditableWrapper
@@ -35,11 +36,12 @@ class ContentEditableWrapper
 
         $content = sprintf(
             '<span class="t3-frontend-editing__inline-actions">%s</span>' .
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" data-edit-url="%s">%s</div>',
             self::renderInlineActionIcons(),
             $table,
             $field,
             $uid,
+            self::renderEditUrl($table, $uid),
             $content
         );
 
@@ -57,10 +59,32 @@ class ContentEditableWrapper
 
         $inlineIcons =
             $iconFactory->getIcon('actions-edit-add', Icon::SIZE_SMALL)->render() .
+            $iconFactory->getIcon('actions-open', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();
 
         return $inlineIcons;
+    }
+
+    /**
+     * Render a edit url to the backend content wizard
+     *
+     * @param string $table
+     * @param string $uid
+     * @return string
+     */
+    public static function renderEditUrl($table, $uid)
+    {
+        $editUrl = BackendUtility::getModuleUrl(
+            'record_edit',
+            [
+                'edit[' . $table . '][' . $uid . ']' => 'edit',
+                'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
+                'feEdit' => 1
+            ]
+        );
+
+        return $editUrl;
     }
 }

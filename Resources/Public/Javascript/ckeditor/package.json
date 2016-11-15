@@ -2,7 +2,7 @@
   "_args": [
     [
       "ckeditor@^4.5.10",
-      "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing"
+      "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
   "_from": "ckeditor@>=4.5.10 <5.0.0",
@@ -36,7 +36,7 @@
   "_shasum": "5f3aef4f6b109d8d0b33e3532acb6d2f08537d12",
   "_shrinkwrap": null,
   "_spec": "ckeditor@^4.5.10",
-  "_where": "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing",
+  "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "author": {
     "name": "CKSource",
     "url": "http://cksource.com/"
@@ -56,20 +56,20 @@
   "homepage": "http://ckeditor.com",
   "keywords": [
     "ckeditor",
-    "editor",
     "fckeditor",
+    "editor",
+    "wysiwyg",
     "html",
-    "javascript",
     "richtext",
     "text",
-    "wysiwyg"
+    "javascript"
   ],
   "license": "For licensing, see LICENSE.md or http://ckeditor.com/license.",
   "main": "ckeditor.js",
   "maintainers": [
     {
-      "name": "cksource",
-      "email": "npm@cksource.com"
+      "email": "npm@cksource.com",
+      "name": "cksource"
     }
   ],
   "name": "ckeditor",

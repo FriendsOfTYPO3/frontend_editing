@@ -11,6 +11,7 @@
     FrontendEditing.prototype.showError = showError;
     FrontendEditing.prototype.showWarning = showWarning;
     FrontendEditing.prototype.confirm = confirm;
+    FrontendEditing.prototype.modal = modal;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -153,6 +154,11 @@
         });
 
         $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
+
+        // If modal is closed, refresh the iframe
+        $(document).on('lity:close', function(event, instance) {
+            F.refreshIframe();
+        });
     }
 
     function loadPageIntoIframe(url, callback) {
@@ -206,12 +212,15 @@
     function showSuccess(message, title) {
         flashMessage(messageTypes.OK, message, title);
     }
-    function showError (message, title) {
+
+    function showError(message, title) {
         flashMessage(messageTypes.ERROR, message, title);
     }
-    function showWarning (message, title) {
+
+    function showWarning(message, title) {
         flashMessage(messageTypes.WARNING, message, title);
     }
+
     function confirm(message, callbacks) {
         callbacks = callbacks || {};
 
@@ -227,6 +236,10 @@
                 callbacks.no();
             }
         });
+    }
+
+    function modal(content) {
+        lity(content);
     }
 
 }(jQuery));

@@ -8,7 +8,8 @@
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
     "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js ./Resources/Public/Javascript",
-    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run build:css",
+    "add:resource:lity": "NODE_ENV=production npm install && cp -a ./node_modules/lity ./Resources/Public/Javascript",
+    "build:extension": "npm run add:resource:ckeditor && npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run add:resource:lity && npm run build:css",
     "build:css": "npm run lint:css --silent && node-sass Resources/Private/Css/ -o Resources/Public/Css/",
     "watch:css": "nodemon -e scss -x npm run build:css",
     "lint:css": "sass-lint Resources/Private/Css/**/*.scss --verbose --no-exit",
@@ -19,10 +20,11 @@
   "dependencies": {
     "ckeditor": "^4.5.10",
     "toastr": "^2.1.2",
-    "immutable": "^3.8"
+    "immutable": "^3.8",
+    "alertify.js": "^1.0.12",
+    "lity": "^2.2.0"
   },
   "devDependencies": {
-    "alertify.js": "^1.0.12",
     "node-sass": "^3.9.3",
     "nodemon": "^1.10.2",
     "sass-lint": "^1.9.1"

@@ -53,7 +53,23 @@ var Editor = (function($){
             var thatIndex = index + 1;
             that.ckeditor(editorConfig);
 
-            // Inline editing -> delete action
+            /** Inline editing actions */
+
+            // Add new action
+            that.prev().find('.icon-actions-edit-add').on('click', function() {
+                F.confirm(F.translate('notifications.add-content-element'), {
+                    yes: function() {
+
+                    }
+                });
+            });
+
+            // Open/edit action
+            that.prev().find('.icon-actions-open').on('click', function() {
+                F.modal(that.data('edit-url'));
+            });
+
+            // Delete action
             that.prev().find('.icon-actions-edit-delete').on('click', function() {
                 F.confirm(F.translate('notifications.delete-content-element'), {
                     yes: function() {
@@ -62,16 +78,7 @@ var Editor = (function($){
                 });
             });
 
-            // Inline editing -> add new action
-            that.prev().find('.icon-actions-edit-add').on('click', function() {
-                F.confirm(F.translate('notifications.add-content-element'), {
-                    yes: function() {
-                        
-                    }
-                });
-            });
-
-            // Inline editing -> move up action
+            // Move up action
             that.prev().find('.icon-actions-move-up').on('click', function() {
                 // Find the previous editor instance element
                 var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
@@ -83,7 +90,7 @@ var Editor = (function($){
                 }
             });
 
-            // Inline editing -> move down action
+            // Move down action
             that.prev().find('.icon-actions-move-down').on('click', function() {
                 // Find the next editor instance element
                 var nextEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex + 1)];

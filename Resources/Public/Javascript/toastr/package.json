@@ -2,7 +2,7 @@
   "_args": [
     [
       "toastr@^2.1.2",
-      "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing"
+      "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
   "_from": "toastr@>=2.1.2 <3.0.0",
@@ -32,7 +32,7 @@
   "_shasum": "fd69066ae7578a5b3357725fc9c7c335e9b681df",
   "_shrinkwrap": null,
   "_spec": "toastr@^2.1.2",
-  "_where": "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing",
+  "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "bugs": {
     "url": "http://stackoverflow.com/questions/tagged/toastr"
   },
@@ -87,12 +87,12 @@
   "main": "toastr.js",
   "maintainers": [
     {
-      "name": "durango",
-      "email": "me@danieldurante.com"
+      "email": "me@danieldurante.com",
+      "name": "durango"
     },
     {
-      "name": "timferrell",
-      "email": "timothyferrell+npm@gmail.com"
+      "email": "timothyferrell+npm@gmail.com",
+      "name": "timferrell"
     }
   ],
   "name": "toastr",
