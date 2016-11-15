@@ -163,6 +163,8 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/css/alertify.css" />';
+        $resources .= '<link rel="stylesheet" type="text/css" href="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.css" />';
         $resources .= '<script src="typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
             PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
         $resources .= '<script type="text/javascript" src="' .
@@ -173,6 +175,10 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.js"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/immutable/dist/immutable.min.js"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/js/alertify.js"></script>';
+        $resources .= '<script type="text/javascript" src="' .
+            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.js"></script>';
 
         return $resources;
     }

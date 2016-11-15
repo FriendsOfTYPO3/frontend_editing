@@ -1,11 +1,11 @@
 {
   "_args": [
     [
-      "alertify.js",
-      "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing"
+      "alertify.js@^1.0.12",
+      "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
-  "_from": "alertify.js@latest",
+  "_from": "alertify.js@>=1.0.12 <2.0.0",
   "_id": "alertify.js@1.0.12",
   "_inCache": true,
   "_installable": true,
@@ -23,20 +23,20 @@
   "_phantomChildren": {},
   "_requested": {
     "name": "alertify.js",
-    "raw": "alertify.js",
-    "rawSpec": "",
+    "raw": "alertify.js@^1.0.12",
+    "rawSpec": "^1.0.12",
     "scope": null,
-    "spec": "latest",
-    "type": "tag"
+    "spec": ">=1.0.12 <2.0.0",
+    "type": "range"
   },
   "_requiredBy": [
-    "#DEV:/"
+    "/"
   ],
   "_resolved": "https://registry.npmjs.org/alertify.js/-/alertify.js-1.0.12.tgz",
   "_shasum": "8c1f15423dbcbb07f0368f281cf79f6497e3cfea",
   "_shrinkwrap": null,
-  "_spec": "alertify.js",
-  "_where": "/Users/mosaalhusseini/Documents/docker/TYPO3-docker-boilerplate/app/web/typo3conf/ext/frontend_editing",
+  "_spec": "alertify.js@^1.0.12",
+  "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "author": {
     "email": "fabien.doiron@gmail.com",
     "name": "Fabien Doiron",
@@ -48,18 +48,18 @@
   },
   "contributors": [
     {
-      "name": "Mahdi Yusuf",
-      "email": "yusuf.mahdi@gmail.com",
-      "url": "http://www.mahdiyusuf.com"
-    },
-    {
-      "name": "Fabien Doiron",
       "email": "fabien.doiron@gmail.com",
+      "name": "Fabien Doiron",
       "url": "http://fabien-d.github.io/"
     },
     {
-      "name": "Christian Tellnes",
+      "email": "brad@bradb.net",
+      "name": "Brad Berger",
+      "url": "https://bradb.net"
+    },
+    {
       "email": "christian@tellnes.com",
+      "name": "Christian Tellnes",
       "url": "http://christian.tellnes.com"
     },
     {
@@ -71,18 +71,18 @@
       "url": "http://ismaildemirbilek.com"
     },
     {
-      "name": "Stuart Keith",
       "email": "stuart@stuartkeith.com",
+      "name": "Stuart Keith",
       "url": "http://stuartkeith.com"
     },
     {
-      "name": "Antoine Corcy",
       "email": "contact@sbin.dk",
+      "name": "Antoine Corcy",
       "url": "http://sbin.dk"
     },
     {
-      "name": "quasipickle",
-      "email": "dylana@ualberta.ca"
+      "email": "dylana@ualberta.ca",
+      "name": "quasipickle"
     },
     {
       "name": "Shayan Elhami"
@@ -92,30 +92,30 @@
       "url": "https://twitter.com/mindeavor"
     },
     {
-      "name": "Kristoffer Berdal",
       "email": "github@flexd.net",
+      "name": "Kristoffer Berdal",
       "url": "http://cognitive.io"
     },
     {
-      "name": "Brad Berger",
-      "email": "brad@bradb.net",
-      "url": "https://bradb.net"
+      "email": "yusuf.mahdi@gmail.com",
+      "name": "Mahdi Yusuf",
+      "url": "http://www.mahdiyusuf.com"
     },
     {
-      "name": "Janek Lasocki-Biczysko",
-      "email": "janek.lb@gmail.com"
+      "email": "janek.lb@gmail.com",
+      "name": "Janek Lasocki-Biczysko"
     },
     {
-      "name": "Paul Osborne",
-      "email": "paul.osborne.uk@gmail.com"
+      "email": "paul.osborne.uk@gmail.com",
+      "name": "Paul Osborne"
     },
     {
       "name": "Florian Sellmayr",
       "url": "https://flosell.github.io/"
     },
     {
-      "name": "Stu Kabakoff",
       "email": "sakabako@gmail.com",
+      "name": "Stu Kabakoff",
       "url": "https://github.com/sakabako"
     },
     {
@@ -135,8 +135,8 @@
       "url": "https://github.com/vladjerca"
     },
     {
-      "name": "Jose Vera",
       "email": "hola@jose.com.co",
+      "name": "Jose Vera",
       "url": "http://jose.com.co"
     },
     {
@@ -188,18 +188,18 @@
   "gitHead": "b07279f4e37efb927d724b04cbbf08569743fb50",
   "homepage": "https://alertifyjs.org/",
   "keywords": [
-    "alert",
     "alertify",
-    "alertify.js",
     "alertifyjs",
-    "notifications"
+    "alertify.js",
+    "notifications",
+    "alert"
   ],
   "license": "MIT",
   "main": "dist/js/alertify.js",
   "maintainers": [
     {
-      "name": "bradberger",
-      "email": "brad@bradb.net"
+      "email": "brad@bradb.net",
+      "name": "bradberger"
     }
   ],
   "name": "alertify.js",

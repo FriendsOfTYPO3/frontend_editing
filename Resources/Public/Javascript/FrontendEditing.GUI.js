@@ -154,6 +154,11 @@
         });
 
         $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
+
+        // If modal is closed, refresh the iframe
+        $(document).on('lity:close', function(event, instance) {
+            F.refreshIframe();
+        });
     }
 
     function loadPageIntoIframe(url, callback) {
@@ -233,21 +238,8 @@
         });
     }
 
-    function modal(content, callbacks) {
-        callbacks = callbacks || {};
-
-        alertify.log(content);
-
-            /*.confirm(message, function () {
-                // User clicked "ok"
-                if (typeof callbacks.yes === 'function') {
-                    callbacks.yes();
-                }
-            }, function() {
-                if (typeof callbacks.no === 'function') {
-                    callbacks.no();
-                }
-            });*/
+    function modal(content) {
+        lity(content);
     }
 
 }(jQuery));

@@ -66,15 +66,7 @@ var Editor = (function($){
 
             // Open/edit action
             that.prev().find('.icon-actions-open').on('click', function() {
-                /*F.confirm(F.translate('notifications.delete-content-element'), {
-                    yes: function() {
-                        F.delete(that.data('uid'), that.data('table'));
-                    }
-                });*/
-
-                var content = '<iframe src="' + that.data('edit-url') + '"></iframe>';
-
-                F.modal(content);
+                F.modal(that.data('edit-url'));
             });
 
             // Delete action

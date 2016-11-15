@@ -38,7 +38,6 @@ class ContentEditableWrapper
         $editUrl = BackendUtility::getModuleUrl(
             'record_edit', [
                 'edit[' . $table . '][' . $uid . ']' => 'edit',
-                'columnsOnly' => $field,
                 'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
                 'feEdit' => 1
             ]
