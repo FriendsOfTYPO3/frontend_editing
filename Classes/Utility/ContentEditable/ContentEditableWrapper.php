@@ -34,15 +34,6 @@ class ContentEditableWrapper
             throw new \Exception('Property "uid" can not to be empty!');
         }
 
-
-        $editUrl = BackendUtility::getModuleUrl(
-            'record_edit', [
-                'edit[' . $table . '][' . $uid . ']' => 'edit',
-                'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
-                'feEdit' => 1
-            ]
-        );
-
         $content = sprintf(
             '<span class="t3-frontend-editing__inline-actions">%s</span>' .
                 '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" data-edit-url="%s">%s</div>',
@@ -50,7 +41,7 @@ class ContentEditableWrapper
             $table,
             $field,
             $uid,
-            $editUrl,
+            self::renderEditUrl($table, $uid),
             $content
         );
 
@@ -74,5 +65,26 @@ class ContentEditableWrapper
             $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();
 
         return $inlineIcons;
+    }
+
+    /**
+     * Render a edit url to the backend content wizard
+     *
+     * @param string $table
+     * @param string $uid
+     * @return string
+     */
+    public static function renderEditUrl($table, $uid)
+    {
+        $editUrl = BackendUtility::getModuleUrl(
+            'record_edit',
+            [
+                'edit[' . $table . '][' . $uid . ']' => 'edit',
+                'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
+                'feEdit' => 1
+            ]
+        );
+
+        return $editUrl;
     }
 }

@@ -70,11 +70,12 @@ class ContentEditableFixtures
     {
         $expectedOutput = sprintf(
             '<span class="t3-frontend-editing__inline-actions">%s</span>' .
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" data-edit-url="%s">%s</div>',
             ContentEditableWrapper::renderInlineActionIcons(),
             $this->table,
             $this->field,
             $this->uid,
+            ContentEditableWrapper::renderEditUrl($this->table, $this->uid),
             $this->content
         );
 
