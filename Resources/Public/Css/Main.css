@@ -840,3 +840,10 @@ body {
   background-image: none !important;
   color: #0f0f0f !important;
   text-shadow: 0 1px 0 #9d9d9d !important; }
+
+.lity-close {
+  position: absolute !important;
+  right: -30px !important;
+  top: -30px !important; }
+  .lity-close:active {
+    top: -30px !important; }
