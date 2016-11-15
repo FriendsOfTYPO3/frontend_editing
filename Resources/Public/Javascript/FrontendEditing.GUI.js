@@ -225,8 +225,7 @@
         callbacks = callbacks || {};
 
         // Confirm dialog
-        alertify
-        .confirm(message, function () {
+        alertify.confirm(message, function() {
             // User clicked "ok"
             if (typeof callbacks.yes === 'function') {
                 callbacks.yes();

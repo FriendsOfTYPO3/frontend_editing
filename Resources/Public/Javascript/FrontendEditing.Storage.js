@@ -16,6 +16,7 @@
             var processedItems = this.getSaveItems().set(id, item);
             localStorage.setItem(this.storageKey, JSON.stringify(processedItems));
         },
+
         getSaveItems: function() {
             var saveItems = localStorage.getItem(this.storageKey);
             if (saveItems === null || saveItems === '') {
@@ -26,9 +27,11 @@
 
             return saveItems;
         },
+
         clear: function() {
             localStorage.removeItem(this.storageKey);
         },
+
         isEmpty: function() {
             return this.getSaveItems().count() === 0;
         }

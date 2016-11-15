@@ -176,8 +176,6 @@ class ContentPostProc
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/immutable/dist/immutable.min.js"></script>';
         $resources .= '<script type="text/javascript" src="' .
-            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/js/alertify.js"></script>';
-        $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.js"></script>';
 
         return $resources;
