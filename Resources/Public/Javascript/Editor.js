@@ -45,18 +45,13 @@ var Editor = (function($){
             F.navigate(linkUrl);
         });
 
-        // Add custom configuration to ckeditor
-        var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
-        $contenteditable.each(function(index) {
+        // Find all t3-frontend-editing__inline-actions
+        var $inlineActions = $iframeContents.find('span.t3-frontend-editing__inline-actions');
+        $inlineActions.each(function(index) {
             var that = $(this);
-            var editorPrefix = 'editor';
-            var thatIndex = index + 1;
-            that.ckeditor(editorConfig);
-
-            /** Inline editing actions */
 
             // Add new action
-            that.prev().find('.icon-actions-edit-add').on('click', function() {
+            that.find('.icon-actions-edit-add').on('click', function() {
                 F.confirm(F.translate('notifications.add-content-element'), {
                     yes: function() {
 
@@ -65,12 +60,12 @@ var Editor = (function($){
             });
 
             // Open/edit action
-            that.prev().find('.icon-actions-open').on('click', function() {
+            that.find('.icon-actions-open').on('click', function() {
                 F.modal(that.data('edit-url'));
             });
 
             // Delete action
-            that.prev().find('.icon-actions-edit-delete').on('click', function() {
+            that.find('.icon-actions-edit-delete').on('click', function() {
                 F.confirm(F.translate('notifications.delete-content-element'), {
                     yes: function() {
                         F.delete(that.data('uid'), that.data('table'));
@@ -78,29 +73,45 @@ var Editor = (function($){
                 });
             });
 
-            // Move up action
-            that.prev().find('.icon-actions-move-up').on('click', function() {
-                // Find the previous editor instance element
-                var previousEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex - 1)];
-                if (previousEditorInstance) {
-                    var previousDomElementUid = previousEditorInstance.ui.contentsElement.$.dataset.uid;
+            if (typeof $inlineActions[index - 1] !== 'undefined' &&
+                $inlineActions[index - 1].dataset.cid == that.data('cid')
+            ) {
+                // Move up action
+                that.find('.icon-actions-move-up').on('click', function() {
+                    // Find the previous editor instance element
+                    var previousDomElementUid = $inlineActions[index - 1].dataset.uid;
                     var currentDomElementUid = that.data('uid');
                     var currentDomElementTable = that.data('table');
                     F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
-                }
-            });
+                });
+            } else {
+                that.find('.icon-actions-move-up').hide();
+            }
 
-            // Move down action
-            that.prev().find('.icon-actions-move-down').on('click', function() {
-                // Find the next editor instance element
-                var nextEditorInstance = CKEDITOR.instances[editorPrefix + (thatIndex + 1)];
-                if (nextEditorInstance) {
-                    var nextDomElementUid = nextEditorInstance.ui.contentsElement.$.dataset.uid;
+            if (typeof $inlineActions[index + 1] !== 'undefined' &&
+                $inlineActions[index + 1].dataset.cid == that.data('cid')
+            ) {
+                // Move down action
+                that.find('.icon-actions-move-down').on('click', function() {
+                    // Find the next editor instance element
+                    var nextDomElementUid = $inlineActions[index + 1].dataset.uid;
                     var currentDomElementUid = that.data('uid');
                     var currentDomElementTable = that.data('table');
                     F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
-                }
-            });
+                });
+            } else {
+                that.find('.icon-actions-move-down').hide();
+            }
+        });
+
+        // Add custom configuration to ckeditor
+        var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
+        $contenteditable.each(function(index) {
+            var that = $(this);
+            var editorPrefix = 'editor';
+            var thatIndex = index + 1;
+            that.ckeditor(editorConfig);
+
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');

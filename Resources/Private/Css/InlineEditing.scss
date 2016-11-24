@@ -6,14 +6,49 @@
   }
 }
 
-.#{$t3-frontend}inline-actions {
-  visibility: hidden;
-  background: $orange-primary;
-  height: 26px;
-  display: block;
-  width: 105px;
-  margin: 0 0 0 auto;
+.#{$t3-frontend}dropzone {
+  height: 0px;
+  background-color: $drop-zone-bg-color;
+  transition: height 0.2s;
+  -webkit-transition: height 0.2s;
+  margin: 0;
   padding: 0;
+}
+
+.#{$t3-frontend}ce {
+  position: relative;
+  &:hover {
+    outline: 3px dotted rgba($black, .2);
+    .cke_editable {
+      outline: 3px dotted rgba($orange-primary, .3);
+    }
+    .#{$t3-frontend}inline-actions {
+      display: block;
+    }
+  }
+}
+
+.dropzones-enabled .#{$t3-frontend}dropzone {
+  height: $drop-zone-enabled-height;
+  &.active {
+    height: $drop-zone-active-height;
+    border: dashed 2px $drop-zone-active-border-color;
+  }
+}
+
+.#{$t3-frontend}inline-actions {
+  display: none;
+  background:rgba($white, .8);
+  color: $black;
+  position: absolute;
+  top:0;
+  right:0;
+  display: none;
+  padding: 2px;
+  color: $white;
+  font-size: $font-size-small;
+  font-family: $font-family-base;
+  z-index: 2;
 
   .icon {
     .icon-markup {

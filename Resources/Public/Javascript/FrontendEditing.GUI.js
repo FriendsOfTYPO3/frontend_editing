@@ -12,6 +12,7 @@
     FrontendEditing.prototype.showWarning = showWarning;
     FrontendEditing.prototype.confirm = confirm;
     FrontendEditing.prototype.modal = modal;
+    FrontendEditing.prototype.iframe = getIframe;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -189,6 +190,10 @@
 
     function hideLoadingScreen() {
         $loadingScreen.addClass(CLASS_HIDDEN);
+    }
+
+    function getIframe() {
+        return $iframe;
     }
 
     function flashMessage(type, message, title) {

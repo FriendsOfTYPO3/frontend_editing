@@ -35,14 +35,84 @@ class ContentEditableWrapper
         }
 
         $content = sprintf(
-            '<span class="t3-frontend-editing__inline-actions">%s</span>' .
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" data-edit-url="%s">%s</div>',
-            self::renderInlineActionIcons(),
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $table,
             $field,
             $uid,
-            self::renderEditUrl($table, $uid),
             $content
+        );
+
+        return $content;
+    }
+
+    /**
+     * Wrap content
+     *
+     * @param string $table
+     * @param string $uid
+     * @param array $dataArr
+     * @param string $content
+     * @return string
+     * @throws \Exception
+     */
+    public static function wrapContent($table, $uid, $dataArr, $content)
+    {
+        // Check that data is not empty
+        if (empty($table)) {
+            throw new \Exception('Property "table" can not to be empty!');
+        } elseif (empty($uid)) {
+            throw new \Exception('Property "uid" can not to be empty!');
+        }
+
+        // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
+        // Could make it would make it possible to configure cid for use with extensions that create columns by content
+        $content = sprintf(
+            '<div class="t3-frontend-editing__ce" title="%s">' .
+                '<span class="t3-frontend-editing__inline-actions" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+                '%s' .
+            '</div>',
+            $uid,
+            $table,
+            $uid,
+            $dataArr['colPos'],
+            self::renderEditUrl($table, $uid),
+            self::renderInlineActionIcons(),
+            $content
+        );
+
+        return $content;
+    }
+
+    /**
+     * Add a dropzone after the content
+     *
+     * @param string $table
+     * @param string $uid
+     * @param string $content
+     * @return string
+     * @throws \Exception
+     */
+    public static function wrapContentWithDropzone($table, $uid, $content)
+    {
+        // Check that data is not empty
+        if (empty($table)) {
+            throw new \Exception('Property "table" can not to be empty!');
+        } elseif (empty($uid)) {
+            throw new \Exception('Property "uid" can not to be empty!');
+        }
+
+        $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+
+        $content = sprintf(
+            '%s' .
+            '<div class="t3-frontend-editing__dropzone" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            $content,
+            $jsFuncOnDrop,
+            $jsFuncOnDragover,
+            $jsFuncOnDragLeave,
+            self::renderNewUrl($table, $uid)
         );
 
         return $content;
@@ -86,5 +156,34 @@ class ContentEditableWrapper
         );
 
         return $editUrl;
+    }
+
+    /**
+     * Render a new content elememnt url to the backend content wizard
+     *
+     * @param string $table
+     * @param int $uid
+     * @return string
+     */
+    public static function renderNewUrl($table, $uid = 0)
+    {
+        // Default to top of "page"
+        $newId = $GLOBALS['TSFE']->id;
+
+        // If content uid is supplied, set new content to be "after"
+        if ($uid > 0) {
+            $newId = $uid * -1;
+        }
+
+        $newUrl = BackendUtility::getModuleUrl(
+            'record_edit',
+            [
+                'edit[' . $table . '][' . $newId . ']' => 'new',
+                'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
+                'feEdit' => 1
+            ]
+        );
+
+        return $newUrl;
     }
 }

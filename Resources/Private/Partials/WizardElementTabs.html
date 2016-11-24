@@ -13,7 +13,12 @@
 			</div>
 			<div class="accordion-content">
 				<f:for each="{wizardTab.items}" as="contentItem">
-					<div class="element">
+					<div class="element"
+						 draggable="true"
+						 ondragstart="F.dragNewCeStart(event)"
+						 ondragend="F.dragNewCeEnd(event)"
+						 data-params="{contentItem.params}"
+						 title="{f:translate(key:'right-bar.element-title', arguments:{0: contentItem.title}, extensionName: 'FrontendEditing')}">
 						<span class="content-icon">
 							{contentItem.iconHtml -> f:format.html()}
 						</span>

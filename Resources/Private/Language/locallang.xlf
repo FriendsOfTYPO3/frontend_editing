@@ -54,6 +54,9 @@
             <trans-unit id="notifications.add-content-element">
                 <source>You would have the option to add an element now, if this feature was implemented.</source>
             </trans-unit>
+            <trans-unit id="right-bar.element-title">
+                <source>Drag and drop on page to create a new '%s' content element.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

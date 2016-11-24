@@ -3,26 +3,21 @@
   width: 60px;
   height: 60px;
   display: inline-block;
-  position: relative;
-  margin: 5px 5px 5px 0;
-
   img {
-    position: absolute;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    margin-top: 14px;
+    margin-left: 14px;
   }
 }
 
 .element {
   display: inline-block;
   margin-bottom: 10px;
+  position: relative;
 
   .description {
     width: 212px;
     display: none;
+    margin-left: 5px;
 
     .title-default {
       display: inline-block;
@@ -35,6 +30,16 @@
         padding-top: 4px;
       }
     }
+  }
+  div {
+    pointer-events: none;
+  }
+  span {
+    pointer-events: none;
+  }
+  &:hover{
+    outline: solid 2px $orange-primary;
+    cursor: move;
   }
 }
 
