@@ -60,6 +60,40 @@ class ContentEditableWrapperTest extends UnitTestCase
     /**
      * @test
      */
+    public function getWrapContent()
+    {
+        $wrapContent = $this->subject->wrapContent(
+            $this->fixtures->getTable(),
+            $this->fixtures->getUid(),
+            $this->fixtures->getDataArr(),
+            $this->fixtures->getContent()
+        );
+
+        $this->assertSame(
+            $wrapContent,
+            $this->fixtures->getWrapExpectedContent()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function getWrapContentWithDropzone()
+    {
+        $wrapContent = $this->subject->wrapContentWithDropzone(
+            $this->fixtures->getTable(),
+            $this->fixtures->getUid(),
+            $this->fixtures->getContent()
+        );
+        $this->assertSame(
+            $wrapContent,
+            $this->fixtures->getWrapWithDropzoneExpectedContent()
+        );
+    }
+
+    /**
+     * @test
+     */
     public function tryWrapContentAndExpectAnException()
     {
         try {
@@ -71,6 +105,79 @@ class ContentEditableWrapperTest extends UnitTestCase
             );
         } catch (\Exception $exception) {
             $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            return;
+        }
+        $this->fail('Expected Property "table" missing Exception has not been raised.');
+    }
+
+    /**
+     * @test
+     */
+    public function tryWrapContentAndExpectAnExceptionForMissingTable()
+    {
+        try {
+            $wrappedContent = $this->subject->wrapContent(
+                '',
+                $this->fixtures->getUid(),
+                $this->fixtures->getDataArr(),
+                $this->fixtures->getContent()
+            );
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            return;
+        }
+        $this->fail('Expected Property "table" missing Exception has not been raised.');
+    }
+
+    /**
+     * @test
+     */
+    public function tryWrapContentAndExpectAnExceptionForMissingUid()
+    {
+        try {
+            $wrappedContent = $this->subject->wrapContent(
+                $this->fixtures->getTable(),
+                '',
+                $this->fixtures->getDataArr(),
+                $this->fixtures->getContent()
+            );
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
+            return;
+        }
+        $this->fail('Expected Property "table" missing Exception has not been raised.');
+    }
+    /**
+     * @test
+     */
+    public function tryWrapContentWithDropzoneAndExpectAnExceptionForMissingTable()
+    {
+        try {
+            $wrappedContent = $this->subject->wrapContentWithDropzone(
+                '',
+                $this->fixtures->getUid(),
+                $this->fixtures->getContent()
+            );
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            return;
+        }
+        $this->fail('Expected Property "table" missing Exception has not been raised.');
+    }
+
+    /**
+     * @test
+     */
+    public function tryWrapContentWithDropzoneAndExpectAnExceptionForMissingUid()
+    {
+        try {
+            $wrappedContent = $this->subject->wrapContentWithDropzone(
+                $this->fixtures->getTable(),
+                '',
+                $this->fixtures->getContent()
+            );
+        } catch (\Exception $exception) {
+            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
             return;
         }
         $this->fail('Expected Property "table" missing Exception has not been raised.');

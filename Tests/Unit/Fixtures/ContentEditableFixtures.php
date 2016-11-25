@@ -30,6 +30,16 @@ class ContentEditableFixtures
     protected $content = 'This is my content';
 
     /**
+     * @var array
+     */
+    protected $dataArr = [
+        'uid' => 1,
+        'pid' => 37,
+        'colPos' => 0,
+        'title' => 'Test title'
+    ];
+
+    /**
      * @return string
      */
     public function getTable()
@@ -62,6 +72,14 @@ class ContentEditableFixtures
     }
 
     /**
+     * @return array
+     */
+    public function getDataArr()
+    {
+        return $this->dataArr;
+    }
+
+    /**
      * A public getter for getting the correct expected wrapping
      *
      * @return string
@@ -69,14 +87,66 @@ class ContentEditableFixtures
     public function getWrappedExpectedContent()
     {
         $expectedOutput = sprintf(
-            '<span class="t3-frontend-editing__inline-actions">%s</span>' .
-                '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" data-edit-url="%s">%s</div>',
-            ContentEditableWrapper::renderInlineActionIcons(),
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
             $this->table,
             $this->field,
             $this->uid,
-            ContentEditableWrapper::renderEditUrl($this->table, $this->uid),
             $this->content
+        );
+
+        return $expectedOutput;
+    }
+
+    /**
+     * A public getter for getting the correct expected wrapping
+     *
+     * @return string
+     */
+    public function getWrapExpectedContent()
+    {
+        $class = 't3-frontend-editing__inline-actions';
+        $expectedOutput = sprintf(
+            '<div class="t3-frontend-editing__ce" title="%s">' .
+                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+                '%s' .
+            '</div>',
+            $this->uid,
+            $class,
+            $this->table,
+            $this->uid,
+            $this->dataArr['colPos'],
+            ContentEditableWrapper::renderEditUrl(
+                $this->table,
+                $this->uid
+            ),
+            ContentEditableWrapper::renderInlineActionIcons(),
+            $this->content
+        );
+
+        return $expectedOutput;
+    }
+
+    /**
+     * A public getter for getting the correct expected wrapping
+     *
+     * @return string
+     */
+    public function getWrapWithDropzoneExpectedContent()
+    {
+        $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+        $class = 't3-frontend-editing__dropzone';
+
+        $expectedOutput = sprintf(
+            '%s' .
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            $this->content,
+            $class,
+            $jsFuncOnDrop,
+            $jsFuncOnDragover,
+            $jsFuncOnDragLeave,
+            ContentEditableWrapper::renderNewUrl($this->table, $this->uid)
         );
 
         return $expectedOutput;
