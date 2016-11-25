@@ -66,12 +66,14 @@ class ContentEditableWrapper
 
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
+        $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
             '<div class="t3-frontend-editing__ce" title="%s">' .
-                '<span class="t3-frontend-editing__inline-actions" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
             $uid,
+            $class,
             $table,
             $uid,
             $dataArr['colPos'],
@@ -104,11 +106,13 @@ class ContentEditableWrapper
         $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
         $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
         $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+        $class = 't3-frontend-editing__dropzone';
 
         $content = sprintf(
             '%s' .
-            '<div class="t3-frontend-editing__dropzone" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
             $content,
+            $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
