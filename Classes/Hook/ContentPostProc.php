@@ -245,10 +245,13 @@ class ContentPostProc
         );
         $wizardItems = $contentController->wizardArray();
         $contentItems = [];
-        foreach ($wizardItems as $wizardItem) {
-            // If the wizard element is not a grouping item
-            if (!isset($wizardItem['header'])) {
-                $contentItems[] = array_merge(
+        $wizardTabKey = '';
+        foreach ($wizardItems as $wizardKey => $wizardItem) {
+            if (isset($wizardItem['header'])) {
+                $wizardTabKey = $wizardKey;
+                $contentItems[$wizardTabKey]['description'] = $wizardItem['header'];
+            } else {
+                $contentItems[$wizardTabKey]['items'][] = array_merge(
                     $wizardItem,
                     [
                         'iconHtml' => $this->iconFactory->getIcon($wizardItem['iconIdentifier'])->render()
@@ -256,7 +259,6 @@ class ContentPostProc
                 );
             }
         }
-
         return $contentItems;
     }
 }

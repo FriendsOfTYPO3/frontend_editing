@@ -139,23 +139,19 @@
   background-color: #555f63;
   width: 60px;
   height: 60px;
-  display: inline-block;
-  position: relative;
-  margin: 5px 5px 5px 0; }
+  display: inline-block; }
   .content-icon img {
-    position: absolute;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0; }
+    margin-top: 14px;
+    margin-left: 14px; }
 
 .element {
   display: inline-block;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  position: relative; }
   .element .description {
     width: 212px;
-    display: none; }
+    display: none;
+    margin-left: 5px; }
     .element .description .title-default {
       display: inline-block;
       width: 200px;
@@ -164,6 +160,13 @@
       .element .description .title-default:first-of-type {
         font-size: 18px;
         padding-top: 4px; }
+  .element div {
+    pointer-events: none; }
+  .element span {
+    pointer-events: none; }
+  .element:hover {
+    outline: solid 2px #FF8700;
+    cursor: move; }
 
 .accordion .grid,
 .accordion .list-view {
@@ -840,6 +843,9 @@ body {
   background-image: none !important;
   color: #0f0f0f !important;
   text-shadow: 0 1px 0 #9d9d9d !important; }
+
+.lity-active .lity {
+  background: rgba(15, 15, 15, 0.5); }
 
 .lity-opened {
   z-index: 99999 !important; }

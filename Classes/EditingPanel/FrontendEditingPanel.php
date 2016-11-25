@@ -92,14 +92,24 @@ class FrontendEditingPanel
         $fieldList
     ) {
         if (Access::isEnabled()) {
+            $wrappedContent = $content;
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
-            $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
+            // wrap content with controls
+            $wrappedContent = ContentEditableWrapper::wrapContent(
                 $table,
-                $fieldList,
                 $editUid,
-                $content
+                $dataArr,
+                $wrappedContent
+            );
+
+            // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
+            // add a dropzone after content
+            $wrappedContent = ContentEditableWrapper::wrapContentWithDropzone(
+                $table,
+                $editUid,
+                $wrappedContent
             );
 
             return $wrappedContent;

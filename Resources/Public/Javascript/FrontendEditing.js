@@ -142,7 +142,37 @@ var FrontendEditing = (function($){
                 .done(done)
                 .fail(fail)
                 .always(always);
+        },
+
+        dragNewCeStart: function(ev) {
+            ev.dataTransfer.setData("params", ev.currentTarget.dataset.params);
+            var $iframe = F.iframe();
+            $iframe.contents().find("body").addClass('dropzones-enabled');
+        },
+
+        dragNewCeEnd: function(ev) {
+            var $iframe = F.iframe();
+            $iframe.contents().find("body").removeClass('dropzones-enabled');
+        },
+
+        dragNewCeOver: function(ev) {
+            ev.preventDefault();
+            $(ev.currentTarget).addClass('active');
+        },
+
+        dragNewCeLeave: function(ev) {
+            ev.preventDefault();
+            $(ev.currentTarget).removeClass('active');
+        },
+
+        dropNewCe: function(ev) {
+            ev.preventDefault();
+            var params = ev.dataTransfer.getData("params");
+            var newUrl = $(ev.currentTarget).data('new-url');
+            var fullUrl = newUrl + params;
+            F.modal(fullUrl);
         }
+
     };
 
     return FrontendEditing;
