@@ -108,10 +108,7 @@ var Editor = (function($){
         var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
         $contenteditable.each(function(index) {
             var that = $(this);
-            var editorPrefix = 'editor';
-            var thatIndex = index + 1;
             that.ckeditor(editorConfig);
-
         });
 
         var $topBar = $('.t3-frontend-editing__top-bar');
@@ -124,21 +121,6 @@ var Editor = (function($){
             });
 
             var editor = event.editor;
-
-            editor.editable().on('click', function(event) {
-                // Move inline action icons into the content editable div
-                $.when($(event.sender.$).prepend($(event.sender.$).prev(inlineActionButtonsClass))).done(function() {
-                    // Then set the icons to be visible
-                    $(event.sender.$).find(inlineActionButtonsClass).css('visibility', 'visible');
-                });
-            });
-
-            editor.editable().on('blur', function(event) {
-                // Once again move the inline action icons back to outside the content editable div
-                $(event.sender.$).before($(event.sender.$).find(inlineActionButtonsClass));
-                // The hide the icons once again
-                $(event.sender.$).prev().css('visibility', 'hidden');
-            });
 
             editor.on('change', function(changeEvent) {
                 if (typeof editor.element !== 'undefined') {
