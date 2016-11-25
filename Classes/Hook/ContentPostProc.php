@@ -97,7 +97,7 @@ class ContentPostProc
                 }
 
                 $view = new \TYPO3\CMS\Fluid\View\StandaloneView();
-                $view->setTemplatePathAndFilename($templatePaths[10]);
+                $view->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($templatePaths[10]));
                 $view->setLayoutRootPaths($layoutPaths);
                 $view->setPartialRootPaths($partialPaths);
                 $view->setTemplateRootPaths($templatePaths);
@@ -121,7 +121,12 @@ class ContentPostProc
                         $icons
                     )
                 );
-                $view->getRenderingContext()->setLegacyMode(false);
+                
+                // Method getRenderingContext() available since V8
+                if (method_exists($view, 'getRenderingContext')) {
+                    $view->getRenderingContext()->setLegacyMode(false);
+                }
+               
                 $renderedHtml = $view->render();
 
                 $output .= $renderedHtml;
