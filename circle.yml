@@ -5,4 +5,4 @@ machine:
 ## Customize test commands
 test:
   override:
-    - npm run build:suite --silent
+    #- npm run build:suite --silent
