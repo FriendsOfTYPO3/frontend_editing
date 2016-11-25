@@ -121,9 +121,12 @@ class ContentPostProc
                         $icons
                     )
                 );
+                
                 // Method getRenderingContext() available since V8
-                if (method_exists($view,'getRenderingContext'))
+                if (method_exists($view, 'getRenderingContext')) {
                     $view->getRenderingContext()->setLegacyMode(false);
+                }
+               
                 $renderedHtml = $view->render();
 
                 $output .= $renderedHtml;
