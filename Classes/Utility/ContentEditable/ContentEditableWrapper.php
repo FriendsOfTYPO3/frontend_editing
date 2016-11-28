@@ -86,7 +86,7 @@ class ContentEditableWrapper
     }
 
     /**
-     * Add a dropzone after the content
+     * Add a drop zone after the content
      *
      * @param string $table
      * @param string $uid
@@ -109,8 +109,7 @@ class ContentEditableWrapper
         $class = 't3-frontend-editing__dropzone';
 
         $content = sprintf(
-            '%s' .
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            '%s' . '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
             $content,
             $class,
             $jsFuncOnDrop,
@@ -171,10 +170,10 @@ class ContentEditableWrapper
      */
     public static function renderNewUrl($table, $uid = 0)
     {
-        // Default to top of "page"
+        // Default to top of 'page'
         $newId = $GLOBALS['TSFE']->id;
 
-        // If content uid is supplied, set new content to be "after"
+        // If content uid is supplied, set new content to be 'after'
         if ($uid > 0) {
             $newId = $uid * -1;
         }
