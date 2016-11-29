@@ -15,7 +15,7 @@
   .t3-frontend-editing__ce:hover {
     outline: 3px dotted rgba(15, 15, 15, 0.2); }
     .t3-frontend-editing__ce:hover .cke_editable {
-      outline: 3px dotted rgba(255, 135, 0, 0.3); }
+      outline: 3px dotted #FF8700; }
     .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
       display: block; }
 
@@ -28,11 +28,9 @@
 .t3-frontend-editing__inline-actions {
   display: none;
   background: rgba(255, 255, 255, 0.8);
-  color: #0f0f0f;
   position: absolute;
   top: 0;
   right: 0;
-  display: none;
   padding: 2px;
   color: #fff;
   font-size: 14px;
