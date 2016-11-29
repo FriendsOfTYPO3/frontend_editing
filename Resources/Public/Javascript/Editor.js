@@ -3,6 +3,7 @@ var Editor = (function($){
     'use strict';
 
     var editorConfig = {
+        skin: 'moono',
         entities_latin: false,
         htmlEncodeOutput: false,
         allowedContent: true,
