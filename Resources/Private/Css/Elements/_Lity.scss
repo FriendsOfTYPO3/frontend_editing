@@ -1,5 +1,7 @@
-.lity-active .lity {
-  background: rgba($black, 0.5);
+.lity-active {
+  .lity {
+    background: rgba($black, .5);
+  }
 }
 
 .lity-opened {
@@ -15,4 +17,3 @@
   right: -30px !important;
   top: -30px !important;
 }
-
