@@ -20,7 +20,7 @@
   &:hover {
     outline: 3px dotted rgba($black, .2);
     .cke_editable {
-      outline: 3px dotted rgba($orange-primary, .3);
+      outline: 3px dotted $orange-primary;
     }
     .#{$t3-frontend}inline-actions {
       display: block;
@@ -39,11 +39,9 @@
 .#{$t3-frontend}inline-actions {
   display: none;
   background:rgba($white, .8);
-  color: $black;
   position: absolute;
   top:0;
   right:0;
-  display: none;
   padding: 2px;
   color: $white;
   font-size: $font-size-small;
