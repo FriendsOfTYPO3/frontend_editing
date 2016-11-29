@@ -43,6 +43,17 @@ frontendEditingPageTree {
     10 < tt_content.list.20.frontendediting_frontend_editing_page_tree
 }
 
+lib.fluidContent {
+    stdWrap {
+        editIcons = tt_content: header
+    }
+}
+
+tt_content.text.stdWrap < lib.fluidContent.stdWrap
+tt_content.textpic.stdWrap < lib.fluidContent.stdWrap
+tt_content.image.stdWrap < lib.fluidContent.stdWrap
+tt_content.mailform.stdWrap < lib.fluidContent.stdWrap
+
 # Disable output of newlines
 lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines >
 [global]
