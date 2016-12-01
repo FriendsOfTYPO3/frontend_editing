@@ -91,7 +91,7 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-        if (Access::isEnabled()) {
+        if (Access::isEnabled() && $conf['beforeLastTag'] == 0) {
             $wrappedContent = $content;
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
