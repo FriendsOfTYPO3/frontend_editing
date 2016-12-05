@@ -51,3 +51,31 @@ The output would then look like the following in frontend edit mode:
 While not in frontend edit mode the output are the following: 
 
     This is the content text to edit
+
+## TypoScript
+
+If you are listing elements with TypoScript only, you can still include the editing icons using the included hook into TYPO3 rendering process.
+This example lists editable the frontend user names and emails:
+
+    page.20 = CONTENT
+    page.20 {
+      table = fe_users
+      select.pidInList = 38
+      renderObj = COA
+      renderObj.10 = TEXT
+      renderObj.10 {
+        field = username
+        wrap = Username:|<br/>
+        stdWrap.editIcons = fe_users: username
+        stdWrap.editIcons.beforeLastTag = 1
+      }
+      renderObj.20 = TEXT
+      renderObj.20 {
+        field = email
+        wrap = Email:|<br/><br/>
+        stdWrap.editIcons = fe_users: email
+        stdWrap.editIcons.beforeLastTag = 1
+      }
+      stdWrap.editIcons = pages: users
+      stdWrap.editIcons.hasEditableFields = 1
+    }

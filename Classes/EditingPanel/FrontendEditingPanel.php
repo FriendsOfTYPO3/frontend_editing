@@ -95,19 +95,19 @@ class FrontendEditingPanel
         // We need to determine if we are having whole element or just one field for element
         // this only allows to edit all other tables just per field instead of per element
         if ($conf['beforeLastTag'] == 1) {
-            $isEditableField = TRUE;
+            $isEditableField = true;
         } elseif ($table == 'tt_content' || $conf['hasEditableFields'] == 1) {
-           $isWholeElement = TRUE;
+            $isWholeElement = true;
         } else {
             // default fallback, for everything else with edit icons, we assume it is serparate element and is editable
-            $isWholeElement = TRUE;
-            $isEditableField = TRUE;
+            $isWholeElement = true;
+            $isEditableField = trueTRUE;
         }
 
         $wrappedContent = $content;
 
         if (Access::isEnabled() && $isEditableField) {
-            $fields = explode(',',$fieldList);
+            $fields = explode(',', $fieldList);
             $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
                 $table,
                 $fields[0],
@@ -117,7 +117,6 @@ class FrontendEditingPanel
         }
 
         if (Access::isEnabled() && $isWholeElement) {
-           
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
@@ -136,7 +135,6 @@ class FrontendEditingPanel
                 $editUid,
                 $wrappedContent
             );
-
         }
 
         return $wrappedContent;
