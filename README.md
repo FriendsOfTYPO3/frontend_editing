@@ -9,4 +9,4 @@ This package gives frontend editing capability to TYPO3 CMS, the editor used is 
 
 For all kind of documentation which covers install to how to develop the extension:
 
-https://pixelant.gitbooks.io/typo3-frontend-editing/
+https://www.gitbook.com/book/pixelant/typo3-frontend-editing/details/
