@@ -6,7 +6,8 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
-use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Helper;
 
 /**
  * Class ContentPostProc
@@ -59,7 +60,7 @@ class ContentPostProc
     {
         if (\TYPO3\CMS\FrontendEditing\Utility\Access::isEnabled()
             && $parentObject->type === 0
-            && !$this->httpRefererIsFromBackendViewModule()
+            && !Helper::httpRefererIsFromBackendViewModule()
         ) {
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (isset($isFrontendEditing) && (bool)$isFrontendEditing === true) {
@@ -184,19 +185,6 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.js"></script>';
 
         return $resources;
-    }
-
-    /**
-     * Determine if page is loaded from the TYPO3 BE
-     *
-     * @return bool
-     */
-    protected function httpRefererIsFromBackendViewModule()
-    {
-        $parsedReferer = parse_url($_SERVER['HTTP_REFERER']);
-        $pathArray = explode('/', $parsedReferer['path']);
-        $viewPageView = preg_match('/web_ViewpageView/i', $parsedReferer['query']);
-        return (strtolower($pathArray[1]) === 'typo3' && $viewPageView);
     }
 
     /**

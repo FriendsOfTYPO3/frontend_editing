@@ -14,6 +14,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\Access;
 use TYPO3\CMS\Frontend\View\AdminPanelView;
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Utility\Helper;
 
 /**
  * View class for the edit panels in frontend editing.
@@ -91,7 +92,6 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-
         // We need to determine if we are having whole element or just one field for element
         // this only allows to edit all other tables just per field instead of per element
         if ($conf['beforeLastTag'] == 1) {
@@ -106,7 +106,7 @@ class FrontendEditingPanel
 
         $wrappedContent = $content;
 
-        if (Access::isEnabled() && $isEditableField) {
+        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isEditableField) {
             $fields = explode(',', $fieldList);
             $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
                 $table,
@@ -116,7 +116,7 @@ class FrontendEditingPanel
             );
         }
 
-        if (Access::isEnabled() && $isWholeElement) {
+        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isWholeElement) {
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
