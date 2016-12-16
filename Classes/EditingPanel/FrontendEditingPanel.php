@@ -14,6 +14,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\Access;
 use TYPO3\CMS\Frontend\View\AdminPanelView;
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Utility\Helper;
 
 /**
  * View class for the edit panels in frontend editing.
@@ -91,7 +92,7 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-        if (Access::isEnabled()) {
+        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule()) {
             $wrappedContent = $content;
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
