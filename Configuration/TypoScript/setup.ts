@@ -4,6 +4,9 @@ plugin.tx_frontendediting {
         templateRootPaths.10 = {$plugin.tx_frontendediting.view.templateRootPaths.10}
         partialRootPaths.10 = {$plugin.tx_frontendediting.view.partialRootPaths.10}
     }
+    features {
+        requireCHashArgumentForActionArguments = 0
+    }
 }
 
 [globalVar = TSFE : beUserLogin > 0]
