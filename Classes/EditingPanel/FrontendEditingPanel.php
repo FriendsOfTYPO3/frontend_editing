@@ -92,8 +92,31 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ) {
-        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule()) {
-            $wrappedContent = $content;
+        // We need to determine if we are having whole element or just one field for element
+        // this only allows to edit all other tables just per field instead of per element
+        if ($conf['beforeLastTag'] === 1) {
+            $isEditableField = true;
+        } elseif ($table === 'tt_content' || $conf['hasEditableFields'] === 1) {
+            $isWholeElement = true;
+        } else {
+            // default fallback, for everything else with edit icons, we assume it is separate element and is editable
+            $isWholeElement = true;
+            $isEditableField = true;
+        }
+
+        $wrappedContent = $content;
+
+        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isEditableField) {
+            $fields = explode(',', $fieldList);
+            $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
+                $table,
+                $fields[0],
+                $editUid,
+                $wrappedContent
+            );
+        }
+
+        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isWholeElement) {
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
@@ -112,11 +135,9 @@ class FrontendEditingPanel
                 $editUid,
                 $wrappedContent
             );
-
-            return $wrappedContent;
-        } else {
-            return $content;
         }
+
+        return $wrappedContent;
     }
 
     /**
