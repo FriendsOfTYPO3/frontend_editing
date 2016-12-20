@@ -94,14 +94,14 @@ class FrontendEditingPanel
     ) {
         // We need to determine if we are having whole element or just one field for element
         // this only allows to edit all other tables just per field instead of per element
-        if ($conf['beforeLastTag'] == 1) {
+        if ($conf['beforeLastTag'] === 1) {
             $isEditableField = true;
-        } elseif ($table == 'tt_content' || $conf['hasEditableFields'] == 1) {
+        } elseif ($table === 'tt_content' || $conf['hasEditableFields'] === 1) {
             $isWholeElement = true;
         } else {
-            // default fallback, for everything else with edit icons, we assume it is serparate element and is editable
+            // default fallback, for everything else with edit icons, we assume it is separate element and is editable
             $isWholeElement = true;
-            $isEditableField = trueTRUE;
+            $isEditableField = true;
         }
 
         $wrappedContent = $content;
