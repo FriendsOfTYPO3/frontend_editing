@@ -3,16 +3,37 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 use TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
+use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel.
  */
 class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
 {
+
+    /**
+     * @var ContentEditableWrapper
+     */
+    protected $contentEditableWrapper = null;
+
+    /**
+     * @var ContentEditableFixtures
+     */
+    protected $fixtures = null;
+
+    /**
+     * @var TemplateService
+     */
+    protected $templateServiceMock;
+
+    /**
+     * @var TypoScriptFrontendController
+     */
+    protected $frontendControllerMock;
 
     /**
      * Set up
@@ -38,6 +59,9 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $this->frontendControllerMock->page =  [];
         $this->frontendControllerMock->sys_page = $pageRepositoryMock;
         $GLOBALS['TSFE'] = $this->frontendControllerMock;
+
+        $this->contentEditableWrapper = new ContentEditableWrapper();
+        $this->fixtures = new ContentEditableFixtures();
     }
 
      /**
@@ -50,8 +74,12 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $content = $this->getUniqueId('content');
         return [
             'standard case call edit icons for tt_content:bodytext' => [
-                '<div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">' .
-                $content . '</div>',
+                $this->contentEditableWrapper->wrapContentToBeEditable(
+                    'tt_content',
+                    'bodytext',
+                    1,
+                    $content
+                ),
                 $content,
                 'tt_content:bodytext',
                 ['beforeLastTag' => '1','allow' => 'edit'],
@@ -66,7 +94,7 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             ],
             'another case with fe_users:email' => [
                 '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12">' .
-                $content . '</div>',
+                    $content . '</div>',
                 $content,
                 'fe_users:email',
                 ['beforeLastTag' => '1','allow' => 'edit'],
@@ -81,7 +109,7 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             ],
             'another case with tt_content:header' => [
                 '<div contenteditable="true" data-table="tt_content" data-field="header" data-uid="12">' .
-                $content . '</div>',
+                    $content . '</div>',
                 $content,
                 'tt_content:header',
                 ['beforeLastTag' => '1','allow' => 'edit'],
