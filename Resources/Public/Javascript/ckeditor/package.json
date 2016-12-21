@@ -1,41 +1,41 @@
 {
   "_args": [
     [
-      "ckeditor@^4.5.10",
+      "ckeditor@^4.6.0",
       "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing"
     ]
   ],
-  "_from": "ckeditor@>=4.5.10 <5.0.0",
-  "_id": "ckeditor@4.5.11",
+  "_from": "ckeditor@>=4.6.0 <5.0.0",
+  "_id": "ckeditor@4.6.0",
   "_inCache": true,
   "_installable": true,
   "_location": "/ckeditor",
-  "_nodeVersion": "6.5.0",
+  "_nodeVersion": "6.7.0",
   "_npmOperationalInternal": {
-    "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/ckeditor-4.5.11.tgz_1473255367184_0.9715864942409098"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/ckeditor-4.6.0.tgz_1479311319258_0.1100359137635678"
   },
   "_npmUser": {
     "email": "npm@cksource.com",
     "name": "cksource"
   },
-  "_npmVersion": "2.6.1",
+  "_npmVersion": "3.10.3",
   "_phantomChildren": {},
   "_requested": {
     "name": "ckeditor",
-    "raw": "ckeditor@^4.5.10",
-    "rawSpec": "^4.5.10",
+    "raw": "ckeditor@^4.6.0",
+    "rawSpec": "^4.6.0",
     "scope": null,
-    "spec": ">=4.5.10 <5.0.0",
+    "spec": ">=4.6.0 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.11.tgz",
-  "_shasum": "5f3aef4f6b109d8d0b33e3532acb6d2f08537d12",
+  "_resolved": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.6.0.tgz",
+  "_shasum": "37cdc988aa22ca6fc67540bb32b6f039a35e7718",
   "_shrinkwrap": null,
-  "_spec": "ckeditor@^4.5.10",
+  "_spec": "ckeditor@^4.6.0",
   "_where": "/Users/mattiasnilsson/Development/typo3-cms/app/web/typo3conf/ext/frontend_editing",
   "author": {
     "name": "CKSource",
@@ -49,10 +49,10 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "5f3aef4f6b109d8d0b33e3532acb6d2f08537d12",
-    "tarball": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.5.11.tgz"
+    "shasum": "37cdc988aa22ca6fc67540bb32b6f039a35e7718",
+    "tarball": "https://registry.npmjs.org/ckeditor/-/ckeditor-4.6.0.tgz"
   },
-  "gitHead": "48155a1e1c7e84736b5a166ad3f33acea2a51255",
+  "gitHead": "2530c9c5d26f275882da192ba2231ac69e967474",
   "homepage": "http://ckeditor.com",
   "keywords": [
     "ckeditor",
@@ -80,5 +80,5 @@
     "url": "git+https://github.com/ckeditor/ckeditor-releases.git"
   },
   "scripts": {},
-  "version": "4.5.11"
+  "version": "4.6.0"
 }

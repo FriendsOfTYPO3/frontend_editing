@@ -18,7 +18,7 @@
     "build:suite": "npm run php:codesniffer && npm run php:unittests && npm run lint:css"
   },
   "dependencies": {
-    "ckeditor": "^4.5.10",
+    "ckeditor": "^4.6.0",
     "toastr": "^2.1.2",
     "immutable": "^3.8",
     "alertify.js": "^1.0.12",
