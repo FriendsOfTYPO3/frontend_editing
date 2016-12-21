@@ -6,24 +6,14 @@ use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
-use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\Core\Tests\UnitTestCase;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel.
  */
-class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class FrontendEditingPanelTest extends UnitTestCase
 {
-
-    /**
-     * @var ContentEditableWrapper
-     */
-    protected $contentEditableWrapper = null;
-
-    /**
-     * @var ContentEditableFixtures
-     */
-    protected $fixtures = null;
 
     /**
      * @var TemplateService
@@ -43,6 +33,7 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $this->templateServiceMock =
             $this->getMockBuilder(TemplateService::class)
             ->setMethods(['getFileName', 'linkData'])->getMock();
+
         $pageRepositoryMock =
             $this->getMockBuilder(PageRepositoryFixture::class)
             ->setMethods(['getRawRecord', 'getMountPointInfo'])->getMock();
@@ -54,14 +45,12 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
             '',
             false
         );
+
         $this->frontendControllerMock->tmpl = $this->templateServiceMock;
         $this->frontendControllerMock->config = [];
         $this->frontendControllerMock->page =  [];
         $this->frontendControllerMock->sys_page = $pageRepositoryMock;
         $GLOBALS['TSFE'] = $this->frontendControllerMock;
-
-        $this->contentEditableWrapper = new ContentEditableWrapper();
-        $this->fixtures = new ContentEditableFixtures();
     }
 
      /**
@@ -74,17 +63,21 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
         $content = $this->getUniqueId('content');
         return [
             'standard case call edit icons for tt_content:bodytext' => [
-                $this->contentEditableWrapper->wrapContentToBeEditable(
+                ContentEditableWrapper::wrapContentWithDropzone(
                     'tt_content',
-                    'bodytext',
                     1,
-                    $content
+                    ContentEditableWrapper::wrapContent(
+                        'tt_content',
+                        1,
+                        [],
+                        $content
+                    )
                 ),
                 $content,
                 'tt_content:bodytext',
-                ['beforeLastTag' => '1','allow' => 'edit'],
+                ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'tt_content:1',
-                ['uid' => 1, 'pid' => 1,'CType' => 'text', 'bodytext' => $content],
+                ['uid' => 1, 'pid' => 1, 'CType' => 'text', 'bodytext' => $content],
                 '',
                 'tt_content',
                 '1',
@@ -93,11 +86,20 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
                 1
             ],
             'another case with fe_users:email' => [
-                '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12">' .
-                    $content . '</div>',
+                ContentEditableWrapper::wrapContentWithDropzone(
+                    'fe_users',
+                    12,
+                    ContentEditableWrapper::wrapContent(
+                        'fe_users',
+                        12,
+                        [],
+                        '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12">'
+                            . $content . '</div>'
+                    )
+                ),
                 $content,
                 'fe_users:email',
-                ['beforeLastTag' => '1','allow' => 'edit'],
+                ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'fe_users:12',
                 ['uid' => 12, 'pid' => 1, 'email' => $content],
                 '',
@@ -108,8 +110,16 @@ class FrontendEditingPanelTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
                 1
             ],
             'another case with tt_content:header' => [
-                '<div contenteditable="true" data-table="tt_content" data-field="header" data-uid="12">' .
-                    $content . '</div>',
+                ContentEditableWrapper::wrapContentWithDropzone(
+                    'tt_content',
+                    12,
+                    ContentEditableWrapper::wrapContent(
+                        'tt_content',
+                        12,
+                        [],
+                        $content
+                    )
+                ),
                 $content,
                 'tt_content:header',
                 ['beforeLastTag' => '1','allow' => 'edit'],
