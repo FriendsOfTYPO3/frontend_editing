@@ -5,6 +5,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Class ContentEditableWrapper
@@ -77,7 +79,7 @@ class ContentEditableWrapper
             $table,
             $uid,
             $dataArr['colPos'],
-            self::renderEditUrl($table, $uid),
+            self::renderEditOnClickReturnUrl(self::renderEditUrl($table, $uid)),
             self::renderInlineActionIcons(),
             $content
         );
@@ -188,5 +190,22 @@ class ContentEditableWrapper
         );
 
         return $newUrl;
+    }
+
+    /**
+     * Render the onclick return url for when open an edit window
+     *
+     * @param string $url
+     * @return string
+     */
+    public static function renderEditOnClickReturnUrl($url)
+    {
+        $returnUrl = $url . '&returnUrl=' .
+            PathUtility::getAbsoluteWebPath(
+                ExtensionManagementUtility::siteRelPath('frontend_editing') .
+                'Resources/Public/Templates/Close.html'
+            );
+
+        return $returnUrl;
     }
 }

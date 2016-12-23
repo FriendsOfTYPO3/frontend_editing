@@ -11,21 +11,6 @@ class Integration
 {
 
     /**
-     * Get count of changed elements per page
-     *
-     * @param integer $pageId page uid
-     * @return integer
-     */
-    public static function getCountOfUnsavedElements($pageId)
-    {
-        $elements = $GLOBALS['BE_USER']->uc['aloha'][$pageId];
-        if (is_array($elements)) {
-            return count($elements);
-        }
-        return 0;
-    }
-
-    /**
      * Modify content if it is RTE base by using RteHtmlParser functions
      *
      * @param string $table table name
