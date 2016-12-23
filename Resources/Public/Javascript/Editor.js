@@ -62,7 +62,7 @@ var Editor = (function($){
 
             // Open/edit action
             that.find('.icon-actions-open').on('click', function() {
-                F.modal(that.data('edit-url'));
+                F.windowOpen(that.data('edit-url'));
             });
 
             // Delete action

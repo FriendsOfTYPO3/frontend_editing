@@ -115,9 +115,11 @@ class ContentEditableFixtures
             $this->table,
             $this->uid,
             $this->dataArr['colPos'],
-            ContentEditableWrapper::renderEditUrl(
-                $this->table,
-                $this->uid
+            ContentEditableWrapper::renderEditOnClickReturnUrl(
+                ContentEditableWrapper::renderEditUrl(
+                    $this->table,
+                    $this->uid
+                )
             ),
             ContentEditableWrapper::renderInlineActionIcons(),
             $this->content

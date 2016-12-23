@@ -12,6 +12,7 @@
     FrontendEditing.prototype.showWarning = showWarning;
     FrontendEditing.prototype.confirm = confirm;
     FrontendEditing.prototype.modal = modal;
+    FrontendEditing.prototype.windowOpen = windowOpen;
     FrontendEditing.prototype.iframe = getIframe;
 
     var CLASS_HIDDEN = 'hidden';
@@ -244,6 +245,12 @@
 
     function modal(content) {
         lity(content);
+    }
+
+    function windowOpen(url) {
+        var vHWin = window.open(url ,'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
+        vHWin.focus();
+        return false;
     }
 
 }(jQuery));
