@@ -117,7 +117,7 @@ class ContentEditableWrapper
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            self::renderNewUrl($table, $uid)
+            self::renderEditOnClickReturnUrl(self::renderNewUrl($table, $uid))
         );
 
         return $content;

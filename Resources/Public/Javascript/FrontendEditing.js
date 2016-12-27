@@ -167,10 +167,10 @@ var FrontendEditing = (function($){
 
         dropNewCe: function(ev) {
             ev.preventDefault();
-            var params = ev.dataTransfer.getData("params");
+            var params = ev.dataTransfer.getData('params');
             var newUrl = $(ev.currentTarget).data('new-url');
             var fullUrl = newUrl + params;
-            F.modal(fullUrl);
+            F.windowOpen(fullUrl);
         }
 
     };
