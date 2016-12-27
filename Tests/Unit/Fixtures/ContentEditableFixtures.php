@@ -148,7 +148,9 @@ class ContentEditableFixtures
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            ContentEditableWrapper::renderNewUrl($this->table, $this->uid)
+            ContentEditableWrapper::renderEditOnClickReturnUrl(
+                ContentEditableWrapper::renderNewUrl($this->table, $this->uid)
+            )
         );
 
         return $expectedOutput;
