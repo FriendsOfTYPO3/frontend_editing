@@ -114,7 +114,7 @@
             F.showLoadingScreen();
         });
 
-        $('.right-bar-button').on('click', function () {
+        $('.right-bar-button').on('click', function() {
             $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -138,18 +138,18 @@
             });
         });
 
-        $('.accordion .trigger').on('click', function(){
+        $('.accordion .trigger').on('click', function() {
             $(this).toggleClass('active');
             $(this).closest('.accordion-container').find('.accordion-content').slideToggle(200);
         });
 
-        $('.accordion .grid').on('click', function(){
+        $('.accordion .grid').on('click', function() {
             $(this).closest('.accordion-container')
                 .removeClass('accordion-list')
                 .addClass('accordion-grid');
         });
 
-        $('.list-view').on('click', function(){
+        $('.list-view').on('click', function() {
             $(this).closest('.accordion-container')
                 .removeClass('accordion-grid')
                 .addClass('accordion-list');
