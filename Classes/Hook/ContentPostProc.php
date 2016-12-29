@@ -117,7 +117,8 @@ class ContentPostProc
                             'currentTime' => time(),
                             'contentItems' => $this->getContentItems(),
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
-                            'languageLabels' => json_encode($this->getLocalizedFrontendLabels())
+                            'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
+                            'currentPage' => $GLOBALS['TSFE']->id
                         ],
                         $icons
                     )

@@ -339,6 +339,9 @@
 .page-tree-status-hidden {
   margin-left: -16px; }
 
+.page-tree-active {
+  color: #FF8700; }
+
 .t3-frontend-editing__top-bar {
   background: #191919;
   color: #fff;
