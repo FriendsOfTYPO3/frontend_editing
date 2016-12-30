@@ -42,6 +42,7 @@
 
         initListeners();
         bindActions();
+        initGuiStates();
         loadPageIntoIframe(options.iframeUrl, options.iframeLoadedCallback);
         iframeLoadedCallback = options.iframeLoadedCallback;
         storage = F.getStorage();
@@ -114,7 +115,7 @@
             F.showLoadingScreen();
         });
 
-        $('.right-bar-button').on('click', function () {
+        $('.right-bar-button').on('click', function() {
             $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -123,6 +124,10 @@
         });
 
         $('.left-bar-button').on('click', function() {
+            if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
+                F.getStorage().addItem('leftPanelOpen', true);
+            }
+
             $('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
             $('.t3-frontend-editing__left-bar').toggleClass('open');
             $('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
@@ -138,18 +143,18 @@
             });
         });
 
-        $('.accordion .trigger').on('click', function(){
+        $('.accordion .trigger').on('click', function() {
             $(this).toggleClass('active');
             $(this).closest('.accordion-container').find('.accordion-content').slideToggle(200);
         });
 
-        $('.accordion .grid').on('click', function(){
+        $('.accordion .grid').on('click', function() {
             $(this).closest('.accordion-container')
                 .removeClass('accordion-list')
                 .addClass('accordion-grid');
         });
 
-        $('.list-view').on('click', function(){
+        $('.list-view').on('click', function() {
             $(this).closest('.accordion-container')
                 .removeClass('accordion-grid')
                 .addClass('accordion-list');
@@ -161,6 +166,15 @@
         $(document).on('lity:close', function(event, instance) {
             F.refreshIframe();
         });
+    }
+
+    function initGuiStates() {
+        var states = F.getStorage().getAllData();
+        if (typeof states.leftPanelOpen != 'undefined' && states.leftPanelOpen === true) {
+            // Trigger open left panel
+            $('.left-bar-button').trigger('click');
+            F.getStorage().addItem('leftPanelOpen', false);
+        }
     }
 
     function loadPageIntoIframe(url, callback) {
