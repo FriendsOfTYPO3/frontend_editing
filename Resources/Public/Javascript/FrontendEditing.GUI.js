@@ -42,6 +42,7 @@
 
         initListeners();
         bindActions();
+        initGuiStates();
         loadPageIntoIframe(options.iframeUrl, options.iframeLoadedCallback);
         iframeLoadedCallback = options.iframeLoadedCallback;
         storage = F.getStorage();
@@ -123,6 +124,10 @@
         });
 
         $('.left-bar-button').on('click', function() {
+            if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
+                F.getStorage().addItem('leftPanelOpen', true);
+            }
+
             $('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
             $('.t3-frontend-editing__left-bar').toggleClass('open');
             $('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
@@ -161,6 +166,15 @@
         $(document).on('lity:close', function(event, instance) {
             F.refreshIframe();
         });
+    }
+
+    function initGuiStates() {
+        var states = F.getStorage().getAllData();
+        if (typeof states.leftPanelOpen != 'undefined' && states.leftPanelOpen === true) {
+            // Trigger open left panel
+            $('.left-bar-button').trigger('click');
+            F.getStorage().addItem('leftPanelOpen', false);
+        }
     }
 
     function loadPageIntoIframe(url, callback) {
