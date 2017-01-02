@@ -170,7 +170,7 @@
 
     function initGuiStates() {
         var states = F.getStorage().getAllData();
-        if (typeof states.leftPanelOpen != 'undefined' && states.leftPanelOpen === true) {
+        if (typeof states.leftPanelOpen !== 'undefined' && states.leftPanelOpen === true) {
             // Trigger open left panel
             $('.left-bar-button').trigger('click');
             F.getStorage().addItem('leftPanelOpen', false);
