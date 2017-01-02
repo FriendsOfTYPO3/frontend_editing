@@ -126,7 +126,7 @@ var Editor = (function($){
             editor.on('change', function(changeEvent) {
                 if (typeof editor.element !== 'undefined') {
                     var dataSet = editor.element.$.dataset;
-                    storage.addSaveItem(dataSet.uid, {
+                    storage.addSaveItem(dataSet.uid + '_' + dataSet.field, {
                         'action': 'save',
                         'table': dataSet.table,
                         'uid': dataSet.uid,
