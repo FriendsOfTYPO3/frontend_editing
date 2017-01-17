@@ -474,7 +474,13 @@
   .t3-frontend-editing__top-bar-right .user .icon-avatar-default {
     position: relative;
     top: 6px;
-    vertical-align: middle; }
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 50%; }
+  .t3-frontend-editing__top-bar-right .user .icon-avatar-title {
+    position: relative;
+    top: 9px; }
   .t3-frontend-editing__top-bar-right .right-bar-button {
     background: none;
     border: 0;

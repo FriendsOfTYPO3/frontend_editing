@@ -130,7 +130,14 @@
       position: relative;
       top: 6px;
       vertical-align: middle;
+      display: inline-block;
+      overflow: hidden;
+      border-radius: 50%;
+    }
 
+    .icon-avatar-title {
+      position: relative;
+      top: 9px;
     }
   }
 
