@@ -1,6 +1,6 @@
 .lity-active {
   .lity {
-    background: rgba($black, .5);
+    background: $modal-background-color;
   }
 }
 
@@ -9,11 +9,11 @@
 }
 
 .lity-close {
+  position: absolute !important;
+  right: -30px !important;
+  top: -30px !important;
 
   &:active {
     top: -30px !important;
   }
-  position: absolute !important;
-  right: -30px !important;
-  top: -30px !important;
 }

@@ -1,4 +1,12 @@
 .#{$t3-frontend}page-tree-wrapper {
+
+  height: calc(100vh - #{$top-bar-height});
+  max-height: calc(100vh - #{$top-bar-height});
+  width: $left-bar-width - 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -16,13 +24,6 @@
   &::-webkit-scrollbar-track {
     background-color: $scroll-bar-track;
   }
-
-  height: calc(100vh - #{$top-bar-height});
-  max-height: calc(100vh - #{$top-bar-height});
-  width: $left-bar-width - 14px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: absolute;
 
   .#{$t3-frontend}page-tree {
     list-style-type: none;
