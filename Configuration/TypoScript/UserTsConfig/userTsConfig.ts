@@ -6,4 +6,5 @@ admPanel {
     module.edit.forceDisplayFieldIcons = 1
     module.edit.forceDisplayIcons = 0
     hide = 1
+    preview.showHiddenRecords = 1
 }
