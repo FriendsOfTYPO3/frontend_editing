@@ -1,16 +1,16 @@
 .#{$t3-frontend}iframe-wrapper {
 
-  &.#{$t3-frontend}iframe-overlay {
-    &.push-toleft-iframe  {
-      width: 100%;
-    }
-  }
-
   @include transition(width .2s);
   margin-top: $top-bar-height;
   margin-right: $right-bar-width;
   position: relative;
   width: 100%;
+
+  &.#{$t3-frontend}iframe-overlay {
+    &.push-toleft-iframe  {
+      width: 100%;
+    }
+  }
 
   &.push-toleft-iframe {
     @include transition(width .2s);
