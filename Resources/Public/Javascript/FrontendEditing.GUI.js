@@ -31,6 +31,7 @@
     var $itemCounter;
     var $iframe;
     var $loadingScreen;
+    var $saveButton;
     var iframeUrl;
     var iframeLoadedCallback;
     var storage;
@@ -39,6 +40,7 @@
         $itemCounter = $('.top-bar-action-buttons .items-counter');
         $iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
         $loadingScreen = $('.t3-frontend-editing__loading-screen');
+        $saveButton = $('.t3-frontend-editing__save');
 
         initListeners();
         bindActions();
@@ -74,8 +76,10 @@
         F.on(F.CONTENT_CHANGE, function(items) {
             var items = storage.getSaveItems();
             if (items.count()) {
+                $saveButton.removeClass('btn-inactive');
                 $itemCounter.html('(' + items.count() + ')');
             } else {
+                $saveButton.addClass('btn-inactive');
                 $itemCounter.html('');
             }
         });

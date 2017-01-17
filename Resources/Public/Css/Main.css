@@ -88,6 +88,11 @@
   .btn-default:hover {
     background-color: rgba(204, 204, 204, 0.5); }
 
+.btn-inactive {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: #4c4c4c; }
+
 .title-default {
   padding: 10px 0; }
 

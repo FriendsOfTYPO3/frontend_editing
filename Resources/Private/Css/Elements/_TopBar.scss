@@ -90,7 +90,6 @@
   right: 0;
   position: relative;
 
-
   &.push-toleft {
     @include transition(right .2s);
     @include transition-duration(.2s);

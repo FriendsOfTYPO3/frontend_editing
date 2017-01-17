@@ -31,3 +31,9 @@
     background-color: lighten(transparentize($gray, .5), 50%);
   }
 }
+
+.btn-inactive {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: $gray;
+}
