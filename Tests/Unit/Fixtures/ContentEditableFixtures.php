@@ -87,10 +87,11 @@ class ContentEditableFixtures
     public function getWrappedExpectedContent()
     {
         $expectedOutput = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" class="%s">%s</div>',
             $this->table,
             $this->field,
             $this->uid,
+            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
             $this->content
         );
 
@@ -106,10 +107,11 @@ class ContentEditableFixtures
     {
         $class = 't3-frontend-editing__inline-actions';
         $expectedOutput = sprintf(
-            '<div class="t3-frontend-editing__ce" title="%s">' .
+            '<div class="t3-frontend-editing__ce %s" title="%s">' .
                 '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
+            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
             $this->uid,
             $class,
             $this->table,

@@ -6,6 +6,10 @@
   }
 }
 
+&.#{$t3-frontend}hidden-element {
+  opacity: .4;
+}
+
 .#{$t3-frontend}dropzone {
   height: 0px;
   background-color: $drop-zone-bg-color;

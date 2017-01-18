@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class ContentEditableWrapper
@@ -37,10 +38,11 @@ class ContentEditableWrapper
         }
 
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" class="%s">%s</div>',
             $table,
             $field,
             $uid,
+            self::checkIfContentElementIsHidden($table, $uid),
             $content
         );
 
@@ -70,10 +72,11 @@ class ContentEditableWrapper
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce" title="%s">' .
+            '<div class="t3-frontend-editing__ce %s" title="%s">' .
                 '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
+            self::checkIfContentElementIsHidden($table, $uid),
             $uid,
             $class,
             $table,
@@ -207,5 +210,23 @@ class ContentEditableWrapper
             );
 
         return $returnUrl;
+    }
+
+    /**
+     * Check if the content element is hidden and return a proper class name
+     *
+     * @param string $table
+     * @param string $uid
+     * @return string $hiddenClassName
+     */
+    public static function checkIfContentElementIsHidden($table, $uid)
+    {
+        $hiddenClassName = '';
+        $hidden = Integration::recordInfo($table, $uid, 'hidden');
+        if ($hidden['hidden']) {
+            $hiddenClassName = 't3-frontend-editing__hidden-element';
+        }
+
+        return $hiddenClassName;
     }
 }

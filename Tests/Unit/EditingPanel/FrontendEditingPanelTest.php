@@ -93,7 +93,7 @@ class FrontendEditingPanelTest extends UnitTestCase
                         'fe_users',
                         12,
                         [],
-                        '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12">'
+                        '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12" class="">'
                             . $content . '</div>'
                     )
                 ),

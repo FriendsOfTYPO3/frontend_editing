@@ -129,7 +129,7 @@ class FrontendEditingPanel
             );
 
             // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
-            // add a dropzone after content
+            // Add a dropzone after content
             $wrappedContent = ContentEditableWrapper::wrapContentWithDropzone(
                 $table,
                 $editUid,
