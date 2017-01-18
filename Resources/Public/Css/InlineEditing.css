@@ -43,3 +43,6 @@
     cursor: pointer; }
   .t3-frontend-editing__inline-actions .icon-actions-edit-delete, .t3-frontend-editing__inline-actions .icon-actions-edit-add {
     margin-left: 2px; }
+
+#typo3-previewInfo {
+  display: none; }
