@@ -108,7 +108,8 @@ class ContentEditableFixtures
         $class = 't3-frontend-editing__inline-actions';
         $expectedOutput = sprintf(
             '<div class="t3-frontend-editing__ce %s" title="%s">' .
-                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+                '<span class="%s" data-table="%s" data-uid="%s"' .
+                    ' data-hidden="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
             ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
@@ -116,6 +117,7 @@ class ContentEditableFixtures
             $class,
             $this->table,
             $this->uid,
+            0,
             $this->dataArr['colPos'],
             ContentEditableWrapper::renderEditOnClickReturnUrl(
                 ContentEditableWrapper::renderEditUrl(
@@ -123,7 +125,7 @@ class ContentEditableFixtures
                     $this->uid
                 )
             ),
-            ContentEditableWrapper::renderInlineActionIcons(),
+            ContentEditableWrapper::renderInlineActionIcons(false),
             $this->content
         );
 

@@ -337,6 +337,47 @@ class CrudController extends ActionController
     }
 
     /**
+     * Hide a record through the data handler
+     *
+     * @param string $table
+     * @param string $uid
+     * @param boolean $hide
+     * @return array
+     */
+    public function hideContentAction($table, $uid, $hide)
+    {
+        try {
+            // Find the page (pid) on which the record exists
+            $pageUid = Integration::recordInfo($table, $uid, 'pid');
+
+            $command = [];
+            $data = [];
+            $data[$table][$uid][''] = $pageUid;
+            $data[$table][$uid]['hidden'] = $hide;
+
+            $this->dataHandler->start($data, $command);
+            $this->dataHandler->process_cmdmap();
+            $this->dataHandler->process_datamap();
+
+            // Clear the page (pid) cache
+            CacheUtility::clearPageCache([$pageUid['pid']]);
+
+            $message = [
+                'success' => true,
+                'message' => 'Content hidden (' . $uid . ')'
+            ];
+        } catch (\Exception $exception) {
+            $this->throwStatus(
+                500,
+                $exception->getFile(),
+                $exception->getMessage()
+            );
+        }
+
+        return json_encode($message);
+    }
+
+    /**
      * Move a content to another position (columnPosition, colpos)
      *
      * @param string $uid

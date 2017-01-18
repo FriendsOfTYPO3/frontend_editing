@@ -68,22 +68,27 @@ class ContentEditableWrapper
             throw new \Exception('Property "uid" can not to be empty!');
         }
 
+        $hiddenElementClassName = self::checkIfContentElementIsHidden($table, $uid);
+        $elementIsHidden = ($hiddenElementClassName === '') ? false : true;
+
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
             '<div class="t3-frontend-editing__ce %s" title="%s">' .
-                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+                '<span class="%s" data-table="%s" data-uid="%s" data-hidden="%s"' .
+                    ' data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
-            self::checkIfContentElementIsHidden($table, $uid),
+            $hiddenElementClassName,
             $uid,
             $class,
             $table,
             $uid,
+            intval($elementIsHidden),
             $dataArr['colPos'],
             self::renderEditOnClickReturnUrl(self::renderEditUrl($table, $uid)),
-            self::renderInlineActionIcons(),
+            self::renderInlineActionIcons($elementIsHidden),
             $content
         );
 
@@ -129,14 +134,20 @@ class ContentEditableWrapper
     /**
      * Renders the inline action icons
      *
+     * @param boolean $elementIsHidden
      * @return string
      */
-    public static function renderInlineActionIcons()
+    public static function renderInlineActionIcons($elementIsHidden)
     {
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
+        $visibilityIcon = ($elementIsHidden === true) ?
+            $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() :
+            $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render();
+
         $inlineIcons =
             $iconFactory->getIcon('actions-edit-add', Icon::SIZE_SMALL)->render() .
+            $visibilityIcon .
             $iconFactory->getIcon('actions-open', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
