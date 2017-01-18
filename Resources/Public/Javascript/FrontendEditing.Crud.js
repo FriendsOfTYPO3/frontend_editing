@@ -18,6 +18,7 @@
     // Extend FrontendEditing with the following functions
     FrontendEditing.prototype.saveAll = saveAll;
     FrontendEditing.prototype.delete = deleteRecord;
+    FrontendEditing.prototype.hideContent = hideRecord;
     FrontendEditing.prototype.moveContent = moveRecord;
 
     var numberOfRequestsLeft;
@@ -93,6 +94,38 @@
         var url = getCrudUrl('delete', {
             uid: uid,
             table: table
+        });
+
+        F.get(url, {
+            done: function(data) {
+                F.trigger(
+                    F.UPDATE_CONTENT_COMPLETE,
+                    {
+                        message: data.message
+                    }
+                );
+            },
+            fail: function(jqXHR, textStatus, errorThrown) {
+                F.trigger(
+                    F.REQUEST_ERROR,
+                    {
+                        message: jqXHR.responseText
+                    }
+                );
+            },
+            always: function() {
+                F.trigger(F.REQUEST_COMPLETE);
+            }
+        });
+    }
+
+    function hideRecord(uid, table, hide) {
+        this.trigger(F.REQUEST_START);
+
+        var url = getCrudUrl('hideContent', {
+            uid: uid,
+            table: table,
+            hide: hide
         });
 
         F.get(url, {

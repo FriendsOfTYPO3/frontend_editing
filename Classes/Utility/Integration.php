@@ -2,6 +2,7 @@
 namespace TYPO3\CMS\FrontendEditing\Utility;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Html\RteHtmlParser;
 
 /**
  * Check access of the user to display only those actions which are allowed
@@ -39,7 +40,7 @@ class Integration
             $RTEsetup = $GLOBALS['BE_USER']->getTSConfig('RTE', BackendUtility::getPagesTSconfig($pageId));
             $thisConfig = BackendUtility::RTEsetup($RTEsetup['properties'], $table, $vconf['field'], $theTypeString);
 
-            $rteHtmlParser = new \TYPO3\CMS\Core\Html\RteHtmlParser();
+            $rteHtmlParser = new RteHtmlParser();
             $fieldContent = $rteHtmlParser->RTE_transform($fieldContent, $vconf['spec'], 'db', $thisConfig);
         }
 

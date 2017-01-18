@@ -74,6 +74,15 @@ var Editor = (function($){
                 });
             });
 
+            // Hide/Unhide action
+            that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function() {
+                var hide = 1;
+                if (that.data('hidden') == 1) {
+                    hide = 0;
+                }
+                F.hideContent(that.data('uid'), that.data('table'), hide);
+            });
+
             if (typeof $inlineActions[index - 1] !== 'undefined' &&
                 $inlineActions[index - 1].dataset.cid == that.data('cid')
             ) {

@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class ContentEditableWrapper
@@ -37,10 +38,11 @@ class ContentEditableWrapper
         }
 
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" class="%s">%s</div>',
             $table,
             $field,
             $uid,
+            self::checkIfContentElementIsHidden($table, $uid),
             $content
         );
 
@@ -66,21 +68,27 @@ class ContentEditableWrapper
             throw new \Exception('Property "uid" can not to be empty!');
         }
 
+        $hiddenElementClassName = self::checkIfContentElementIsHidden($table, $uid);
+        $elementIsHidden = ($hiddenElementClassName === '') ? false : true;
+
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce" title="%s">' .
-                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+            '<div class="t3-frontend-editing__ce %s" title="%s">' .
+                '<span class="%s" data-table="%s" data-uid="%s" data-hidden="%s"' .
+                    ' data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
+            $hiddenElementClassName,
             $uid,
             $class,
             $table,
             $uid,
+            intval($elementIsHidden),
             $dataArr['colPos'],
             self::renderEditOnClickReturnUrl(self::renderEditUrl($table, $uid)),
-            self::renderInlineActionIcons(),
+            self::renderInlineActionIcons($elementIsHidden),
             $content
         );
 
@@ -126,14 +134,20 @@ class ContentEditableWrapper
     /**
      * Renders the inline action icons
      *
+     * @param boolean $elementIsHidden
      * @return string
      */
-    public static function renderInlineActionIcons()
+    public static function renderInlineActionIcons($elementIsHidden)
     {
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
+        $visibilityIcon = ($elementIsHidden === true) ?
+            $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() :
+            $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render();
+
         $inlineIcons =
             $iconFactory->getIcon('actions-edit-add', Icon::SIZE_SMALL)->render() .
+            $visibilityIcon .
             $iconFactory->getIcon('actions-open', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
@@ -207,5 +221,23 @@ class ContentEditableWrapper
             );
 
         return $returnUrl;
+    }
+
+    /**
+     * Check if the content element is hidden and return a proper class name
+     *
+     * @param string $table
+     * @param string $uid
+     * @return string $hiddenClassName
+     */
+    public static function checkIfContentElementIsHidden($table, $uid)
+    {
+        $hiddenClassName = '';
+        $hidden = Integration::recordInfo($table, $uid, 'hidden');
+        if ($hidden['hidden']) {
+            $hiddenClassName = 't3-frontend-editing__hidden-element';
+        }
+
+        return $hiddenClassName;
     }
 }
