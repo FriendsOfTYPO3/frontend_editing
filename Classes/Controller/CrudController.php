@@ -22,6 +22,8 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 use TYPO3\CMS\FrontendEditing\Utility\Cache\CacheUtility;
 use TYPO3\CMS\FrontendEditing\Utility\Integration;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * A Controller which handles the CRUD actions for content
@@ -39,6 +41,11 @@ class CrudController extends ActionController
      * @var string
      */
     protected $defaultViewObjectName = JsonView::class;
+
+    /**
+     * @var ConnectionPool
+     */
+    protected $connectionPool;
 
     /**
      * @var DataHandler
@@ -89,6 +96,7 @@ class CrudController extends ActionController
         $this->dataHandler->stripslashes_values = 0;
         // Initialize backend user for data handler
         $this->dataHandler->BE_USER = $GLOBALS['BE_USER'];
+        $this->connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
 
         if (!isset($GLOBALS['LANG'])) {
             // DataHandler uses $GLOBALS['LANG'] when saving records
@@ -233,8 +241,18 @@ class CrudController extends ActionController
             $this->field = $body['field'];
         }
         $this->uid = $body['uid'];
-        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
 
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->table);
+        $this->record = $queryBuilder
+            ->select('*')
+            ->from($this->table)
+            ->where(
+                $queryBuilder->expr()->eq('uid', (int)$this->uid)
+            )
+            ->execute()
+            ->fetch();
+        
         $requestPreProcessArray =
             $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'];
         if (is_array($requestPreProcessArray)) {
