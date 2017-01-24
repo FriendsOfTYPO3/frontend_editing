@@ -16,6 +16,9 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * A class that handles the integration of CKEditor
@@ -73,7 +76,17 @@ class Integration
     public static function recordInfo($table, $id, $fieldList = '*')
     {
         if (is_array($GLOBALS['TCA'][$table])) {
-            $record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow($fieldList, $table, 'uid=' . intval($id));
+            $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = $connectionPool->getQueryBuilderForTable($table);
+            $record = $queryBuilder
+                ->select($fieldList)
+                ->from($table)
+                ->where(
+                    $queryBuilder->expr()->eq('uid', (int)$id)
+                )
+                ->execute()
+                ->fetch();
             return $record;
         }
 
