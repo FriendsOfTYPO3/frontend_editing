@@ -252,7 +252,7 @@ class CrudController extends ActionController
             )
             ->execute()
             ->fetch();
-        
+
         $requestPreProcessArray =
             $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'];
         if (is_array($requestPreProcessArray)) {

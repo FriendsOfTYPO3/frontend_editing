@@ -15,6 +15,9 @@ namespace TYPO3\CMS\FrontendEditing\Utility\RequestPreProcess;
  */
 
 use TYPO3\CMS\FrontendEditing\Controller\CrudController;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * Hook for saving content element "table"
@@ -87,11 +90,14 @@ class CeTable implements RequestPreProcessInterface
                 $newPiFlexform = '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>' .
                     $doc->saveXml($doc->documentElement);
 
-                $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-                    'tt_content',
-                    'uid=' . $record['uid'],
-                    ['pi_flexform' => $newPiFlexform]
-                );
+                $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+                /** @var QueryBuilder $queryBuilder */
+                $queryBuilder = $connectionPool->getQueryBuilderForTable('tt_content');
+                $queryBuilder
+                    ->update('tt_content')
+                    ->where($queryBuilder->expr()->eq('uid', $record['uid']))
+                    ->set('pi_flexform', $newPiFlexform)
+                    ->execute();
             }
         }
 
