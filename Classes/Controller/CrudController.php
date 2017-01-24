@@ -233,7 +233,8 @@ class CrudController extends ActionController
             $this->field = $body['field'];
         }
         $this->uid = $body['uid'];
-        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
+
+        $this->record = Integration::recordInfo($this->table, $this->uid);
 
         $requestPreProcessArray =
             $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'];
