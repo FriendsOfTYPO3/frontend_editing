@@ -518,29 +518,6 @@
       border: 1px solid #3f3f3f; }
     .t3-frontend-editing__right-bar .top-right-bar-wrapper::-webkit-scrollbar-track {
       background-color: #3f3f3f; }
-  .t3-frontend-editing__right-bar.open .top-right-title .icon-icons-arrow-double {
-    -webkit-transition: left 0.2s;
-    -moz-transition: left 0.2s;
-    -ms-transition: left 0.2s;
-    -o-transition: left 0.2s;
-    transition: left 0.2s;
-    -webkit-transition-duration: 0.2s;
-    -moz-transition-duration: 0.2s;
-    -ms-transition-duration: 0.2s;
-    -o-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
-    transform: rotate(0deg);
-    -moz-transform-origin: center;
-    -o-transform-origin: center;
-    -ms-transform-origin: center;
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    left: 0;
-    color: #fff; }
   .t3-frontend-editing__right-bar .top-right-title {
     text-align: right;
     background-color: #0f0f0f;
@@ -553,7 +530,7 @@
       font-size: 18px;
       display: inline-block;
       padding-right: 5px; }
-    .t3-frontend-editing__right-bar .top-right-title .icon-icons-arrow-double {
+    .t3-frontend-editing__right-bar .top-right-title .right-bar-button {
       -webkit-transition: left 0.2s;
       -moz-transition: left 0.2s;
       -ms-transition: left 0.2s;
@@ -564,11 +541,6 @@
       -ms-transition-duration: 0.2s;
       -o-transition-duration: 0.2s;
       transition-duration: 0.2s;
-      -webkit-transform: rotate(180deg);
-      -moz-transform: rotate(180deg);
-      -ms-transform: rotate(180deg);
-      -o-transform: rotate(180deg);
-      transform: rotate(180deg);
       -moz-transform-origin: center;
       -o-transform-origin: center;
       -ms-transform-origin: center;
@@ -585,15 +557,18 @@
       color: #838383;
       font-size: 32px;
       left: -45px; }
-      .t3-frontend-editing__right-bar .top-right-title .icon-icons-arrow-double:hover {
+      .t3-frontend-editing__right-bar .top-right-title .right-bar-button:hover {
         background-color: #292929;
         color: #fff; }
-    .t3-frontend-editing__right-bar .top-right-title .icon-icons-tools-settings {
+    .t3-frontend-editing__right-bar .top-right-title .title-icon-right {
       top: 7px;
       position: relative;
       font-size: 32px;
       padding-right: 15px;
       color: #FF8700; }
+  .t3-frontend-editing__right-bar.open .top-right-title .right-bar-button {
+    left: 0;
+    color: #fff; }
   .t3-frontend-editing__right-bar .page-seo {
     padding: 15px 0 0;
     text-align: center; }
@@ -692,30 +667,7 @@
   font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px); }
-  .t3-frontend-editing__left-bar.open .top-left-title .icon-icons-arrow-double {
-    -webkit-transition: right 0.2s;
-    -moz-transition: right 0.2s;
-    -ms-transition: right 0.2s;
-    -o-transition: right 0.2s;
-    transition: right 0.2s;
-    -webkit-transition-duration: 0.2s;
-    -moz-transition-duration: 0.2s;
-    -ms-transition-duration: 0.2s;
-    -o-transition-duration: 0.2s;
-    transition-duration: 0.2s;
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    transform: rotate(180deg);
-    -moz-transform-origin: center;
-    -o-transform-origin: center;
-    -ms-transform-origin: center;
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    right: 0;
-    color: #fff; }
-  .t3-frontend-editing__left-bar .icon-icons-site-tree {
+  .t3-frontend-editing__left-bar .title-icon-left {
     top: 7px;
     position: relative;
     font-size: 32px;
@@ -729,7 +681,7 @@
       padding: 10px 5px 10px 10px;
       font-size: 18px;
       display: inline-block; }
-    .t3-frontend-editing__left-bar .top-left-title .icon-icons-arrow-double {
+    .t3-frontend-editing__left-bar .top-left-title .left-bar-button {
       -webkit-transition: right 0.2s;
       -moz-transition: right 0.2s;
       -ms-transition: right 0.2s;
@@ -762,9 +714,18 @@
       font-size: 32px;
       right: -45px;
       top: 0; }
-      .t3-frontend-editing__left-bar .top-left-title .icon-icons-arrow-double:hover {
+      .t3-frontend-editing__left-bar .top-left-title .left-bar-button:hover {
         background-color: #292929;
         color: #fff; }
+  .t3-frontend-editing__left-bar.open .top-left-title .left-bar-button {
+    right: 0;
+    color: #fff; }
+  .t3-frontend-editing__left-bar.open .top-left-title .icon-icons-arrow-double {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg); }
 
 .push-toright {
   left: 280px;

@@ -136,6 +136,7 @@
         });
 
         $('.right-bar-button').on('click', function() {
+            $(this).toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
             $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -144,6 +145,7 @@
         });
 
         $('.left-bar-button').on('click', function() {
+            $(this).toggleClass('icon-icons-site-tree icon-icons-arrow-double');
             if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
                 F.getStorage().addItem('leftPanelOpen', true);
             }

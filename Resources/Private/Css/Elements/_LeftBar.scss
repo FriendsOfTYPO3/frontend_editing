@@ -12,22 +12,7 @@
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 
-  &.open {
-
-    .top-left-title {
-
-      .icon-icons-arrow-double {
-        @include transition(right .2s);
-        @include transition-duration(.2s);
-        @include rotate(180);
-        @include transform-origin (center);
-        right: 0;
-        color: $white;
-      }
-    }
-  }
-
-  .icon-icons-site-tree {
+  .title-icon-left {
     top: 7px;
     position: relative;
     font-size: 32px;
@@ -46,7 +31,7 @@
       display: inline-block;
     }
 
-    .icon-icons-arrow-double {
+    .left-bar-button {
       @include transition(right .2s);
       @include transition-duration(.2s);
       @include rotate(0);
@@ -67,6 +52,19 @@
       &:hover {
         background-color: lighten($black, 10%);
         color: $white;
+      }
+    }
+  }
+
+  &.open {
+    .top-left-title {
+      .left-bar-button {
+        right: 0;
+        color: $white;
+      }
+
+      .icon-icons-arrow-double {
+        @include rotate(180);
       }
     }
   }
