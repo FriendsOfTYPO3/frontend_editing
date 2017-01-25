@@ -94,6 +94,9 @@ class CeTable implements RequestPreProcessInterface
                 /** @var QueryBuilder $queryBuilder */
                 $queryBuilder = $connectionPool->getQueryBuilderForTable('tt_content');
                 $queryBuilder
+                    ->getRestrictions()
+                    ->removeAll();
+                $queryBuilder
                     ->update('tt_content')
                     ->where($queryBuilder->expr()->eq('uid', $record['uid']))
                     ->set('pi_flexform', $newPiFlexform)

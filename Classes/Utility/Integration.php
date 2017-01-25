@@ -79,6 +79,9 @@ class Integration
             $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = $connectionPool->getQueryBuilderForTable($table);
+            $queryBuilder
+                ->getRestrictions()
+                ->removeAll();
             $record = $queryBuilder
                 ->select($fieldList)
                 ->from($table)
@@ -87,6 +90,7 @@ class Integration
                 )
                 ->execute()
                 ->fetch();
+                //->getSQL();var_dump($record);die;
             return $record;
         }
 
