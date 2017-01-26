@@ -64,4 +64,33 @@ class Integration
 
         return false;
     }
+
+	/**
+	 * Returns the title label used in Backend lists
+	 *
+	 * @param int $uid of the content element
+	 * @return string
+	 */
+    public static function contentElementTitle($uid)
+    {
+    	static $titles = [];
+
+    	//Optimized retrieval
+    	if($titles[$uid] !== NULL) {
+    		return $titles[$uid];
+	    }
+
+	    $rawRecord = BackendUtility::getRecord(
+		    'tt_content',
+		    $uid
+	    );
+
+	    $titles[$uid] = BackendUtility::getRecordTitle(
+		    'tt_content',
+		    $rawRecord,
+		    TRUE
+	    );
+
+	    return $titles[$uid];
+    }
 }

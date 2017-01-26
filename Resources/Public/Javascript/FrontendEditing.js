@@ -171,7 +171,24 @@ var FrontendEditing = (function($){
             var newUrl = $(ev.currentTarget).data('new-url');
             var fullUrl = newUrl + params;
             F.windowOpen(fullUrl);
-        }
+        },
+
+	    indicateCeStart: function(ev) {
+		    var $iframe = F.iframe();
+		    $iframe.contents().find("#c"+ev.currentTarget.dataset.uid).parent().addClass('indicate-element');
+            console.log($iframe.contents().find("#c" + ev.currentTarget.dataset.uid).parent().offset.top);
+		    $iframe.contents().find('body, html').animate(
+		        {
+			        scrollTop: $iframe.contents().find("#c" + ev.currentTarget.dataset.uid).parent().offset().top - 10
+		        },
+                500
+            );
+	    },
+
+	    indicateCeEnd: function(ev) {
+		    var $iframe = F.iframe();
+		    $iframe.contents().find("#c"+ev.currentTarget.dataset.uid).parent().removeClass('indicate-element');
+	    }
 
     };
 

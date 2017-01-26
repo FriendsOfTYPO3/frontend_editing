@@ -7,6 +7,8 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
+use TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
 
 /**
@@ -32,6 +34,11 @@ class ContentPostProc
      */
     protected $iconFactory;
 
+	/**
+	 * @var \TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository
+	 */
+	protected $contentRepository;
+
     /**
      * Extension configuration
      *
@@ -45,6 +52,8 @@ class ContentPostProc
     public function __construct()
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $objectManager = GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+        $this->contentRepository = $objectManager->get(ContentRepository::class);
     }
 
     /**
@@ -116,6 +125,7 @@ class ContentPostProc
                             'pageTree' => $this->getPageTreeStructure(),
                             'currentTime' => time(),
                             'contentItems' => $this->getContentItems(),
+	                        'contentElementsOnPage' => $this->getContentElementsOnPage($GLOBALS['TSFE']->id),
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
                             'currentPage' => $GLOBALS['TSFE']->id
@@ -255,4 +265,15 @@ class ContentPostProc
         }
         return $contentItems;
     }
+
+	/**
+	 * Get the content elements on the page
+	 *
+	 * @param int $pageId The page id to fetch content elements from
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	protected function getContentElementsOnPage($pageId)
+	{
+		return $this->contentRepository->findAllOnPage($pageId);
+	}
 }

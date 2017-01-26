@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Class ContentEditableWrapper
@@ -66,6 +67,8 @@ class ContentEditableWrapper
             throw new \Exception('Property "uid" can not to be empty!');
         }
 
+
+
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
@@ -74,7 +77,7 @@ class ContentEditableWrapper
                 '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
-            $uid,
+	        Integration::contentElementTitle($uid),
             $class,
             $table,
             $uid,
