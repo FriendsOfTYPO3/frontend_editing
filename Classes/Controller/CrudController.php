@@ -1,6 +1,18 @@
 <?php
-
 namespace TYPO3\CMS\FrontendEditing\Controller;
+
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -12,7 +24,9 @@ use TYPO3\CMS\FrontendEditing\Utility\Cache\CacheUtility;
 use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
- * Class CrudController
+ * A Controller which handles the CRUD actions for content
+ *
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
 class CrudController extends ActionController
 {
@@ -219,7 +233,8 @@ class CrudController extends ActionController
             $this->field = $body['field'];
         }
         $this->uid = $body['uid'];
-        $this->record = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $this->table, 'uid=' . $this->uid);
+
+        $this->record = Integration::recordInfo($this->table, $this->uid);
 
         $requestPreProcessArray =
             $GLOBALS['TYPO3_CONF_VARS']['Ckeditor']['Classes/Save/Save.php']['requestPreProcess'];
@@ -324,6 +339,47 @@ class CrudController extends ActionController
             $message = [
                 'success' => true,
                 'message' => 'Content deleted (' . $uid . ')'
+            ];
+        } catch (\Exception $exception) {
+            $this->throwStatus(
+                500,
+                $exception->getFile(),
+                $exception->getMessage()
+            );
+        }
+
+        return json_encode($message);
+    }
+
+    /**
+     * Hide a record through the data handler
+     *
+     * @param string $table
+     * @param string $uid
+     * @param boolean $hide
+     * @return array
+     */
+    public function hideContentAction($table, $uid, $hide)
+    {
+        try {
+            // Find the page (pid) on which the record exists
+            $pageUid = Integration::recordInfo($table, $uid, 'pid');
+
+            $command = [];
+            $data = [];
+            $data[$table][$uid][''] = $pageUid;
+            $data[$table][$uid]['hidden'] = $hide;
+
+            $this->dataHandler->start($data, $command);
+            $this->dataHandler->process_cmdmap();
+            $this->dataHandler->process_datamap();
+
+            // Clear the page (pid) cache
+            CacheUtility::clearPageCache([$pageUid['pid']]);
+
+            $message = [
+                'success' => true,
+                'message' => 'Content hidden (' . $uid . ')'
             ];
         } catch (\Exception $exception) {
             $this->throwStatus(

@@ -1,3 +1,19 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+/**
+ * Editor: used in iframe for DOM interaction
+ */
 var Editor = (function($){
 
     'use strict';
@@ -72,6 +88,15 @@ var Editor = (function($){
                         F.delete(that.data('uid'), that.data('table'));
                     }
                 });
+            });
+
+            // Hide/Unhide action
+            that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function() {
+                var hide = 1;
+                if (that.data('hidden') == 1) {
+                    hide = 0;
+                }
+                F.hideContent(that.data('uid'), that.data('table'), hide);
             });
 
             if (typeof $inlineActions[index - 1] !== 'undefined' &&

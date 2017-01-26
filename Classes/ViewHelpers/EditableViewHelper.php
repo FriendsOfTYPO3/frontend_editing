@@ -1,12 +1,25 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use TYPO3\CMS\FrontendEditing\Utility\Access;
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
- * Viewhelper to enable frontend editing for records in fluid
+ * View helper to enable frontend editing for records in fluid
  *
  * Example:
  * {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
@@ -19,6 +32,8 @@ use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
  * <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
  *     This is the content text to edit
  * </div>
+ *
+ * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
 class EditableViewHelper extends AbstractTagBasedViewHelper
 {

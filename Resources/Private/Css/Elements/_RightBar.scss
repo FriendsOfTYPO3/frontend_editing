@@ -42,21 +42,6 @@
     }
   }
 
-  &.open {
-
-    .top-right-title {
-
-      .icon-icons-arrow-double {
-        @include transition(left .2s);
-        @include transition-duration(.2s);
-        @include rotate(0);
-        @include transform-origin (center);
-        left: 0;
-        color: $white;
-      }
-    }
-  }
-
   .top-right-title {
     text-align: right;
     background-color: $header-top-bg-color;
@@ -72,10 +57,9 @@
       padding-right: 5px;
     }
 
-    .icon-icons-arrow-double {
+    .right-bar-button {
       @include transition(left .2s);
       @include transition-duration(.2s);
-      @include rotate(180);
       @include transform-origin (center);
       cursor: pointer;
       float: left;
@@ -95,12 +79,21 @@
       }
     }
 
-    .icon-icons-tools-settings {
+    .title-icon-right {
       top: 7px;
       position: relative;
       font-size: 32px;
       padding-right: 15px;
       color: $orange-primary;
+    }
+  }
+
+  &.open {
+    .top-right-title {
+      .right-bar-button {
+        left: 0;
+        color: $white;
+      }
     }
   }
 

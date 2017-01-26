@@ -6,6 +6,10 @@
   }
 }
 
+&.#{$t3-frontend}hidden-element {
+  opacity: .4;
+}
+
 .#{$t3-frontend}dropzone {
   height: 0px;
   background-color: $drop-zone-bg-color;
@@ -63,4 +67,9 @@
   .icon-actions-edit-delete, .icon-actions-edit-add  {
     margin-left: 2px;
   }
+}
+
+// Hide preview info box from TYPO3 admin panel
+#typo3-previewInfo {
+  display: none;
 }

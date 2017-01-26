@@ -62,10 +62,10 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rtehtmlarea'))
     'TYPO3\CMS.frontend_editing',
     'frontend_editing',
     [
-        'Crud' => 'update, delete, moveContent'
+        'Crud' => 'update, delete, hideContent, moveContent'
     ],
     [
-        'Crud' => 'update, delete, moveContent'
+        'Crud' => 'update, delete, hideContent, moveContent'
     ]
 );
 

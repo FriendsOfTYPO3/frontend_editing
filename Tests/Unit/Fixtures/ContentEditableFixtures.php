@@ -1,6 +1,19 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
 
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
 
 /**
@@ -87,10 +100,11 @@ class ContentEditableFixtures
     public function getWrappedExpectedContent()
     {
         $expectedOutput = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s">%s</div>',
+            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%s" class="%s">%s</div>',
             $this->table,
             $this->field,
             $this->uid,
+            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
             $this->content
         );
 
@@ -106,14 +120,17 @@ class ContentEditableFixtures
     {
         $class = 't3-frontend-editing__inline-actions';
         $expectedOutput = sprintf(
-            '<div class="t3-frontend-editing__ce" title="%s">' .
-                '<span class="%s" data-table="%s" data-uid="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+            '<div class="t3-frontend-editing__ce %s" title="%s">' .
+                '<span class="%s" data-table="%s" data-uid="%s"' .
+                    ' data-hidden="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
+            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
             $this->uid,
             $class,
             $this->table,
             $this->uid,
+            0,
             $this->dataArr['colPos'],
             ContentEditableWrapper::renderEditOnClickReturnUrl(
                 ContentEditableWrapper::renderEditUrl(
@@ -121,7 +138,7 @@ class ContentEditableFixtures
                     $this->uid
                 )
             ),
-            ContentEditableWrapper::renderInlineActionIcons(),
+            ContentEditableWrapper::renderInlineActionIcons(false),
             $this->content
         );
 

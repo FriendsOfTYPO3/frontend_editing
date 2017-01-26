@@ -1,3 +1,19 @@
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+/**
+ * FrontendEditing.GUI: Functionality related to the GUI and events listeners
+ */
 (function($){
 
     'use strict';
@@ -120,6 +136,7 @@
         });
 
         $('.right-bar-button').on('click', function() {
+            $(this).toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
             $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -128,6 +145,7 @@
         });
 
         $('.left-bar-button').on('click', function() {
+            $(this).toggleClass('icon-icons-site-tree icon-icons-arrow-double');
             if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
                 F.getStorage().addItem('leftPanelOpen', true);
             }
