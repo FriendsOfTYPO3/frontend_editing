@@ -32,6 +32,9 @@ var FrontendEditing = (function($){
         CONTENT_CHANGE: 'CONTENT_CHANGE'
     };
 
+    // TimeoutId used in indicateCeStart()
+    var indicateCeScrollTimeoutId = null;
+
     // Add default events and a function to add other events
     FrontendEditing.events = events;
     FrontendEditing.addEvent = function(key, value) {
@@ -191,19 +194,27 @@ var FrontendEditing = (function($){
 
 	    indicateCeStart: function(ev) {
 		    var $iframe = F.iframe();
-		    $iframe.contents().find("#c"+ev.currentTarget.dataset.uid).parent().addClass('indicate-element');
-            console.log($iframe.contents().find("#c" + ev.currentTarget.dataset.uid).parent().offset.top);
-		    $iframe.contents().find('body, html').animate(
-		        {
-			        scrollTop: $iframe.contents().find("#c" + ev.currentTarget.dataset.uid).parent().offset().top - 10
-		        },
-                500
-            );
+		    var uid = ev.currentTarget.dataset.uid;
+		    $iframe.contents().find("#c"+uid).parent().addClass('indicate-element');
+            console.log($iframe.contents().find("#c"+uid).parent().offset.top);
+
+            window.clearTimeout(this.indicateCeScrollTimeoutId);
+
+		    this.indicateCeScrollTimeoutId = window.setTimeout(function() {
+			    var $iframe = F.iframe();
+	            $iframe.contents().find('body, html').animate(
+		            {
+			            scrollTop: $iframe.contents().find("#c" + uid).parent().offset().top - 10
+		            },
+		            500
+	            );
+            }, 1000);
 	    },
 
 	    indicateCeEnd: function(ev) {
 		    var $iframe = F.iframe();
 		    $iframe.contents().find("#c"+ev.currentTarget.dataset.uid).parent().removeClass('indicate-element');
+		    window.clearTimeout(this.indicateCeScrollTimeoutId);
 	    }
 
     };
