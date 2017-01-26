@@ -1,29 +1,35 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers\ContentElement;
+
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
-
 /**
- * Viewhelper to enable frontend editing for records in fluid
+ * Viewhelper for printing a content element's name
  *
  * Example:
  * {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
  *
- * <fe:editable table="tt_content" field="bodytext" uid="{item.uid}">
- *     {item.bodytext}
- * </fe:editable>
+ * <fe:contentElement.recordTitle object="{contentElement}" size="default" />
  *
  * Output:
- * <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
- *     This is the content text to edit
- * </div>
+ * The Content Element's name
  */
 class RecordTitleViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
-
-	protected $escapeOutput = false;
-
 	/**
 	 * @var \TYPO3\CMS\Core\Imaging\IconFactory
 	 * @inject
@@ -32,7 +38,6 @@ class RecordTitleViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
 
 	public function initializeArguments() {
 		$this->registerArgument('object', '\TYPO3\CMS\FrontendEditing\Domain\Model\Content', 'The content element object', true);
-		$this->registerArgument('size', 'string', 'The content element object', false, Icon::SIZE_DEFAULT);
 	}
 
     /**

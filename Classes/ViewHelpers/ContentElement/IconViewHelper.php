@@ -1,24 +1,37 @@
 <?php
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers\ContentElement;
+
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 
-
 /**
- * Viewhelper to enable frontend editing for records in fluid
+ * Viewhelper output HTML for an icon for a content element
  *
  * Example:
  * {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
  *
- * <fe:editable table="tt_content" field="bodytext" uid="{item.uid}">
- *     {item.bodytext}
- * </fe:editable>
+ * <fe:contentElement.icon object="{contentElement}" size="default" />
  *
  * Output:
- * <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
- *     This is the content text to edit
- * </div>
+ * <span class="t3js-icon icon icon-size-default icon-state-default icon-content-text" data-identifier="content-text">
+ *     <span class="icon-markup">
+ *         <img src="[path to icon]" width="32" height="32">
+ *     </span>
+ * </span>
  */
 class IconViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
