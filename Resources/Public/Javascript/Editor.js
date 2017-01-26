@@ -67,6 +67,11 @@ var Editor = (function($){
         $inlineActions.each(function(index) {
             var that = $(this);
 
+            // disable dragging icons by mistake
+            that.find('img').on('dragstart', function() {
+                return false;
+            });
+
             // Add new action
             that.find('.icon-actions-edit-add').on('click', function() {
                 F.confirm(F.translate('notifications.add-content-element'), {
