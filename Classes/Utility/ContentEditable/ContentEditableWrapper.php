@@ -95,7 +95,7 @@ class ContentEditableWrapper
                 '%s' .
             '</div>',
             $hiddenElementClassName,
-            $uid,
+            Integration::contentElementTitle($uid),
             $class,
             $table,
             $uid,
