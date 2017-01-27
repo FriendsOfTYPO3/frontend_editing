@@ -96,8 +96,6 @@ class ContentPostProc
 
                 $this->typoScriptFrontendController = $parentObject;
 
-                $output = $this->loadResources();
-
                 $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
                     'index.php?id=' . $this->typoScriptFrontendController->id .
                     '&frontend_editing=true'
@@ -144,7 +142,9 @@ class ContentPostProc
                             'contentElementsOnPage' => $this->getContentElementsOnPage($GLOBALS['TSFE']->id),
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
-                            'currentPage' => $GLOBALS['TSFE']->id
+                            'currentPage' => $GLOBALS['TSFE']->id,
+                            'resources' => $this->loadResources(),
+                            'javascriptResources' => $this->loadJavascriptResources()
                         ],
                         $icons
                     )
@@ -155,11 +155,7 @@ class ContentPostProc
                     $view->getRenderingContext()->setLegacyMode(false);
                 }
                
-                $renderedHtml = $view->render();
-
-                $output .= $renderedHtml;
-
-                $parentObject->content = $output;
+                $parentObject->content = $view->render();
             }
         }
     }
@@ -198,7 +194,17 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/css/alertify.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.css" />';
-        $resources .= '<script src="/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
+        return $resources;
+    }
+
+     /**
+     * Load the necessary Javascript-resources for the toolbars
+     *
+     * @return string
+     */
+    private function loadJavascriptResources()
+    {
+        $resources = '<script src="/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
             PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js"></script>';
@@ -210,7 +216,6 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/immutable/dist/immutable.min.js"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.js"></script>';
-
         return $resources;
     }
 
