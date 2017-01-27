@@ -164,14 +164,14 @@ var FrontendEditing = (function($){
         },
 
         dragNewCeStart: function(ev) {
-            ev.dataTransfer.setData("params", ev.currentTarget.dataset.params);
+            ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
             var $iframe = F.iframe();
-            $iframe.contents().find("body").addClass('dropzones-enabled');
+            $iframe.contents().find('body').addClass('dropzones-enabled');
         },
 
         dragNewCeEnd: function(ev) {
             var $iframe = F.iframe();
-            $iframe.contents().find("body").removeClass('dropzones-enabled');
+            $iframe.contents().find('body').removeClass('dropzones-enabled');
         },
 
         dragNewCeOver: function(ev) {
@@ -192,30 +192,28 @@ var FrontendEditing = (function($){
             F.windowOpen(fullUrl);
         },
 
-	    indicateCeStart: function(ev) {
-		    var $iframe = F.iframe();
-		    var uid = ev.currentTarget.dataset.uid;
-		    $iframe.contents().find("#c"+uid).parent().addClass('indicate-element');
-            console.log($iframe.contents().find("#c"+uid).parent().offset.top);
-
+        indicateCeStart: function(ev) {
+            var $iframe = F.iframe();
+            var uid = ev.currentTarget.dataset.uid;
+            $iframe.contents().find('#c' + uid).parent().addClass('indicate-element');
             window.clearTimeout(this.indicateCeScrollTimeoutId);
 
-		    this.indicateCeScrollTimeoutId = window.setTimeout(function() {
-			    var $iframe = F.iframe();
-	            $iframe.contents().find('body, html').animate(
-		            {
-			            scrollTop: $iframe.contents().find("#c" + uid).parent().offset().top - 10
-		            },
-		            500
-	            );
+            this.indicateCeScrollTimeoutId = window.setTimeout(function() {
+                var $iframe = F.iframe();
+                $iframe.contents().find('body, html').animate(
+                    {
+                        scrollTop: $iframe.contents().find('#c' + uid).parent().offset().top - 10
+                    },
+                    500
+                );
             }, 1000);
-	    },
+        },
 
-	    indicateCeEnd: function(ev) {
-		    var $iframe = F.iframe();
-		    $iframe.contents().find("#c"+ev.currentTarget.dataset.uid).parent().removeClass('indicate-element');
-		    window.clearTimeout(this.indicateCeScrollTimeoutId);
-	    }
+        indicateCeEnd: function(ev) {
+            var $iframe = F.iframe();
+            $iframe.contents().find('#c' + ev.currentTarget.dataset.uid).parent().removeClass('indicate-element');
+            window.clearTimeout(this.indicateCeScrollTimeoutId);
+        }
 
     };
 
