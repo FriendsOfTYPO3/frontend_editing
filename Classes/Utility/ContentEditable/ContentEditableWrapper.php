@@ -248,9 +248,6 @@ class ContentEditableWrapper
     {
         $hiddenClassName = '';
         $hidden = Integration::recordInfo($table, $uid, '*');
-        if ($uid === '196') {
-        //    var_dump($hidden);die;
-        }
         if ($hidden['hidden']) {
             $hiddenClassName = 't3-frontend-editing__hidden-element';
         }

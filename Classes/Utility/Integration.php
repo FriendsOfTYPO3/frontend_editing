@@ -90,7 +90,6 @@ class Integration
                 )
                 ->execute()
                 ->fetch();
-                //->getSQL();var_dump($record);die;
             return $record;
         }
 
