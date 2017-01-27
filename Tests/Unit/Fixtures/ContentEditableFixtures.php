@@ -15,6 +15,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
  */
 
 use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Fixtures for ContentEditableProperties
@@ -126,7 +127,7 @@ class ContentEditableFixtures
                 '%s' .
             '</div>',
             ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
-            $this->uid,
+            Integration::contentElementTitle($this->uid),
             $class,
             $this->table,
             $this->uid,
