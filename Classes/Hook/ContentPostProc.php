@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
+use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
 
 /**
  * Hook class ContentPostProc for rendering the panels and iframe for inline editing
@@ -118,8 +119,11 @@ class ContentPostProc
                 $view->setPartialRootPaths($partialPaths);
                 $view->setTemplateRootPaths($templatePaths);
 
+                $avatar = GeneralUtility::makeInstance(DefaultAvatarProvider::class);
+
                 $icons = [
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
+                    'userImage' => $avatar->getImage($GLOBALS['BE_USER']->user, 32),
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
                 ];
 

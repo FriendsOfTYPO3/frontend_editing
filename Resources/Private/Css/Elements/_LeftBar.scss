@@ -32,25 +32,24 @@
     }
 
     .left-bar-button {
-      @include transition(right .2s);
-      @include transition-duration(.2s);
-      @include rotate(0);
+      @include transition(right ($push-duration / 2) $push-timing);
       @include transform-origin (center);
       cursor: pointer;
       float: right;
       display: block;
-      height: 40px;
+      height: $top-bar-height;
+      line-height: $top-bar-height;
       width: 45px;
       text-align: center;
       position: absolute;
-      padding-top: 5px;
       color: $gray-light;
       font-size: 32px;
       right: -45px;
       top: 0;
+      background-color: $black;
 
       &:hover {
-        background-color: lighten($black, 10%);
+        background-color: lighten($black, 20%);
         color: $white;
       }
     }
@@ -60,11 +59,10 @@
     .top-left-title {
       .left-bar-button {
         right: 0;
-        color: $white;
       }
 
       .icon-icons-arrow-double {
-        @include rotate(180);
+        @include transform(scaleX(-1));
       }
     }
   }

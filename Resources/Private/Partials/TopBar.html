@@ -11,14 +11,34 @@
 			</div>
 		</div>
 		<div class="t3-frontend-editing__top-bar-right">
+
 			<ul class="top-bar-items">
-				<li class="dropdown item">
-					<div class="user">
-						{userIcon -> f:format.html()}
+				<li class="item">
+					<a class="dropdown-toggle user">
+						<f:if condition="{userImage}">
+							<f:then>
+								<span class="t3js-icon icon icon-size-default icon-state-default icon-avatar-default" data-identifier="avatar-default">
+									<span class="icon-markup">
+										<img src="{userImage.url}" width="{userImage.width}" height="{userImage.height}" />
+									</span>
+								</span>
+							</f:then>
+							<f:else>
+								{userIcon -> f:format.html()}
+							</f:else>
+						</f:if>
 						<span class="icon-avatar-title" title="{userName -> f:format.html()}">{userName -> f:format.html()} </span>
-					</div>
+					</a>
+					<ul class="dropdown-menu">
+						<li>
+							<button class="btn-default">
+								<f:translate key="top-bar.logout" extensionName="FrontendEditing" />
+							</button>
+						</li>
+					</ul>
 				</li>
 			</ul>
+
 			<div class="top-bar-action-buttons">
 				<button type="submit" class="t3-frontend-editing__save btn btn-inactive">
 					<span class="btn-text">
