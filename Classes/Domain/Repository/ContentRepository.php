@@ -15,6 +15,8 @@ namespace TYPO3\CMS\FrontendEditing\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+
 /**
  * Content element repository
  *
@@ -22,23 +24,24 @@ namespace TYPO3\CMS\FrontendEditing\Domain\Repository;
  */
 class ContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
-	/**
-	 * Find all content elements on a page
-	 *
-	 * @param $pageId
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findAllOnPage($pageId) {
-		$query = $this->createQuery();
 
-		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
-		$querySettings = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings');
-		$querySettings->setRespectStoragePage(FALSE);
+    /**
+     * Find all content elements on a page
+     *
+     * @param integer $pageId
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findAllOnPage($pageId)
+    {
+        $query = $this->createQuery();
 
-		//@TODO: Decide on ordering to use for content elements
-		$query->setQuerySettings($querySettings);
+        /** @var $querySettings Typo3QuerySettings */
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
 
-		return $query->matching($query->equals('pid', $pageId))->execute();
-	}
+        //@TODO: Decide on ordering to use for content elements
+        $query->setQuerySettings($querySettings);
 
+        return $query->matching($query->equals('pid', $pageId))->execute();
+    }
 }

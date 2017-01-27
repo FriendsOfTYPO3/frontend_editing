@@ -14,8 +14,8 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers\ContentElement;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\FrontendEditing\Utility\Integration;
+use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
 
 /**
  * Viewhelper for printing a content element's name
@@ -30,15 +30,25 @@ use TYPO3\CMS\FrontendEditing\Utility\Integration;
  */
 class RecordTitleViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
-	/**
-	 * @var \TYPO3\CMS\Core\Imaging\IconFactory
-	 * @inject
-	 */
-	protected $iconFactory;
 
-	public function initializeArguments() {
-		$this->registerArgument('object', '\TYPO3\CMS\FrontendEditing\Domain\Model\Content', 'The content element object', true);
-	}
+    /**
+     * @var \TYPO3\CMS\Core\Imaging\IconFactory
+     * @inject
+     */
+    protected $iconFactory;
+
+    /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        $this->registerArgument(
+            'object',
+            Content::class,
+            'The content element object',
+            true
+        );
+    }
 
     /**
      * Returns the "title"-value for the record as shown in backend lists

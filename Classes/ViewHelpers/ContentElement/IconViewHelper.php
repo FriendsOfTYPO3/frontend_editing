@@ -16,7 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers\ContentElement;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Extbase\Utility\ArrayUtility;
+use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
 
 /**
  * Viewhelper output HTML for an icon for a content element
@@ -36,18 +36,36 @@ use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 class IconViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 
-	protected $escapeOutput = false;
+    /**
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
-	/**
-	 * @var \TYPO3\CMS\Core\Imaging\IconFactory
-	 * @inject
-	 */
-	protected $iconFactory;
+    /**
+     * @var \TYPO3\CMS\Core\Imaging\IconFactory
+     * @inject
+     */
+    protected $iconFactory;
 
-	public function initializeArguments() {
-		$this->registerArgument('object', '\TYPO3\CMS\FrontendEditing\Domain\Model\Content', 'The content element object', true);
-		$this->registerArgument('size', 'string', 'The content element object', false, Icon::SIZE_DEFAULT);
-	}
+    /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        $this->registerArgument(
+            'object',
+            Content::class,
+            'The content element object',
+            true
+        );
+        $this->registerArgument(
+            'size',
+            'string',
+            'The content element object',
+            false,
+            Icon::SIZE_DEFAULT
+        );
+    }
 
     /**
      * Render an icon for an entity object (i.e. database record)
@@ -56,15 +74,15 @@ class IconViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
      */
     public function render()
     {
-    	$rawRecord = BackendUtility::getRecord(
-	    	'tt_content',
-		    $this->arguments['object']->getUid()
-		);
+        $rawRecord = BackendUtility::getRecord(
+            'tt_content',
+            $this->arguments['object']->getUid()
+        );
 
         return $this->iconFactory->getIconForRecord(
-        	'tt_content',
-	        $rawRecord,
-			$this->arguments['size']
+            'tt_content',
+            $rawRecord,
+            $this->arguments['size']
         );
     }
 }

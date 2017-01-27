@@ -85,6 +85,7 @@ class CrudController extends ActionController
      */
     public function __construct()
     {
+        parent::__construct();
         $this->dataHandler = new DataHandler();
         $this->dataHandler->stripslashes_values = 0;
         // Initialize backend user for data handler
