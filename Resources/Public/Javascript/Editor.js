@@ -67,7 +67,7 @@ var Editor = (function($){
         $inlineActions.each(function(index) {
             var that = $(this);
 
-            // disable dragging icons by mistake
+            // Disable dragging icons by mistake
             that.find('img').on('dragstart', function() {
                 return false;
             });
