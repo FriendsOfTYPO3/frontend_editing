@@ -186,6 +186,11 @@ class ContentPostProc
         return $resources;
     }
 
+     /**
+     * Load the necessary Javascript-resources for the toolbars
+     *
+     * @return string
+     */
     private function loadJavascriptResources()
     {
         $resources = '<script src="/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
