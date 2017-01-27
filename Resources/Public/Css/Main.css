@@ -295,7 +295,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 95%;
-      display: inline-block;
       line-height: 1; }
       .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
         cursor: pointer; }
