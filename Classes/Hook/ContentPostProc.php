@@ -22,6 +22,7 @@ use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
 use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Hook class ContentPostProc for rendering the panels and iframe for inline editing
@@ -137,7 +138,8 @@ class ContentPostProc
                             'contentItems' => $this->getContentItems(),
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
-                            'currentPage' => $GLOBALS['TSFE']->id
+                            'currentPage' => $GLOBALS['TSFE']->id,
+                            'logoutUrl' => BackendUtility::getModuleUrl('logout')
                         ],
                         $icons
                     )
