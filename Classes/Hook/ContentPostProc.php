@@ -20,6 +20,9 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
+use TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
 use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -50,6 +53,11 @@ class ContentPostProc
     protected $iconFactory;
 
     /**
+     * @var \TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository
+     */
+    protected $contentRepository;
+
+    /**
      * Extension configuration
      *
      * @var array
@@ -62,6 +70,8 @@ class ContentPostProc
     public function __construct()
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->contentRepository = $objectManager->get(ContentRepository::class);
     }
 
     /**
@@ -87,8 +97,6 @@ class ContentPostProc
                 $parentObject->set_no_cache('Display frontend editing', true);
 
                 $this->typoScriptFrontendController = $parentObject;
-
-                $output = $this->loadResources();
 
                 $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') .
                     'index.php?id=' . $this->typoScriptFrontendController->id .
@@ -136,10 +144,13 @@ class ContentPostProc
                             'pageTree' => $this->getPageTreeStructure(),
                             'currentTime' => time(),
                             'contentItems' => $this->getContentItems(),
+                            'contentElementsOnPage' => $this->getContentElementsOnPage($GLOBALS['TSFE']->id),
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
                             'currentPage' => $GLOBALS['TSFE']->id,
-                            'logoutUrl' => BackendUtility::getModuleUrl('logout')
+                            'logoutUrl' => BackendUtility::getModuleUrl('logout'),
+                            'resources' => $this->loadResources(),
+                            'javascriptResources' => $this->loadJavascriptResources()
                         ],
                         $icons
                     )
@@ -150,11 +161,7 @@ class ContentPostProc
                     $view->getRenderingContext()->setLegacyMode(false);
                 }
                
-                $renderedHtml = $view->render();
-
-                $output .= $renderedHtml;
-
-                $parentObject->content = $output;
+                $parentObject->content = $view->render();
             }
         }
     }
@@ -193,7 +200,17 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/css/alertify.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.css" />';
-        $resources .= '<script src="/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
+        return $resources;
+    }
+
+     /**
+     * Load the necessary Javascript-resources for the toolbars
+     *
+     * @return string
+     */
+    private function loadJavascriptResources()
+    {
+        $resources = '<script src="/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-' .
             PageRenderer::JQUERY_VERSION_LATEST . '.min.js" type="text/javascript"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/ckeditor/ckeditor.js"></script>';
@@ -205,7 +222,6 @@ class ContentPostProc
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/immutable/dist/immutable.min.js"></script>';
         $resources .= '<script type="text/javascript" src="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.js"></script>';
-
         return $resources;
     }
 
@@ -275,5 +291,16 @@ class ContentPostProc
             }
         }
         return $contentItems;
+    }
+
+    /**
+     * Get the content elements on the page
+     *
+     * @param int $pageId The page id to fetch content elements from
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    protected function getContentElementsOnPage($pageId)
+    {
+        return $this->contentRepository->findAllOnPage($pageId);
     }
 }

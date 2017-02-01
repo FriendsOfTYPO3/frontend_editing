@@ -10,6 +10,28 @@
   }
 }
 
+.content-icon-default {
+  @extend .content-icon;
+  width: 32px;
+  height: 32px;
+
+  img {
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+.content-icon-small {
+  @extend .content-icon;
+  width: 16px;
+  height: 16px;
+
+  img {
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
 .element {
   display: inline-block;
   margin-bottom: 10px;

@@ -30,6 +30,10 @@
       display: block;
     }
   }
+  //Colored frame when hovering content element in right-column list
+  &.indicate-element {
+    outline: 3px solid $orange-primary;
+  }
 }
 
 .dropzones-enabled .#{$t3-frontend}dropzone {

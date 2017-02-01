@@ -21,6 +21,8 @@
       outline: 3px dotted #FF8700; }
     .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
       display: block; }
+  .t3-frontend-editing__ce.indicate-element {
+    outline: 3px solid #FF8700; }
 
 .dropzones-enabled .t3-frontend-editing__dropzone {
   height: 25px; }

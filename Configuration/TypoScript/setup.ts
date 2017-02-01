@@ -9,6 +9,28 @@ plugin.tx_frontendediting {
     }
 }
 
+# Content element persistence for content element hierarchy display
+config.tx_extbase {
+    persistence{
+        classes {
+            TYPO3\CMS\FrontendEditing\Domain\Model\Content {
+                mapping {
+                    tableName = tt_content
+                    columns {
+                        uid.mapOnProperty = uid
+                        pid.mapOnProperty = pid
+                        sorting.mapOnProperty = sorting
+                        CType.mapOnProperty = contentType
+                        header.mapOnProperty = header
+                        crdate.mapOnProperty = crdate
+                        tstamp.mapOnProperty = tstamp
+                    }
+                }
+            }
+        }
+    }
+}
+
 [globalVar = TSFE : beUserLogin > 0]
 # Additional page plugin for Content CRUD requests as those need a BE-USER
 frontendEditing = PAGE

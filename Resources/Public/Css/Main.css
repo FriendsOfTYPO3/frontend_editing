@@ -140,14 +140,28 @@
   font-weight: normal;
   font-style: normal; }
 
-.content-icon {
+.content-icon, .content-icon-default, .content-icon-small {
   background-color: #555f63;
   width: 60px;
   height: 60px;
   display: inline-block; }
-  .content-icon img {
+  .content-icon img, .content-icon-default img, .content-icon-small img {
     margin-top: 14px;
     margin-left: 14px; }
+
+.content-icon-default {
+  width: 32px;
+  height: 32px; }
+  .content-icon-default img {
+    margin-top: 0;
+    margin-left: 0; }
+
+.content-icon-small {
+  width: 16px;
+  height: 16px; }
+  .content-icon-small img {
+    margin-top: 0;
+    margin-left: 0; }
 
 .element {
   display: inline-block;
@@ -249,7 +263,7 @@
   margin: -10px;
   padding: 10px;
   margin-bottom: 15px; }
-  .accordion-list .element .content-icon {
+  .accordion-list .element .content-icon, .accordion-list .element .content-icon-default, .accordion-list .element .content-icon-small {
     vertical-align: top; }
 
 .accordion-list .list-view {
@@ -281,7 +295,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 95%;
-      display: inline-block;
       line-height: 1; }
       .t3-frontend-editing__page-tree-wrapper .t3-frontend-editing__page-tree li:hover {
         cursor: pointer; }

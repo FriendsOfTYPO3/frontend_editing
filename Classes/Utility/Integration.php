@@ -90,10 +90,38 @@ class Integration
                 )
                 ->execute()
                 ->fetch();
-                //->getSQL();var_dump($record);die;
             return $record;
         }
 
         return false;
+    }
+
+    /**
+     * Returns the title label used in Backend lists
+     *
+     * @param int $uid of the content element
+     * @return string
+     */
+    public static function contentElementTitle($uid)
+    {
+        static $titles = [];
+
+        // Optimized retrieval
+        if ($titles[$uid] !== null) {
+            return $titles[$uid];
+        }
+
+        $rawRecord = BackendUtility::getRecord(
+            'tt_content',
+            $uid
+        );
+
+        $titles[$uid] = BackendUtility::getRecordTitle(
+            'tt_content',
+            $rawRecord,
+            true
+        );
+
+        return $titles[$uid];
     }
 }
