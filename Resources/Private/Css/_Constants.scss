@@ -12,7 +12,7 @@ $white: #fff;
 $scroll-bar-color: #3f3f3f;
 $scroll-bar-track: rgba(63, 63, 63, .6);
 
-$transparent-opacity: rgba(transparent, .6);
+$transparent-opacity: rgba(transparent, .7);
 
 // Font
 $font-family-base: "Share", Verdana, Helvetica, Arial, sans-serif;
@@ -42,3 +42,7 @@ $drop-zone-active-border-color: rgba( 0, 145, 210, 1);
 
 // Modal
 $modal-background-color: rgba($black, .5);
+
+// Timing
+$push-duration: .2s;
+$push-timing: linear;

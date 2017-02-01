@@ -24,6 +24,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
 use TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
+use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Hook class ContentPostProc for rendering the panels and iframe for inline editing
@@ -126,8 +128,11 @@ class ContentPostProc
                 $view->setPartialRootPaths($partialPaths);
                 $view->setTemplateRootPaths($templatePaths);
 
+                $avatar = GeneralUtility::makeInstance(DefaultAvatarProvider::class);
+
                 $icons = [
                     'userIcon' => $this->iconFactory->getIcon('avatar-default', Icon::SIZE_DEFAULT)->render(),
+                    'userImage' => $avatar->getImage($GLOBALS['BE_USER']->user, 32),
                     'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
                 ];
 
@@ -143,6 +148,7 @@ class ContentPostProc
                             'overlayOption' => $GLOBALS['BE_USER']->uc['tx_frontend_editing_overlay'],
                             'languageLabels' => json_encode($this->getLocalizedFrontendLabels()),
                             'currentPage' => $GLOBALS['TSFE']->id,
+                            'logoutUrl' => BackendUtility::getModuleUrl('logout'),
                             'resources' => $this->loadResources(),
                             'javascriptResources' => $this->loadJavascriptResources()
                         ],

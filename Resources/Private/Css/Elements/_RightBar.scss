@@ -58,23 +58,24 @@
     }
 
     .right-bar-button {
-      @include transition(left .2s);
-      @include transition-duration(.2s);
+      @include transition(left ($push-duration / 2) $push-timing);
       @include transform-origin (center);
       cursor: pointer;
       float: left;
       display: block;
-      height: 40px;
+      height: $top-bar-height;
+      line-height: $top-bar-height;
       width: 45px;
       text-align: center;
       position: absolute;
-      padding-top: 5px;
       color: $gray-light;
       font-size: 32px;
       left: -45px;
+      top: 0;
+      background-color: $black;
 
       &:hover {
-        background-color: lighten($black, 10%);
+        background-color: lighten($black, 20%);
         color: $white;
       }
     }
@@ -92,7 +93,6 @@
     .top-right-title {
       .right-bar-button {
         left: 0;
-        color: $white;
       }
     }
   }

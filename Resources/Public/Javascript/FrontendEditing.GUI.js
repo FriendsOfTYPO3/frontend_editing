@@ -33,6 +33,9 @@
 
     var CLASS_HIDDEN = 'hidden';
 
+    var pushDuration = 200;
+    var pushEasing = 'linear';
+
     var messageTypes = {
         OK: 'OK',
         ERROR: 'ERROR',
@@ -141,7 +144,7 @@
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
             t = ++t % 2;
-            $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
+            $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, pushDuration, pushEasing);
         });
 
         $('.left-bar-button').on('click', function() {
@@ -154,7 +157,7 @@
             $('.t3-frontend-editing__left-bar').toggleClass('open');
             $('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
             y = ++y % 2;
-            $('.t3-frontend-editing__left-bar').stop().animate({ left: y ? 0 : -280 }, 200);
+            $('.t3-frontend-editing__left-bar').stop().animate({ left: y ? 0 : -280 }, pushDuration, pushEasing);
         });
 
         $('.page-seo-devices span').on('click', function() {
@@ -167,7 +170,7 @@
 
         $('.accordion .trigger').on('click', function() {
             $(this).toggleClass('active');
-            $(this).closest('.accordion-container').find('.accordion-content').slideToggle(200);
+            $(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);
         });
 
         $('.accordion .grid').on('click', function() {
@@ -176,13 +179,19 @@
                 .addClass('accordion-grid');
         });
 
+        $('.top-bar-items .dropdown-toggle').on('click', function() {
+            $(this).toggleClass('active');
+            $(this).next('.dropdown-menu').toggle();
+        });
+
+
         $('.list-view').on('click', function() {
             $(this).closest('.accordion-container')
                 .removeClass('accordion-grid')
                 .addClass('accordion-list');
         });
 
-        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, 200);
+        $('.t3-frontend-editing__right-bar').stop().animate({ right: t ? 0 : -325 }, pushDuration, pushEasing);
 
         // If modal is closed, refresh the iframe
         $(document).on('lity:close', function(event, instance) {

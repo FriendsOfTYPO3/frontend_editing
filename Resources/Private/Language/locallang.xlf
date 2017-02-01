@@ -10,11 +10,14 @@
                 <source>Save All</source>
             </trans-unit>
             <trans-unit id="top-bar.discard-all">
-                <source>Discard All</source>
+                <source>Discard</source>
+            </trans-unit>
+            <trans-unit id="top-bar.logout">
+                <source>Logout</source>
             </trans-unit>
 
             <trans-unit id="left-bar.site-tree">
-                <source>SITE TREE</source>
+                <source>Site Tree</source>
             </trans-unit>
 
             <trans-unit id="right-bar.tools-properties">
@@ -24,7 +27,7 @@
                 <source>Page SEO Score</source>
             </trans-unit>
             <trans-unit id="right-bar.seo-guide">
-                <source>SEO GUIDE</source>
+                <source>SEO Guide</source>
             </trans-unit>
 
             <trans-unit id="notifications.save-title">

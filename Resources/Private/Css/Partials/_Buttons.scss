@@ -11,7 +11,7 @@
   vertical-align: middle;
   cursor: pointer;
   font-family: $font-family-base;
-  height: 35px;
+  height: $top-bar-height - 10px;
   font-size: $font-size-regular;
   padding: 0 14px;
   text-transform: uppercase;
