@@ -58,7 +58,7 @@
     }
 
     .right-bar-button {
-      @include transition(right ($push-duration / 2) $push-timing);
+      @include transition(left ($push-duration / 2) $push-timing);
       @include transform-origin (center);
       cursor: pointer;
       float: left;
@@ -71,6 +71,7 @@
       color: $gray-light;
       font-size: 32px;
       left: -45px;
+      top: 0;
       background-color: $black;
 
       &:hover {

@@ -31,29 +31,13 @@
 
 .#{$t3-frontend}top-bar-left {
   @include transition(left $push-duration $push-timing);
-  //@include transition-duration($push-duration);
   position: relative;
   left: 0;
   width: 50%;
   float: left;
 
-  .left-bar-button {
-    background: none;
-    border: 0;
-    color: $white;
-    cursor: pointer;
-  }
-
-  &.push-toright {
-    @include transition(left $push-duration $push-timing);
-    //@include transition-duration($push-duration);
-
-    .back-backend {
-      margin-left: 0;
-    }
-  }
-
   .back-backend {
+    @include transition(margin $push-duration $push-timing);
     display: inline-block;
     position: relative;
     border-right: 1px solid $black;
@@ -80,6 +64,12 @@
       color: $orange-primary;
     }
   }
+
+  &.push-toright {
+    .back-backend {
+      margin-left: 0;
+    }
+  }
 }
 
 .#{$t3-frontend}top-bar-right {
@@ -90,22 +80,8 @@
   right: 0;
   position: relative;
 
-  &.push-toleft {
-    @include transition(right $push-duration $push-timing);
-    right: $right-bar-width;
-    position: relative;
-
-    .top-bar-items {
-      margin-right: 0;
-    }
-  }
-
-  .top-bar-action-buttons {
-    float: right;
-    margin: 5px;
-  }
-
   .top-bar-items {
+    @include transition(margin $push-duration $push-timing);
     float: right;
     margin: 0;
     margin-right: 45px;
@@ -154,6 +130,19 @@
     }
   }
 
+  &.push-toleft {
+    right: $right-bar-width;
+
+    .top-bar-items {
+      margin-right: 0;
+    }
+  }
+
+  .top-bar-action-buttons {
+    float: right;
+    margin: 5px;
+  }
+
   .user {
     padding-left: 10px;
     padding-right: 10px;
@@ -181,13 +170,5 @@
       position: relative;
       top: -3px;
     }
-  }
-
-  .right-bar-button {
-    background: none;
-    border: 0;
-    color: $white;
-    cursor: pointer;
-    margin-top: 15px;
   }
 }

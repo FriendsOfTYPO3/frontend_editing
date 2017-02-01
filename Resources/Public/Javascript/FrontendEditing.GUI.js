@@ -281,8 +281,8 @@
             if (typeof callbacks.yes === 'function') {
                 callbacks.yes();
             }
-        }, function() 
-{            if (typeof callbacks.no === 'function') {
+        }, function() {
+            if (typeof callbacks.no === 'function') {
                 callbacks.no();
             }
         });
