@@ -160,7 +160,6 @@ class ContentEditableWrapper
             $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render();
 
         $inlineIcons =
-            $iconFactory->getIcon('actions-edit-add', Icon::SIZE_SMALL)->render() .
             $visibilityIcon .
             $iconFactory->getIcon('actions-open', Icon::SIZE_SMALL)->render() .
             $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .

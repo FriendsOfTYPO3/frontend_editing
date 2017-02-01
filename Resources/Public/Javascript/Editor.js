@@ -72,15 +72,6 @@ var Editor = (function($){
                 return false;
             });
 
-            // Add new action
-            that.find('.icon-actions-edit-add').on('click', function() {
-                F.confirm(F.translate('notifications.add-content-element'), {
-                    yes: function() {
-
-                    }
-                });
-            });
-
             // Open/edit action
             that.find('.icon-actions-open').on('click', function() {
                 F.windowOpen(that.data('edit-url'));
