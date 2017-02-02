@@ -67,7 +67,7 @@
 
 .btn, .btn-default {
   display: inline-block;
-  background-color: #FF8700;
+  background-color: #e8a33d;
   color: #fff;
   border: 0;
   text-align: center;
@@ -80,7 +80,7 @@
   text-transform: uppercase;
   outline: none; }
   .btn:hover, .btn-default:hover {
-    background-color: #ff9f33; }
+    background-color: #e4941d; }
 
 .btn-default {
   border: 1px solid #838383;
@@ -184,7 +184,7 @@
   .element span {
     pointer-events: none; }
   .element:hover {
-    outline: solid 2px #FF8700;
+    outline: solid 2px #e8a33d;
     cursor: move; }
 
 .accordion .grid,
@@ -358,7 +358,7 @@
   margin-left: -16px; }
 
 .page-tree-active {
-  color: #FF8700; }
+  color: #e8a33d; }
 
 .t3-frontend-editing__top-bar {
   background: #191919;
@@ -419,7 +419,7 @@
       top: 3px;
       position: relative;
       font-size: 20px;
-      color: #FF8700; }
+      color: #e8a33d; }
   .t3-frontend-editing__top-bar-left.push-toright .back-backend {
     margin-left: 0; }
 
@@ -576,14 +576,14 @@
       position: relative;
       font-size: 32px;
       padding-right: 15px;
-      color: #FF8700; }
+      color: #e8a33d; }
   .t3-frontend-editing__right-bar.open .top-right-title .right-bar-button {
     left: 0; }
   .t3-frontend-editing__right-bar .page-seo {
     padding: 15px 0 0;
     text-align: center; }
     .t3-frontend-editing__right-bar .page-seo .page-seo-score {
-      border: 4px solid #FF8700;
+      border: 4px solid #e8a33d;
       font-size: 25px;
       padding: 6px;
       border-radius: 50%;
@@ -686,7 +686,7 @@
     position: relative;
     font-size: 32px;
     padding-left: 15px;
-    color: #FF8700; }
+    color: #e8a33d; }
   .t3-frontend-editing__left-bar .top-left-title {
     height: 45px;
     background-color: #0f0f0f; }
@@ -829,100 +829,156 @@ body {
   .lity-close:active {
     top: -30px !important; }
 
-.alertify-logs > * {
-  padding: 12px 24px;
-  color: #fff;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 1px; }
-  .alertify-logs > *, .alertify-logs > *.default {
-    background: rgba(0, 0, 0, 0.8); }
-  .alertify-logs > *.error {
-    background: rgba(244, 67, 54, 0.8); }
-  .alertify-logs > *.success {
-    background: rgba(76, 175, 80, 0.9); }
-
 .alertify {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(15, 15, 15, 0.5);
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   width: 100%;
   height: 100%;
-  z-index: 99999; }
+  z-index: 99999;
+  overflow: hidden;
+  font-family: "Share", Verdana, Helvetica, Arial, sans-serif; }
   .alertify.hide {
     opacity: 0;
     pointer-events: none; }
   .alertify, .alertify.show {
     box-sizing: border-box;
-    transition: all 0.33s cubic-bezier(0.25, 0.8, 0.25, 1); }
-  .alertify, .alertify * {
+    transition: opacity 0.2s linear; }
+  .alertify,
+  .alertify * {
     box-sizing: border-box; }
   .alertify .dialog {
-    padding: 12px; }
-  .alertify .dialog, .alertify .alert {
+    padding: 10px 15px; }
+  .alertify .dialog,
+  .alertify .alert {
     width: 100%;
     margin: 0 auto;
     position: relative;
     top: 50%;
     transform: translateY(-50%); }
-    .alertify .dialog > *, .alertify .alert > * {
-      width: 400px;
+    .alertify .dialog > *,
+    .alertify .alert > * {
+      border-radius: 2px;
+      width: 600px;
       max-width: 95%;
       margin: 0 auto;
       text-align: center;
-      padding: 12px;
+      padding: 0;
       background: #fff;
-      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14), 0 4px 5px 0 rgba(0, 0, 0, 0.098), 0 1px 10px 0 rgba(0, 0, 0, 0.084); }
-    .alertify .dialog .msg, .alertify .alert .msg {
-      padding: 12px;
-      margin-bottom: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
+    .alertify .dialog .msg,
+    .alertify .alert .msg {
+      padding: 15px;
       margin: 0;
+      margin-bottom: 15px;
       text-align: left; }
-    .alertify .dialog input:not(.form-control), .alertify .alert input:not(.form-control) {
+    .alertify .dialog input:not(.form-control),
+    .alertify .alert input:not(.form-control) {
       margin-bottom: 15px;
       width: 100%;
       font-size: 100%;
-      padding: 12px; }
-      .alertify .dialog input:not(.form-control):focus, .alertify .alert input:not(.form-control):focus {
+      padding: 15px; }
+      .alertify .dialog input:not(.form-control):focus,
+      .alertify .alert input:not(.form-control):focus {
         outline-offset: -2px; }
-      .alertify .dialog input:not(.form-control).invalid, .alertify .alert input:not(.form-control).invalid {
+      .alertify .dialog input:not(.form-control).invalid,
+      .alertify .alert input:not(.form-control).invalid {
         border-left: 2px solid rgba(244, 67, 54, 0.8); }
-    .alertify .dialog nav, .alertify .alert nav {
-      text-align: right; }
-      .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button), .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button) {
-        background: transparent;
+    .alertify .dialog nav,
+    .alertify .alert nav {
+      text-align: right;
+      padding: 10px 15px;
+      display: block; }
+      .alertify .dialog nav .btn, .alertify .dialog nav .btn-default,
+      .alertify .alert nav .btn,
+      .alertify .alert nav .btn-default {
+        margin: 6px 4px; }
+      .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button),
+      .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button) {
         box-sizing: border-box;
-        color: rgba(0, 0, 0, 0.87);
+        color: #0f0f0f;
         position: relative;
         outline: 0;
-        border: 0;
         display: inline-block;
         align-items: center;
-        padding: 0 6px;
-        margin: 6px 8px;
-        line-height: 36px;
-        min-height: 36px;
+        padding: 0;
+        margin: 0 0 0 5px;
+        line-height: 32px;
+        min-height: 32px;
         white-space: nowrap;
-        min-width: 88px;
+        min-width: 100px;
         text-align: center;
         text-transform: uppercase;
-        font-size: 14px;
+        font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
+        font-size: 16px;
         text-decoration: none;
         cursor: pointer;
-        border: 1px solid transparent;
-        border-radius: 2px; }
-        .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):hover, .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):active, .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):hover, .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):active {
-          background-color: rgba(0, 0, 0, 0.05); }
-        .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):focus, .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):focus {
-          border: 1px solid rgba(0, 0, 0, 0.1); }
-      .alertify .dialog nav button.btn, .alertify .dialog nav button.btn-default, .alertify .alert nav button.btn, .alertify .alert nav button.btn-default {
-        margin: 6px 4px; }
+        border-radius: 2px;
+        background-color: #EFEFEF;
+        border: 1px solid #bcbcbc; }
+        .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):hover, .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):focus,
+        .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):hover,
+        .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):focus {
+          background-color: #dddddd;
+          border-color: #aaaaaa; }
+        .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):active,
+        .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button):active {
+          background-color: #cbcbcb;
+          border-color: #898989; }
+        .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok,
+        .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok {
+          background: #e8a33d;
+          border-color: #e4941d;
+          color: #fff; }
+          .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:hover, .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:focus,
+          .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:hover,
+          .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:focus {
+            background-color: #e4941d;
+            border-color: #c68017; }
+          .alertify .dialog nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:active,
+          .alertify .alert nav button:not(.btn):not(.btn-default):not(.pure-button):not(.md-button):not(.mdl-button).ok:active {
+            background-color: #c68017;
+            border-color: #503309; }
+    .alertify .dialog .msg + nav,
+    .alertify .alert .msg + nav {
+      border-top: 1px solid #EFEFEF; }
 
 .alertify-logs {
   position: fixed;
   z-index: 99999; }
+  .alertify-logs > * {
+    padding: 15px 30px;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 1px;
+    box-sizing: border-box;
+    transition: opacity 0.2s linear;
+    position: relative;
+    clear: both;
+    backface-visibility: hidden;
+    perspective: 1000; }
+    .alertify-logs > * {
+      max-height: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none; }
+    .alertify-logs > *.show {
+      margin-top: 15px;
+      opacity: 1;
+      max-height: 1000px;
+      padding: 15px;
+      pointer-events: auto; }
+    .alertify-logs > *, .alertify-logs > *.default {
+      background: rgba(15, 15, 15, 0.2); }
+    .alertify-logs > *.error {
+      background: rgba(244, 67, 54, 0.8); }
+    .alertify-logs > *.success {
+      background: rgba(76, 175, 80, 0.9); }
   .alertify-logs.bottom, .alertify-logs:not(.top) {
     bottom: 16px; }
   .alertify-logs.left, .alertify-logs:not(.right) {
@@ -948,23 +1004,3 @@ body {
         opacity: 0; }
   .alertify-logs.top {
     top: 0; }
-  .alertify-logs > * {
-    box-sizing: border-box;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    clear: both;
-    backface-visibility: hidden;
-    perspective: 1000; }
-    .alertify-logs > * {
-      max-height: 0;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none; }
-    .alertify-logs > *.show {
-      margin-top: 12px;
-      opacity: 1;
-      max-height: 1000px;
-      padding: 12px;
-      pointer-events: auto; }
