@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\FrontendEditing\Domain\Model\Content;
 use TYPO3\CMS\FrontendEditing\Domain\Repository\ContentRepository;
 use TYPO3\CMS\FrontendEditing\Utility\Helper;
 use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
