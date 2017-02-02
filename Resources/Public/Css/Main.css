@@ -817,7 +817,8 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   z-index: 11000;
-  text-align: center; }
+  text-align: center;
+  overflow: hidden; }
   .t3-frontend-editing__quick-edit-overlay.hidden {
     -webkit-transition: opacity 0.2s linear 0s, z-index 0s linear 0.2s;
     -moz-transition: opacity 0.2s linear 0s, z-index 0s linear 0.2s;

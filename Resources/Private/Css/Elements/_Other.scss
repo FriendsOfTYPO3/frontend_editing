@@ -94,6 +94,7 @@
   background: $transparent-opacity;
   z-index: 11000;
   text-align: center;
+  overflow: hidden;
 
   &.hidden {
     @include transition(opacity $fade-duration $fade-timing 0s, z-index 0s $fade-timing $fade-duration);
