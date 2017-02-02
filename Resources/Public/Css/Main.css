@@ -647,6 +647,10 @@
         .t3-frontend-editing__right-bar .page-seo .page-seo-devices .page-seo-phone:hover {
           cursor: pointer;
           color: #fff; }
+  .t3-frontend-editing__right-bar .icon-overlay-hidden {
+    position: relative;
+    left: 14px;
+    bottom: 20px; }
 
 .t3-frontend-editing__save .btn-text,
 .t3-frontend-editing__discard .btn-text {

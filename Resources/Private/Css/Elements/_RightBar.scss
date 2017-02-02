@@ -196,6 +196,12 @@
       }
     }
   }
+
+  .icon-overlay-hidden {
+    position: relative;
+    left: 14px;
+    bottom: 20px;
+  }
 }
 
 .#{$t3-frontend}save,

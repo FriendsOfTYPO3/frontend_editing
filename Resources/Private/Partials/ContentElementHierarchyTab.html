@@ -12,26 +12,29 @@
 	<div class="accordion-content">
 		<f:for each="{contentElementsOnPage}" as="contentElement">
 			<div class="element"
-				 onmouseover="F.indicateCeStart(event)"
-				 onmouseout="F.indicateCeEnd(event)"
-				 data-uid="{contentElement.uid}"
+				onmouseover="F.indicateCeStart(event)"
+				onmouseout="F.indicateCeEnd(event)"
+				data-uid="{contentElement.uid}"
 			>
-			<f:comment>
-				 <!--
-				 @TODO: Implement click to: 1) scroll to content element and 2) start editing
-				 @TODO: Implement copy-on-drag for content elements.
-				 draggable="true"
-				 ondragstart="F.dragCopyCeStart(event)"
-				 ondragend="F.dragCopyCeEnd(event)"
-				 title="{fe:contentElement.recordTitle(object: contentElement))}"
-				 -->
-			</f:comment>
-					<span class="content-icon-default">
-						<fe:contentElement.icon object="{contentElement}" size="default" />
-					</span>
+				<f:comment>
+					 <!--
+					 @TODO: Implement click to: 1) scroll to content element and 2) start editing
+					 @TODO: Implement copy-on-drag for content elements.
+					 draggable="true"
+					 ondragstart="F.dragCopyCeStart(event)"
+					 ondragend="F.dragCopyCeEnd(event)"
+					 title="{fe:contentElement.recordTitle(object: contentElement))}"
+					 -->
+				</f:comment>
+				<span class="content-icon-default">
+					<fe:contentElement.icon object="{contentElement}" size="default" />
+				</span>
 				<div class="description">
-					<span class="title-default"><fe:contentElement.recordTitle object="{contentElement}" /></span>
-					<span class="title-default title-normal-casing"><f:translate key="right-bar.on-page.changed" extensionName="FrontendEditing" />
+					<span class="title-default">
+						<fe:contentElement.recordTitle object="{contentElement}" />
+					</span>
+					<span class="title-default title-normal-casing">
+						<f:translate key="right-bar.on-page.changed" extensionName="FrontendEditing" />
 						<f:format.date>@{contentElement.tstamp}</f:format.date>
 					</span>
 				</div>
