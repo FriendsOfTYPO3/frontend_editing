@@ -249,6 +249,7 @@
     }
 
     function hideQuickEditIframe() {
+        // The removal of the iframe should improve the browser's memory consumption
         $('.t3-frontend-editing__quick-edit-overlay').addClass(CLASS_HIDDEN).find('#FEquickEditWindow').remove();
     }
 
