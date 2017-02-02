@@ -13,13 +13,16 @@
 <f:render partial="RightBar" arguments="{_all}"></f:render>
 <f:render partial="LeftBar" arguments="{_all}"></f:render>
 
+
+		<div class="t3-frontend-editing__quick-edit-overlay hidden"></div>
+
 		<script type="text/javascript">
 			var iframeUrl = "{iframeUrl -> f:format.raw()}";
 			var inlineActionButtonsClass = '.t3-frontend-editing__inline-actions';
 		</script>
 
 		<div class="t3-frontend-editing__iframe-wrapper inactive {f:if(condition:overlayOption, then: 't3-frontend-editing__iframe-overlay')}">
-			<iframe src="" frameborder="0" border="0"></iframe>
+			<iframe src=""></iframe>
 		</div>
 
 		<div class="t3-frontend-editing__loading-screen">

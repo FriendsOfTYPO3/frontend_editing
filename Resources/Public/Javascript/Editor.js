@@ -83,7 +83,7 @@ var Editor = (function($){
 
             // Open/edit action
             that.find('.icon-actions-open').on('click', function() {
-                F.windowOpen(that.data('edit-url'));
+                F.quickEditOpen(that.data('edit-url'));
             });
 
             // Delete action
