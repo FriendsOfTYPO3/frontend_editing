@@ -194,8 +194,6 @@ class ContentPostProc
         $resources = '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Css/Main.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
-            '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/toastr/build/toastr.min.css" />';
-        $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/css/alertify.css" />';
         $resources .= '<link rel="stylesheet" type="text/css" href="' .
             '/typo3conf/ext/frontend_editing/Resources/Public/Javascript/lity/dist/lity.min.css" />';
