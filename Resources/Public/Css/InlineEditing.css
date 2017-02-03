@@ -1,6 +1,6 @@
 /* Toolbars */
 *[contenteditable="true"]:focus {
-  outline: 3px dotted #FF8700; }
+  outline: 3px dotted #e8a33d; }
 
 .t3-frontend-editing__hidden-element {
   opacity: .4; }
@@ -18,11 +18,11 @@
   .t3-frontend-editing__ce:hover {
     outline: 3px dotted rgba(15, 15, 15, 0.2); }
     .t3-frontend-editing__ce:hover .cke_editable {
-      outline: 3px dotted #FF8700; }
+      outline: 3px dotted #e8a33d; }
     .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
       display: block; }
   .t3-frontend-editing__ce.indicate-element {
-    outline: 3px solid #FF8700; }
+    outline: 3px solid #e8a33d; }
 
 .dropzones-enabled .t3-frontend-editing__dropzone {
   height: 25px; }

@@ -1,0 +1,252 @@
+$box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+$padding-base: 15px;
+$success-color: rgba(76, 175, 80, .9);
+$danger-color: rgba(244, 67, 54, .8);
+$text-color: rgba(0, 0, 0, .8);
+$border-radius: 1px;
+
+.alertify {
+  position: fixed;
+  background-color: $modal-background-color;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  overflow: hidden;
+
+  font-family: $font-family-base;
+
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &,
+  &.show {
+    box-sizing: border-box;
+    transition: opacity $fade-duration $fade-timing;
+  }
+
+  &,
+  * {
+    box-sizing: border-box;
+  }
+
+  .dialog {
+    padding: 10px 15px;
+  }
+
+  .dialog,
+  .alert {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    > * {
+      border-radius: 2px;
+      width: 600px;
+      max-width: 95%;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0;
+      background: $white;
+      box-shadow: $box-shadow;
+    }
+
+    .msg {
+      padding: $padding-base;
+      margin: 0;
+      margin-bottom: $padding-base;
+      text-align: left;
+    }
+
+    input:not(.form-control) {
+      margin-bottom: 15px;
+      width: 100%;
+      font-size: 100%;
+      padding: $padding-base;
+
+      &:focus {
+        outline-offset: -2px;
+      }
+
+      &.invalid {
+        border-left: 2px solid $danger-color;
+      }
+    }
+
+    nav {
+      text-align: right;
+      padding: 10px 15px;
+      display: block;
+
+      .btn {
+        margin: 6px 4px;
+      }
+
+      button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button) {
+        box-sizing: border-box;
+        color: $black;
+        position: relative;
+        outline: 0;
+        display: inline-block;
+        align-items: center;
+        padding: 0;
+        margin: 0 0 0 5px;
+        line-height: 32px;
+        min-height: 32px;
+        white-space: nowrap;
+        min-width: 100px;
+        text-align: center;
+        text-transform: uppercase;
+
+        font-family: $font-family-base;
+        font-size: $font-size-regular;
+
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: 2px;
+
+        background-color: $gray-bright;
+        border: 1px solid darken($gray-bright, 20%);
+
+        &:hover,
+        &:focus {
+          background-color: darken($gray-bright, 7%);
+          border-color: darken($gray-bright, 27%);
+        }
+
+        &:active {
+          background-color: darken($gray-bright, 14%);
+          border-color: darken($gray-bright, 40%);
+        }
+
+        &.ok {
+          background: $orange-primary;
+          border-color: darken($orange-primary, 7%);
+          color: $white;
+
+          &:hover,
+          &:focus {
+            background-color: darken($orange-primary, 7%);
+            border-color: darken($orange-primary, 14%);
+          }
+
+          &:active {
+            background-color: darken($orange-primary, 14%);
+            border-color: darken($orange-primary, 40%);
+          }
+        }
+      }
+    }
+
+    .msg + nav {
+      border-top: 1px solid $gray-bright;
+    }
+  }
+}
+
+.alertify-logs {
+  position: fixed;
+  z-index: 99999;
+
+  > * {
+    padding: $padding-base $padding-base * 2;
+    color: $white;
+    box-shadow: $box-shadow;
+    border-radius: $border-radius;
+
+    box-sizing: border-box;
+    transition: opacity $fade-duration $fade-timing;
+    position: relative;
+    clear: both;
+    backface-visibility: hidden;
+    perspective: 1000;
+
+    & {
+      max-height: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &.show {
+      margin-top: $padding-base;
+      opacity: 1;
+      max-height: 1000px;
+      padding: $padding-base;
+      pointer-events: auto;
+    }
+
+    &,
+    &.default {
+      background: transparentize($black, .8);
+    }
+
+    &.error {
+      background: $danger-color;
+    }
+
+    &.success {
+      background: $success-color;
+    }
+  }
+
+  &.bottom,
+  &:not(.top) {
+    bottom: 16px;
+  }
+
+  // All left positions.
+  &.left,
+  &:not(.right) {
+    left: 16px;
+
+    > * {
+      float: left;
+      transform: translate3d(0, 0, 0);
+      height: auto;
+
+      &.show {
+        left: 0;
+      }
+
+      &,
+      &.hide {
+        left: -110%;
+      }
+    }
+  }
+
+  &.right {
+    right: 16px;
+
+    > * {
+      float: right;
+      transform: translate3d(0, 0, 0);
+
+      &.show {
+        right: 0;
+        opacity: 1;
+      }
+
+      &,
+      &.hide {
+        right: -110%;
+        opacity: 0;
+      }
+    }
+  }
+
+  &.top {
+    top: 0;
+  }
+
+}

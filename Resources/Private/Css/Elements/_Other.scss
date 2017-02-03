@@ -73,13 +73,3 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
 }
-
-.alertify {
-  font-family: $font-family-base;
-
-  button {
-    font-family: $font-family-base;
-    font-size: $font-size-regular !important;
-    border: 1px solid $gray-light !important;
-  }
-}
