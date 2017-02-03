@@ -899,11 +899,11 @@ button.toast-close-button {
   width: 100%; }
 
 .toast-top-left {
-  top: 12px;
+  top: 57px;
   left: 12px; }
 
 .toast-top-right {
-  top: 12px;
+  top: 57px;
   right: 12px; }
 
 .toast-bottom-right {
@@ -925,8 +925,8 @@ button.toast-close-button {
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
-    padding: 15px 15px 15px 50px;
-    width: 300px;
+    padding: 10px 10px 10px 50px;
+    width: 350px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
@@ -936,9 +936,12 @@ button.toast-close-button {
     -webkit-box-shadow: 0 0 12px #838383;
     box-shadow: 0 0 12px #838383;
     color: #fff;
-    opacity: .8;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-    filter: alpha(opacity=80); }
+    opacity: .95;
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
+    filter: alpha(opacity=95);
+    font-family: "Share", Verdana, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.25em; }
   #toast-container > :hover {
     -moz-box-shadow: 0 0 12px #0f0f0f;
     -webkit-box-shadow: 0 0 12px #0f0f0f;
@@ -965,19 +968,19 @@ button.toast-close-button {
     margin: auto; }
 
 .toast {
-  background-color: #030303; }
+  background-color: #0f0f0f; }
 
 .toast-success {
-  background-color: #51a351; }
+  background-color: #0f0f0f; }
 
 .toast-error {
-  background-color: #bd362f; }
+  background-color: #c94545; }
 
 .toast-info {
-  background-color: #2f96b4; }
+  background-color: #4c4c4c; }
 
 .toast-warning {
-  background-color: #f89406; }
+  background-color: #FF8700; }
 
 .toast-progress {
   position: absolute;
@@ -992,7 +995,7 @@ button.toast-close-button {
 @media all and (max-width: 240px) {
   #toast-container > div {
     padding: 8px 8px 8px 50px;
-    width: 11em; }
+    width: 90%; }
   #toast-container .toast-close-button {
     right: -.2em;
     top: -.2em; } }
@@ -1000,12 +1003,12 @@ button.toast-close-button {
 @media all and (min-width: 241px) and (max-width: 480px) {
   #toast-container > div {
     padding: 8px 8px 8px 50px;
-    width: 18em; }
+    width: 90%;
+    max-width: 350px; }
   #toast-container .toast-close-button {
     right: -.2em;
     top: -.2em; } }
 
 @media all and (min-width: 481px) and (max-width: 768px) {
   #toast-container > div {
-    padding: 15px 15px 15px 50px;
-    width: 25em; } }
+    padding: 10px 10px 10px 50px; } }
