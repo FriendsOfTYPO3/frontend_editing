@@ -842,6 +842,8 @@ body {
 .toast-message {
   -ms-word-wrap: break-word;
   word-wrap: break-word; }
+  .toast-message div {
+    position: relative !important; }
   .toast-message label {
     color: #fff; }
   .toast-message a {
@@ -927,6 +929,7 @@ button.toast-close-button {
     margin: 0 0 6px;
     padding: 10px 10px 10px 50px;
     width: 350px;
+    max-height: 200px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
