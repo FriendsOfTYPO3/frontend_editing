@@ -6,7 +6,7 @@
 Development
 ===========
 
-Instructions for how to develop the frontend editing.
+Instructions on how to develop the frontend editing extension
 
 .. toctree::
    :titlesonly:

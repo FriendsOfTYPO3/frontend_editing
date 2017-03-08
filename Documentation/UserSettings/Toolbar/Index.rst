@@ -5,12 +5,12 @@
 Activate the right toolbar as overlay or push
 ---------------------------------------------
 
-If the user have a smaller screen the default push effect behaviour of the right toolbar can really make the screen size small. There is a possibility to chose which behaviour should be used.
+If the user has a smaller screen, the default push effect behaviour of the right toolbar can make the screen very size small. There is a possibility to choose which behaviour should be used.
 
 Push
 ----
 
-Push is the default which just pushes all the content to the left when used.
+Push is the default which pushes all the content to the left.
 
 Overlay
 -------

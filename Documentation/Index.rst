@@ -13,22 +13,17 @@ TYPO3 Frontend Editing
 Pixelant frontend editing (frontend_editing)
 --------------------------------------------
 
-This package gives frontend editing capability to TYPO3 CMS, the editor used is Ckeditor_.
+This extension enables frontend editing for the TYPO3 CMS. Ckeditor_ is used as editor.
 
 Documentation
 -------------
 
-For all kind of documentation which covers install to how to develop the extension: Gitbook_
-
-:Writing here:    M-arcus
-:Rendered:        |today|
-:Buildinfo:       `buildinfo <_buildinfo>`_
-:Others:          `overview <..>`__
+Documentation on how to install and develop the extension: Gitbook_
 
 .. toctree::
    :hidden:
 
    Installation/Index
    InlineEditing/Index
-   TYPO3UserSettings/Index
+   UserSettings/Index
    Development/Index

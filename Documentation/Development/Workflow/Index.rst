@@ -11,20 +11,20 @@ For working with the extension, the following can be run to accomplish common ta
 Test
 ----
 
-To run the PHP codesniffer run the following command:
+Run the following command to execute the PHP codesniffer:
 
 ::
 
    npm run php:codesniffer
 
-To run the PHP Unit tests run the following command:
+Run the following command to run the PHP Unit tests:
 
 
 ::
 
    npm run php:unittests
 
-To simulate the full build process locally, then run this packaged command:
+Run this command to simulate the full build process locally:
 
 ::
 
@@ -66,14 +66,14 @@ Add the lity (modals) node_module to Public/Resources folder:
 Styling
 -------
 
-The extension are using SASS for compiling into CSS.
-To build the stylesheets use the following command:
+The extension is using SASS.
+Use the following command to build the stylesheets:
 
 ::
 
    npm run build:css
 
-While developing use the following watch command:
+Use the following watch command while developing:
 
 ::
 
@@ -82,7 +82,7 @@ While developing use the following watch command:
 Publish
 -------
 
-To build the extension before a publish to TER use the following command to copy all necessary node_modules into Public/Resources folder (is a bundle of all add:resource commands) and compile the SASS:
+Use the following command to copy all necessary node_modules into Public/Resources folder and compile the SASS:
 ::
 
    npm run build:extension
