@@ -22,13 +22,15 @@
     FrontendEditing.prototype.initGUI = init;
     FrontendEditing.prototype.showLoadingScreen = showLoadingScreen;
     FrontendEditing.prototype.hideLoadingScreen = hideLoadingScreen;
+    FrontendEditing.prototype.showQuickEditIframe = showQuickEditIframe;
+    FrontendEditing.prototype.hideQuickEditIframe = hideQuickEditIframe;
     FrontendEditing.prototype.refreshIframe = refreshIframe;
     FrontendEditing.prototype.showSuccess = showSuccess;
     FrontendEditing.prototype.showError = showError;
     FrontendEditing.prototype.showWarning = showWarning;
     FrontendEditing.prototype.confirm = confirm;
     FrontendEditing.prototype.modal = modal;
-    FrontendEditing.prototype.windowOpen = windowOpen;
+    FrontendEditing.prototype.quickEditOpen = quickEditOpen;
     FrontendEditing.prototype.iframe = getIframe;
 
     var CLASS_HIDDEN = 'hidden';
@@ -197,6 +199,10 @@
         $(document).on('lity:close', function(event, instance) {
             F.refreshIframe();
         });
+
+        $('.t3-frontend-editing__quick-edit-overlay').on('click', function() {
+            F.hideQuickEditIframe();
+        });
     }
 
     function initGuiStates() {
@@ -236,6 +242,15 @@
 
     function hideLoadingScreen() {
         $loadingScreen.addClass(CLASS_HIDDEN);
+    }
+
+    function showQuickEditIframe() {
+        $('.t3-frontend-editing__quick-edit-overlay').removeClass(CLASS_HIDDEN);
+    }
+
+    function hideQuickEditIframe() {
+        // The removal of the iframe should improve the browser's memory consumption
+        $('.t3-frontend-editing__quick-edit-overlay').addClass(CLASS_HIDDEN).find('#FEquickEditWindow').remove();
     }
 
     function getIframe() {
@@ -292,10 +307,16 @@
         lity(content);
     }
 
-    function windowOpen(url) {
-        var vHWin = window.open(url ,'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
-        vHWin.focus();
-        return false;
+    function quickEditOpen(url) {
+        F.showLoadingScreen();
+        var deferred = $.Deferred();
+        $('<iframe id="FEquickEditWindow" src=' + url + '></iframe>').appendTo('.t3-frontend-editing__quick-edit-overlay');
+        $('#FEquickEditWindow').on('load', deferred.resolve);
+
+        deferred.done(function() {
+            F.hideLoadingScreen();
+            F.showQuickEditIframe();
+        });
     }
 
 }(jQuery));

@@ -189,7 +189,7 @@ var FrontendEditing = (function($){
             var params = ev.dataTransfer.getData('params');
             var newUrl = $(ev.currentTarget).data('new-url');
             var fullUrl = newUrl + params;
-            F.windowOpen(fullUrl);
+            F.quickEditOpen(fullUrl);
         },
 
         indicateCeStart: function(ev) {

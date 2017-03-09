@@ -21,7 +21,7 @@ $font-size-small: 14px;
 $font-size-regular: 16px;
 $font-size-large: 18px;
 
-/* Toolbars */
+// Toolbars
 $t3-frontend: t3-frontend-editing__;
 
 // Header top
@@ -46,3 +46,8 @@ $modal-background-color: rgba($black, .5);
 // Timing
 $push-duration: .2s;
 $push-timing: linear;
+$fade-duration: .2s;
+$fade-timing: linear;
+
+// Spinner
+$spinner-size: 48px;

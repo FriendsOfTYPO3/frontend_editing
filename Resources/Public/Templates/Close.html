@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <title>Close</title>
     <script type="text/javascript">
-        self.close();
         // Refresh the iframe with inline editing
-        window.opener.F.refreshIframe();
+        parent.F.refreshIframe();
+        parent.F.hideQuickEditIframe();
     </script>
 </head>
 <body>
