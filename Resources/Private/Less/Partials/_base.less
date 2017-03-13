@@ -1,0 +1,35 @@
+.transition(@transition...) {
+  -webkit-transition: @transition;
+  -moz-transition: @transition;
+  -ms-transition: @transition;
+  -o-transition: @transition;
+  transition: @transition;
+}
+
+.transition-duration(@duration...) {
+  -webkit-transition-duration: @duration;
+  -moz-transition-duration: @duration;
+  -ms-transition-duration: @duration;
+  -o-transition-duration: @duration;
+  transition-duration: @duration;
+}
+
+.transform(@transform...) {
+  -webkit-transform: @transform;
+  -moz-transform: @transform;
+  -ms-transform: @transform;
+  -o-transform: @transform;
+  transform: @transform;
+}
+
+.rotate(@deg) {
+  .transform(rotate((@deg)deg));
+}
+
+.transform-origin(@origin) {
+  -moz-transform-origin: @origin;
+  -o-transform-origin: @origin;
+  -ms-transform-origin: @origin;
+  -webkit-transform-origin: @origin;
+  transform-origin: @origin;
+}

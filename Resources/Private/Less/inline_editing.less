@@ -1,0 +1,89 @@
+//
+// Frontend editing, inline editing Styles
+// ---------------
+// Description: Global styles for inline editing wrapper.
+// Requires:    ../Less/Configuration/Variables/_colors.less
+// Usage:       This file is compiled to the standalone CSS file:
+//              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
+//
+
+
+// Include Color Variables
+@import '../../../../../../Build/Resources/Public/Less/Configuration/Variables/_colors.less';
+
+*[contenteditable="true"] {
+  &:focus{
+    outline: 3px dotted @color-t3-primary;
+  }
+}
+
+&.t3-frontend-editing__hidden-element {
+  opacity: .4;
+}
+
+.t3-frontend-editing__dropzone {
+  height: 0;
+  background-color: @color-t3-blue;
+  transition: height 0.2s;
+  -webkit-transition: height 0.2s;
+  margin: 0;
+  padding: 0;
+}
+
+.t3-frontend-editing__ce {
+  position: relative;
+  min-height: 35px;
+  &:hover {
+    outline: 3px dotted rgba(15, 15, 15, .2);
+    .cke_editable {
+      outline: 3px dotted @color-t3-primary;
+      z-index: 5;
+    }
+    .t3-frontend-editing__inline-actions {
+      display: block;
+    }
+  }
+  // Colored frame when hovering content element in right-column list
+  &.indicate-element {
+    outline: 3px solid @color-t3-primary;
+  }
+}
+
+.dropzones-enabled .t3-frontend-editing__dropzone {
+  height: 25px;
+  &.active {
+    height: 60px;
+    border: dashed 2px @gray;
+  }
+}
+
+.t3-frontend-editing__inline-actions {
+  display: none;
+  position: absolute;
+  top: -27px;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  color: @color-white;
+  z-index: 2;
+  height: 27px;
+  width: 100%;
+  text-align: right;
+
+  .icon {
+    .icon-markup {
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .icon-actions-edit-delete, .icon-actions-edit-add  {
+    margin-left: 2px;
+  }
+}
+
+// Hide preview info box from TYPO3 admin panel
+#typo3-previewInfo {
+  display: none;
+}

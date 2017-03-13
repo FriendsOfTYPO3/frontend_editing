@@ -1,29 +1,57 @@
-.. include:: Includes.txt
+﻿.. include:: Includes.txt
 
-.. highlight:: rst
 
-======================
-TYPO3 Frontend Editing
-======================
+.. _start:
 
-|img-passed|
+=========================
+Frontend editing
+=========================
 
-|img-typo3-850|
+:Extension key:
+      frontend_editing
 
-Pixelant frontend editing (frontend_editing)
---------------------------------------------
+:Version:
+      |release|
 
-This extension enables frontend editing for the TYPO3 CMS. Ckeditor_ is used as editor.
+:Language:
+      en
 
-Documentation
--------------
+:Description:
+      Frontend editing functionality for TYPO3 CMS.
 
-Documentation on how to install and develop the extension: Gitbook_
+:Keywords:
+      frontend, editing
+
+:Copyright:
+      2017
+
+:Author:
+      TYPO3 CMS Core Development Team
+
+:License:
+      Open Content License available from `www.opencontent.org/opl.shtml
+      <http://www.opencontent.org/opl.shtml>`_
+
+:Rendered:
+      |today|
+
+The content of this document is related to TYPO3,
+
+a GNU/GPL CMS/Framework available from `www.typo3.org
+<http://www.typo3.org/>`_
+
+
+
+
+**Table of Contents**
 
 .. toctree::
-   :hidden:
+   :maxdepth: 5
+   :titlesonly:
+   :glob:
 
+   Introduction/Index
    Installation/Index
    InlineEditing/Index
    UserSettings/Index
-   Development/Index
+

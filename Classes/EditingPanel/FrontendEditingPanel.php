@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\EditingPanel;
 
 /*
@@ -14,29 +15,16 @@ namespace TYPO3\CMS\FrontendEditing\EditingPanel;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
-use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\FrontendEditing\Utility\Access;
-use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
-use TYPO3\CMS\FrontendEditing\Utility\Helper;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
  * View class for the edit panels in frontend editing
- *
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
 class FrontendEditingPanel
 {
-    /**
-     * The Content Object Renderer
-     *
-     * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
-     */
-    protected $cObj;
-
     /**
      * Property for accessing TypoScriptFrontendController centrally
      *
@@ -45,40 +33,29 @@ class FrontendEditingPanel
     protected $frontendController;
 
     /**
-     * Property for accessing DatabaseConnection centrally
-     *
-     * @var DatabaseConnection
-     */
-    protected $databaseConnection;
-
-    /**
-     * @var FrontendBackendUserAuthentication
-     */
-    protected $backendUser;
-
-    /**
-     * @var \TYPO3\CMS\Core\Imaging\IconFactory
-     */
-    protected $iconFactory;
-
-    /**
      * Constructor for the edit panel
-     *
-     * @param DatabaseConnection $databaseConnection
-     * @param TypoScriptFrontendController $frontendController
-     * @param FrontendBackendUserAuthentication $backendUser
      */
-    public function __construct(
-        DatabaseConnection $databaseConnection = null,
-        TypoScriptFrontendController $frontendController = null,
-        FrontendBackendUserAuthentication $backendUser = null
-    ) {
-        $this->databaseConnection = $databaseConnection ?: $GLOBALS['TYPO3_DB'];
-        $this->frontendController = $frontendController ?: $GLOBALS['TSFE'];
-        $this->backendUser = $backendUser ?: $GLOBALS['BE_USER'];
-        $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
-        $this->cObj->start([]);
-        $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+    public function __construct()
+    {
+        $this->frontendController = $GLOBALS['TSFE'];
+    }
+
+    /**
+     * Needs to be implemented via the API but not in use
+     *
+     * @param string $content
+     * @param array $conf
+     * @param string $currentRecord
+     * @param array $dataArray
+     * @param string $table
+     * @param array $allowedActions
+     * @param string $newUid
+     * @param string $fields
+     * @return string
+     */
+    public function editPanel($content, $conf, $currentRecord, $dataArray, $table, $allowedActions, $newUid, $fields)
+    {
+        return $content;
     }
 
     /**
@@ -86,8 +63,17 @@ class FrontendEditingPanel
      * with proper parameters for editing the table/fields of the context.
      * This implements TYPO3 context sensitive editing facilities.
      * Only backend users will have access (if properly configured as well).
+     * See TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
      *
-     * @inheritdoc
+     * @param string $content
+     * @param array $params
+     * @param array $conf
+     * @param array $currentRecord
+     * @param array $dataArr
+     * @param string $addUrlParamStr
+     * @param string $table
+     * @param string $editUid
+     * @param string $fieldList
      * @return string
      */
     public function editIcons(
@@ -100,10 +86,17 @@ class FrontendEditingPanel
         $table,
         $editUid,
         $fieldList
-    ) {
+    ): string {
+        $access = GeneralUtility::makeInstance(AccessService::class);
+        if (!$access->isEnabled()) {
+            return $content;
+        }
+
         // We need to determine if we are having whole element or just one field for element
         // this only allows to edit all other tables just per field instead of per element
-        if ($conf['beforeLastTag'] === 1) {
+        $isEditableField = false;
+        $isWholeElement = false;
+        if ((int)$conf['beforeLastTag'] === 1) {
             $isEditableField = true;
         } elseif ($table === 'tt_content' || $conf['hasEditableFields'] === 1) {
             $isWholeElement = true;
@@ -113,68 +106,38 @@ class FrontendEditingPanel
             $isEditableField = true;
         }
 
-        $wrappedContent = $content;
-
-        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isEditableField) {
-            $fields = explode(',', $fieldList);
-            $wrappedContent = ContentEditableWrapper::wrapContentToBeEditable(
+        $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+        if ($isEditableField) {
+            $fields = GeneralUtility::trimexplode(',', $fieldList);
+            $content = $wrapperService->wrapContentToBeEditable(
                 $table,
-                $fields[0],
-                $editUid,
-                $wrappedContent
+                trim($fields[0]),
+                (int)$editUid,
+                $content
             );
         }
 
-        if (Access::isEnabled() && !Helper::httpRefererIsFromBackendViewModule() && $isWholeElement) {
+        if ($isWholeElement) {
             // Special content is about to be shown, so the cache must be disabled.
             $this->frontendController->set_no_cache('Display frontend edit icons', true);
 
             // wrap content with controls
-            $wrappedContent = ContentEditableWrapper::wrapContent(
+            $content = $wrapperService->wrapContent(
                 $table,
-                $editUid,
+                (int)$editUid,
                 $dataArr,
-                $wrappedContent
+                $content
             );
 
             // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
             // Add a dropzone after content
-            $wrappedContent = ContentEditableWrapper::wrapContentWithDropzone(
+            $content = $wrapperService->wrapContentWithDropzone(
                 $table,
-                $editUid,
-                $wrappedContent
+                (int)$editUid,
+                $content
             );
         }
 
-        return $wrappedContent;
-    }
-
-    /**
-     * Returns TRUE if the input table/row would be hidden in the frontend,
-     * according to the current time and simulate user group
-     *
-     * @param string $table The table name
-     * @param array $row The data record
-     * @return bool
-     */
-    protected function isDisabled($table, array $row)
-    {
-        $status = false;
-        if ($GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['disabled'] &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['disabled']] ||
-            $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['fe_group'] &&
-            $this->frontendController->simUserGroup &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['fe_group']]
-                == $this->frontendController->simUserGroup ||
-            $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['starttime'] &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
-            $GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['endtime'] &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['endtime']] &&
-            $row[$GLOBALS['TCA'][$table]['ctrl']['enablecolumns']['endtime']] < $GLOBALS['EXEC_TIME']
-        ) {
-            $status = true;
-        }
-
-        return $status;
+        return $content;
     }
 }

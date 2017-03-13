@@ -14,154 +14,154 @@
 /**
  * Editor: used in iframe for DOM interaction
  */
-var Editor = (function($){
+define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR) {
+	'use strict';
 
-    'use strict';
+	var defaultEditorConfig = {
+		skin: 'moono',
+		entities_latin: false,
+		htmlEncodeOutput: false,
+		allowedContent: true,
+		customConfig: '',
+		stylesSet: []
+	};
 
-    var editorConfig = {
-        skin: 'moono',
-        entities_latin: false,
-        htmlEncodeOutput: false,
-        allowedContent: true,
-        toolbarGroups: [
-            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-            { name: 'links' },
-            { name: 'insert' },
-            { name: 'tools' },
-            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-            { name: 'others' },
-            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] }
-        ]
-    };
+	function init($iframe, configurationUrl) {
+		// Storage for adding and checking if it's empty when navigating to other pages
+		var storage = F.getStorage();
 
-    function init($iframe) {
-        // Storage for adding and checking if it's empty when navigating to other pages
-        var storage = F.getStorage();
+		// The content in the iframe will be used many times
+		var $iframeContents = $iframe.contents();
 
-        // The content in the iframe will be used many times
-        var $iframeContents = $iframe.contents();
+		// Include Inline editing styles after iframe has loaded
+		$iframeContents.find('head').append(
+			$(
+				'<link/>',
+				{
+					rel: 'stylesheet',
+					href: '/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css',
+					type: 'text/css'
+				}
+			)
+		);
 
-        // Include Inline editing styles after iframe has loaded
-        var $head = $iframeContents.find('head');
+		// Suppress a tags (links) to redirect the normal way
+		$iframeContents.find('a').click(function (event) {
+			event.preventDefault();
+			var linkUrl = $(this).attr('href');
+			F.navigate(linkUrl);
+		});
 
-        $head.append(
-            $(
-                '<link/>',
-                {
-                    rel: 'stylesheet',
-                    href: '/typo3conf/ext/frontend_editing/Resources/Public/Css/InlineEditing.css',
-                    type: 'text/css'
-                }
-            )
-        );
+		// Find all t3-frontend-editing__inline-actions
+		var $inlineActions = $iframeContents.find('span.t3-frontend-editing__inline-actions');
+		$inlineActions.each(function (index) {
+			var that = $(this);
 
-        // Suppress a tags (links) to redirect the normal way
-        $iframeContents.find('a').click(function(event) {
-            event.preventDefault();
-            var linkUrl = $(this).attr('href');
-            F.navigate(linkUrl);
-        });
+			// Disable dragging icons by mistake
+			that.find('img').on('dragstart', function () {
+				return false;
+			});
 
-        // Find all t3-frontend-editing__inline-actions
-        var $inlineActions = $iframeContents.find('span.t3-frontend-editing__inline-actions');
-        $inlineActions.each(function(index) {
-            var that = $(this);
+			// Open/edit action
+			that.find('.icon-actions-open').on('click', function () {
+				F.windowOpen(that.data('edit-url'));
+			});
 
-            // Disable dragging icons by mistake
-            that.find('img').on('dragstart', function() {
-                return false;
-            });
+			// Delete action
+			that.find('.icon-actions-edit-delete').on('click', function () {
+				F.confirm(F.translate('notifications.delete-content-element'), {
+					yes: function () {
+						F.delete(that.data('uid'), that.data('table'));
+					}
+				});
+			});
 
-            // Open/edit action
-            that.find('.icon-actions-open').on('click', function() {
-                F.windowOpen(that.data('edit-url'));
-            });
+			// Hide/Unhide action
+			that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function () {
+				var hide = 1;
+				if (that.data('hidden') == 1) {
+					hide = 0;
+				}
+				F.hideContent(that.data('uid'), that.data('table'), hide);
+			});
 
-            // Delete action
-            that.find('.icon-actions-edit-delete').on('click', function() {
-                F.confirm(F.translate('notifications.delete-content-element'), {
-                    yes: function() {
-                        F.delete(that.data('uid'), that.data('table'));
-                    }
-                });
-            });
+			if (typeof $inlineActions[index - 1] !== 'undefined' &&
+				$inlineActions[index - 1].dataset.cid == that.data('cid')
+			) {
+				// Move up action
+				that.find('.icon-actions-move-up').on('click', function () {
+					// Find the previous editor instance element
+					var previousDomElementUid = $inlineActions[index - 1].dataset.uid;
+					var currentDomElementUid = that.data('uid');
+					var currentDomElementTable = that.data('table');
+					F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
+				});
+			} else {
+				that.find('.icon-actions-move-up').hide();
+			}
 
-            // Hide/Unhide action
-            that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function() {
-                var hide = 1;
-                if (that.data('hidden') == 1) {
-                    hide = 0;
-                }
-                F.hideContent(that.data('uid'), that.data('table'), hide);
-            });
+			if (typeof $inlineActions[index + 1] !== 'undefined' &&
+				$inlineActions[index + 1].dataset.cid == that.data('cid')
+			) {
+				// Move down action
+				that.find('.icon-actions-move-down').on('click', function () {
+					// Find the next editor instance element
+					var nextDomElementUid = $inlineActions[index + 1].dataset.uid;
+					var currentDomElementUid = that.data('uid');
+					var currentDomElementTable = that.data('table');
+					F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
+				});
+			} else {
+				that.find('.icon-actions-move-down').hide();
+			}
+		});
 
-            if (typeof $inlineActions[index - 1] !== 'undefined' &&
-                $inlineActions[index - 1].dataset.cid == that.data('cid')
-            ) {
-                // Move up action
-                that.find('.icon-actions-move-up').on('click', function() {
-                    // Find the previous editor instance element
-                    var previousDomElementUid = $inlineActions[index - 1].dataset.uid;
-                    var currentDomElementUid = that.data('uid');
-                    var currentDomElementTable = that.data('table');
-                    F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
-                });
-            } else {
-                that.find('.icon-actions-move-up').hide();
-            }
+		var $topBar = $('.t3-frontend-editing__top-bar');
 
-            if (typeof $inlineActions[index + 1] !== 'undefined' &&
-                $inlineActions[index + 1].dataset.cid == that.data('cid')
-            ) {
-                // Move down action
-                that.find('.icon-actions-move-down').on('click', function() {
-                    // Find the next editor instance element
-                    var nextDomElementUid = $inlineActions[index + 1].dataset.uid;
-                    var currentDomElementUid = that.data('uid');
-                    var currentDomElementTable = that.data('table');
-                    F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
-                });
-            } else {
-                that.find('.icon-actions-move-down').hide();
-            }
-        });
+		// Add custom configuration to ckeditor
+		var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
+		$contenteditable.each(function () {
+			var $el = $(this);
+			$.ajax({
+				url: configurationUrl,
+				method: 'GET',
+				dataType: 'json',
+				data: {
+					'table': $(this).data('table'),
+					'uid': $(this).data('uid'),
+					'field': $(this).data('field')
+				}
+			}).done(function (data) {
+				// ensure all plugins / buttons are loaded
+				if (typeof data.externalPlugins !== 'undefined') {
+					eval(data.externalPlugins);
+				}
+				var config = $.extend(true, defaultEditorConfig, data.configuration);
+				// initialize CKEditor now, when finished remember any change
+				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
+					// This moves the dom instances of ckeditor into the top bar
+					$('.' + editor.id).detach().appendTo($topBar);
 
-        // Add custom configuration to ckeditor
-        var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
-        $contenteditable.each(function(index) {
-            var that = $(this);
-            that.ckeditor(editorConfig);
-        });
+					editor.on('change', function (changeEvent) {
+						if (typeof editor.element !== 'undefined') {
+							var dataSet = editor.element.$.dataset;
+							storage.addSaveItem(dataSet.uid + '_' + dataSet.field, {
+								'action': 'save',
+								'table': dataSet.table,
+								'uid': dataSet.uid,
+								'field': dataSet.field,
+								'editorInstance': editor.name
+							});
+							F.trigger(F.CONTENT_CHANGE);
+						}
+					});
+				});
+			});
+		});
+	}
 
-        var $topBar = $('.t3-frontend-editing__top-bar');
-        CKEDITOR.on('instanceReady', function(event) {
+	return {
+		init: init
+	}
 
-            // @TODO: This moves the dom instances of ckeditor into the top bar
-            $contenteditable.each(function() {
-                var editorDomInstance = $(this).ckeditor().editor.id;
-                $('.' + editorDomInstance).detach().appendTo($topBar);
-            });
-
-            var editor = event.editor;
-
-            editor.on('change', function(changeEvent) {
-                if (typeof editor.element !== 'undefined') {
-                    var dataSet = editor.element.$.dataset;
-                    storage.addSaveItem(dataSet.uid + '_' + dataSet.field, {
-                        'action': 'save',
-                        'table': dataSet.table,
-                        'uid': dataSet.uid,
-                        'field': dataSet.field,
-                        'editorInstance': editor.name
-                    });
-                    F.trigger(F.CONTENT_CHANGE);
-                }
-            });
-        });
-    }
-
-    return {
-        init: init
-    }
-
-})(jQuery);
+});

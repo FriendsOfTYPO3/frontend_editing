@@ -1,0 +1,74 @@
+.t3-frontend-editing__left-bar {
+
+  background: @transparent-opacity;
+  color: @white;
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: @left-bar-width;
+  min-height: 100%;
+  z-index: 10999;
+  font-family: @font-family-base;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  .title-icon-left {
+    top: 7px;
+    position: relative;
+    font-size: 32px;
+    padding-left: 15px;
+    color: @color-t3-primary;
+  }
+
+  .top-left-title {
+    height: @top-bar-height;
+    background-color: @header-top-bg-color;
+
+    .title-left {
+      text-align: left;
+      padding: 10px 5px 10px 10px;
+      font-size: 18px;
+      display: inline-block;
+    }
+
+    .left-bar-button {
+      .transition(right (@push-duration / 2) @push-timing);
+      .transform-origin (center);
+      cursor: pointer;
+      float: right;
+      display: block;
+      height: @top-bar-height;
+      line-height: @top-bar-height;
+      width: 45px;
+      text-align: center;
+      position: absolute;
+      color: @gray-light;
+      font-size: 32px;
+      right: -45px;
+      top: 0;
+      background-color: @black;
+
+      &:hover {
+        background-color: lighten(@black, 20%);
+        color: @white;
+      }
+    }
+  }
+
+  &.open {
+    .top-left-title {
+      .left-bar-button {
+        right: 0;
+      }
+
+      .icon-icons-arrow-double {
+        .transform(scaleX(-1));
+      }
+    }
+  }
+}
+
+.push-toright {
+  left: @left-bar-width;
+  position: relative;
+}
