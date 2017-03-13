@@ -39,7 +39,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				'<link/>',
 				{
 					rel: 'stylesheet',
-					href: '/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css',
+					href: '/typo3conf/ext/frontend_editing/Resources/Public/Css/inline_editing.css',
 					type: 'text/css'
 				}
 			)
