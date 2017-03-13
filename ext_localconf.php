@@ -2,8 +2,7 @@
 defined('TYPO3_MODE') or die();
 
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
-//$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['fe'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
 
 /**
  * Hooks
