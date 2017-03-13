@@ -1,6 +1,6 @@
 {
 	"name": "typo3/cms-frontend-editing",
-	"type": "typo3-cms-framework",
+	"type": "typo3-cms-extension",
 	"description": "Enable editors to work with the content in the most intuitive way possible",
 	"license": ["GPL-2.0+"],
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
