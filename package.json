@@ -21,9 +21,6 @@
     "alertify.js": "^1.0.12"
   },
   "devDependencies": {
-    "node-sass": "^3.9.3",
-    "nodemon": "^1.10.2",
-    "sass-lint": "^1.9.1",
     "less": "^2.7.2",
     "less-watch-compiler": "^1.4.2"
   },
