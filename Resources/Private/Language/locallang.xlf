@@ -1,8 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<xliff version="1.0">
-    <file source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing">
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+    <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing">
         <header/>
         <body>
+            <trans-unit id="settings.field.frontend_editing">
+                <source>Enable Frontend Editing</source>
+            </trans-unit>
+            <trans-unit id="settings.field.frontend_editing_overlay">
+                <source>Frontend Editing: Enable right overlay bar</source>
+            </trans-unit>
             <trans-unit id="top-bar.to-backend">
                 <source>To backend</source>
             </trans-unit>
@@ -15,21 +21,12 @@
             <trans-unit id="top-bar.logout">
                 <source>Logout</source>
             </trans-unit>
-
             <trans-unit id="left-bar.site-tree">
                 <source>Site Tree</source>
             </trans-unit>
-
             <trans-unit id="right-bar.tools-properties">
                 <source>TOOLS &amp; PROPERTIES</source>
             </trans-unit>
-            <trans-unit id="right-bar.page-seo-score">
-                <source>Page SEO Score</source>
-            </trans-unit>
-            <trans-unit id="right-bar.seo-guide">
-                <source>SEO Guide</source>
-            </trans-unit>
-
             <trans-unit id="notifications.save-title">
                 <source>Content saved</source>
             </trans-unit>
@@ -57,10 +54,12 @@
             <trans-unit id="notifications.add-content-element">
                 <source>You would have the option to add an element now, if this feature was implemented.</source>
             </trans-unit>
+            <trans-unit id="notifications.content-locked">
+                <source>The content is currently locked, do you still want to save?</source>
+            </trans-unit>
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
             </trans-unit>
-
             <trans-unit id="right-bar.on-page.changed">
                 <source>Modified:</source>
             </trans-unit>

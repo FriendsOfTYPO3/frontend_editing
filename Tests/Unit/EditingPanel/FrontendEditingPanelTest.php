@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
-use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 
 /**
@@ -76,10 +76,10 @@ class FrontendEditingPanelTest extends UnitTestCase
         $content = $this->getUniqueId('content');
         return [
             'standard case call edit icons for tt_content:bodytext' => [
-                ContentEditableWrapper::wrapContentWithDropzone(
+                ContentEditableWrapperService::wrapContentWithDropzone(
                     'tt_content',
                     1,
-                    ContentEditableWrapper::wrapContent(
+                    ContentEditableWrapperService::wrapContent(
                         'tt_content',
                         1,
                         [],
@@ -99,10 +99,10 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with fe_users:email' => [
-                ContentEditableWrapper::wrapContentWithDropzone(
+                ContentEditableWrapperService::wrapContentWithDropzone(
                     'fe_users',
                     12,
-                    ContentEditableWrapper::wrapContent(
+                    ContentEditableWrapperService::wrapContent(
                         'fe_users',
                         12,
                         [],
@@ -123,10 +123,10 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with tt_content:header' => [
-                ContentEditableWrapper::wrapContentWithDropzone(
+                ContentEditableWrapperService::wrapContentWithDropzone(
                     'tt_content',
                     12,
-                    ContentEditableWrapper::wrapContent(
+                    ContentEditableWrapperService::wrapContent(
                         'tt_content',
                         12,
                         [],

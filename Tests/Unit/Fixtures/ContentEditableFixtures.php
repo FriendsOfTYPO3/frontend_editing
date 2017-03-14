@@ -14,7 +14,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
@@ -105,7 +105,7 @@ class ContentEditableFixtures
             $this->table,
             $this->field,
             $this->uid,
-            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
+            ContentEditableWrapperService::checkIfContentElementIsHidden($this->table, $this->uid),
             $this->content
         );
 
@@ -126,20 +126,20 @@ class ContentEditableFixtures
                     ' data-hidden="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
-            ContentEditableWrapper::checkIfContentElementIsHidden($this->table, $this->uid),
-            Integration::contentElementTitle($this->uid),
+            ContentEditableWrapperService::checkIfContentElementIsHidden($this->table, $this->uid),
+            ContentEditableWrapperService::contentElementTitle($this->uid),
             $class,
             $this->table,
             $this->uid,
             0,
             $this->dataArr['colPos'],
-            ContentEditableWrapper::renderEditOnClickReturnUrl(
-                ContentEditableWrapper::renderEditUrl(
+            ContentEditableWrapperService::renderEditOnClickReturnUrl(
+                ContentEditableWrapperService::renderEditUrl(
                     $this->table,
                     $this->uid
                 )
             ),
-            ContentEditableWrapper::renderInlineActionIcons(false),
+            ContentEditableWrapperService::renderInlineActionIcons(false),
             $this->content
         );
 
@@ -166,8 +166,8 @@ class ContentEditableFixtures
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            ContentEditableWrapper::renderEditOnClickReturnUrl(
-                ContentEditableWrapper::renderNewUrl($this->table, $this->uid)
+            ContentEditableWrapperService::renderEditOnClickReturnUrl(
+                ContentEditableWrapperService::renderNewUrl($this->table, $this->uid)
             )
         );
 

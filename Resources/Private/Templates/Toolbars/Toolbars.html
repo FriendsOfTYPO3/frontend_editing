@@ -1,41 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		{resources -> f:format.raw()}
-		{javascriptResources -> f:format.raw()}
-	</head>
-	<body>
-
 <f:render partial="TopBar" arguments="{_all}"></f:render>
 <f:render partial="RightBar" arguments="{_all}"></f:render>
 <f:render partial="LeftBar" arguments="{_all}"></f:render>
 
-		<script type="text/javascript">
-			var iframeUrl = "{iframeUrl -> f:format.raw()}";
-			var inlineActionButtonsClass = '.t3-frontend-editing__inline-actions';
-		</script>
+<div class="t3-frontend-editing__iframe-wrapper inactive {f:if(condition:overlayOption, then: 't3-frontend-editing__iframe-overlay')}">
+	<iframe src="" frameborder="0" border="0"></iframe>
+</div>
 
-		<div class="t3-frontend-editing__iframe-wrapper inactive {f:if(condition:overlayOption, then: 't3-frontend-editing__iframe-overlay')}">
-			<iframe src="" frameborder="0" border="0"></iframe>
-		</div>
-
-		<div class="t3-frontend-editing__loading-screen">
-			{loadingIcon -> f:format.html()}
-		</div>
-
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/alertify.js/src/js/alertify.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.Storage.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.Crud.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/FrontendEditing.GUI.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/Editor.js" type="text/javascript"></script>
-		<script src="/typo3conf/ext/frontend_editing/Resources/Public/Javascript/Main.js" type="text/javascript"></script>
-		<script>
-			F.setTranslationLabels({languageLabels->f:format.raw()});
-		</script>
-
-	</body>
-</html>
+<div class="t3-frontend-editing__loading-screen">
+	{loadingIcon -> f:format.raw()}
+</div>

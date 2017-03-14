@@ -1,0 +1,134 @@
+.t3-frontend-editing__page-tree-wrapper {
+
+  height: calc(~"100vh - "@top-bar-height);
+  max-height: calc(~"100vh - "@top-bar-height);
+  width: @left-bar-width - 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: @scroll-bar-track;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: @black;
+    border: 1px solid @scroll-bar-color;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: @scroll-bar-track;
+  }
+
+  .t3-frontend-editing__page-tree {
+    list-style-type: none;
+    padding: 0;
+    font-size: @font-size-small;
+
+    li {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 95%;
+      line-height: 1;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.treeline-icon {
+  position: relative;
+  display: block;
+  float: left;
+  margin-top: -6px;
+  margin-bottom: -6px;
+  margin-right: 2px;
+  padding: 0;
+  height: 31px;
+  width: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &::before {
+    top: 0;
+    height: 100%;
+    width: 2px;
+    margin-left: -1px;
+    border-left: 1px dotted @white;
+  }
+
+  &::after {
+    border-top: 1px dotted @white;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    margin-top: -1px;
+  }
+
+  &::after,
+  &::before {
+    position: absolute;
+    content: '';
+    left: 50%;
+  }
+}
+
+.treeline-icon-jointop {
+  &::before {
+    top: 50%;
+  }
+}
+
+.treeline-icon-joinbottom {
+  &::before {
+    top: -50%;
+  }
+}
+
+.treeline-icon-line {
+  &::after {
+    display: none;
+  }
+}
+
+.treeline-icon-blank {
+  display: none;
+}
+
+.treeline-icon-clear {
+  &::before,
+  &::after {
+    display: none;
+  }
+}
+
+.icon-overlay {
+  img {
+    width: 12px;
+    height: 12px;
+    position: relative;
+    left: -16px;
+    top: 1px;
+  }
+}
+
+.page-tree-item {
+  position: relative;
+  top: -2px;
+}
+
+.page-tree-status-hidden {
+  margin-left: -16px;
+}
+
+.page-tree-active {
+  color: @color-t3-primary;
+}

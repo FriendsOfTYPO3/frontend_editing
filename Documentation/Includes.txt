@@ -12,33 +12,3 @@
 
 .. default-role:: code
 .. highlight:: php
-
-.. |img-passed|      image:: /Images/passed.svg
-.. :target: https://circleci.com/gh/pixelant/frontend_editing
-.. :border: 0
-.. :align: left
-
-.. |img-typo3-850|      image:: /Images/TYPO3-8.5.0-orange.svg
-.. :target: https://typo3.org/
-.. :border: 0
-.. :align: left
-
-.. |img-add-typoscript|      image:: /Images/add-typoscript.png
-.. :border: 0
-.. :align: left
-
-.. |img-user-activation-of-feedit|      image:: /Images/user-activation-of-feedit.png
-.. :border: 0
-.. :align: left
-
-.. |img-user-settings|      image:: /Images/user-settings.png
-.. :border: 0
-.. :align: left
-
-.. |img-activate-rightbar-overlay|      image:: /Images/activate-rightbar-overlay.png
-.. :border: 0
-.. :align: left
-
-.. _Ckeditor: http://ckeditor.com/
-
-.. _Gitbook: https://www.gitbook.com/book/pixelant/typo3-frontend-editing/details/

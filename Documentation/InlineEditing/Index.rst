@@ -1,77 +1,101 @@
 .. include:: ../Includes.txt
 
-.. highlight:: rst
 
-==============
-Inline editing
-==============
 
-After activating the extension from the TYPO3-backend you need to check what templating engine is used in the TYPO3-installation.
+.. _inline-editing:
 
-CSS Styled Content (css_styled_content)
----------------------------------------
+Inline Editing
+------------
 
-If the installation is using the well known (and old) css_styled_content-extension the functionality comes straight out of the box. The editing can start directly.
+After the frontend editing have been activated from within TYPO3´s backend
+there are one scenario that needs to been taking into account. It is what
+kind of templating engine are used for the frontend template for the websites
+that you are using.
 
-Fluid Styled Content (fluid_styled_content)
--------------------------------------------
+.. _css-styled-content:
 
-When using fluid_styled_content there are some things that needs to be adjusted to your template to get the editing to work. First of all there is a view helper that needs to be included and configured.
+CSS Styled Content
+""""""""""""""""""
 
-First import the namespace:
+If the installation are using the well known (and old) extension which is called
+css_styled_content are being used. The functionality comes straight out of the
+box and the editing can start directly.
 
-.. code-block:: php
+.. _fluid-styled-content:
 
-   {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
+Fluid Styled Content
+""""""""""""""""""""
 
-The next step is to find the content that you want editable and wrap it with the view helper:
+When it comes to fluid_styled_content there are some things that needs to be
+adjusted to your template to get the editing to work. First of all there is
+a view helper that needs to be included and configured.
 
-.. code-block:: html
-
-   <fe:editable table="tt_content" field="bodytext" uid="{item.uid}">
-       {item.bodytext}
-   </fe:editable>
-
-The output will look like this in frontend edit mode:
-
-.. code-block:: html
-
-   <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
-       This is the content text to edit
-   </div>
-
-While not in frontend edit mode the output is:
+First, find the content that you want editable and wrap it with the view
+helper:
 
 .. code-block:: html
 
-   This is the content text to edit
+	<core:contentEditable table="tt_content" field="bodytext" uid="{item.uid}">
+		{item.bodytext}
+	</core:contentEditable>
+
+The available options are:
+
+- *table*: The database table name to where the data should be saved
+- *field*: The database field to where the data should be saved
+- *uid*: The database field to where the data should be saved
+
+A full example looks like this:
+
+.. code-block:: html
+
+	<core:contentEditable table="{item.table}" field="{item.field}" uid="{item.uid}">
+		{item.bodytext}
+	</core:contentEditable>
+
+The output would then look like the following in frontend edit mode:
+
+.. code-block:: html
+
+	<div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
+		This is the content text to edit
+	</div>
+
+While not in frontend edit mode the output are the following:
+
+.. code-block:: html
+
+	This is the content text to edit
+
+.. _typoscript:
 
 TypoScript
-----------
+""""""""""
 
-If you are listing elements with TypoScript only, you can still include the editing icons using the included hook into TYPO3 rendering process. This example lists the editable frontend user names and emails:
+If you are listing elements with TypoScript only, you can still include the editing icons using the included hook into TYPO3 rendering process.
+This example lists editable the frontend user names and emails:
 
 .. code-block:: typoscript
 
-   page.20 = CONTENT
-   page.20 {
-     table = fe_users
-     select.pidInList = 38
-     renderObj = COA
-     renderObj.10 = TEXT
-     renderObj.10 {
-       field = username
-       wrap = Username:|<br/>
-       stdWrap.editIcons = fe_users: username
-       stdWrap.editIcons.beforeLastTag = 1
-     }
-     renderObj.20 = TEXT
-     renderObj.20 {
-       field = email
-       wrap = Email:|<br/><br/>
-       stdWrap.editIcons = fe_users: email
-       stdWrap.editIcons.beforeLastTag = 1
-     }
-     stdWrap.editIcons = pages: users
-     stdWrap.editIcons.hasEditableFields = 1
-   }
+	page.20 = CONTENT
+	page.20 {
+		table = fe_users
+		select.pidInList = 38
+		renderObj = COA
+		renderObj.10 = TEXT
+		renderObj.10 {
+			ield = username
+			wrap = Username:|<br/>
+			stdWrap.editIcons = fe_users: username
+			stdWrap.editIcons.beforeLastTag = 1
+		}
+		renderObj.20 = TEXT
+		renderObj.20 {
+			field = email
+			wrap = Email:|<br/><br/>
+			stdWrap.editIcons = fe_users:email
+			stdWrap.editIcons.beforeLastTag = 1
+		}
+		stdWrap.editIcons = pages:users
+		stdWrap.editIcons.hasEditableFields = 1
+	}

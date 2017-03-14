@@ -1,7 +1,0 @@
-{
-  "ignore": [
-    ".git",
-    "node_modules/**/node_modules",
-    "Resources/Public/Javascript/*"
-  ]
-}

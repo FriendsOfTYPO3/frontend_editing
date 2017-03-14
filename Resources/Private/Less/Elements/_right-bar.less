@@ -1,0 +1,222 @@
+
+
+.t3-frontend-editing__right-bar {
+
+  background-color: @gray;
+  color: @white;
+  position: absolute;
+  top: 0;
+  right: -@right-bar-width;
+  width: @right-bar-width;
+  min-height: 100%;
+  z-index: 10999;
+  font-family: @font-family-base;
+  text-transform: uppercase;
+
+  &.t3-frontend-editing__right-overlay {
+    background: @transparent-opacity;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+
+  .top-right-bar-wrapper {
+    height: calc(~"100vh - "@top-bar-height);
+    max-height: calc(~"100vh - "@top-bar-height);
+    overflow-y: auto;
+    margin-top: @top-bar-height;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: @scroll-bar-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: @black;
+      border: 1px solid @scroll-bar-color;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: @scroll-bar-color;
+    }
+  }
+
+  .top-right-title {
+    text-align: right;
+    background-color: @header-top-bg-color;
+    height: @top-bar-height;
+    position: absolute;
+    margin-top: -@top-bar-height;
+    width: @right-bar-width;
+    z-index: 1;
+
+    .title-right {
+      font-size: @font-size-large;
+      display: inline-block;
+      padding-right: 5px;
+    }
+
+    .right-bar-button {
+      .transition(left (@push-duration / 2) @push-timing);
+      .transform-origin(center);
+      cursor: pointer;
+      float: left;
+      display: block;
+      height: @top-bar-height;
+      line-height: @top-bar-height;
+      width: 45px;
+      text-align: center;
+      position: absolute;
+      color: @gray-light;
+      font-size: 32px;
+      left: -45px;
+      top: 0;
+      background-color: @black;
+
+      &:hover {
+        background-color: lighten(@black, 20%);
+        color: @white;
+      }
+    }
+
+    .title-icon-right {
+      top: 7px;
+      position: relative;
+      font-size: 32px;
+      padding-right: 15px;
+      color: @color-t3-primary;
+    }
+  }
+
+  &.open {
+    .top-right-title {
+      .right-bar-button {
+        left: 0;
+      }
+    }
+  }
+
+  .page-seo {
+    padding: 15px 0 0;
+    text-align: center;
+
+    .page-seo-score {
+      border: 4px solid @color-t3-primary;
+      font-size: 25px;
+      padding: 6px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      text-align: center;
+      display: inline-block;
+      margin: 0 7px;
+      position: relative;
+      top: 2px;
+    }
+
+    .btn-default {
+      margin-bottom: 8px;
+    }
+
+    .page-seo-devices {
+      padding-top: 12px;
+      font-size: 24px;
+      display: table;
+      margin: 0 auto;
+
+      .page-seo-lg-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: @gray-light;
+
+        &.active {
+          color: @white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: @white;
+        }
+      }
+
+      .page-seo-desktop {
+        font-size: 48px;
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 5px;
+        color: @gray-light;
+
+        &.active {
+          color: @white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: @white;
+        }
+      }
+
+      .page-seo-tablet {
+        font-size: 34px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        padding-right: 5px;
+        color: @gray-light;
+
+        &.active {
+          color: @white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: @white;
+        }
+      }
+
+      .page-seo-phone {
+        font-size: 26px;
+        display: table-cell;
+        vertical-align: middle;
+        position: relative;
+        top: 3px;
+        color: @gray-light;
+
+        &.active {
+          color: @white;
+        }
+
+        &:hover {
+          cursor: pointer;
+          color: @white;
+        }
+      }
+    }
+  }
+}
+
+.t3-frontend-editing__save,
+.t3-frontend-editing__discard {
+
+  .btn-text {
+    position: relative;
+    top: -3px;
+  }
+
+  .icon-icons-save {
+    font-size: 26px;
+    position: relative;
+    top: 1px;
+  }
+
+  .icon-icons-cancel {
+    font-size: 26px;
+    position: relative;
+    top: 2px;
+  }
+}

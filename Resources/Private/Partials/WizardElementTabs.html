@@ -20,7 +20,7 @@
 						 data-params="{contentItem.params}"
 						 title="{f:translate(key:'right-bar.element-title', arguments:{0: contentItem.title}, extensionName: 'FrontendEditing')}">
 						<span class="content-icon">
-							{contentItem.iconHtml -> f:format.html()}
+							{contentItem.iconHtml -> f:format.raw()}
 						</span>
 						<div class="description">
 							<span class="title-default">{contentItem.title}</span>

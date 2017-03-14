@@ -1,29 +1,30 @@
 .. include:: ../Includes.txt
 
-.. highlight:: rst
 
-===================
-TYPO3 Installation
-===================
 
-The following steps are required to activate the frontend editing for a TYPO3 installation.
+.. _installation:
 
-#. Install and activate the extension called **frontend_editing**.
+Installation
+------------
 
-#. Add the typoscript-static-template called **TYPO3 frontend editing** to the site root template.
+The following steps are required to active the frontend editing for a TYPO3 installation.
 
-   |img-add-typoscript|
+- Install and active the extension called *frontend_editing*
 
-#. After the inclusion of the typoscript-static-template you need to add the following setting to the site root.
+- Add the TypoScript called *TYPO3 frontend editing* to the site roots where the features should be activated
 
-   Add this to the setup part, where the 1 or 0 indicates if it is active or not
+  .. figure:: ../Images/AddTypoScript.png
+     :alt: TYPO3 frontend editing TyposScript
 
-   .. code-block:: typoscript
+- After the inclusion of the typoscript settings there is a need to add the following setting to the site root(s)
+  Add this to the setup part, where the **1** or **0** indicates if it is active or not
 
-      config.tx_frontend_editing = 1
+  .. code-block:: typoscript
 
-#. The last thing to do is for the individual users to activate the frontend editing for themselves. This is done in the "User settings" in TYPO3's backend.
+     config.frontend_editing = 1
 
-   |img-user-activation-of-feedit|
+- The last thing to do is for the individual users to activate the frontend editing for themselves.
+  This is done in the "User settings" in TYPO3:s backend.
 
-You are now ready for some easy editing! :)
+  .. figure:: ../Images/UserActivationOfFeedit.png
+     :alt: User activation of frontend editing

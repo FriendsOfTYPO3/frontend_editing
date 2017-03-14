@@ -1,8 +1,10 @@
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+
 <div class="t3-frontend-editing__top-bar">
 	<div class="t3-frontend-editing__topbar-inner">
 		<div class="t3-frontend-editing__top-bar-left">
 			<div class="back-backend">
-				<a href="/typo3">
+				<a href="{backendUrl}">
 					<span class="icons icon-icons-back"></span>
 					<span title="To backend">
 						<f:translate key="top-bar.to-backend" extensionName="FrontendEditing" />
@@ -15,25 +17,16 @@
 			<ul class="top-bar-items">
 				<li class="item">
 					<a class="dropdown-toggle user">
-						<f:if condition="{userImage}">
-							<f:then>
-								<span class="t3js-icon icon icon-size-default icon-state-default icon-avatar-default" data-identifier="avatar-default">
-									<span class="icon-markup">
-										<img src="{userImage.url}" width="{userImage.width}" height="{userImage.height}" />
-									</span>
-								</span>
-							</f:then>
-							<f:else>
-								{userIcon -> f:format.html()}
-							</f:else>
-						</f:if>
-						<span class="icon-avatar-title" title="{userName -> f:format.html()}">{userName -> f:format.html()} </span>
+						<be:avatar backendUser="{currentUser.uid}" />
+						<span class="icon-avatar-title" title="{currentUser.username}">{currentUser.username}</span>
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<button class="btn-default" onclick="location.href='{logoutUrl}';">
-								<f:translate key="top-bar.logout" extensionName="FrontendEditing" />
-							</button>
+							<a class="btn-default btn-logout" href="{logoutUrl}">
+								<span class="btn-text">
+									<f:translate key="top-bar.logout" extensionName="FrontendEditing" />
+								</span>
+							</a>
 						</li>
 					</ul>
 				</li>

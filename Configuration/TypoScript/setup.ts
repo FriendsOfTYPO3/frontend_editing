@@ -1,84 +1,38 @@
-plugin.tx_frontendediting {
-    view {
-        layoutRootPaths.10 = {$plugin.tx_frontendediting.view.layoutRootPaths.10}
-        templateRootPaths.10 = {$plugin.tx_frontendediting.view.templateRootPaths.10}
-        partialRootPaths.10 = {$plugin.tx_frontendediting.view.partialRootPaths.10}
-    }
-    features {
-        requireCHashArgumentForActionArguments = 0
-    }
-}
-
-# Content element persistence for content element hierarchy display
-config.tx_extbase {
-    persistence{
-        classes {
-            TYPO3\CMS\FrontendEditing\Domain\Model\Content {
-                mapping {
-                    tableName = tt_content
-                    columns {
-                        uid.mapOnProperty = uid
-                        pid.mapOnProperty = pid
-                        sorting.mapOnProperty = sorting
-                        CType.mapOnProperty = contentType
-                        header.mapOnProperty = header
-                        crdate.mapOnProperty = crdate
-                        tstamp.mapOnProperty = tstamp
-                    }
-                }
-            }
-        }
-    }
-}
-
 [globalVar = TSFE : beUserLogin > 0]
-# Additional page plugin for Content CRUD requests as those need a BE-USER
-frontendEditing = PAGE
-frontendEditing {
-    typeNum = 1470741815
-
-    config {
-        disableAllHeaderCode = 1
-        debug = 0
-        xhtml_cleaning = none
-        admPanel = 0
-        metaCharset = utf-8
-        no_cache = 1
-        additionalHeaders = Content-type:application/json
-    }
-
-    10 < tt_content.list.20.frontendediting_frontend_editing
-}
-
-# Additional page plugin for Page tree CRUD requests as those need a BE-USER
-frontendEditingPageTree = PAGE
-frontendEditingPageTree {
-    typeNum = 1477569731
-
-    config {
-        disableAllHeaderCode = 1
-        debug = 0
-        xhtml_cleaning = none
-        admPanel = 0
-        metaCharset = utf-8
-        no_cache = 1
-        additionalHeaders = Content-type:application/json
-    }
-
-    10 < tt_content.list.20.frontendediting_frontend_editing_page_tree
-}
 
 lib.fluidContent {
     stdWrap {
-        editIcons = tt_content: header
+        editIcons = tt_content:header
     }
 }
 
-tt_content.text.stdWrap < lib.fluidContent.stdWrap
-tt_content.textpic.stdWrap < lib.fluidContent.stdWrap
+tt_content.bullets.stdWrap < lib.fluidContent.stdWrap
+tt_content.div.stdWrap < lib.fluidContent.stdWrap
+tt_content.header.stdWrap < lib.fluidContent.stdWrap
+tt_content.html.stdWrap < lib.fluidContent.stdWrap
 tt_content.image.stdWrap < lib.fluidContent.stdWrap
+tt_content.list.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_abstract.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_categorized_pages.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_pages.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_recently_updated.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_related_pages.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_section.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_section_pages.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_sitemap.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_sitemap_pages.stdWrap < lib.fluidContent.stdWrap
+tt_content.menu_subpages.stdWrap < lib.fluidContent.stdWrap
+tt_content.shortcut.stdWrap < lib.fluidContent.stdWrap
+tt_content.table.stdWrap < lib.fluidContent.stdWrap
+tt_content.text.stdWrap < lib.fluidContent.stdWrap
+tt_content.textmedia.stdWrap < lib.fluidContent.stdWrap
+tt_content.textpic.stdWrap < lib.fluidContent.stdWrap
+tt_content.uploads.stdWrap < lib.fluidContent.stdWrap
 tt_content.mailform.stdWrap < lib.fluidContent.stdWrap
 
-# Disable output of newlines
-lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines >
+config.tx_extbase{
+    objects {
+        TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
+    }
+}
 [global]

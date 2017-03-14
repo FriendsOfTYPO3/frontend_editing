@@ -2,20 +2,20 @@
 defined('TYPO3_MODE') or die();
 
 // Add BE User setting
-$GLOBALS['TYPO3_USER_SETTINGS']['columns']['tx_frontend_editing_enable'] = [
-    'label' => 'Enable frontend editing',
+$GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing'] = [
+    'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:settings.field.frontend_editing',
     'type' => 'check',
-    'default' => 0,
+    'default' => 1,
 ];
 
 // Add overlay option User setting
-$GLOBALS['TYPO3_USER_SETTINGS']['columns']['tx_frontend_editing_overlay'] = [
-    'label' => 'Enable overlay rightbar',
+$GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing_overlay'] = [
+    'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:settings.field.frontend_editing_overlay',
     'type' => 'check',
     'default' => 0,
 ];
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings(
-    'tx_frontend_editing_enable, tx_frontend_editing_overlay, ',
+    'frontend_editing, frontend_editing_overlay',
     'after:edit_RTE'
 );
