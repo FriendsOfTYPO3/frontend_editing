@@ -5,9 +5,10 @@
 	"license": ["GPL-2.0+"],
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
+		"php": "^7.0",
+		"typo3/cms-core": "~8.6"
 	},
 	"require-dev": {
-		"typo3/cms": "8.6.*",
 		"squizlabs/php_codesniffer": "2.*",
 		"phpunit/phpunit": "^5.4",
 		"mikey179/vfsStream": "~1.6.0"
