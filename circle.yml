@@ -3,6 +3,6 @@ machine:
     version: 7.0.4
 
 ## Customize test commands
-test:
-  override:
-    - npm run build:suite --silent
+#test:
+#  override:
+#    - npm run build:suite --silent

@@ -147,7 +147,7 @@ class ContentEditableWrapperService
      * @param bool $elementIsHidden
      * @return string
      */
-    protected function renderInlineActionIcons($elementIsHidden): string
+    public function renderInlineActionIcons($elementIsHidden): string
     {
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
@@ -172,7 +172,7 @@ class ContentEditableWrapperService
      * @param string $uid
      * @return string
      */
-    protected function renderEditUrl($table, $uid): string
+    public function renderEditUrl($table, $uid): string
     {
         $newUrl = BackendUtility::getModuleUrl(
             'record_edit',
@@ -192,7 +192,7 @@ class ContentEditableWrapperService
      * @param int $uid
      * @return string
      */
-    protected function renderNewUrl(string $table, int $uid = 0): string
+    public function renderNewUrl(string $table, int $uid = 0): string
     {
         // Default to top of 'page'
         $newId = (int)$GLOBALS['TSFE']->id;
@@ -220,7 +220,7 @@ class ContentEditableWrapperService
      * @param string $url
      * @return string
      */
-    protected function renderEditOnClickReturnUrl(string $url): string
+    public function renderEditOnClickReturnUrl(string $url): string
     {
         $closeUrl = GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html');
         if (!empty($closeUrl)) {
@@ -236,7 +236,7 @@ class ContentEditableWrapperService
      * @param int $uid
      * @return string $hiddenClassName
      */
-    protected function checkIfContentElementIsHidden(string $table, int $uid): string
+    public function checkIfContentElementIsHidden(string $table, int $uid): string
     {
         $hiddenClassName = '';
         $row = BackendUtility::getRecord($table, $uid);
@@ -259,7 +259,7 @@ class ContentEditableWrapperService
      * @param int $uid of the content element
      * @return string
      */
-    protected function contentElementTitle(int $uid): string
+    public function contentElementTitle(int $uid): string
     {
         $rawRecord = BackendUtility::getRecord('tt_content', $uid);
         return BackendUtility::getRecordTitle(

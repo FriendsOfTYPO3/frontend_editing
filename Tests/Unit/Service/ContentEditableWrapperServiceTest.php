@@ -16,15 +16,15 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Utility\ContentEditable;
 
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
-use TYPO3\CMS\FrontendEditing\Utility\ContentEditable\ContentEditableWrapper;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
- * Test case for class TYPO3\CMS\FrontendEditing\Utility\ContentEditableWrapper.
+ * Test case for class TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService.
  */
-class ContentEditableWrapperTest extends UnitTestCase
+class ContentEditableWrapperServiceTest extends UnitTestCase
 {
     /**
-     * @var ContentEditableWrapper
+     * @var ContentEditableWrapperService
      */
     protected $subject = null;
 
@@ -40,7 +40,7 @@ class ContentEditableWrapperTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $this->subject = new ContentEditableWrapper();
+        $this->subject = new ContentEditableWrapperService();
         $this->fixtures = new ContentEditableFixtures();
     }
 

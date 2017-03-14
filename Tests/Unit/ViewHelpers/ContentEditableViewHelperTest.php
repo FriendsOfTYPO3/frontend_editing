@@ -16,16 +16,16 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
-use TYPO3\CMS\FrontendEditing\ViewHelpers\EditableViewHelper;
+use TYPO3\CMS\FrontendEditing\ViewHelpers\ContentEditableViewHelper;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 
 /**
  * Test case for TYPO3\CMS\FrontendEditing\ViewHelpers\EditableViewHelper
  */
-class EditableViewHelperTest extends ViewHelperBaseTestcase
+class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
 {
     /**
-     * @var EditableViewHelper
+     * @var ContentEditableViewHelper
      */
     protected $viewHelper;
 
@@ -42,7 +42,7 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
         parent::setUp();
         $this->fixtures = new ContentEditableFixtures();
         $this->viewHelper = $this->getAccessibleMock(
-            EditableViewHelper::class,
+            ContentEditableViewHelper::class,
             ['renderChildren']
         );
         $this->injectDependenciesIntoViewHelper($this->viewHelper);
@@ -79,7 +79,7 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
      */
     public function viewHelperRendersWithTheCorrectEditableWrapping()
     {
-        $this->viewHelper = new EditableViewHelper();
+        $this->viewHelper = new ContentEditableViewHelper();
         $this->injectDependenciesIntoViewHelper($this->viewHelper);
 
         $this->viewHelper->setRenderChildrenClosure(
@@ -93,8 +93,7 @@ class EditableViewHelperTest extends ViewHelperBaseTestcase
             [
                 'table' => $this->fixtures->getTable(),
                 'field' => $this->fixtures->getField(),
-                'uid' => $this->fixtures->getUid(),
-                'disableAccessCheck' => true
+                'uid' => $this->fixtures->getUid()
             ]
         );
 
