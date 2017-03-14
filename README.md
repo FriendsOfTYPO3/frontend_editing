@@ -1,6 +1,6 @@
-# Pixelant
+# TYPO3 frontend editing
 
-[![CircleCI](https://circleci.com/gh/pixelant/frontend_editing.svg?style=svg)](https://circleci.com/gh/pixelant/frontend_editing) [![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg?style=flat-square)](https://typo3.org/)
+[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg?style=flat-square)](https://typo3.org/)
 
 ## TYPO3 frontend editing (frontend_editing)
 This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
