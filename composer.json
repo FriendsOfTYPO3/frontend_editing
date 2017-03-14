@@ -5,11 +5,12 @@
 	"license": ["GPL-2.0+"],
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
-		"typo3/cms-core": "*",
-		"typo3/cms-backend": "*",
-		"typo3/cms-frontend": "*",
-		"typo3/cms-setup": "*",
-		"typo3/cms-rte-ckeditor": "*"
+	},
+	"require-dev": {
+		"typo3/cms": "8.6.*",
+		"squizlabs/php_codesniffer": "2.*",
+		"phpunit/phpunit": "^5.4",
+		"mikey179/vfsStream": "~1.6.0"
 	},
 	"replace": {
 		"frontend_editing": "self.version"
@@ -17,6 +18,35 @@
 	"autoload": {
 		"psr-4": {
 			"TYPO3\\CMS\\FrontendEditing\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"TYPO3\\CMS\\FrontendEditing\\Tests\\": "Tests/",
+			"TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
+			"TYPO3\\CMS\\Fluid\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
+		}
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
+		"preferred-install": {
+			"typo3/cms": "source"
+		}
+	},
+	"scripts": {
+		"post-autoload-dump": [
+			"mkdir -p .Build/Web/typo3conf/ext/",
+			"[ -L .Build/Web/typo3conf/ext/frontend_editing ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/frontend_editing"
+		]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "0.0.x-dev"
+		},
+		"typo3/cms": {
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"web-dir": ".Build/Web"
 		}
 	}
 }
