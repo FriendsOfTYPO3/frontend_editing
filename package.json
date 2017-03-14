@@ -4,9 +4,9 @@
   "description": "Enable editors to work with the content in the most intuitive way possible",
   "sasslintConfig": "scss-lint.yml",
   "scripts": {
-    "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr ./Resources/Public/Javascript",
-    "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable ./Resources/Public/Javascript",
-    "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js ./Resources/Public/Javascript",
+    "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr/toastr.js ./Resources/Public/Javascript/contrib/toastr.js",
+    "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable/dist/immutable.js ./Resources/Public/Javascript/Contrib/immutable.js",
+    "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js/dist/js/alertify.js ./Resources/Public/Javascript/Contrib/alertify.js",
     "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run build:css",
     "build:css": "lessc -x Resources/Private/Less/frontend_editing.less Resources/Public/Css/frontend_editing.css && lessc -x Resources/Private/Less/inline_editing.less Resources/Public/Css/inline_editing.css",
     "watch:css": "less-watch-compiler Resources/Private/Less Resources/Public/Css",
