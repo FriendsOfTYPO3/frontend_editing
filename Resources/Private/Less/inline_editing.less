@@ -34,13 +34,13 @@
   position: relative;
   min-height: 35px;
   &:hover {
-    outline: 3px dotted rgba(15, 15, 15, .2);
+    outline: 3px dotted rgba(146, 146, 146, .5);
     .cke_editable {
       outline: 3px dotted @color-t3-primary;
       z-index: 5;
     }
     .t3-frontend-editing__inline-actions {
-      display: block;
+      display: inline-block;
     }
   }
   // Colored frame when hovering content element in right-column list
@@ -60,15 +60,15 @@
 .t3-frontend-editing__inline-actions {
   display: none;
   position: absolute;
-  top: -27px;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  top: -30px;
+  right: -3px;
   color: @color-white;
   z-index: 2;
   height: 27px;
-  width: 100%;
   text-align: right;
+  background-color: rgba(255,255,255,0.6);
+  padding-left: 6px;
+  padding-right: 3px;
 
   .icon {
     .icon-markup {
