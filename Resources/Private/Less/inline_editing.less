@@ -34,7 +34,7 @@
   position: relative;
   min-height: 35px;
   &:hover {
-    outline: 3px dotted rgba(146, 146, 146, .5);
+    outline: 3px dotted fade(@color-t3-gray, 50%);
     .cke_editable {
       outline: 3px dotted @color-t3-primary;
       z-index: 5;
@@ -69,15 +69,15 @@
   padding-bottom: 3px;
 
   .icon {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: fade(@color-white, 60%);
     cursor: pointer;
 
     &:hover {
-      background-color: rgba(208, 208, 208, 0.6);
+      background-color: fade(@gray-light, 60%);
     }
   }
 
-  /* begin section from backend.css - modified though */
+  // end section borrowed from backend.css - modified though
   .icon {
     position: relative;
     display: inline-block;
@@ -145,7 +145,7 @@
     width: 58px;
     line-height: 58px;
   }
-  /* end section from backend.css */
+  // end section borrowed from backend.css
 }
 
 // Hide preview info box from TYPO3 admin panel
