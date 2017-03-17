@@ -60,27 +60,92 @@
 .t3-frontend-editing__inline-actions {
   display: none;
   position: absolute;
-  top: -30px;
+  bottom: 100%;
+
   right: -3px;
   color: @color-white;
   z-index: 2;
-  height: 27px;
   text-align: right;
-  background-color: rgba(255,255,255,0.6);
-  padding-left: 6px;
-  padding-right: 3px;
+  padding-bottom: 3px;
 
   .icon {
-    .icon-markup {
-      img {
-        cursor: pointer;
-      }
+    background-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(208, 208, 208, 0.6);
     }
   }
 
-  .icon-actions-edit-delete, .icon-actions-edit-add  {
-    margin-left: 2px;
+  /* begin section from backend.css - modified though */
+  .icon {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
   }
+  .icon svg,
+  .icon img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform: translate3d(0, 0, 0);
+  }
+  .icon * {
+    display: block;
+    line-height: inherit;
+  }
+  .icon-markup {
+    position: absolute;
+    display: block;
+    text-align: center;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+  .icon-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 68.75%;
+    width: 68.75%;
+    text-align: center;
+  }
+  .icon-color {
+    fill: currentColor;
+  }
+  .icon-spin .icon-markup {
+    animation: icon-spin 2s infinite linear;
+  }
+  @keyframes icon-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(359deg);
+    }
+  }
+  .icon-state-disabled .icon-markup {
+    opacity: 0.5;
+  }
+  .icon-size-small {
+    height: 26px;
+    width: 26px;
+    line-height: 26px;
+  }
+  .icon-size-default {
+    height: 42px;
+    width: 42px;
+    line-height: 42px;
+  }
+  .icon-size-large {
+    height: 58px;
+    width: 58px;
+    line-height: 58px;
+  }
+  /* end section from backend.css */
 }
 
 // Hide preview info box from TYPO3 admin panel
