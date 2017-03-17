@@ -33,12 +33,6 @@ Run this command to simulate the full build process locally:
 Add node_modules to Public/Resources folder
 -------------------------------------------
 
-Add the ckeditor node_module to Public/Resources folder:
-
-::
-
-   npm run add:resource:ckeditor
-
 Add the toastr (notifications) node_module to Public/Resources folder:
 
 ::
@@ -57,16 +51,10 @@ Add the alertify.js (confirms) node_module to Public/Resources folder:
 
    npm run add:resource:alertify
 
-Add the lity (modals) node_module to Public/Resources folder:
-
-::
-
-   npm run add:resource:lity
-
 Styling
 -------
 
-The extension is using SASS.
+The extension is using LESS.
 Use the following command to build the stylesheets:
 
 ::
@@ -82,7 +70,7 @@ Use the following watch command while developing:
 Publish
 -------
 
-Use the following command to copy all necessary node_modules into Public/Resources folder and compile the SASS:
+Use the following command to copy all necessary node_modules into Public/Resources folder and compile the LESS:
 ::
 
    npm run build:extension
