@@ -51,17 +51,19 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var $saveButton;
 	var iframeUrl;
 	var storage;
+	var editorConfigurationUrl;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
 		$iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
 		$loadingScreen = $('.t3-frontend-editing__loading-screen');
 		$saveButton = $('.t3-frontend-editing__save');
+		editorConfigurationUrl = options.editorConfigurationUrl;
 
 		initListeners();
 		bindActions();
 		initGuiStates();
-		loadPageIntoIframe(options.iframeUrl, options.editorConfigurationUrl);
+		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
 	}
 
@@ -218,7 +220,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function refreshIframe() {
-		loadPageIntoIframe(iframeUrl);
+		loadPageIntoIframe(iframeUrl, editorConfigurationUrl);
 	}
 
 	function showLoadingScreen() {
