@@ -110,6 +110,16 @@ class FrontendEditingInitializationHook
             'ajax_frontendediting_editorconfiguration',
             ['page' => $this->typoScriptFrontendController->id]
         );
+        $ajaxUrlIcons = $uriBuilder->buildUriFromRoute(
+            'ajax_icons'
+        );
+
+        // define the window size of the popups within the RTE
+        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
+        if (!empty($rtePopupWindowSize)) {
+            list($rtePopupWindowWidth, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
+        }
+        $rtePopupWindowHeight = !empty($rtePopupWindowHeight) ? (int)$rtePopupWindowHeight : 600;
 
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
@@ -135,6 +145,12 @@ class FrontendEditingInitializationHook
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
+            window.TYPO3.settings = [];
+            window.TYPO3.settings.Textarea = [];
+            window.TYPO3.settings.Textarea.RTEPopupWindow = [];
+            window.TYPO3.settings.Textarea.RTEPopupWindow.height = ' . $rtePopupWindowHeight . ';
+            window.TYPO3.settings.ajaxUrls = [];
+            window.TYPO3.settings.ajaxUrls.icons = \'' . $ajaxUrlIcons . '\';
         }');
         $view = $this->initializeView();
         $view->assignMultiple([
