@@ -64,7 +64,24 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 
 			// Open/edit action
 			that.find('.icon-actions-open').on('click', function () {
-				F.windowOpen(that.data('edit-url'));
+				require([
+					'jquery',
+					'TYPO3/CMS/Backend/Modal'
+					], function ($, Modal) {
+
+					Modal.advanced({
+						type: Modal.types.iframe,
+						title: '',
+						content: that.data('edit-url'),
+						size: Modal.sizes.large,
+						callback: function(currentModal) {
+							currentModal.find('.modal-header').hide();
+							currentModal.on('hidden.bs.modal', function (e) {
+								F.refreshIframe();
+							});
+						}
+					});
+				});
 			});
 
 			// Delete action

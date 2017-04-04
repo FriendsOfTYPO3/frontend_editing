@@ -121,6 +121,9 @@ class FrontendEditingInitializationHook
         }
         $rtePopupWindowHeight = !empty($rtePopupWindowHeight) ? (int)$rtePopupWindowHeight : 600;
 
+        // define DateTimePicker dateformat
+        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
+
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
@@ -145,12 +148,19 @@ class FrontendEditingInitializationHook
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
-            window.TYPO3.settings = [];
-            window.TYPO3.settings.Textarea = [];
-            window.TYPO3.settings.Textarea.RTEPopupWindow = [];
-            window.TYPO3.settings.Textarea.RTEPopupWindow.height = ' . $rtePopupWindowHeight . ';
-            window.TYPO3.settings.ajaxUrls = [];
-            window.TYPO3.settings.ajaxUrls.icons = \'' . $ajaxUrlIcons . '\';
+            window.TYPO3.settings = {
+                Textarea: {
+                    RTEPopupWindow: {
+                        height: ' . $rtePopupWindowHeight . '
+                    }
+                },
+                ajaxUrls: {
+                    icons: \'' . $ajaxUrlIcons . '\'
+                },
+                DateTimePicker: {
+                    DateFormat: ' . json_encode($dateFormat) . '
+                }
+            };
         }');
         $view = $this->initializeView();
         $view->assignMultiple([
