@@ -1,5 +1,5 @@
 {
-	"name": "typo3/frontend-editing",
+	"name": "friendsoftypo3/frontend-editing",
 	"type": "typo3-cms-extension",
 	"description": "Enable editors to work with the content in the most intuitive way possible",
 	"license": ["GPL-2.0+"],
