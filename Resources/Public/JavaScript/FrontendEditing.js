@@ -156,7 +156,25 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var params = ev.dataTransfer.getData('params');
 			var newUrl = $(ev.currentTarget).data('new-url');
 			var fullUrl = newUrl + params;
-			F.windowOpen(fullUrl);
+
+			require([
+				'jquery',
+				'TYPO3/CMS/Backend/Modal'
+				], function ($, Modal) {
+
+				Modal.advanced({
+					type: Modal.types.iframe,
+					title: '',
+					content: fullUrl,
+					size: Modal.sizes.large,
+					callback: function(currentModal) {
+						currentModal.find('.modal-header').hide();
+						currentModal.on('hidden.bs.modal', function (e) {
+							F.refreshIframe();
+						});
+					}
+				});
+			});
 		},
 
 		indicateCeStart: function (ev) {

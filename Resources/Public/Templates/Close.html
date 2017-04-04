@@ -5,9 +5,8 @@
     <meta charset="utf-8" />
     <title>Close</title>
     <script type="text/javascript">
-        self.close();
-        // Refresh the iframe with inline editing
-        window.opener.F.refreshIframe();
+        // Close modal
+        window.parent.$('.t3js-modal').modal('hide');
     </script>
 </head>
 <body>
