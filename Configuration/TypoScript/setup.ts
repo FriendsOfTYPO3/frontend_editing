@@ -35,4 +35,8 @@ config.tx_extbase{
         TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
     }
 }
+
+# prevent links from being parsed to FE url
+lib.parseFunc_RTE.tags.a >
+
 [global]
