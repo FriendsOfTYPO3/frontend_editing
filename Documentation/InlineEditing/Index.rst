@@ -84,7 +84,7 @@ This example lists editable the frontend user names and emails:
 		renderObj = COA
 		renderObj.10 = TEXT
 		renderObj.10 {
-			ield = username
+			field = username
 			wrap = Username:|<br/>
 			stdWrap.editIcons = fe_users: username
 			stdWrap.editIcons.beforeLastTag = 1

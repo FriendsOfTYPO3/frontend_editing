@@ -54,4 +54,5 @@ a GNU/GPL CMS/Framework available from `www.typo3.org
    Installation/Index
    InlineEditing/Index
    UserSettings/Index
+   Development/Index
 
