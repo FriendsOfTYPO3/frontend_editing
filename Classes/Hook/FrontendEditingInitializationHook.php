@@ -98,6 +98,7 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
+        // Check if url has a ?, then decide on URL separator
         if (strpos($requestUrl, '?') !== false) {
             $urlSeparator = '&';
         } else {
