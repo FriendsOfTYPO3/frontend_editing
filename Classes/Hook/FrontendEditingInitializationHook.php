@@ -19,6 +19,7 @@ use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
@@ -295,8 +296,11 @@ class FrontendEditingInitializationHook
      */
     protected function getContentItems(): array
     {
+        /** @var NewContentElementController $contentController */
         $contentController = GeneralUtility::makeInstance(NewContentElementController::class);
         $wizardItems = $contentController->wizardArray();
+        $this->wizardItemsHook($wizardItems, $contentController);
+
         $contentItems = [];
         $wizardTabKey = '';
         foreach ($wizardItems as $wizardKey => $wizardItem) {
@@ -313,6 +317,30 @@ class FrontendEditingInitializationHook
             }
         }
         return $contentItems;
+    }
+
+    /**
+     * Call registered hooks to manipulate wizard items
+     *
+     * @param array &$wizardItems
+     * @param NewContentElementController $contentController
+     */
+    protected function wizardItemsHook(array &$wizardItems, NewContentElementController $contentController)
+    {
+        // Wrapper for wizards
+        // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'] as $classData) {
+                $hookObject = GeneralUtility::getUserObj($classData);
+                if (!$hookObject instanceof NewContentElementWizardHookInterface) {
+                    throw new \UnexpectedValueException(
+                        $classData . ' must implement interface ' . NewContentElementWizardHookInterface::class,
+                        1227834741
+                    );
+                }
+                $hookObject->manipulateWizardItems($wizardItems, $contentController);
+            }
+        }
     }
 
     /**
