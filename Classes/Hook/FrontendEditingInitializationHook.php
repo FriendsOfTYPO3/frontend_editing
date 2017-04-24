@@ -96,8 +96,14 @@ class FrontendEditingInitializationHook
         // Special content is about to be shown, so the cache must be disabled.
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
-        $iframeUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL') .
-            '&frontend_editing=true';
+        $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
+        if (strpos($requestUrl, '?') !== false) {
+            $urlSeparator = '&';
+        } else {
+            $urlSeparator = '?';
+        }
+
+        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
