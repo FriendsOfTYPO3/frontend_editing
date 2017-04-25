@@ -68,9 +68,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 					// check if it's CKEditor field and save either with html or without
 					var content;
 					if (item.isCKEditorFieldEnable) {
-                        content = CKEDITOR.instances[item.editorInstance].getData();
+						content = CKEDITOR.instances[item.editorInstance].getData();
 					} else {
-                        content = CKEDITOR.instances[item.editorInstance].editable().getText();
+						content = CKEDITOR.instances[item.editorInstance].editable().getText();
 					}
 
 					// Save the content
