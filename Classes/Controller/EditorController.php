@@ -88,7 +88,7 @@ class EditorController
         $data = [
             'configuration' => $configuration,
             'externalPlugins' => $externalPlugins,
-            'isCKEditorFieldEnable' => $this->rteConfiguration !== null
+            'hasCkeditorConfiguration' => $this->rteConfiguration !== null
         ];
 
         $response->getBody()->write(json_encode($data));

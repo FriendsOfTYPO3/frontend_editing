@@ -65,9 +65,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			$.when(checkIfRecordIsLocked(item)).done(function(data) {
 				// If user prompted yes or there was no locked record found
 				if (data === false) {
-					// check if it's CKEditor field and save either with html or without
+					// Check if the CKEditor has configuration, otherwise remove HTML tags
 					var content;
-					if (item.isCKEditorFieldEnable) {
+					if (item.hasCkeditorConfiguration) {
 						content = CKEDITOR.instances[item.editorInstance].getData();
 					} else {
 						content = CKEDITOR.instances[item.editorInstance].editable().getText();

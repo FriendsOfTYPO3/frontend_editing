@@ -27,7 +27,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 	};
 
 	/**
-	 * Default simple tool bar for non CKEditor (RTE) field
+	 * Default simple toolbar for non CKEditor (RTE) field
 	 *
 	 * @type {{toolbarGroups: [*]}}
 	 */
@@ -168,13 +168,14 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					eval(data.externalPlugins);
 				}
 
-				// if not a CKEditor field display only copy past bar
+				// If there is no CKEditor configuration.
 				var config = defaultEditorConfig;
-				if (data.isCKEditorFieldEnable) {
+				if (data.hasCkeditorConfiguration) {
 					$.extend(config, data.configuration);
 				} else {
 					$.extend(config, defaultSimpleEditorConfig);
 				}
+
 
 				// initialize CKEditor now, when finished remember any change
 				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
@@ -189,7 +190,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 								'table': dataSet.table,
 								'uid': dataSet.uid,
 								'field': dataSet.field,
-								'isCKEditorFieldEnable': data.isCKEditorFieldEnable,
+								'hasCkeditorConfiguration': data.hasCkeditorConfiguration,
 								'editorInstance': editor.name
 							});
 							F.trigger(F.CONTENT_CHANGE);
