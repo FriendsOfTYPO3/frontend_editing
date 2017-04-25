@@ -105,7 +105,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		navigate: function (linkUrl) {
-			if (linkUrl && linkUrl !== '#') {
+			if (linkUrl && linkUrl.indexOf('#') !== 0) {
 				if (this.getStorage().isEmpty()) {
 					window.location.href = linkUrl;
 				} else {
