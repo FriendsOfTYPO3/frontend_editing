@@ -26,6 +26,20 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		stylesSet: []
 	};
 
+	/**
+	 * Default simple tool bar for non CKEditor (RTE) field
+	 *
+	 * @type {{toolbarGroups: [*]}}
+	 */
+	var defaultSimpleEditorConfig = {
+		toolbarGroups: [
+			{
+				'name': 'clipboard',
+				'groups': ['clipboard', 'undo']
+			}
+		]
+	};
+
 	function init($iframe, configurationUrl) {
 		// Storage for adding and checking if it's empty when navigating to other pages
 		var storage = F.getStorage();
@@ -153,7 +167,15 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				if (typeof data.externalPlugins !== 'undefined') {
 					eval(data.externalPlugins);
 				}
-				var config = $.extend(true, defaultEditorConfig, data.configuration);
+
+				// if not a CKEditor field display only copy past bar
+				var config = defaultEditorConfig;
+				if (data.isCKEditorFieldEnable) {
+					$.extend(true, config, data.configuration);
+				} else {
+					$.extend(config, defaultSimpleEditorConfig);
+				}
+
 				// initialize CKEditor now, when finished remember any change
 				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
 					// This moves the dom instances of ckeditor into the top bar
@@ -167,6 +189,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 								'table': dataSet.table,
 								'uid': dataSet.uid,
 								'field': dataSet.field,
+								'isCKEditorFieldEnable': data.isCKEditorFieldEnable,
 								'editorInstance': editor.name
 							});
 							F.trigger(F.CONTENT_CHANGE);

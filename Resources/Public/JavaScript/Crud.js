@@ -65,13 +65,21 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			$.when(checkIfRecordIsLocked(item)).done(function(data) {
 				// If user prompted yes or there was no locked record found
 				if (data === false) {
+					// check if it's CKEditor field and save either with html or without
+					var content;
+					if (item.isCKEditorFieldEnable) {
+                        content = CKEDITOR.instances[item.editorInstance].getData();
+					} else {
+                        content = CKEDITOR.instances[item.editorInstance].editable().getText();
+					}
+
 					// Save the content
 					var saveItemData = {
 						'action': item.action,
 						'table': item.table,
 						'uid': item.uid,
 						'field': item.field,
-						'content': CKEDITOR.instances[item.editorInstance].getData()
+						'content': content
 					};
 					$.ajax({
 						url: getEndpointUrl(),

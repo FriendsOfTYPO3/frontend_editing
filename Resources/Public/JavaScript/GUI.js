@@ -103,7 +103,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function bindActions() {
-		$('.t3-frontend-editing__save').on('click', function (e) {
+		$saveButton.on('click', function (e) {
 			if (!storage.isEmpty()) {
 				F.saveAll();
 			} else {
