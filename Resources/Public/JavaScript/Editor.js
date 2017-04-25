@@ -171,7 +171,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				// if not a CKEditor field display only copy past bar
 				var config = defaultEditorConfig;
 				if (data.isCKEditorFieldEnable) {
-					$.extend(true, config, data.configuration);
+					$.extend(config, data.configuration);
 				} else {
 					$.extend(config, defaultSimpleEditorConfig);
 				}
