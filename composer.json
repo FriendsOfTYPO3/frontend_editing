@@ -6,7 +6,7 @@
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
 		"php": "^7.0",
-		"typo3/cms": "^8.7"
+		"typo3/cms": "8.7.*"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "2.*",
