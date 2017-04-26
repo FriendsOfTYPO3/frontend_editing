@@ -46,14 +46,13 @@ class ContentObjectRendererHook
             $content .= $pObject->render($contentObject, $conf);
 
             // If not content found wrap with drop zone
-            if (empty($content) && $conf['table'] === 'tt_content') {
-                if (!empty($conf['select.']['where'])
-                    && GeneralUtility::isFirstPartOfStr(trim($conf['select.']['where']), 'colPos')
-                ) {
-                    list(, $colPos) = GeneralUtility::intExplode('=', $conf['select.']['where'], true);
-                } else {
-                    $colPos = 0;
-                }
+            // Add drop zone only of colPos is set
+            if (empty($content)
+                && $conf['table'] === 'tt_content'
+                && !empty($conf['select.']['where'])
+                && GeneralUtility::isFirstPartOfStr(ltrim($conf['select.']['where']), 'colPos')
+            ) {
+                list(, $colPos) = GeneralUtility::intExplode('=', $conf['select.']['where'], true);
 
                 /** @var ContentEditableWrapperService $wrapperService */
                 $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
