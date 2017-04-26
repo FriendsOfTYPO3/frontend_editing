@@ -88,9 +88,9 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
             '<div class="t3-frontend-editing__ce %s" title="%s">' .
-            '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
-            ' data-cid="%d" data-edit-url="%s">%s</span>' .
-            '%s' .
+                '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
+                    ' data-cid="%d" data-edit-url="%s">%s</span>' .
+                '%s' .
             '</div>',
             $hiddenElementClassName,
             $this->contentElementTitle((int)$uid),
