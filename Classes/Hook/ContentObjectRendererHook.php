@@ -46,7 +46,7 @@ class ContentObjectRendererHook
             $content .= $pObject->render($contentObject, $conf);
 
             // If not content found wrap with drop zone
-            // Add drop zone only of colPos is set
+            // Add drop zone only if colPos is set
             if (empty($content)
                 && $conf['table'] === 'tt_content'
                 && !empty($conf['select.']['where'])
