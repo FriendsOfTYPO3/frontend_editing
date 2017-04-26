@@ -38,3 +38,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess'
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig(
     '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:frontend_editing/Configuration/UserTsConfig/userTsConfig.ts">'
 );
+
+// Register BE user avatar provider on FE
+if (TYPO3_MODE === 'FE') {
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['avatarProviders']['frontendEditingAvatarProvider'] = [
+        'provider' => \TYPO3\CMS\FrontendEditing\Provider\FrontendEditingAvatarProvider::class
+    ];
+}
