@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace TYPO3\CMS\FrontendEditing\Service;
 
 /*
@@ -113,9 +114,10 @@ class ContentEditableWrapperService
      * @param int $uid
      * @param string $content
      * @return string
+     * @param int $colPos
      * @throws \InvalidArgumentException
      */
-    public function wrapContentWithDropzone(string $table, int $uid, string $content): string
+    public function wrapContentWithDropzone(string $table, int $uid, string $content, int $colPos = 0): string
     {
         // Check that data is not empty
         if (empty($table)) {
@@ -135,7 +137,7 @@ class ContentEditableWrapperService
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid))
+            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos))
         );
 
         return $content;
@@ -190,9 +192,10 @@ class ContentEditableWrapperService
      *
      * @param string $table
      * @param int $uid
+     * @param int $colPos
      * @return string
      */
-    public function renderNewUrl(string $table, int $uid = 0): string
+    public function renderNewUrl(string $table, int $uid = 0, int $colPos = 0): string
     {
         // Default to top of 'page'
         $newId = (int)$GLOBALS['TSFE']->id;
@@ -202,13 +205,20 @@ class ContentEditableWrapperService
             $newId = $uid * -1;
         }
 
+        $urlParameters = [
+            'edit[' . $table . '][' . $newId . ']' => 'new',
+            'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
+            'feEdit' => 1
+        ];
+
+        // If there is no any content in drop zone we need to set colPos
+        if ($colPos > 0) {
+            $urlParameters['overrideVals[' . $table . '][colPos]'] = $colPos;
+        }
+
         $newUrl = BackendUtility::getModuleUrl(
             'record_edit',
-            [
-                'edit[' . $table . '][' . $newId . ']' => 'new',
-                'noView' => (GeneralUtility::_GP('ADMCMD_view') ? 1 : 0),
-                'feEdit' => 1
-            ]
+            $urlParameters
         );
 
         return (string)$newUrl;

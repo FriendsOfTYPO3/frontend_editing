@@ -19,6 +19,12 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php'
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->main';
 
+// Hook content object render. Check if column is empty
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClass']['CONTENT'] = [
+    'CONTENT',
+    \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
+];
+
 /**
  * Pre processors
  */
