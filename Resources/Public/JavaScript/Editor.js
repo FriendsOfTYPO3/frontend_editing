@@ -171,11 +171,10 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				// If there is no CKEditor configuration.
 				var config = defaultEditorConfig;
 				if (data.hasCkeditorConfiguration) {
-					$.extend(config, data.configuration);
+					config = $.extend(true, config, data.configuration);
 				} else {
-					$.extend(config, defaultSimpleEditorConfig);
+					config = $.extend(true, config, defaultSimpleEditorConfig);
 				}
-
 
 				// initialize CKEditor now, when finished remember any change
 				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
