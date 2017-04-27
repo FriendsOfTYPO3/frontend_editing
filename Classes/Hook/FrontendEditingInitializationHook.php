@@ -340,6 +340,11 @@ class FrontendEditingInitializationHook
                         1227834741
                     );
                 }
+                // Check if ID is set
+                if (!$contentController->id) {
+                    $contentController->id = $this->typoScriptFrontendController->id;
+                }
+
                 $hookObject->manipulateWizardItems($wizardItems, $contentController);
             }
         }
