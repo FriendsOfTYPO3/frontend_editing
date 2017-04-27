@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
 /*
@@ -17,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
@@ -47,7 +47,13 @@ class ContentObjectRendererHook
 
             // If not content found wrap with drop zone
             // Add drop zone only if colPos is set
+
+            /** @var AccessService $access */
+            $access = GeneralUtility::makeInstance(AccessService::class);
+
             if (empty($content)
+                && GeneralUtility::_GET('frontend_editing')
+                && $access->isEnabled()
                 && $conf['table'] === 'tt_content'
                 && !empty($conf['select.']['where'])
                 && GeneralUtility::isFirstPartOfStr(ltrim($conf['select.']['where']), 'colPos')
