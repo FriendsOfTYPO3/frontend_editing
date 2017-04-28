@@ -7,7 +7,7 @@
 New Content Elements
 ------------
 
-It's possible to add drop zone for new content elements in a custom places. There a special ContentEditableWrapperService.
+It's possible to add drop zones for new content elements in a custom content elements. This is done by the class called ContentEditableWrapperService.
 
 - Example of usage.
 
