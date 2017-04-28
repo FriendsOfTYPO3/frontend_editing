@@ -115,10 +115,16 @@ class ContentEditableWrapperService
      * @param string $content
      * @return string
      * @param int $colPos
+     * @param array $defaultValues
      * @throws \InvalidArgumentException
      */
-    public function wrapContentWithDropzone(string $table, int $uid, string $content, int $colPos = 0): string
-    {
+    public function wrapContentWithDropzone(
+        string $table,
+        int $uid,
+        string $content,
+        int $colPos = 0,
+        array $defaultValues = []
+    ): string {
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
@@ -137,7 +143,7 @@ class ContentEditableWrapperService
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos))
+            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues))
         );
 
         return $content;
@@ -193,9 +199,10 @@ class ContentEditableWrapperService
      * @param string $table
      * @param int $uid
      * @param int $colPos
+     * @param array $defaultValues
      * @return string
      */
-    public function renderNewUrl(string $table, int $uid = 0, int $colPos = 0): string
+    public function renderNewUrl(string $table, int $uid = 0, int $colPos = 0, array $defaultValues = []): string
     {
         // Default to top of 'page'
         $newId = (int)$GLOBALS['TSFE']->id;
@@ -212,8 +219,12 @@ class ContentEditableWrapperService
         ];
 
         // If there is no any content in drop zone we need to set colPos
-        if ($colPos > 0) {
-            $urlParameters['overrideVals[' . $table . '][colPos]'] = $colPos;
+        if ($colPos !== 0) {
+            $urlParameters['defVals'][$table]['colPos'] = $colPos;
+        }
+        // If there are any fields to set
+        if (!empty($defaultValues)) {
+            $urlParameters['defVals'][$table] = array_merge($urlParameters['defVals'][$table] ?? [], $defaultValues);
         }
 
         $newUrl = BackendUtility::getModuleUrl(
