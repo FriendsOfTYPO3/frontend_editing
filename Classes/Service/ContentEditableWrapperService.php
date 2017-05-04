@@ -283,10 +283,12 @@ class ContentEditableWrapperService
     public function contentElementTitle(int $uid): string
     {
         $rawRecord = BackendUtility::getRecord('tt_content', $uid);
-        return BackendUtility::getRecordTitle(
+        $recordTitle = BackendUtility::getRecordTitle(
             'tt_content',
             $rawRecord,
             true
         );
+
+        return strip_tags($recordTitle);
     }
 }

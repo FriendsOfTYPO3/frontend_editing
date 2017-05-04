@@ -61,7 +61,6 @@ class CeHeader implements RequestPreProcessInterface
                     default:
                         $headerTypeRequest['content'] = 0;
                 }
-                // @todo: Do a direct save for the header-type field.
 
                 $fieldName = 'header';
             }
