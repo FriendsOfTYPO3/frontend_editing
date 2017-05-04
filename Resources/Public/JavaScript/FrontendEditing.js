@@ -130,29 +130,49 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			}
 		},
 
-		dragNewCeStart: function (ev) {
+		dragCeStart: function (ev) {
 			ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
+			ev.dataTransfer.setData('movable', ev.currentTarget.dataset.movable);
+			ev.dataTransfer.setData('movableUid', $(ev.currentTarget).find('span.t3-frontend-editing__inline-actions').data('uid'));
+
 			var $iframe = F.iframe();
 			$iframe.contents().find('body').addClass('dropzones-enabled');
 		},
 
-		dragNewCeEnd: function (ev) {
+		dragCeEnd: function (ev) {
 			var $iframe = F.iframe();
 			$iframe.contents().find('body').removeClass('dropzones-enabled');
 		},
 
-		dragNewCeOver: function (ev) {
+		dragCeOver: function (ev) {
 			ev.preventDefault();
 			$(ev.currentTarget).addClass('active');
 		},
 
-		dragNewCeLeave: function (ev) {
+		dragCeLeave: function (ev) {
 			ev.preventDefault();
 			$(ev.currentTarget).removeClass('active');
 		},
 
-		dropNewCe: function (ev) {
+		dropCe: function (ev) {
 			ev.preventDefault();
+			var moveCe = parseInt(ev.dataTransfer.getData('movable'), 10);
+
+			if (moveCe === 1) {
+				var currentTarget = $(ev.currentTarget);
+				var ceUid = parseInt(ev.dataTransfer.getData('movableUid'), 10);
+				var moveAfter = parseInt(currentTarget.data('moveafter'), 10);
+				var colPos = parseInt(currentTarget.data('colpos'), 10);
+
+				if (ceUid !== moveAfter) {
+					F.moveContent(ceUid, 'tt_content', moveAfter, colPos);
+				}
+			} else {
+				this.dropNewCe(ev);
+			}
+		},
+
+		dropNewCe: function (ev) {
 			var params = ev.dataTransfer.getData('params');
 			var newUrl = $(ev.currentTarget).data('new-url');
 			var fullUrl = newUrl + params;

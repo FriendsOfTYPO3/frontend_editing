@@ -87,7 +87,10 @@ class ContentEditableWrapperService
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s">' .
+            '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
+                'data-movable="1"' .
+                'ondragstart="window.parent.F.dragCeStart(event)"' .
+                'ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
                     ' data-cid="%d" data-edit-url="%s">%s</span>' .
                 '%s' .
@@ -132,18 +135,20 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163439);
         }
 
-        $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
-        $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
-        $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+        $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
         $class = 't3-frontend-editing__dropzone';
 
         $content .= sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues))
+            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
+            $uid,
+            $colPos
         );
 
         return $content;

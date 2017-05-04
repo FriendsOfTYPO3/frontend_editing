@@ -201,17 +201,23 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 		});
 	}
 
-	function moveRecord(uid, table, beforeUid) {
+	function moveRecord(uid, table, beforeUid, colPos) {
 		this.trigger(F.REQUEST_START);
+
+		var data = {
+			uid: uid,
+			table: table,
+			beforeUid: beforeUid
+		};
+
+		if (typeof colPos !== 'undefined') {
+			data.colPos = colPos;
+		}
 
 		$.ajax({
 			url: getEndpointUrl('move'),
 			method: 'POST',
-			data: {
-				uid: uid,
-				table: table,
-				beforeUid: beforeUid
-			}
+			data: data
 		}).done(function (data) {
 			F.trigger(
 				F.UPDATE_CONTENT_COMPLETE,

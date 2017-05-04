@@ -153,9 +153,9 @@ class ContentEditableFixtures
      */
     public function getWrapWithDropzoneExpectedContent()
     {
-        $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
-        $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
-        $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+        $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
         $class = 't3-frontend-editing__dropzone';
 
         $expectedOutput = sprintf(

@@ -106,6 +106,7 @@ class FrontendEditingPanel
             $isEditableField = true;
         }
 
+        /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
         if ($isEditableField) {
             $fields = GeneralUtility::trimexplode(',', $fieldList);
@@ -134,7 +135,8 @@ class FrontendEditingPanel
             $content = $wrapperService->wrapContentWithDropzone(
                 $table,
                 (int)$editUid,
-                $content
+                $content,
+                (int)$dataArr['colPos']
             );
         }
 
