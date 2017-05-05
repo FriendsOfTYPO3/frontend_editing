@@ -138,26 +138,46 @@ class FrontendEditingPanel
                 $content
             );
 
-            // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
-            // Add a dropzone after content
-            $content = $wrapperService->wrapContentWithDropzone(
-                $table,
-                (int)$editUid,
-                $content,
-                (int)$dataArr['colPos']
-            );
-
-            // If it's first content element for this column wrap with dropzone before content too
-            if (!GeneralUtility::inList(self::$columnsWithContentList, $dataArr['colPos'])) {
+            $isWrappedWithDropzone = false;
+            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing']['FrontendEditingPanel']['dropzoneModifiers'])) {
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing']['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
+                    $hookObject = GeneralUtility::getUserObj($classData);
+                    if (!$hookObject instanceof FrontendEditingDropzoneModifier) {
+                        throw new \UnexpectedValueException(
+                            $classData . ' must implement interface ' . FrontendEditingDropzoneModifier::class,
+                            1493980015
+                        );
+                    }
+                    $isWrappedWithDropzone = $hookObject->wrapWithDropzone(
+                        $table,
+                        (int)$editUid,
+                        $dataArr,
+                        $content
+                    );
+                }
+            }
+            if (!$isWrappedWithDropzone) {
+                // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
+                // Add a dropzone after content
                 $content = $wrapperService->wrapContentWithDropzone(
                     $table,
-                    0,
+                    (int)$editUid,
                     $content,
-                    (int)$dataArr['colPos'],
-                    [],
-                    true
+                    (int)$dataArr['colPos']
                 );
-                self::$columnsWithContentList .= ',' . $dataArr['colPos'];
+
+                // If it's first content element for this column wrap with dropzone before content too
+                if (!GeneralUtility::inList(self::$columnsWithContentList, $dataArr['colPos'])) {
+                    $content = $wrapperService->wrapContentWithDropzone(
+                        $table,
+                        0,
+                        $content,
+                        (int)$dataArr['colPos'],
+                        [],
+                        true
+                    );
+                    self::$columnsWithContentList .= ',' . $dataArr['colPos'];
+                }
             }
         }
 
