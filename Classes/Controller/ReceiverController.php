@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace TYPO3\CMS\FrontendEditing\Controller;
 
 /*
@@ -66,10 +67,20 @@ class ReceiverController
                         );
                         break;
                     case 'move':
+                        // Check if colPos is set
+                        $colPos = isset($request->getParsedBody()['colPos']) ?
+                            (int)$request->getParsedBody()['colPos'] : -2;
+
+                        // Check if page is set
+                        $page = isset($request->getQueryParams()['page']) ?
+                            (int)$request->getQueryParams()['page'] : 0;
+
                         $this->moveAction(
                             $table,
                             $uid,
-                            (int)$request->getParsedBody()['beforeUid']
+                            (int)$request->getParsedBody()['beforeUid'],
+                            $page,
+                            $colPos
                         );
                         break;
                     case 'lockedRecord':
@@ -201,7 +212,8 @@ class ReceiverController
     protected function lockedRecordAction(string $table, int $uid)
     {
         if (BackendUtility::isRecordLocked($table, $uid)) {
-            $this->writeSuccessMessage('The content "' . $uid . '" is currently edited by someone else. Do you want to save this?');
+            $this->writeSuccessMessage('The content "' . $uid .
+                '" is currently edited by someone else. Do you want to save this?');
         }
     }
 
@@ -216,8 +228,14 @@ class ReceiverController
      * @param int $columnPosition
      * @param int $container
      */
-    public function moveAction(string $table, int $uid, int $beforeUid = 0, int $pid = 0, int $columnPosition = -2, int $container = 0)
-    {
+    public function moveAction(
+        string $table,
+        int $uid,
+        int $beforeUid = 0,
+        int $pid = 0,
+        int $columnPosition = -2,
+        int $container = 0
+    ) {
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $command = [];
         $data = [];

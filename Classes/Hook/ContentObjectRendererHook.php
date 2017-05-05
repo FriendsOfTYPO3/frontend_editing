@@ -65,7 +65,7 @@ class ContentObjectRendererHook
 
                 $content = $wrapperService->wrapContentWithDropzone(
                     $conf['table'],
-                    -1,
+                    0,
                     $content,
                     $colPos
                 );

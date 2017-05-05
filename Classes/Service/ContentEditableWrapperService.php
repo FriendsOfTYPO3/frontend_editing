@@ -87,7 +87,10 @@ class ContentEditableWrapperService
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s">' .
+            '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
+                'data-movable="1"' .
+                'ondragstart="window.parent.F.dragCeStart(event)"' .
+                'ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
                     ' data-cid="%d" data-edit-url="%s">%s</span>' .
                 '%s' .
@@ -108,7 +111,7 @@ class ContentEditableWrapperService
     }
 
     /**
-     * Add a drop zone after the content
+     * Add a drop zone before/after the content
      *
      * @param string $table
      * @param int $uid
@@ -116,6 +119,7 @@ class ContentEditableWrapperService
      * @return string
      * @param int $colPos
      * @param array $defaultValues
+     * @param bool $prepend
      * @throws \InvalidArgumentException
      */
     public function wrapContentWithDropzone(
@@ -123,30 +127,33 @@ class ContentEditableWrapperService
         int $uid,
         string $content,
         int $colPos = 0,
-        array $defaultValues = []
+        array $defaultValues = [],
+        bool $prepend = false
     ): string {
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
-        } elseif (empty($uid)) {
-            throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163439);
+        } elseif ($uid < 0) {
+            throw new \InvalidArgumentException('Property "uid" is not valid!', 1486163439);
         }
 
-        $jsFuncOnDrop = 'window.parent.F.dropNewCe(event)';
-        $jsFuncOnDragover = 'window.parent.F.dragNewCeOver(event)';
-        $jsFuncOnDragLeave = 'window.parent.F.dragNewCeLeave(event)';
+        $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
         $class = 't3-frontend-editing__dropzone';
 
-        $content .= sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+        $dropZone = sprintf(
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues))
+            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
+            $uid,
+            $colPos
         );
 
-        return $content;
+        return $prepend ? ($dropZone . $content) : ($content . $dropZone);
     }
 
     /**
