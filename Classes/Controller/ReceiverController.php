@@ -67,14 +67,19 @@ class ReceiverController
                         );
                         break;
                     case 'move':
+                        // Check if colPos is set
                         $colPos = isset($request->getParsedBody()['colPos']) ?
                             (int)$request->getParsedBody()['colPos'] : -2;
+
+                        // Check if page is set
+                        $page = isset($request->getQueryParams()['page']) ?
+                            (int)$request->getQueryParams()['page'] : 0;
 
                         $this->moveAction(
                             $table,
                             $uid,
                             (int)$request->getParsedBody()['beforeUid'],
-                            (int)$request->getQueryParams()['page'],
+                            $page,
                             $colPos
                         );
                         break;
