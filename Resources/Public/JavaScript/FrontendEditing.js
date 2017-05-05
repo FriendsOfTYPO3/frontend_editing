@@ -174,7 +174,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 
 		dropCe: function (ev) {
 			ev.preventDefault();
-			var movable = ev.dataTransfer.getData('movable');
+			var movable = parseInt(ev.dataTransfer.getData('movable'), 10);
 
 			if (movable === 1) {
 				var $currentTarget = $(ev.currentTarget);
