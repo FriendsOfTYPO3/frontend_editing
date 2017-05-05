@@ -111,7 +111,7 @@ class ContentEditableWrapperService
     }
 
     /**
-     * Add a drop zone after the content
+     * Add a drop zone before/after the content
      *
      * @param string $table
      * @param int $uid
@@ -119,6 +119,7 @@ class ContentEditableWrapperService
      * @return string
      * @param int $colPos
      * @param array $defaultValues
+     * @param bool $prepend
      * @throws \InvalidArgumentException
      */
     public function wrapContentWithDropzone(
@@ -126,13 +127,14 @@ class ContentEditableWrapperService
         int $uid,
         string $content,
         int $colPos = 0,
-        array $defaultValues = []
+        array $defaultValues = [],
+        bool $prepend = false
     ): string {
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
-        } elseif (empty($uid)) {
-            throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163439);
+        } elseif ($uid < 0) {
+            throw new \InvalidArgumentException('Property "uid" is not valid!', 1486163439);
         }
 
         $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
@@ -140,7 +142,7 @@ class ContentEditableWrapperService
         $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
         $class = 't3-frontend-editing__dropzone';
 
-        $content .= sprintf(
+        $dropZone = sprintf(
             '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d"></div>',
             $class,
             $jsFuncOnDrop,
@@ -151,7 +153,7 @@ class ContentEditableWrapperService
             $colPos
         );
 
-        return $content;
+        return $prepend ? ($dropZone . $content) : ($content . $dropZone);
     }
 
     /**

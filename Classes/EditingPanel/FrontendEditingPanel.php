@@ -33,6 +33,14 @@ class FrontendEditingPanel
     protected $frontendController;
 
     /**
+     * Keep list of columns (colPos) which has content
+     * so we know if element is first for this column or no
+     *
+     * @var string
+     */
+    public static $columnsWithContentList = '';
+
+    /**
      * Constructor for the edit panel
      */
     public function __construct()
@@ -138,6 +146,19 @@ class FrontendEditingPanel
                 $content,
                 (int)$dataArr['colPos']
             );
+
+            // If it's first content element for this column wrap with dropzone before content too
+            if (!GeneralUtility::inList(self::$columnsWithContentList, $dataArr['colPos'])) {
+                $content = $wrapperService->wrapContentWithDropzone(
+                    $table,
+                    0,
+                    $content,
+                    (int)$dataArr['colPos'],
+                    [],
+                    true
+                );
+                self::$columnsWithContentList .= ',' . $dataArr['colPos'];
+            }
         }
 
         return $content;

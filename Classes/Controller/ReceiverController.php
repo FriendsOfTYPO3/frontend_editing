@@ -74,7 +74,7 @@ class ReceiverController
                             $table,
                             $uid,
                             (int)$request->getParsedBody()['beforeUid'],
-                            0,
+                            (int)$request->getQueryParams()['page'],
                             $colPos
                         );
                         break;

@@ -42,6 +42,7 @@ class NotFoundView extends \TYPO3\CMS\Extbase\Mvc\View\NotFoundView
         $template = parent::render();
 
         $contentObject = $this->configurationManager->getContentObject();
+        /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
         return $wrapperService->wrapContent(
