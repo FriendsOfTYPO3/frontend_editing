@@ -12,4 +12,5 @@ Instructions on how to develop the frontend editing extension
    :titlesonly:
 
    Dependencies/Index
+   Hooks/Index
    Workflow/Index
