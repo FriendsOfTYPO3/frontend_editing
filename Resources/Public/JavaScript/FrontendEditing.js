@@ -131,15 +131,33 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		dragCeStart: function (ev) {
+			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
 			ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
-			ev.dataTransfer.setData('movable', ev.currentTarget.dataset.movable);
+			ev.dataTransfer.setData('movable', movable);
 			ev.dataTransfer.setData('movableUid', $(ev.currentTarget).find('span.t3-frontend-editing__inline-actions').data('uid'));
+
+			if (movable === 1) {
+				var $currentTarget = $(ev.currentTarget);
+
+				$currentTarget.prev('.t3-frontend-editing__dropzone').addClass('t3-frontend-editing__dropzone-hidden');
+				$currentTarget.next('.t3-frontend-editing__dropzone').addClass('t3-frontend-editing__dropzone-hidden');
+			}
 
 			var $iframe = F.iframe();
 			$iframe.contents().find('body').addClass('dropzones-enabled');
 		},
 
 		dragCeEnd: function (ev) {
+			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
+			if (movable === 1) {
+				var $currentTarget = $(ev.currentTarget);
+
+				$currentTarget.prev('.t3-frontend-editing__dropzone').removeClass('t3-frontend-editing__dropzone-hidden');
+				$currentTarget.next('.t3-frontend-editing__dropzone').removeClass('t3-frontend-editing__dropzone-hidden');
+			}
+
 			var $iframe = F.iframe();
 			$iframe.contents().find('body').removeClass('dropzones-enabled');
 		},
@@ -156,13 +174,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 
 		dropCe: function (ev) {
 			ev.preventDefault();
-			var moveCe = parseInt(ev.dataTransfer.getData('movable'), 10);
+			var movable = ev.dataTransfer.getData('movable');
 
-			if (moveCe === 1) {
-				var currentTarget = $(ev.currentTarget);
+			if (movable === 1) {
+				var $currentTarget = $(ev.currentTarget);
 				var ceUid = parseInt(ev.dataTransfer.getData('movableUid'), 10);
-				var moveAfter = parseInt(currentTarget.data('moveafter'), 10);
-				var colPos = parseInt(currentTarget.data('colpos'), 10);
+				var moveAfter = parseInt($currentTarget.data('moveafter'), 10);
+				var colPos = parseInt($currentTarget.data('colpos'), 10);
 
 				if (ceUid !== moveAfter) {
 					F.moveContent(ceUid, 'tt_content', moveAfter, colPos);
