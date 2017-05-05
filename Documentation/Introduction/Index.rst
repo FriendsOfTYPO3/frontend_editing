@@ -32,7 +32,7 @@ current versions.
 Feedback
 ^^^^^^^^
 
-If you find a bug either in this manual or in the workspaces /
-versioning extensions please use the bug tracker at
-https://forge.typo3.org/projects/typo3cms-core/issues.
+If you find a bug either in this manual or in the frontend editing /
+extension please use the bug tracker at
+https://github.com/FriendsOfTYPO3/frontend_editing/issues
 
