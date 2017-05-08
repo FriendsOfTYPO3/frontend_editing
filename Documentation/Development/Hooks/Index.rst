@@ -17,6 +17,8 @@ This is used in case you need to influence on a process of wrapping with drop zo
 
   .. code-block:: php
 
+    <?php
+
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing']['FrontendEditingPanel']['dropzoneModifiers'][] = \Your\NameSpace\YourClass::class;
 
 - Create hook class to control drop zone wrapping process
@@ -29,6 +31,13 @@ This is used in case you need to influence on a process of wrapping with drop zo
 
     class YourClass implements \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingDropzoneModifier
     {
+        /**
+         * @param string $table
+         * @param integer $editUid
+         * @param array $dataArr
+         * @param string $content
+         * @return string $content
+         */
         public function wrapWithDropzone(
           string $table,
           int $editUid,
