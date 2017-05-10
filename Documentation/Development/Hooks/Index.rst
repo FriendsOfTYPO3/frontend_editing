@@ -23,7 +23,7 @@ This is used in case you need to influence on a process of wrapping with drop zo
 
 - Create hook class to control drop zone wrapping process
 
-    .. code-block:: php
+  .. code-block:: php
 
     <?php
 
