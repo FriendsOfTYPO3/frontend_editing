@@ -253,20 +253,23 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		var deferred = $.Deferred();
-
-		$iframe.attr({
-			'src': url
+		$.ajax({
+			url: url,
+			headers: {
+				'X-Frontend-Editing': '1'
+			},
+			method: 'GET',
+			success: function(content) {
+				$iframe[0].contentWindow.document.open();
+				$iframe[0].contentWindow.document.write(content);
+				$iframe[0].contentWindow.document.close();
+			},
+			complete: function() {
+				Editor.init($iframe, editorConfigurationUrl, resourcePath);
+				hideLoadingScreen();
+				iframeUrl = url;
+			}
 		});
-
-		$iframe.on('load', deferred.resolve);
-
-		deferred.done(function () {
-			Editor.init($iframe, editorConfigurationUrl, resourcePath);
-			hideLoadingScreen();
-		});
-
-		iframeUrl = url;
 	}
 
 	function refreshIframe() {

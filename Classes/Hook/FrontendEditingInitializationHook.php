@@ -71,11 +71,11 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $access = GeneralUtility::makeInstance(AccessService::class);
-        if ($access->isEnabled() && $tsfe->type === 0) {
-            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
-            if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
-                return true;
-            }
+        if ($access->isEnabled()
+            && $tsfe->type === 0
+            && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
+        ) {
+            return true;
         }
         return false;
     }
@@ -98,14 +98,6 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
-        // Check if url has a ?, then decide on URL separator
-        if (strpos($requestUrl, '?') !== false) {
-            $urlSeparator = '&';
-        } else {
-            $urlSeparator = '?';
-        }
-
-        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -151,7 +143,7 @@ class FrontendEditingInitializationHook
             window.F = new FrontendEditing();
             window.F.initGUI({
                 resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
-                iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
+                iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
