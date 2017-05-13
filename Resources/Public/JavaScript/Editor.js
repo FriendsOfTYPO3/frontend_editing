@@ -61,9 +61,11 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 
 		// Suppress a tags (links) to redirect the normal way
 		$iframeContents.find('a').click(function (event) {
-			event.preventDefault();
 			var linkUrl = $(this).attr('href');
-			F.navigate(linkUrl);
+			if (!event.isDefaultPrevented() && linkUrl.indexOf('#') !== 0) {
+				event.preventDefault();
+				F.navigate(linkUrl);
+			}
 		});
 
 		// Find all t3-frontend-editing__inline-actions
