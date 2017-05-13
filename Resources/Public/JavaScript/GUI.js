@@ -138,8 +138,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			F.showLoadingScreen();
 		});
 
-		$('.right-bar-button').on('click', function () {
-			$(this).toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
+		$('.top-right-title').on('click', function () {
+			$('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
 			$('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
 			$('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
 			$('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -148,8 +148,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			updateRightPanelState();
 		});
 
-		$('.left-bar-button').on('click', function () {
-			$(this).toggleClass('icon-icons-site-tree icon-icons-arrow-double');
+		$('.top-left-title').on('click', function () {
+			$('.left-bar-button').toggleClass('icon-icons-site-tree icon-icons-arrow-double');
 			if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
 				F.getStorage().addItem('leftPanelOpen', true);
 			}
@@ -169,7 +169,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			});
 		});
 
-		$('.accordion .trigger').on('click', function () {
+		$('.accordion .trigger, .accordion .element-title').on('click', function () {
 			$(this).toggleClass('active');
 			$(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);
 			updateRightPanelState();

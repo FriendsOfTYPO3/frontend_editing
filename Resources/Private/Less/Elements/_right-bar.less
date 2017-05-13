@@ -52,6 +52,7 @@
     margin-top: -@top-bar-height;
     width: @right-bar-width;
     z-index: 1;
+    cursor: pointer;
 
     .title-right {
       font-size: @font-size-large;
@@ -62,7 +63,6 @@
     .right-bar-button {
       .transition(left (@push-duration / 2) @push-timing);
       .transform-origin(center);
-      cursor: pointer;
       float: left;
       display: block;
       height: @top-bar-height;

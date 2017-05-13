@@ -23,6 +23,7 @@
   .top-left-title {
     height: @top-bar-height;
     background-color: @header-top-bg-color;
+    cursor: pointer;
 
     .title-left {
       text-align: left;
@@ -34,7 +35,6 @@
     .left-bar-button {
       .transition(right (@push-duration / 2) @push-timing);
       .transform-origin (center);
-      cursor: pointer;
       float: right;
       display: block;
       height: @top-bar-height;
