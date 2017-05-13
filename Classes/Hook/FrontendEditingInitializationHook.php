@@ -105,8 +105,7 @@ class FrontendEditingInitializationHook
             $urlSeparator = '?';
         }
 
-        $showHiddenContentElements = '&ADMCMD_view=1';
-        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true' . $showHiddenContentElements;
+        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
