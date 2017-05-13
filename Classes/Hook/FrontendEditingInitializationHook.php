@@ -151,6 +151,7 @@ class FrontendEditingInitializationHook
             // The global F object for API calls
             window.F = new FrontendEditing();
             window.F.initGUI({
+                resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
                 iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });

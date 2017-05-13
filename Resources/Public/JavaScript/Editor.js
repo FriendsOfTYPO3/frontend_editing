@@ -40,7 +40,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		]
 	};
 
-	function init($iframe, configurationUrl) {
+	function init($iframe, configurationUrl, resourcePath) {
 		// Storage for adding and checking if it's empty when navigating to other pages
 		var storage = F.getStorage();
 
@@ -53,7 +53,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				'<link/>',
 				{
 					rel: 'stylesheet',
-					href: '/typo3conf/ext/frontend_editing/Resources/Public/Css/inline_editing.css',
+					href: resourcePath + 'Css/inline_editing.css',
 					type: 'text/css'
 				}
 			)

@@ -52,6 +52,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var iframeUrl;
 	var storage;
 	var editorConfigurationUrl;
+	var resourcePath;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -59,6 +60,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$loadingScreen = $('.t3-frontend-editing__loading-screen');
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
+		resourcePath = options.resourcePath;
 
 		initListeners();
 		bindActions();
@@ -260,7 +262,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$iframe.on('load', deferred.resolve);
 
 		deferred.done(function () {
-			Editor.init($iframe, editorConfigurationUrl);
+			Editor.init($iframe, editorConfigurationUrl, resourcePath);
 			hideLoadingScreen();
 		});
 
