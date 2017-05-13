@@ -96,7 +96,7 @@ class ContentEditableWrapperService
                 '%s' .
             '</div>',
             $hiddenElementClassName,
-            $this->contentElementTitle((int)$uid),
+            $this->recordTitle($table, (int)$uid),
             $class,
             $table,
             $uid,
@@ -284,18 +284,16 @@ class ContentEditableWrapperService
     /**
      * Returns the title label used in Backend lists
      *
-     * @param int $uid of the content element
+     * @param string $table of the record
+     * @param int $uid of the record
      * @return string
      */
-    public function contentElementTitle(int $uid): string
+    public function recordTitle(string $table, int $uid): string
     {
-        $rawRecord = BackendUtility::getRecord('tt_content', $uid);
-        $recordTitle = BackendUtility::getRecordTitle(
-            'tt_content',
-            $rawRecord,
-            true
+        $rawRecord = BackendUtility::getRecord($table, $uid);
+        return BackendUtility::getRecordTitle(
+            $table,
+            $rawRecord
         );
-
-        return strip_tags($recordTitle);
     }
 }
