@@ -78,8 +78,12 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				return false;
 			});
 
-			// Open/edit action
-			that.find('.icon-actions-open').on('click', function () {
+			// Open/edit|new action
+			that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
+				var url = that.data('edit-url');
+				if ($(this).data('identifier') === 'actions-document-new') {
+					url = that.data('new-url');
+				}
 				require([
 					'jquery',
 					'TYPO3/CMS/Backend/Modal'
@@ -88,7 +92,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					Modal.advanced({
 						type: Modal.types.iframe,
 						title: '',
-						content: that.data('edit-url'),
+						content: url,
 						size: Modal.sizes.large,
 						callback: function(currentModal) {
 							// Hide header of modal

@@ -21,12 +21,23 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * A class for adding wrapping for a content element to be editable
  */
 class ContentEditableWrapperService
 {
+    /**
+     * @var IconFactory
+     */
+    protected $iconFactory;
+
+    /**
+     * @var LanguageService
+     */
+    protected $languageService;
 
     /**
      * Add the proper wrapping (html tag) to make the content editable by CKEditor
@@ -92,7 +103,7 @@ class ContentEditableWrapperService
                 'ondragstart="window.parent.F.dragCeStart(event)"' .
                 'ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
-                    ' data-cid="%d" data-edit-url="%s">%s</span>' .
+                    ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
             '</div>',
             $hiddenElementClassName,
@@ -103,7 +114,8 @@ class ContentEditableWrapperService
             (int)$elementIsHidden,
             $dataArr['colPos'],
             $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
-            $this->renderInlineActionIcons($elementIsHidden),
+            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid)),
+            $this->renderInlineActionIcons($table, $elementIsHidden),
             $content
         );
 
@@ -159,25 +171,41 @@ class ContentEditableWrapperService
     /**
      * Renders the inline action icons
      *
+     * @param string $table
      * @param bool $elementIsHidden
      * @return string
      */
-    public function renderInlineActionIcons($elementIsHidden): string
+    public function renderInlineActionIcons(string $table, bool $elementIsHidden): string
     {
-        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
 
         $visibilityIcon = ($elementIsHidden === true) ?
-            $iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL)->render() :
-            $iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL)->render();
+            $this->renderIconWithWrap('unHide', 'actions-edit-unhide') : $this->renderIconWithWrap('hide', 'actions-edit-hide');
+
+        $moveIcons = ($table === 'tt_content') ?
+            $this->renderIconWithWrap('moveUp', 'actions-move-up') . $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
 
         $inlineIcons =
+            $this->renderIconWithWrap('edit', 'actions-open') .
             $visibilityIcon .
-            $iconFactory->getIcon('actions-open', Icon::SIZE_SMALL)->render() .
-            $iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL)->render() .
-            $iconFactory->getIcon('actions-move-up', Icon::SIZE_SMALL)->render() .
-            $iconFactory->getIcon('actions-move-down', Icon::SIZE_SMALL)->render();
+            $this->renderIconWithWrap('delete', 'actions-edit-delete') .
+            $this->renderIconWithWrap('new', 'actions-document-new') .
+            $moveIcons;
 
         return $inlineIcons;
+    }
+
+    /**
+     * Wraps an inline action icon
+     *
+     * @param string $titleKey
+     * @param string $iconKey
+     * @return string
+     */
+    private function renderIconWithWrap(string $titleKey, string $iconKey): string
+    {
+        return '<span title="' . $this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey) . '">' . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
     }
 
     /**
