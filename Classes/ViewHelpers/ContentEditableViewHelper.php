@@ -71,7 +71,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
             'field',
             'string',
             'The database table field name to be used for saving the content',
-            true
+            false
         );
         $this->registerArgument(
             'uid',
@@ -99,11 +99,21 @@ class ContentEditableViewHelper extends AbstractViewHelper
         }
 
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        return $wrapperService->wrapContentToBeEditable(
-            $arguments['table'],
-            $arguments['field'],
-            (int)$arguments['uid'],
-            $content
-        );
+        if (empty($arguments['field'])) {
+            $content = $wrapperService->wrapContent(
+                $arguments['table'],
+                (int)$arguments['uid'],
+                [],
+                $content
+            );
+        } else {
+            $content = $wrapperService->wrapContentToBeEditable(
+                $arguments['table'],
+                $arguments['field'],
+                (int)$arguments['uid'],
+                $content
+            );
+        }
+        return $content;
     }
 }
