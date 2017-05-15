@@ -143,6 +143,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			$('.t3-frontend-editing__right-bar').toggleClass('open');
 			t = ++t % 2;
 			$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+			updateRightPanelState();
 		});
 
 		$('.left-bar-button').on('click', function () {
@@ -169,12 +170,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$('.accordion .trigger').on('click', function () {
 			$(this).toggleClass('active');
 			$(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);
+			updateRightPanelState();
 		});
 
 		$('.accordion .grid').on('click', function () {
 			$(this).closest('.accordion-container')
 				.removeClass('accordion-list')
 				.addClass('accordion-grid');
+			updateRightPanelState();
 		});
 
 		$('.top-bar-items .dropdown-toggle').on('click', function () {
@@ -183,10 +186,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		});
 
 
-		$('.list-view').on('click', function () {
+		$('.accordion .list-view').on('click', function () {
 			$(this).closest('.accordion-container')
 				.removeClass('accordion-grid')
 				.addClass('accordion-list');
+			updateRightPanelState();
 		});
 
 		$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
@@ -199,6 +203,50 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			$('.left-bar-button').trigger('click');
 			F.getStorage().addItem('leftPanelOpen', false);
 		}
+
+		if (typeof states.rightPanelState !== 'undefined') {
+			// Init right panel state
+			if (states.rightPanelState.isVisible) {
+				$('.right-bar-button').trigger('click');
+			}
+
+			for (var wizard in states.rightPanelState.wizards) {
+				if (states.rightPanelState.wizards.hasOwnProperty(wizard)) {
+					var $wizard = $('[data-wizard-type="' + wizard + '"]');
+					if ($wizard.length === 1) {
+						if (states.rightPanelState.wizards[wizard].isListView) {
+							$wizard.find('.list-view').trigger('click');
+						}
+						if (states.rightPanelState.wizards[wizard].isExpanded) {
+							$wizard.find('.trigger').trigger('click');
+						}
+					}
+				}
+			}
+		}
+	}
+
+	function updateRightPanelState() {
+		var rightPanelState = {
+			isVisible: $('.t3-frontend-editing__right-bar').hasClass('open'),
+			wizards: {}
+		};
+
+		$('.accordion .trigger').each(function () {
+				var accordionContainer = $(this).parents('.accordion-container'),
+					isExpanded = $(this).hasClass('active'),
+					isListView = accordionContainer.hasClass('accordion-list');
+
+				if (isExpanded || isListView) {
+					var containerType = accordionContainer.data('wizard-type');
+					rightPanelState.wizards[containerType] = {
+						isExpanded: isExpanded,
+						isListView: isListView
+					}
+				}
+		});
+
+		F.getStorage().addItem('rightPanelState', rightPanelState);
 	}
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
