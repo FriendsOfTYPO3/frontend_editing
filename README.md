@@ -9,4 +9,6 @@ This package gives frontend editing capability to TYPO3 CMS, the editor used is 
 
 For all kind of documentation which covers install to how to develop the extension:
 
-[Documentation](Documentation/Index.rst)
+[Local Documentation](Documentation/Index.rst)
+
+[Online Documentation](https://docs.typo3.org/typo3cms/extensions/frontend_editing/)
