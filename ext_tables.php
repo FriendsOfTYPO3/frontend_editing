@@ -5,14 +5,14 @@ defined('TYPO3_MODE') or die();
 $GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing'] = [
     'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:settings.field.frontend_editing',
     'type' => 'check',
-    'default' => 1,
+    'default' => 0
 ];
 
 // Add overlay option User setting
 $GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing_overlay'] = [
     'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:settings.field.frontend_editing_overlay',
     'type' => 'check',
-    'default' => 0,
+    'default' => 0
 ];
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings(
