@@ -53,6 +53,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
+	var firstSiteContent;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -61,11 +62,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
+		firstSiteContent = options.content
 
 		initListeners();
 		bindActions();
 		initGuiStates();
-		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
+		loadEditorConfig(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
 	}
 
@@ -249,6 +251,16 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		});
 
 		F.getStorage().addItem('rightPanelState', rightPanelState);
+	}
+
+	function loadEditorConfig(url, editorConfigurationUrl) {
+		showLoadingScreen();
+		$iframe[0].contentWindow.document.open();
+		$iframe[0].contentWindow.document.write(firstSiteContent);
+		$iframe[0].contentWindow.document.close();
+		Editor.init($iframe, editorConfigurationUrl, resourcePath);
+		iframeUrl = url;
+		hideLoadingScreen();
 	}
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
