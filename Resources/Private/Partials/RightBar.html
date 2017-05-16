@@ -17,6 +17,20 @@
 				</div>
 			</div>
 		</div>
+		<f:if condition="{pageEditUrl}">
+			<button type="#" class="t3-frontend-editing__page-edit btn btn-default" data-url="{pageEditUrl}">
+				<span class="btn-text">
+					<f:translate key="right-bar.page-edit" extensionName="FrontendEditing" />
+				</span>
+			</button>
+		</f:if>
+		<f:if condition="{pageNewUrl}">
+			<button type="#" class="t3-frontend-editing__page-new btn btn-default" data-url="{pageNewUrl}">
+				<span class="btn-text">
+					<f:translate key="right-bar.page-new" extensionName="FrontendEditing" />
+				</span>
+			</button>
+		</f:if>
 		<div class="elements">
 			<f:render partial="WizardElementTabs" arguments="{_all}"></f:render>
 		</div>

@@ -163,6 +163,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
 		});
 
+		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
+			var url = $(this).data('url');
+			F.loadInModal(url);
+		});
+
 		$('.page-seo-devices span').on('click', function () {
 			$('.page-seo-devices').find('span').removeClass('active');
 			$(this).addClass('active');
