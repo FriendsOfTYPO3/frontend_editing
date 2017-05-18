@@ -294,11 +294,15 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function showLoadingScreen() {
-		$loadingScreen.removeClass(CLASS_HIDDEN);
+		$loadingScreen.fadeIn('fast', function() {
+			$loadingScreen.removeClass(CLASS_HIDDEN);
+		});
 	}
 
 	function hideLoadingScreen() {
-		$loadingScreen.addClass(CLASS_HIDDEN);
+		$loadingScreen.fadeOut('slow', function() {
+			$loadingScreen.addClass(CLASS_HIDDEN);
+		});
 	}
 
 	function getIframe() {
