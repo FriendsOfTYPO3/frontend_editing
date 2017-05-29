@@ -142,9 +142,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 
 		$('.left-bar-button').on('click', function () {
 			$(this).toggleClass('icon-icons-site-tree icon-icons-arrow-double');
-			if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
-				F.getStorage().addItem('leftPanelOpen', true);
-			}
+
+			// save state
+			F.getStorage().addItem('leftPanelOpen', !$('.t3-frontend-editing__left-bar').hasClass('open'));
 
 			$('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
 			$('.t3-frontend-editing__left-bar').toggleClass('open');
@@ -195,7 +195,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		if (typeof states.leftPanelOpen !== 'undefined' && states.leftPanelOpen === true) {
 			// Trigger open left panel
 			$('.left-bar-button').trigger('click');
-			F.getStorage().addItem('leftPanelOpen', false);
 		}
 
 		if (typeof states.rightPanelState !== 'undefined') {

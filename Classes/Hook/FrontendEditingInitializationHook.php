@@ -21,6 +21,8 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
@@ -270,9 +272,41 @@ class FrontendEditingInitializationHook
      */
     protected function getPageTreeStructure(): array
     {
+        $finalTree = [
+            'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
+            'children' => []
+        ];
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $statement = $queryBuilder
+            ->select('uid')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->eq('is_siteroot', $queryBuilder->createNamedParameter(true, \PDO::PARAM_BOOL))
+            )
+            ->orderBy('sorting')
+            ->execute();
+
+        while ($row = $statement->fetch()) {
+            $finalTree['children'] = array_merge(
+                $finalTree['children'],
+                $this->getStructureForSinglePageTree($row['uid'])
+            );
+        }
+
+        return $finalTree;
+    }
+
+    /**
+     * Get the page tree structure of page
+     *
+     * @return array
+     */
+    protected function getStructureForSinglePageTree(int $startingPoint): array
+    {
         // Get page record for tree starting point
         // from where we currently are navigated
-        $startingPoint = $this->typoScriptFrontendController->rootLine[0]['uid'];
         $pageRecord = BackendUtility::getRecord('pages', $startingPoint);
 
         // Creating the icon for the current page and add it to the tree
@@ -296,16 +330,21 @@ class FrontendEditingInitializationHook
         $tree->getTree($startingPoint);
 
         $tree->tree[0] += [
+            'uid' => $pageRecord['uid'],
             'invertedDepth' => 1000,
             'hasSub' => count($tree->tree) > 1
         ];
 
-        return [
-            'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'children' => $this->generateTreeData($tree->tree)
-        ];
+        return $this->generateTreeData($tree->tree);
     }
 
+    /**
+     * Build array of page tree with children
+     *
+     * @param array $tree
+     * @param int $depth
+     * @return array
+     */
     protected function generateTreeData(array $tree, int $depth = 1000): array
     {
         $index = 0;
@@ -315,6 +354,7 @@ class FrontendEditingInitializationHook
             $index++;
             if ($item['invertedDepth'] === $depth) {
                 $treeItem = [
+                    'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
                     'link' => $this->typoScriptFrontendController->cObj->typoLink_URL([
                         'parameter' => $item['row']['uid']

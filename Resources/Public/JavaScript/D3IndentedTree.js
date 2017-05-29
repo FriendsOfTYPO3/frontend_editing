@@ -17,14 +17,21 @@
 define(['jquery', 'd3'], function ($, d3) {
 	'use strict';
 
-	// Set the dimensions and margins of the diagram
+	// Set the dimensions and margins of the tree
 	var margin = {top: 20, right: 20, bottom: 30, left: 10},
 		width = 280 - margin.right - margin.left,
 
 		barHeight = 20,
 		barWidth = width * .9,
 
-		nodeStep = 10;
+		nodeStep = 10,
+
+		dyText = 2.5,
+		dxText = 12,
+
+		xRect = 7,
+
+		circleRadius = 5;
 
 	var i = 0,
 		linksCount = 0,
@@ -33,7 +40,22 @@ define(['jquery', 'd3'], function ($, d3) {
 		svg,
 		tree;
 
+	/**
+	 * Local storage
+	 */
+	var storage,
+		storageData;
+
+	/**
+	 * Main method
+	 *
+	 * @param treeData
+	 */
 	function init(treeData) {
+		storage = F.getStorage();
+		storageData = storage.getAllData();
+
+		_initArrayContains();
 		_initSvg();
 
 		root = d3.hierarchy(treeData); // Constructs a root node from the specified hierarchical data.
@@ -45,6 +67,11 @@ define(['jquery', 'd3'], function ($, d3) {
 		_update(root);
 	}
 
+	/**
+	 * Create SVG
+	 *
+	 * @private
+	 */
 	function _initSvg() {
 		svg = d3.select('#page-tree-wrapper').insert('svg')
 			.attr('width', width + margin.right + margin.left)
@@ -52,6 +79,12 @@ define(['jquery', 'd3'], function ($, d3) {
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 	}
 
+	/**
+	 * Update tree
+	 *
+	 * @param source
+	 * @private
+	 */
 	function _update(source) {
 		var nodes = tree(root), //returns a single node with the properties of d3.tree()
 			nodesSort = [];
@@ -83,7 +116,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.attr('transform', function (d) {
 				return 'translate(' + source.y + ',' + source.x + ')';
 			})
-			.style("opacity", 1e-6)
+			.style('opacity', 1e-6)
 			.call(function () {
 				if (linksCount < links.length) {
 					linksCount = links.length;
@@ -101,7 +134,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		nodeEnter.append('rect')
 			.attr('y', -barHeight / 2)
-			.attr('x', 7)
+			.attr('x', xRect)
 			.attr('height', barHeight)
 			.attr('width', _barWidth)
 			.attr('class', function (d) {
@@ -110,8 +143,8 @@ define(['jquery', 'd3'], function ($, d3) {
 			.on('click', _clickRect);
 
 		nodeEnter.append('text')
-			.attr('dy', 3.5)
-			.attr('dx', 12)
+			.attr('dy', dyText)
+			.attr('dx', dxText)
 			.text(function (d) {
 				return d.data.name;
 			});
@@ -129,7 +162,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		// Update the node attributes and style
 		nodeUpdate.select('circle')
-			.attr('r', 5)
+			.attr('r', circleRadius)
 			.attr('class', function (d) {
 				return d._children ? 'has-children' : 'no-children';
 			})
@@ -188,26 +221,126 @@ define(['jquery', 'd3'], function ($, d3) {
 			.remove();
 	}
 
+	/**
+	 * Collapse children
+	 *
+	 * @param d
+	 * @private
+	 */
 	function _collapse(d) {
-		if (d.children) {
+		if ((d.children && typeof d.data.uid === 'undefined')
+			|| (d.children && !_isExpanded(d.data.uid))) {
 			d._children = d.children;
 			d._children.forEach(_collapse);
 			d.children = null;
+		} else if (d.children) {
+			d.children.forEach(_collapse);
 		}
 	}
 
-	// Toggle children on click.
+	/**
+	 * Check if value is in list
+	 *
+	 * @param uid
+	 * @return {boolean}
+	 */
+	function _isExpanded(uid) {
+		return (typeof storageData.pageTreeState !== 'undefined' && storageData.pageTreeState.contains(uid));
+	}
+
+	/**
+	 * Toggle children on click.
+	 *
+	 * @param d
+	 * @private
+	 */
 	function _clickCircle(d) {
 		if (d.children) {
 			d._children = d.children;
 			d.children = null;
+			if (d.data.uid) {
+				_removeFromActiveStateList(d.data.uid);
+			}
 		} else {
 			d.children = d._children;
 			d._children = null;
+			if (d.data.uid) {
+				_addToActiveStateList(d.data.uid);
+			}
 		}
 		_update(d);
 	}
 
+	/**
+	 * Save expanded page in page tree
+	 *
+	 * @param uid
+	 * @private
+	 */
+	function _addToActiveStateList(uid) {
+		var pageTreeState = _getCurrentPageTreeStateStorageData();
+
+		if (!pageTreeState.contains(uid)) {
+			pageTreeState.push(uid);
+		}
+
+		storage.addItem('pageTreeState', pageTreeState);
+	}
+
+	/**
+	 * Remove expanded page
+	 *
+	 * @param uid
+	 * @private
+	 */
+	function _removeFromActiveStateList(uid) {
+		var pageTreeState = _getCurrentPageTreeStateStorageData(),
+			index = pageTreeState.indexOf(uid);
+
+		if (index > -1) {
+			pageTreeState.splice(index, uid);
+		}
+
+		storage.addItem('pageTreeState', pageTreeState);
+	}
+
+	/**
+	 * Current state of page tree
+	 * @return {*}
+	 * @private
+	 */
+	function _getCurrentPageTreeStateStorageData() {
+		var currentStorageData = storage.getAllData();
+
+		if (typeof currentStorageData.pageTreeState === 'undefined') {
+			currentStorageData.pageTreeState = [];
+		}
+
+		return currentStorageData.pageTreeState;
+	}
+
+	/**
+	 * Init contains function
+	 *
+	 * @private
+	 */
+	function _initArrayContains() {
+		if (!Array.prototype.contains) {
+			Array.prototype.contains = function (v) {
+				for (var i = 0; i < this.length; i++) {
+					if (this[i] === v) return true;
+				}
+				return false;
+			};
+		}
+	}
+
+	/**
+	 * Clicked on rect
+	 *
+	 * @param d
+	 * @private
+	 */
 	function _clickRect(d) {
 		if (d.data.link) {
 			var linkUrl = d.data.link;
@@ -216,6 +349,14 @@ define(['jquery', 'd3'], function ($, d3) {
 		}
 	}
 
+	/**
+	 * Generate path
+	 *
+	 * @param s
+	 * @param d
+	 * @return {string}
+	 * @private
+	 */
 	function _diagonal(s, d) {
 		return `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
@@ -224,10 +365,19 @@ define(['jquery', 'd3'], function ($, d3) {
 
 	}
 
+	/**
+	 * Count bar width (rect)
+	 * @param d
+	 * @return {number}
+	 * @private
+	 */
 	function _barWidth(d) {
 		return barWidth - d.depth * nodeStep;
 	}
 
+	/**
+	 * Return public methods
+	 */
 	return {
 		init: init
 	}
