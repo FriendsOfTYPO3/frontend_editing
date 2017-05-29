@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
 /*
@@ -130,7 +131,10 @@ class FrontendEditingInitializationHook
         $rtePopupWindowHeight = !empty($rtePopupWindowHeight) ? (int)$rtePopupWindowHeight : 600;
 
         // define DateTimePicker dateformat
-        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
+        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? [
+            'MM-DD-YYYY',
+            'HH:mm MM-DD-YYYY'
+        ] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
 
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
@@ -152,6 +156,7 @@ class FrontendEditingInitializationHook
             window.F = new FrontendEditing();
             window.F.initGUI({
                 iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
+                pageTree:' . json_encode($this->getPageTreeStructure()) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
@@ -176,10 +181,9 @@ class FrontendEditingInitializationHook
             'currentUser' => $GLOBALS['BE_USER']->user,
             'currentTime' => $GLOBALS['EXEC_TIME'],
             'currentPage' => $this->typoScriptFrontendController->id,
-            'pageTree' => $this->getPageTreeStructure(),
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
-            'logoutUrl'  => $uriBuilder->buildUriFromRoute('logout'),
+            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
         ]);
@@ -242,6 +246,7 @@ class FrontendEditingInitializationHook
                     'immutable' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'),
                     'alertify' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/alertify'),
                     'ckeditor' => $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'),
+                    'd3' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/d3.min')
                 ]
             ]
         );
@@ -278,8 +283,10 @@ class FrontendEditingInitializationHook
         );
 
         // Create and initialize the tree object
+        /** @var PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init(' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1));
+        $tree->makeHTML = 0;
         $tree->tree[] = [
             'row' => $pageRecord,
             'HTML' => $html
@@ -288,7 +295,46 @@ class FrontendEditingInitializationHook
         // Create the page tree, from the starting point, infinite levels down
         $tree->getTree($startingPoint);
 
-        return $tree->tree;
+        $tree->tree[0] += [
+            'invertedDepth' => 1000,
+            'hasSub' => count($tree->tree) > 1
+        ];
+
+        return [
+            'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
+            'children' => $this->generateTreeData($tree->tree)
+        ];
+    }
+
+    protected function generateTreeData(array $tree, int $depth = 1000): array
+    {
+        $index = 0;
+        $treeData = [];
+
+        foreach ($tree as $item) {
+            $index++;
+            if ($item['invertedDepth'] === $depth) {
+                $treeItem = [
+                    'name' => $item['row']['title'],
+                    'link' => $this->typoScriptFrontendController->cObj->typoLink_URL([
+                        'parameter' => $item['row']['uid']
+                    ]),
+                    'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
+                ];
+
+                if ($item['hasSub']) {
+                    $treeItem['children'] = $this->generateTreeData(array_slice($tree, $index), $depth-1);
+                }
+
+                $treeData[] = $treeItem;
+
+                if ($item['isLast']) {
+                    break;
+                }
+            }
+        }
+
+        return $treeData;
     }
 
     /**

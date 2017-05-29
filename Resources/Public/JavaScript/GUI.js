@@ -14,7 +14,7 @@
 /**
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify', 'TYPO3/CMS/Backend/Modal'], function ($, FrontendEditing, Editor, toastr, alertify, Modal) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, alertify) {
 	'use strict';
 
 	// Extend FrontendEditing with the following functions
@@ -62,6 +62,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 		initListeners();
 		bindActions();
+		D3IndentedTree.init(options.pageTree);
 		initGuiStates();
 		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
@@ -128,13 +129,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 		var t = 0;
 		var y = 0;
-
-		// Add check for page tree navigation
-		$('.t3-frontend-editing__page-tree li').click(function () {
-			var linkUrl = $(this).data('url');
-			F.navigate(linkUrl);
-			F.showLoadingScreen();
-		});
 
 		$('.right-bar-button').on('click', function () {
 			$(this).toggleClass('icon-icons-tools-settings icon-icons-arrow-double');

@@ -7,17 +7,6 @@
 		<span class="left-bar-button icons icon-icons-site-tree" title="{f:translate(key: 'left-bar.site-tree', extensionName: 'FrontendEditing')}"></span>
 	</div>
 	<div class="padding-wrapper">
-		<div class="t3-frontend-editing__page-tree-wrapper">
-			<ul class="t3-frontend-editing__page-tree">
-				<f:for each="{pageTree}" as="page">
-					<li data-url="{f:uri.page(pageUid: page.row.uid)}">
-						{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw>
-						<span class="page-tree-item{f:if(condition: page.row.hidden, then: ' page-tree-status-hidden')}{f:if(condition: '{page.row.starttime} >= {currentTime}', then: ' page-tree-status-hidden')}{f:if(condition: '{page.row.uid} == {currentPage}', then: ' page-tree-active')}" title="id={page.row.uid} - {page.row.title}">
-							{page.row.title}
-						</span>
-					</li>
-				</f:for>
-			</ul>
-		</div>
+		<div id="page-tree-wrapper" class="t3-frontend-editing__page-tree-wrapper"></div>
 	</div>
 </div>
