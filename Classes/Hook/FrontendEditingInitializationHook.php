@@ -73,6 +73,7 @@ class FrontendEditingInitializationHook
      */
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
+        /** @var AccessService $access */
         $access = GeneralUtility::makeInstance(AccessService::class);
         if ($access->isEnabled() && $tsfe->type === 0) {
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
@@ -247,8 +248,7 @@ class FrontendEditingInitializationHook
                     'toastr' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'),
                     'immutable' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'),
                     'alertify' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/alertify'),
-                    'ckeditor' => $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'),
-                    'd3' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/d3.min')
+                    'ckeditor' => $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor')
                 ]
             ]
         );
