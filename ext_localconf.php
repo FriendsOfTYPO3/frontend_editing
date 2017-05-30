@@ -8,11 +8,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CM
 if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
     $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFoundOnCHashError'] = false;
 }
-
-$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['default'] = 'EXT:frontend_editing/Configuration/RTE/Default.yaml';
-
-//var_dump($GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['default']);die;
-
 /**
  * Hooks
  */
