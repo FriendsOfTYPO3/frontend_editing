@@ -86,8 +86,9 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				}
 				require([
 					'jquery',
-					'TYPO3/CMS/Backend/Modal'
-					], function ($, Modal) {
+					'TYPO3/CMS/Backend/Modal',
+					'TYPO3/CMS/Lang/Lang'
+					], function ($, Modal, Lang) {
 
 					Modal.advanced({
 						type: Modal.types.iframe,
