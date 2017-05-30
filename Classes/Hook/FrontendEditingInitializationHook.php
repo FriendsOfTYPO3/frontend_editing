@@ -103,6 +103,15 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
+        // Check if url has a ?, then decide on URL separator
+        if (strpos($requestUrl, '?') !== false) {
+            $urlSeparator = '&';
+        } else {
+            $urlSeparator = '?';
+        }
+
+        $showHiddenContentElements = '&ADMCMD_view=1';
+        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true' . $showHiddenContentElements;
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -166,7 +175,7 @@ class FrontendEditingInitializationHook
             window.F.initGUI({
                 content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
                 resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
-                iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
+                iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
