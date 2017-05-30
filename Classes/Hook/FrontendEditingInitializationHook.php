@@ -39,6 +39,11 @@ use TYPO3\CMS\FrontendEditing\Service\AccessService;
 class FrontendEditingInitializationHook
 {
     /**
+     * @var AccessService
+     */
+    protected $accessService;
+
+    /**
      * @var TypoScriptFrontendController
      */
     protected $typoScriptFrontendController = null;
@@ -70,12 +75,12 @@ class FrontendEditingInitializationHook
      */
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
-        $access = GeneralUtility::makeInstance(AccessService::class);
-        if ($access->isEnabled() && $tsfe->type === 0) {
-            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
-            if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
-                return true;
-            }
+        $this->accessService = GeneralUtility::makeInstance(AccessService::class);
+        if ($this->accessService->isEnabled()
+            && $tsfe->type === 0
+            && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
+        ) {
+            return true;
         }
         return false;
     }
@@ -98,15 +103,6 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
-        // Check if url has a ?, then decide on URL separator
-        if (strpos($requestUrl, '?') !== false) {
-            $urlSeparator = '&';
-        } else {
-            $urlSeparator = '?';
-        }
-
-        $showHiddenContentElements = '&ADMCMD_view=1';
-        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true' . $showHiddenContentElements;
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -121,6 +117,23 @@ class FrontendEditingInitializationHook
         $ajaxUrlIcons = $uriBuilder->buildUriFromRoute(
             'ajax_icons'
         );
+
+        $returnUrl = PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html') . '?');
+        $pageEditUrl = $this->accessService->isPageEditAllowed() ? $uriBuilder->buildUriFromRoute(
+            'record_edit',
+            [
+                'edit[pages][' . $this->typoScriptFrontendController->id . ']' => 'edit',
+                'returnUrl' => $returnUrl
+            ]
+        ) : null;
+        $pageNewUrl = $this->accessService->isPageCreateAllowed() ? $uriBuilder->buildUriFromRoute(
+            'db_new',
+            [
+                'id' => $this->typoScriptFrontendController->id,
+                'pagesOnly' => 1,
+                'returnUrl' => $returnUrl
+            ]
+        ) : null;
 
         // define the window size of the popups within the RTE
         $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
@@ -151,7 +164,9 @@ class FrontendEditingInitializationHook
             // The global F object for API calls
             window.F = new FrontendEditing();
             window.F.initGUI({
-                iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
+                content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
+                resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
+                iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
@@ -181,6 +196,8 @@ class FrontendEditingInitializationHook
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'logoutUrl'  => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
+            'pageEditUrl' => $pageEditUrl,
+            'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
         ]);
 

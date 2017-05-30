@@ -40,7 +40,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		]
 	};
 
-	function init($iframe, configurationUrl) {
+	function init($iframe, configurationUrl, resourcePath) {
 		// Storage for adding and checking if it's empty when navigating to other pages
 		var storage = F.getStorage();
 
@@ -53,7 +53,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				'<link/>',
 				{
 					rel: 'stylesheet',
-					href: '/typo3conf/ext/frontend_editing/Resources/Public/Css/inline_editing.css',
+					href: resourcePath + 'Css/inline_editing.css',
 					type: 'text/css'
 				}
 			)
@@ -61,9 +61,11 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 
 		// Suppress a tags (links) to redirect the normal way
 		$iframeContents.find('a').click(function (event) {
-			event.preventDefault();
 			var linkUrl = $(this).attr('href');
-			F.navigate(linkUrl);
+			if (!event.isDefaultPrevented() && linkUrl.indexOf('#') !== 0) {
+				event.preventDefault();
+				F.navigate(linkUrl);
+			}
 		});
 
 		// Find all t3-frontend-editing__inline-actions
@@ -76,8 +78,12 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				return false;
 			});
 
-			// Open/edit action
-			that.find('.icon-actions-open').on('click', function () {
+			// Open/edit|new action
+			that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
+				var url = that.data('edit-url');
+				if ($(this).data('identifier') === 'actions-document-new') {
+					url = that.data('new-url');
+				}
 				require([
 					'jquery',
 					'TYPO3/CMS/Backend/Modal'
@@ -86,7 +92,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					Modal.advanced({
 						type: Modal.types.iframe,
 						title: '',
-						content: that.data('edit-url'),
+						content: url,
 						size: Modal.sizes.large,
 						callback: function(currentModal) {
 							// Hide header of modal

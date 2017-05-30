@@ -118,6 +118,27 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			}
 		},
 
+		loadInModal: function (url) {
+			require([
+				'jquery',
+				'TYPO3/CMS/Backend/Modal'
+				], function ($, Modal) {
+
+				Modal.advanced({
+					type: Modal.types.iframe,
+					title: '',
+					content: url,
+					size: Modal.sizes.large,
+					callback: function(currentModal) {
+						currentModal.find('.modal-header').hide();
+						currentModal.on('hidden.bs.modal', function (e) {
+							F.refreshIframe();
+						});
+					}
+				});
+			});
+		},
+		
 		setTranslationLabels: function (labels) {
 			translationLabels = labels;
 		},
@@ -194,25 +215,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var params = ev.dataTransfer.getData('params');
 			var newUrl = $(ev.currentTarget).data('new-url');
 			var fullUrl = newUrl + params;
-
-			require([
-				'jquery',
-				'TYPO3/CMS/Backend/Modal'
-				], function ($, Modal) {
-
-				Modal.advanced({
-					type: Modal.types.iframe,
-					title: '',
-					content: fullUrl,
-					size: Modal.sizes.large,
-					callback: function(currentModal) {
-						currentModal.find('.modal-header').hide();
-						currentModal.on('hidden.bs.modal', function (e) {
-							F.refreshIframe();
-						});
-					}
-				});
-			});
+			F.loadInModal(fullUrl);
 		},
 
 		indicateCeStart: function (ev) {

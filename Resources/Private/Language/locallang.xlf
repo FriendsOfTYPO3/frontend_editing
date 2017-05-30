@@ -27,6 +27,12 @@
             <trans-unit id="right-bar.tools-properties">
                 <source>TOOLS &amp; PROPERTIES</source>
             </trans-unit>
+            <trans-unit id="right-bar.page-edit">
+                <source>Edit page properties</source>
+            </trans-unit>
+            <trans-unit id="right-bar.page-new">
+                <source>Create new Page</source>
+            </trans-unit>
             <trans-unit id="notifications.save-title">
                 <source>Content saved</source>
             </trans-unit>

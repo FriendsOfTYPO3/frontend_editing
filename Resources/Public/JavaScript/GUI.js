@@ -52,6 +52,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var iframeUrl;
 	var storage;
 	var editorConfigurationUrl;
+	var resourcePath;
+	var firstSiteContent;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -59,11 +61,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$loadingScreen = $('.t3-frontend-editing__loading-screen');
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
+		resourcePath = options.resourcePath;
+		firstSiteContent = options.content
 
 		initListeners();
 		bindActions();
 		initGuiStates();
-		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
+		loadEditorConfig(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
 	}
 
@@ -136,8 +140,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			F.showLoadingScreen();
 		});
 
-		$('.right-bar-button').on('click', function () {
-			$(this).toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
+		$('.top-right-title').on('click', function () {
+			$('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
 			$('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
 			$('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
 			$('.t3-frontend-editing__right-bar').toggleClass('open');
@@ -146,8 +150,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			updateRightPanelState();
 		});
 
-		$('.left-bar-button').on('click', function () {
-			$(this).toggleClass('icon-icons-site-tree icon-icons-arrow-double');
+		$('.top-left-title').on('click', function () {
+			$('.left-bar-button').toggleClass('icon-icons-site-tree icon-icons-arrow-double');
 			if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
 				F.getStorage().addItem('leftPanelOpen', true);
 			}
@@ -159,6 +163,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
 		});
 
+		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
+			var url = $(this).data('url');
+			F.loadInModal(url);
+		});
+
 		$('.page-seo-devices span').on('click', function () {
 			$('.page-seo-devices').find('span').removeClass('active');
 			$(this).addClass('active');
@@ -167,7 +176,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			});
 		});
 
-		$('.accordion .trigger').on('click', function () {
+		$('.accordion .trigger, .accordion .element-title').on('click', function () {
 			$(this).toggleClass('active');
 			$(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);
 			updateRightPanelState();
@@ -249,22 +258,35 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		F.getStorage().addItem('rightPanelState', rightPanelState);
 	}
 
+	function loadEditorConfig(url, editorConfigurationUrl) {
+		showLoadingScreen();
+		$iframe[0].contentWindow.document.open();
+		$iframe[0].contentWindow.document.write(firstSiteContent);
+		$iframe[0].contentWindow.document.close();
+		Editor.init($iframe, editorConfigurationUrl, resourcePath);
+		iframeUrl = url;
+		hideLoadingScreen();
+	}
+
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		var deferred = $.Deferred();
-
-		$iframe.attr({
-			'src': url
+		$.ajax({
+			url: url,
+			headers: {
+				'X-Frontend-Editing': '1'
+			},
+			method: 'GET',
+			success: function(content) {
+				$iframe[0].contentWindow.document.open();
+				$iframe[0].contentWindow.document.write(content);
+				$iframe[0].contentWindow.document.close();
+			},
+			complete: function() {
+				Editor.init($iframe, editorConfigurationUrl, resourcePath);
+				hideLoadingScreen();
+				iframeUrl = url;
+			}
 		});
-
-		$iframe.on('load', deferred.resolve);
-
-		deferred.done(function () {
-			Editor.init($iframe, editorConfigurationUrl);
-			hideLoadingScreen();
-		});
-
-		iframeUrl = url;
 	}
 
 	function refreshIframe() {
@@ -272,11 +294,15 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function showLoadingScreen() {
-		$loadingScreen.removeClass(CLASS_HIDDEN);
+		$loadingScreen.fadeIn('fast', function() {
+			$loadingScreen.removeClass(CLASS_HIDDEN);
+		});
 	}
 
 	function hideLoadingScreen() {
-		$loadingScreen.addClass(CLASS_HIDDEN);
+		$loadingScreen.fadeOut('slow', function() {
+			$loadingScreen.addClass(CLASS_HIDDEN);
+		});
 	}
 
 	function getIframe() {
