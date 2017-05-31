@@ -13,12 +13,12 @@
 
 *[contenteditable="true"] {
   &:focus{
-    outline: 3px dotted @color-t3-primary;
+    outline: 1px dotted @color-t3-primary;
   }
 }
 
 &.t3-frontend-editing__hidden-element {
-  opacity: .4;
+  opacity: .6;
 }
 
 .t3-frontend-editing__dropzone {
@@ -34,9 +34,9 @@
   position: relative;
   min-height: 35px;
   &:hover {
-    outline: 3px dotted fade(@color-t3-gray, 50%);
+    outline: 1px dotted fade(@color-t3-gray, 50%);
     .cke_editable {
-      outline: 3px dotted @color-t3-primary;
+      outline: 1px dotted @color-t3-primary;
       z-index: 5;
     }
     .t3-frontend-editing__inline-actions {
@@ -45,7 +45,7 @@
   }
   // Colored frame when hovering content element in right-column list
   &.indicate-element {
-    outline: 3px solid @color-t3-primary;
+    outline: 1px solid @color-t3-primary;
   }
   &[draggable="true"]:hover {
     cursor: pointer;
@@ -56,7 +56,7 @@
   height: 25px;
   &.active {
     height: 60px;
-    border: dashed 2px @gray;
+    border: dashed 1px @gray;
   }
   &.t3-frontend-editing__dropzone-hidden {
     display: none;
@@ -69,11 +69,11 @@
   position: absolute;
   bottom: 100%;
 
-  right: -3px;
+  left: -1px;
   color: @color-white;
+  background-color: fade(@color-t3-gray-dark, 80%);
   z-index: 2;
   text-align: right;
-  padding-bottom: 3px;
 
   .icon {
     background-color: fade(@color-white, 60%);

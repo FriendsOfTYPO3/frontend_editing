@@ -15,6 +15,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -50,6 +51,7 @@ class AccessService implements SingletonInterface
             }
         }
     }
+
     /**
      * Is frontend editing enabled or disabled
      *
@@ -58,5 +60,25 @@ class AccessService implements SingletonInterface
     public function isEnabled(): bool
     {
         return $this->isEnabled;
+    }
+
+    /**
+     * Has the user edit rights for page?
+     *
+     * @return bool
+     */
+    public function isPageEditAllowed(): bool
+    {
+        return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_EDIT);
+    }
+
+    /**
+     * Has the user create rights under current page?
+     *
+     * @return bool
+     */
+    public function isPageCreateAllowed(): bool
+    {
+        return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_NEW);
     }
 }
