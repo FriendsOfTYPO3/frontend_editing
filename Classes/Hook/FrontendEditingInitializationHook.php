@@ -119,6 +119,7 @@ class FrontendEditingInitializationHook
         $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true' . $showHiddenContentElements;
 
         // Initialize backend routes
+        /** @var UriBuilder $uriBuilder */
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $endpointUrl = $uriBuilder->buildUriFromRoute(
             'ajax_frontendediting_process',
@@ -188,7 +189,7 @@ class FrontendEditingInitializationHook
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
-            window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($GLOBALS['BE_USER']->id) . ');
+            window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.TYPO3.settings = {
                 Textarea: {
@@ -398,15 +399,15 @@ class FrontendEditingInitializationHook
     {
         /** @var FrontendBackendUserAuthentication $beUSER */
         $beUSER = $GLOBALS['BE_USER'];
-        $mounts = [];
         // Remove mountpoint if explicitly set in options.hideRecords.pages (see above) or is active
         $hideList = [$this->typoScriptFrontendController->rootLine[0]['uid']];
+        $mounts = [];
 
         // If it's admin, return all root pages
         if ($beUSER->isAdmin()) {
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            $statement = $queryBuilder
+            $mounts = $queryBuilder
                 ->select('uid', 'title')
                 ->from('pages')
                 ->where(
@@ -420,11 +421,8 @@ class FrontendEditingInitializationHook
                     )
                 )
                 ->orderBy('sorting')
-                ->execute();
-
-            while ($row = $statement->fetch()) {
-                $mounts[$row['uid']] = $row['title'];
-            }
+                ->execute()
+                ->fetchAll();
         } else {
             $allowedMounts = $beUSER->returnWebmounts();
 
@@ -437,7 +435,7 @@ class FrontendEditingInitializationHook
             if (!empty($allowedMounts)) {
                 /** @var QueryBuilder $queryBuilder */
                 $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-                $statement = $queryBuilder
+                $mounts = $queryBuilder
                     ->select('uid', 'title')
                     ->from('pages')
                     ->where(
@@ -447,12 +445,14 @@ class FrontendEditingInitializationHook
                         )
                     )
                     ->orderBy('sorting')
-                    ->execute();
-
-                while ($row = $statement->fetch()) {
-                    $mounts[$row['uid']] = $row['title'];
-                }
+                    ->execute()
+                    ->fetchAll();
             }
+        }
+
+        // Populate mounts with domains
+        foreach ($mounts as $uid => &$mount) {
+            $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
         }
 
         return $mounts;
@@ -554,5 +554,23 @@ class FrontendEditingInitializationHook
         $renderingContext->setControllerAction('Toolbars');
 
         return $view;
+    }
+
+    /**
+     * Generate Be user session key to transfer between domains
+     *
+     * @return string
+     */
+    protected function getBeSessionKey(): string
+    {
+        return rawurlencode(
+            $GLOBALS['BE_USER']->id .
+            '-' .
+            md5(
+                $GLOBALS['BE_USER']->id .
+                '/' .
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']
+            )
+        );
     }
 }

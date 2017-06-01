@@ -36,6 +36,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	FrontendEditing.prototype.delete = deleteRecord;
 	FrontendEditing.prototype.hideContent = hideRecord;
 	FrontendEditing.prototype.moveContent = moveRecord;
+	FrontendEditing.prototype.getBESessionId = getBESessionId;
 	FrontendEditing.prototype.setEndpointUrl = function (url) {
 		this._endpointUrl = url;
 	};
@@ -242,10 +243,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 		}).always(function () {
 			F.trigger(F.REQUEST_COMPLETE);
 		});
-	}
-
-	function transferBESession() {
-		alert('test');
 	}
 
 	return FrontendEditing;

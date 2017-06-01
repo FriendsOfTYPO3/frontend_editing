@@ -9,10 +9,12 @@
 	<div class="padding-wrapper">
 		<f:if condition="{mounts}">
 			<div class="t3-frontend-editing__page-site-root-wrapper">
-				<select id="site-roots" name="site-roots" onchange="F.siteRootChange();">
-					<option value="0">Choose site root</option>
-					<f:for each="{mounts}" key="uid" as="mountTitle">
-						<option value="{uid}">{mountTitle}</option>
+				<select id="site-roots" name="site-roots" onchange="F.siteRootChange(this);">
+					<option value="0" selected>Choose site root</option>
+					<f:for each="{mounts}" key="uid" as="mount">
+						<f:if condition="{mount.domain}">
+							<option value="//{mount.domain}/">{mount.title}</option>
+						</f:if>
 					</f:for>
 				</select>
 			</div>

@@ -356,8 +356,22 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		return false;
 	}
 
-	function siteRootChange() {
-		alert('test');
+	function siteRootChange(element) {
+		var linkUrl = String($(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()),
+			message = storage.isEmpty() ? 'notifications.change_site_root' : 'notifications.unsaved-changes';
+
+		if (linkUrl !== '0') {
+			F.confirm(F.translate(message), {
+				yes: function () {
+					window.location.href = linkUrl;
+				},
+				no: function () {
+					element.selectedIndex = 0;
+				}
+			});
+		}
+
 	}
+
 	return FrontendEditing;
 });

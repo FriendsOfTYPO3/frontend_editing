@@ -63,6 +63,9 @@
             <trans-unit id="notifications.content-locked">
                 <source>The content is currently locked, do you still want to save?</source>
             </trans-unit>
+            <trans-unit id="notifications.change_site_root">
+                <source>You are going to switch to another site. Are you sure ?</source>
+            </trans-unit>
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
             </trans-unit>
