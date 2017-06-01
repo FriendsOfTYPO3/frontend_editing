@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
 /*
@@ -58,32 +59,13 @@ class PostInitializationBEUserHook implements SingletonInterface
                     $_SERVER['HTTP_COOKIE'] .= ';' . BackendUserAuthentication::getCookieName() .
                         '=' . $sessionParts[0];
                 }
-            }
 
-            // From parent method, we need to make sure cookie is set
-            if ($_COOKIE[BackendUserAuthentication::getCookieName()]) {
-                $GLOBALS['TYPO3_MISC']['microtime_BE_USER_start'] = microtime(true);
-                $this->getTimeTracker()->push('Back End user initialized', '');
+                // From parent method, we need to make sure cookie is set
                 // New backend user object
                 $params['BE_USER'] = GeneralUtility::makeInstance(FrontendBackendUserAuthentication::class);
                 $params['BE_USER']->forceSetCookie = true;
                 $params['BE_USER']->dontSetCookie = false;
                 $params['BE_USER']->start();
-                $params['BE_USER']->unpack_uc();
-                if (!empty($params['BE_USER']->user['uid'])) {
-                    $params['BE_USER']->fetchGroupData();
-                }
-                // Unset the user initialization if any setting / restriction applies
-                if (!$params['BE_USER']->checkBackendAccessSettingsFromInitPhp()) {
-                    $params['BE_USER'] = null;
-                } elseif (!empty($params['BE_USER']->user['uid'])) {
-                    // If the user is active now, let the controller know
-                    $this->beUserLogin = true;
-                } else {
-                    $params['BE_USER'] = null;
-                }
-                $this->getTimeTracker()->pull();
-                $GLOBALS['TYPO3_MISC']['microtime_BE_USER_end'] = microtime(true);
 
                 $url = sprintf(
                     '%s://%s/',
@@ -95,13 +77,5 @@ class PostInitializationBEUserHook implements SingletonInterface
                 HttpUtility::redirect($url, HttpUtility::HTTP_STATUS_307);
             }
         }
-    }
-
-    /**
-     * @return TimeTracker|object
-     */
-    protected function getTimeTracker()
-    {
-        return GeneralUtility::makeInstance(TimeTracker::class);
     }
 }
