@@ -7,6 +7,16 @@
 		<span class="left-bar-button icons icon-icons-site-tree" title="{f:translate(key: 'left-bar.site-tree', extensionName: 'FrontendEditing')}"></span>
 	</div>
 	<div class="padding-wrapper">
+		<f:if condition="{mounts}">
+			<div class="t3-frontend-editing__page-site-root-wrapper">
+				<select id="site-roots" name="site-roots" onchange="F.siteRootChange();">
+					<option value="0">Choose site root</option>
+					<f:for each="{mounts}" key="uid" as="mountTitle">
+						<option value="{uid}">{mountTitle}</option>
+					</f:for>
+				</select>
+			</div>
+		</f:if>
 		<div id="page-tree-wrapper" class="t3-frontend-editing__page-tree-wrapper"></div>
 	</div>
 </div>

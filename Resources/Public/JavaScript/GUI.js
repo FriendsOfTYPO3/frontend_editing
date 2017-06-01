@@ -28,6 +28,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 	FrontendEditing.prototype.confirm = confirm;
 	FrontendEditing.prototype.windowOpen = windowOpen;
 	FrontendEditing.prototype.iframe = getIframe;
+	FrontendEditing.prototype.siteRootChange = siteRootChange;
 
 	var CLASS_HIDDEN = 'hidden';
 
@@ -355,5 +356,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		return false;
 	}
 
+	function siteRootChange() {
+		alert('test');
+	}
 	return FrontendEditing;
 });

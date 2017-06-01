@@ -17,10 +17,12 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  */
 
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
+use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -186,6 +188,7 @@ class FrontendEditingInitializationHook
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
+            window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($GLOBALS['BE_USER']->id) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.TYPO3.settings = {
                 Textarea: {
@@ -213,7 +216,8 @@ class FrontendEditingInitializationHook
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
-            'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render()
+            'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
+            'mounts' => $this->getBEUserMounts()
         ]);
 
         // Assign the content
@@ -297,30 +301,12 @@ class FrontendEditingInitializationHook
      */
     protected function getPageTreeStructure(): array
     {
-        $finalTree = [
+        return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'children' => []
-        ];
-
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-        $statement = $queryBuilder
-            ->select('uid')
-            ->from('pages')
-            ->where(
-                $queryBuilder->expr()->eq('is_siteroot', $queryBuilder->createNamedParameter(true, \PDO::PARAM_BOOL))
+            'children' => $this->getStructureForSinglePageTree(
+                $this->typoScriptFrontendController->rootLine[0]['uid']
             )
-            ->orderBy('sorting')
-            ->execute();
-
-        while ($row = $statement->fetch()) {
-            $finalTree['children'] = array_merge(
-                $finalTree['children'],
-                $this->getStructureForSinglePageTree($row['uid'])
-            );
-        }
-
-        return $finalTree;
+        ];
     }
 
     /**
@@ -388,7 +374,7 @@ class FrontendEditingInitializationHook
                 ];
 
                 if ($item['hasSub']) {
-                    $treeItem['children'] = $this->generateTreeData(array_slice($tree, $index), $depth-1);
+                    $treeItem['children'] = $this->generateTreeData(array_slice($tree, $index), $depth - 1);
                 }
 
                 $treeData[] = $treeItem;
@@ -400,6 +386,76 @@ class FrontendEditingInitializationHook
         }
 
         return $treeData;
+    }
+
+    /**
+     * Get array of mount points
+     * For admin jsut get all root pages
+     *
+     * @return array
+     */
+    protected function getBEUserMounts(): array
+    {
+        /** @var FrontendBackendUserAuthentication $beUSER */
+        $beUSER = $GLOBALS['BE_USER'];
+        $mounts = [];
+        // Remove mountpoint if explicitly set in options.hideRecords.pages (see above) or is active
+        $hideList = [$this->typoScriptFrontendController->rootLine[0]['uid']];
+
+        // If it's admin, return all root pages
+        if ($beUSER->isAdmin()) {
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+            $statement = $queryBuilder
+                ->select('uid', 'title')
+                ->from('pages')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'is_siteroot',
+                        $queryBuilder->createNamedParameter(true, \PDO::PARAM_BOOL)
+                    ),
+                    $queryBuilder->expr()->notIn(
+                        'uid',
+                        $queryBuilder->createNamedParameter($hideList, Connection::PARAM_INT_ARRAY)
+                    )
+                )
+                ->orderBy('sorting')
+                ->execute();
+
+            while ($row = $statement->fetch()) {
+                $mounts[$row['uid']] = $row['title'];
+            }
+        } else {
+            $allowedMounts = $beUSER->returnWebmounts();
+
+            if ($pidList = $beUSER->getTSConfigVal('options.hideRecords.pages')) {
+                $hideList += GeneralUtility::intExplode(',', $pidList, true);
+            }
+
+            $allowedMounts = array_diff($allowedMounts, $hideList);
+
+            if (!empty($allowedMounts)) {
+                /** @var QueryBuilder $queryBuilder */
+                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+                $statement = $queryBuilder
+                    ->select('uid', 'title')
+                    ->from('pages')
+                    ->where(
+                        $queryBuilder->expr()->in(
+                            'uid',
+                            $queryBuilder->createNamedParameter($allowedMounts, Connection::PARAM_INT_ARRAY)
+                        )
+                    )
+                    ->orderBy('sorting')
+                    ->execute();
+
+                while ($row = $statement->fetch()) {
+                    $mounts[$row['uid']] = $row['title'];
+                }
+            }
+        }
+
+        return $mounts;
     }
 
     /**

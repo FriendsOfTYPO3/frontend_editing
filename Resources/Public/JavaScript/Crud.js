@@ -39,6 +39,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	FrontendEditing.prototype.setEndpointUrl = function (url) {
 		this._endpointUrl = url;
 	};
+	FrontendEditing.prototype.setBESessionId = function (beSessionId) {
+		this._beSessionId = beSessionId;
+	};
 
 	var numberOfRequestsLeft;
 
@@ -48,6 +51,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			url += '&action=' + action;
 		}
 		return url;
+	}
+
+	function getBESessionId() {
+		return F._beSessionId;
 	}
 
 	function saveAll() {
@@ -235,6 +242,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 		}).always(function () {
 			F.trigger(F.REQUEST_COMPLETE);
 		});
+	}
+
+	function transferBESession() {
+		alert('test');
 	}
 
 	return FrontendEditing;
