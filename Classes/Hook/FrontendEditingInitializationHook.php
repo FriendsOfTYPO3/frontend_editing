@@ -81,11 +81,11 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $this->accessService = GeneralUtility::makeInstance(AccessService::class);
-        if ($this->accessService->isEnabled()
-            && $tsfe->type === 0
-            && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
-        ) {
-            return true;
+        if ($this->accessService->isEnabled() && $tsfe->type === 0) {
+            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
+            if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
+                return true;
+            }
         }
         return false;
     }
