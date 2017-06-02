@@ -242,17 +242,17 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		};
 
 		$('.accordion .trigger').each(function () {
-				var accordionContainer = $(this).parents('.accordion-container'),
-					isExpanded = $(this).hasClass('active'),
-					isListView = accordionContainer.hasClass('accordion-list');
+			var accordionContainer = $(this).parents('.accordion-container'),
+				isExpanded = $(this).hasClass('active'),
+				isListView = accordionContainer.hasClass('accordion-list');
 
-				if (isExpanded || isListView) {
-					var containerType = accordionContainer.data('wizard-type');
-					rightPanelState.wizards[containerType] = {
-						isExpanded: isExpanded,
-						isListView: isListView
-					}
+			if (isExpanded || isListView) {
+				var containerType = accordionContainer.data('wizard-type');
+				rightPanelState.wizards[containerType] = {
+					isExpanded: isExpanded,
+					isListView: isListView
 				}
+			}
 		});
 
 		F.getStorage().addItem('rightPanelState', rightPanelState);
