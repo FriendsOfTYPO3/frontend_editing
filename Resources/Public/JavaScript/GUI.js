@@ -63,7 +63,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
-		firstSiteContent = options.content
+		firstSiteContent = options.content;
 
 		initListeners();
 		bindActions();
@@ -237,17 +237,17 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		};
 
 		$('.accordion .trigger').each(function () {
-				var accordionContainer = $(this).parents('.accordion-container'),
-					isExpanded = $(this).hasClass('active'),
-					isListView = accordionContainer.hasClass('accordion-list');
+			var accordionContainer = $(this).parents('.accordion-container'),
+				isExpanded = $(this).hasClass('active'),
+				isListView = accordionContainer.hasClass('accordion-list');
 
-				if (isExpanded || isListView) {
-					var containerType = accordionContainer.data('wizard-type');
-					rightPanelState.wizards[containerType] = {
-						isExpanded: isExpanded,
-						isListView: isListView
-					}
+			if (isExpanded || isListView) {
+				var containerType = accordionContainer.data('wizard-type');
+				rightPanelState.wizards[containerType] = {
+					isExpanded: isExpanded,
+					isListView: isListView
 				}
+			}
 		});
 
 		F.getStorage().addItem('rightPanelState', rightPanelState);
@@ -260,6 +260,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		$iframe[0].contentWindow.document.close();
 		Editor.init($iframe, editorConfigurationUrl, resourcePath);
 		iframeUrl = url;
+		$iframe.attr({
+			'src': url
+		});
 		hideLoadingScreen();
 	}
 
@@ -278,6 +281,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			},
 			complete: function() {
 				Editor.init($iframe, editorConfigurationUrl, resourcePath);
+				$iframe.attr({
+					'src': url
+				});
 				hideLoadingScreen();
 				iframeUrl = url;
 			}
