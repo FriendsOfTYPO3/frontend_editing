@@ -76,7 +76,10 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $this->accessService = GeneralUtility::makeInstance(AccessService::class);
-        if ($this->accessService->isEnabled() && $tsfe->type === 0) {
+        if ($this->accessService->isEnabled()
+            && $tsfe->type === 0
+            && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
+        ) {
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
                 return true;
@@ -110,8 +113,7 @@ class FrontendEditingInitializationHook
             $urlSeparator = '?';
         }
 
-        $showHiddenContentElements = '&ADMCMD_view=1';
-        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true' . $showHiddenContentElements;
+        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);

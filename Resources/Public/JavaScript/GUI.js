@@ -62,7 +62,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
-		firstSiteContent = options.content
+		firstSiteContent = options.content;
 
 		initListeners();
 		bindActions();
@@ -265,6 +265,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$iframe[0].contentWindow.document.close();
 		Editor.init($iframe, editorConfigurationUrl, resourcePath);
 		iframeUrl = url;
+		$iframe.attr({
+			'src': url
+		});
 		hideLoadingScreen();
 	}
 
@@ -283,6 +286,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			},
 			complete: function() {
 				Editor.init($iframe, editorConfigurationUrl, resourcePath);
+				$iframe.attr({
+					'src': url
+				});
 				hideLoadingScreen();
 				iframeUrl = url;
 			}
