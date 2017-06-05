@@ -53,7 +53,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var firstSiteContent;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -62,12 +61,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$saveButton = $('.t3-frontend-editing__save');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
-		firstSiteContent = options.content;
 
 		initListeners();
 		bindActions();
 		initGuiStates();
-		loadEditorConfig(options.iframeUrl, editorConfigurationUrl);
+		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
 	}
 
@@ -258,35 +256,22 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		F.getStorage().addItem('rightPanelState', rightPanelState);
 	}
 
-	function loadEditorConfig(url, editorConfigurationUrl) {
-		showLoadingScreen();
-		var d = $iframe[0].contentWindow.document;
-		// Init iframe document
-		d.open();
-		d.close();
-		d.documentElement.innerHTML = firstSiteContent;
-
-		Editor.init($iframe, editorConfigurationUrl, resourcePath);
-		hideLoadingScreen();
-	}
-
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		$.ajax({
-			url: url,
-			headers: {
-				'X-Frontend-Editing': '1'
-			},
-			method: 'GET',
-			success: function(content) {
-				$iframe[0].contentWindow.document.documentElement.innerHTML = content;
-			},
-			complete: function() {
-				Editor.init($iframe, editorConfigurationUrl, resourcePath);
-				hideLoadingScreen();
-				iframeUrl = url;
-			}
+		var deferred = $.Deferred();
+
+		$iframe.attr({
+			'src': url
 		});
+
+		$iframe.on('load', deferred.resolve);
+
+		deferred.done(function () {
+			Editor.init($iframe, editorConfigurationUrl, resourcePath);
+			hideLoadingScreen();
+		});
+
+		iframeUrl = url;
 	}
 
 	function refreshIframe() {

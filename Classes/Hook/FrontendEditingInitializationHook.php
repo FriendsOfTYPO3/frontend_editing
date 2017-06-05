@@ -76,11 +76,11 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $this->accessService = GeneralUtility::makeInstance(AccessService::class);
-        if ($this->accessService->isEnabled()
-            && $tsfe->type === 0
-            && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
-        ) {
-            return true;
+        if ($this->accessService->isEnabled() && $tsfe->type === 0) {
+            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
+            if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
+                return true;
+            }
         }
         return false;
     }
@@ -103,6 +103,16 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
+
+        $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
+        // Check if url has a ?, then decide on URL separator
+        if (strpos($requestUrl, '?') !== false) {
+            $urlSeparator = '&';
+        } else {
+            $urlSeparator = '?';
+        }
+
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
