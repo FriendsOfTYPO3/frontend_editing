@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -59,6 +60,11 @@ class FrontendEditingInitializationHook
     protected $iconFactory;
 
     /**
+     * @var IconRegistry
+     */
+    protected $iconRegistry;
+
+    /**
      * @var PageRenderer
      */
     protected $pageRenderer;
@@ -69,6 +75,7 @@ class FrontendEditingInitializationHook
     public function __construct()
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $this->iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
     }
 
     /**
@@ -295,6 +302,7 @@ class FrontendEditingInitializationHook
     {
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
+            'icon' => '/typo3/sysext/core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg',
             'children' => $this->getStructureForSinglePageTree(
                 $this->typoScriptFrontendController->rootLine[0]['uid']
             )
@@ -362,6 +370,7 @@ class FrontendEditingInitializationHook
                     'link' => $this->typoScriptFrontendController->cObj->typoLink_URL([
                         'parameter' => $item['row']['uid']
                     ]),
+                    'icon' => $this->getTreeItemIconPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
                 ];
 
@@ -378,6 +387,30 @@ class FrontendEditingInitializationHook
         }
 
         return $treeData;
+    }
+
+    /**
+     * Get path to page tree item icon
+     *
+     * @param array $row
+     * @return string
+     */
+    protected function getTreeItemIconPath(array $row): string
+    {
+        $iconIdentifier = $this->iconFactory->mapRecordTypeToIconIdentifier('pages', $row);
+        if (!$iconIdentifier || !$this->iconRegistry->isRegistered($iconIdentifier)) {
+            $iconIdentifier = $this->iconRegistry->getDefaultIconIdentifier();
+        }
+
+        $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($iconIdentifier);
+
+        $source = $iconConfiguration['options']['source'];
+
+        if (strpos($source, 'EXT:') === 0 || strpos($source, '/') !== 0) {
+            $source = GeneralUtility::getFileAbsFileName($source);
+        }
+
+        return PathUtility::getAbsoluteWebPath($source);
     }
 
     /**

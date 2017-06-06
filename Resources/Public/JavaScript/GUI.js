@@ -17,6 +17,16 @@
 define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, alertify) {
 	'use strict';
 
+	// Extend FrontendEditing with additional events
+	var events = {
+		LEFT_PANEL_TOGGLE: 'LEFT_PANEL_TOGGLE'
+	};
+
+	// Add custom events to FrontendEditing
+	for (var key in events) {
+		FrontendEditing.addEvent(key, events[key]);
+	}
+
 	// Extend FrontendEditing with the following functions
 	FrontendEditing.prototype.initGUI = init;
 	FrontendEditing.prototype.showLoadingScreen = showLoadingScreen;
@@ -156,7 +166,18 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__left-bar').toggleClass('open');
 			$('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
 			y = ++y % 2;
-			$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
+			$('.t3-frontend-editing__left-bar').stop().animate(
+				{
+					left: y ? 0 : -280
+				},
+				{
+					duration: pushDuration,
+					easing: pushEasing,
+					complete: function () {
+						F.trigger(F.LEFT_PANEL_TOGGLE, $(this).hasClass('open'));
+					}
+				}
+			);
 		});
 
 		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {

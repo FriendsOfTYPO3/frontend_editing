@@ -31,14 +31,18 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		xRect = 7,
 
-		circleRadius = 5;
+		circleRadius = 5,
+
+		iconHeight = 16,
+		iconWidth = 16;
 
 	var i = 0,
 		linksCount = 0,
 		duration = 400,
 		root,
 		svg,
-		tree;
+		tree,
+		initialized = false;
 
 	/**
 	 * Local storage
@@ -63,8 +67,14 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		root.children.forEach(_collapse);
 
-		// Initialize function
-		_update(root);
+		// Initialize function,
+		// Do it once after left bar open animation is complete
+		F.on(F.LEFT_PANEL_TOGGLE, function (isOpen) {
+			if(initialized === false && isOpen) {
+				_update(root);
+				initialized = true;
+			}
+		});
 	}
 
 	/**
@@ -89,7 +99,8 @@ define(['jquery', 'd3'], function ($, d3) {
 		var nodes = tree(root), //returns a single node with the properties of d3.tree()
 			nodesSort = [];
 
-		var links = nodes.descendants().slice(1);
+		var links = nodes.descendants().slice(1),
+			icons = nodes.descendants();
 
 		d3.select('svg')
 			.transition()
@@ -113,9 +124,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		var nodeEnter = node.enter().append('g')
 			.attr('class', 'node')
-			.attr('transform', function (d) {
-				return 'translate(' + source.y + ',' + source.x + ')';
-			})
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
 			.call(function () {
 				if (linksCount < links.length) {
@@ -144,7 +153,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		nodeEnter.append('text')
 			.attr('dy', dyText)
-			.attr('dx', dxText)
+			.attr('dx', dxText + iconWidth)
 			.text(function (d) {
 				return d.data.name;
 			});
@@ -171,9 +180,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		// Transition exiting nodes to the parent's new position.
 		var nodeExit = node.exit().transition()
 			.duration(duration)
-			.attr('transform', function (d) {
-				return 'translate(' + source.y + ',' + source.x + ')';
-			})
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
 			.remove();
 
@@ -197,7 +204,6 @@ define(['jquery', 'd3'], function ($, d3) {
 		var linkEnter = link.enter().insert('path', 'g')
 			.attr('class', 'link')
 			.attr('d', function (d) {
-				console.log(source);
 				var o = {x: source.x0, y: source.y0};
 				return _diagonal(o, o)
 			});
@@ -219,6 +225,40 @@ define(['jquery', 'd3'], function ($, d3) {
 				var o = {x: source.x, y: source.y};
 				return _diagonal(o, o)
 			})
+			.remove();
+
+		var icon = svg.selectAll('image.tree-icon')
+			.data(icons, function (d) {
+				return d.id;
+			});
+
+		// Enter any new icon
+		var iconEnter = icon.enter().insert('image', 'svg')
+			.style('opacity', 1e-6)
+			.attr('class', 'tree-icon')
+			.attr('height', iconHeight)
+			.attr('width', iconWidth)
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
+			.attr('xlink:href', function (d) {
+				return d.data.icon;
+			});
+
+		// UPDATE
+		var iconUpdate = iconEnter.merge(icon);
+
+		// Transition back to the parent element position
+		iconUpdate.transition()
+			.duration(duration)
+			.attr('transform', function (d) {
+				return 'translate(' + (d.y + iconWidth / 2) + ',' + (d.x - iconHeight / 2) + ')';
+			})
+			.style('opacity', 1);
+
+		// Remove any exiting links
+		icon.exit().transition()
+			.duration(duration)
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
+			.style('opacity', 1e-6)
 			.remove();
 	}
 
