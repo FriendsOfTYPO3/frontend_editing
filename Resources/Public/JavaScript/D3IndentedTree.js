@@ -197,6 +197,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		var linkEnter = link.enter().insert('path', 'g')
 			.attr('class', 'link')
 			.attr('d', function (d) {
+				console.log(source);
 				var o = {x: source.x0, y: source.y0};
 				return _diagonal(o, o)
 			});
@@ -358,10 +359,13 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _diagonal(s, d) {
-		return `M ${s.y} ${s.x}
+		return 'M ' + d.y + ' ' + d.x + ' V ' + s.x + ' H ' + s.y;
+
+		// Curved line
+		/*return `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
               ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`;
+              ${d.y} ${d.x}`;*/
 
 	}
 

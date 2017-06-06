@@ -85,10 +85,7 @@ class FrontendEditingInitializationHook
             && $tsfe->type === 0
             && (!isset($_SERVER['HTTP_X_FRONTEND_EDITING']))
         ) {
-            $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
-            if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
-                return true;
-            }
+            return true;
         }
         return false;
     }
@@ -111,14 +108,6 @@ class FrontendEditingInitializationHook
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
-        // Check if url has a ?, then decide on URL separator
-        if (strpos($requestUrl, '?') !== false) {
-            $urlSeparator = '&';
-        } else {
-            $urlSeparator = '?';
-        }
-
-        $iframeUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // Initialize backend routes
         /** @var UriBuilder $uriBuilder */
@@ -186,8 +175,8 @@ class FrontendEditingInitializationHook
             window.F.initGUI({
                 content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
                 resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
-                iframeUrl: ' . GeneralUtility::quoteJSvalue($iframeUrl) . ',
                 pageTree:' . json_encode($this->getPageTreeStructure()) . ',
+                iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
@@ -401,7 +390,7 @@ class FrontendEditingInitializationHook
     {
         /** @var FrontendBackendUserAuthentication $beUSER */
         $beUSER = $GLOBALS['BE_USER'];
-        // Remove mountpoint if explicitly set in options.hideRecords.pages (see above) or is active
+        // Remove mountpoint if explicitly set in options.hideRecords.pages or is active
         $hideList = [$this->typoScriptFrontendController->rootLine[0]['uid']];
         $mounts = [];
 

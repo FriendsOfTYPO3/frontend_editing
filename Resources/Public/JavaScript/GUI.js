@@ -255,14 +255,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 
 	function loadEditorConfig(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		$iframe[0].contentWindow.document.open();
-		$iframe[0].contentWindow.document.write(firstSiteContent);
-		$iframe[0].contentWindow.document.close();
+		var d = $iframe[0].contentWindow.document;
+		// Init iframe document
+		d.open();
+		d.close();
+		d.documentElement.innerHTML = firstSiteContent;
+
 		Editor.init($iframe, editorConfigurationUrl, resourcePath);
-		iframeUrl = url;
-		$iframe.attr({
-			'src': url
-		});
 		hideLoadingScreen();
 	}
 
@@ -275,15 +274,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			},
 			method: 'GET',
 			success: function(content) {
-				$iframe[0].contentWindow.document.open();
-				$iframe[0].contentWindow.document.write(content);
-				$iframe[0].contentWindow.document.close();
+				$iframe[0].contentWindow.document.documentElement.innerHTML = content;
 			},
 			complete: function() {
 				Editor.init($iframe, editorConfigurationUrl, resourcePath);
-				$iframe.attr({
-					'src': url
-				});
 				hideLoadingScreen();
 				iframeUrl = url;
 			}
