@@ -9,8 +9,8 @@
 	<div class="padding-wrapper">
 		<f:if condition="{mounts}">
 			<div class="t3-frontend-editing__page-site-root-wrapper">
-				<select id="site-roots" name="site-roots" onchange="F.siteRootChange(this);">
-					<option value="0" selected>Choose site root</option>
+				<select id="installation-mounts" name="installation-mounts" onchange="F.siteRootChange(this);">
+					<option value="0" selected><f:translate key="left-bar.installation-mounts.change" extensionName="FrontendEditing"/></option>
 					<f:for each="{mounts}" key="uid" as="mount">
 						<f:if condition="{mount.domain}">
 							<option value="//{mount.domain}/">{mount.title}</option>
@@ -19,6 +19,12 @@
 				</select>
 			</div>
 		</f:if>
+		<div id="page-tree-filter-wrapper" class="t3-frontend-editing__page-tree-filter-wrapper">
+			<label>
+				<span>Search pages:</span>
+				<input type="text" value="" class="search-page-tree">
+			</label>
+		</div>
 		<div id="page-tree-wrapper" class="t3-frontend-editing__page-tree-wrapper"></div>
 	</div>
 </div>

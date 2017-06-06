@@ -220,6 +220,17 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		});
 
 		$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+
+		// Filter event
+		$('input.search-page-tree').on('keyup', function (e) {
+			if (D3IndentedTree.isSearchRunning()) {
+				e.preventDefault();
+			} else {
+				var sword = $(this).val();
+				D3IndentedTree.treeFilter(sword)
+			}
+
+		});
 	}
 
 	function initGuiStates() {
@@ -294,10 +305,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 				'X-Frontend-Editing': '1'
 			},
 			method: 'GET',
-			success: function(content) {
+			success: function (content) {
 				$iframe[0].contentWindow.document.documentElement.innerHTML = content;
 			},
-			complete: function() {
+			complete: function () {
 				Editor.init($iframe, editorConfigurationUrl, resourcePath);
 				hideLoadingScreen();
 				iframeUrl = url;
@@ -310,13 +321,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 	}
 
 	function showLoadingScreen() {
-		$loadingScreen.fadeIn('fast', function() {
+		$loadingScreen.fadeIn('fast', function () {
 			$loadingScreen.removeClass(CLASS_HIDDEN);
 		});
 	}
 
 	function hideLoadingScreen() {
-		$loadingScreen.fadeOut('slow', function() {
+		$loadingScreen.fadeOut('slow', function () {
 			$loadingScreen.addClass(CLASS_HIDDEN);
 		});
 	}

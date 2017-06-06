@@ -130,6 +130,10 @@ class FrontendEditingInitializationHook
         $ajaxUrlIcons = $uriBuilder->buildUriFromRoute(
             'ajax_icons'
         );
+        $filteringUrl = $uriBuilder->buildUriFromRoute(
+            'ajax_frontendediting_treefilter',
+            ['page' => $this->typoScriptFrontendController->id]
+        );
 
         $returnUrl = PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html') . '?');
         $pageEditUrl = $this->accessService->isPageEditAllowed() ? $uriBuilder->buildUriFromRoute(
@@ -188,6 +192,7 @@ class FrontendEditingInitializationHook
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
+            window.F.setFilteringUrl(' . GeneralUtility::quoteJSvalue($filteringUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.TYPO3.settings = {
                 Textarea: {

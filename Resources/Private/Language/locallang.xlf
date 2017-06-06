@@ -75,6 +75,10 @@
             <trans-unit id="right-bar.on-page.title">
                 <source>Elements on page</source>
             </trans-unit>
+
+            <trans-unit id="left-bar.installation-mounts.change">
+                <source>Choose site root</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

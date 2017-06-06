@@ -51,6 +51,12 @@ define(['jquery', 'd3'], function ($, d3) {
 		storageData;
 
 	/**
+	 * Filter by search word
+	 */
+	var lastSearchWord = '',
+		searchRunning = false;
+
+	/**
 	 * Main method
 	 *
 	 * @param treeData
@@ -70,11 +76,34 @@ define(['jquery', 'd3'], function ($, d3) {
 		// Initialize function,
 		// Do it once after left bar open animation is complete
 		F.on(F.LEFT_PANEL_TOGGLE, function (isOpen) {
-			if(initialized === false && isOpen) {
+			if (initialized === false && isOpen) {
 				_update(root);
 				initialized = true;
 			}
 		});
+	}
+
+	/**
+	 * Filter function
+	 *
+	 * @param searchWord
+	 */
+	function treeFilter(searchWord) {
+		setTimeout(function () {
+			if (searchWord.length > 2 && $('input.search-page-tree').val() === searchWord && searchWord !== lastSearchWord) {
+				lastSearchWord = searchWord;
+				F.filterTree(searchWord);
+			}
+		}, 1000);
+	}
+
+	/**
+	 * Is true when search ajax in process
+	 *
+	 * @return {boolean}
+	 */
+	function isSearchRunning() {
+		return searchRunning;
 	}
 
 	/**
@@ -403,9 +432,9 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		// Curved line
 		/*return `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`;*/
+		 C ${(s.y + d.y) / 2} ${s.x},
+		 ${(s.y + d.y) / 2} ${d.x},
+		 ${d.y} ${d.x}`;*/
 
 	}
 
@@ -423,6 +452,8 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * Return public methods
 	 */
 	return {
-		init: init
+		init: init,
+		treeFilter: treeFilter,
+		isSearchRunning: isSearchRunning
 	}
 });
