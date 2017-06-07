@@ -227,9 +227,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 				e.preventDefault();
 			} else {
 				var sword = $(this).val();
-				D3IndentedTree.treeFilter(sword)
+				D3IndentedTree.treeFilter(sword);
 			}
-
 		});
 	}
 

@@ -135,7 +135,9 @@ class FrontendEditingInitializationHook
             ['page' => $this->typoScriptFrontendController->id]
         );
 
-        $returnUrl = PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html') . '?');
+        $returnUrl = PathUtility::getAbsoluteWebPath(
+            GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html') . '?'
+        );
         $pageEditUrl = $this->accessService->isPageEditAllowed() ? $uriBuilder->buildUriFromRoute(
             'record_edit',
             [
@@ -155,7 +157,7 @@ class FrontendEditingInitializationHook
         // define the window size of the popups within the RTE
         $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
         if (!empty($rtePopupWindowSize)) {
-            list($rtePopupWindowWidth, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
+            list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
         }
         $rtePopupWindowHeight = !empty($rtePopupWindowHeight) ? (int)$rtePopupWindowHeight : 600;
 
@@ -317,6 +319,7 @@ class FrontendEditingInitializationHook
     /**
      * Get the page tree structure of page
      *
+     * @param int $startingPoint
      * @return array
      */
     protected function getStructureForSinglePageTree(int $startingPoint): array
@@ -372,9 +375,7 @@ class FrontendEditingInitializationHook
                 $treeItem = [
                     'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
-                    'link' => $this->typoScriptFrontendController->cObj->typoLink_URL([
-                        'parameter' => $item['row']['uid']
-                    ]),
+                    'link' => '/index.php?id=' . $item['row']['uid'],
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
                 ];
@@ -576,6 +577,7 @@ class FrontendEditingInitializationHook
      */
     protected function initializeView(): StandaloneView
     {
+        /** @var StandaloneView $view */
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $renderingContext = $view->getRenderingContext();
         $renderingContext->getTemplatePaths()->fillDefaultsByPackageName('frontend_editing');

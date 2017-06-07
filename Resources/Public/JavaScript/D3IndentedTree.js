@@ -40,9 +40,14 @@ define(['jquery', 'd3'], function ($, d3) {
 		linksCount = 0,
 		duration = 400,
 		root,
+		rootFiltered,
 		svg,
 		tree,
-		initialized = false;
+		initialized = false,
+		activeNodeClass = 'active',
+		nonActiveNodeClass = 'no-active',
+		hasChildrenClass = 'has-children',
+		noChildrenClass = 'no-children';
 
 	/**
 	 * Local storage
@@ -54,7 +59,17 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * Filter by search word
 	 */
 	var lastSearchWord = '',
-		searchRunning = false;
+		searchRunning = false,
+		isFilteringActive = false;
+
+	/**
+	 * Dom jquery selectors
+	 * @type {{}}
+	 */
+	var domSelectors = {
+		pageTree: '#page-tree-wrapper',
+		searchInput: 'input.search-page-tree'
+	};
 
 	/**
 	 * Main method
@@ -78,6 +93,10 @@ define(['jquery', 'd3'], function ($, d3) {
 		F.on(F.LEFT_PANEL_TOGGLE, function (isOpen) {
 			if (initialized === false && isOpen) {
 				_update(root);
+
+				// Reset search input
+				$(_getDomSelector('searchInput')).val('');
+
 				initialized = true;
 			}
 		});
@@ -90,9 +109,13 @@ define(['jquery', 'd3'], function ($, d3) {
 	 */
 	function treeFilter(searchWord) {
 		setTimeout(function () {
-			if (searchWord.length > 2 && $('input.search-page-tree').val() === searchWord && searchWord !== lastSearchWord) {
+			if ($(_getDomSelector('searchInput')).val() === searchWord && searchWord !== lastSearchWord) {
 				lastSearchWord = searchWord;
-				F.filterTree(searchWord);
+				if (searchWord === '') {
+					_resetFilter();
+				} else if(searchWord.length > 2) {
+					_loadFilterTree(searchWord);
+				}
 			}
 		}, 1000);
 	}
@@ -112,7 +135,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _initSvg() {
-		svg = d3.select('#page-tree-wrapper').insert('svg')
+		svg = d3.select(_getDomSelector('pageTree')).append('svg')
 			.attr('width', width + margin.right + margin.left)
 			.append('g')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -125,7 +148,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _update(source) {
-		var nodes = tree(root), //returns a single node with the properties of d3.tree()
+		var nodes = tree(isFilteringActive ? rootFiltered : root), //returns a single node with the properties of d3.tree()
 			nodesSort = [];
 
 		var links = nodes.descendants().slice(1),
@@ -166,7 +189,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		nodeEnter.append('circle')
 			.attr('r', 1e-6)
 			.attr('class', function (d) {
-				return d._children ? 'has-children' : 'no-children';
+				return d._children ? hasChildrenClass : noChildrenClass;
 			})
 			.on('click', _clickCircle);
 
@@ -176,7 +199,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.attr('height', barHeight)
 			.attr('width', _barWidth)
 			.attr('class', function (d) {
-				return d.data.isActive ? 'active' : 'no-active';
+				return d.data.isActive ? activeNodeClass : nonActiveNodeClass;
 			})
 			.on('click', _clickRect);
 
@@ -202,7 +225,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		nodeUpdate.select('circle')
 			.attr('r', circleRadius)
 			.attr('class', function (d) {
-				return d._children ? 'has-children' : 'no-children';
+				return d._children ? hasChildrenClass : noChildrenClass;
 			})
 			.attr('cursor', 'pointer');
 
@@ -309,6 +332,23 @@ define(['jquery', 'd3'], function ($, d3) {
 	}
 
 	/**
+	 * Collapse children for filtered tree by expanded field
+	 *
+	 * @param d
+	 * @private
+	 */
+	function _collapseFiltered(d) {
+		if ((d.children && typeof d.data.uid === 'undefined')
+			|| (d.children && !d.data.expanded)) {
+			d._children = d.children;
+			d._children.forEach(_collapseFiltered);
+			d.children = null;
+		} else if (d.children) {
+			d.children.forEach(_collapseFiltered);
+		}
+	}
+
+	/**
 	 * Check if value is in list
 	 *
 	 * @param uid
@@ -328,13 +368,13 @@ define(['jquery', 'd3'], function ($, d3) {
 		if (d.children) {
 			d._children = d.children;
 			d.children = null;
-			if (d.data.uid) {
+			if (d.data.uid && !isFilteringActive) {
 				_removeFromActiveStateList(d.data.uid);
 			}
 		} else {
 			d.children = d._children;
 			d._children = null;
-			if (d.data.uid) {
+			if (d.data.uid && !isFilteringActive) {
 				_addToActiveStateList(d.data.uid);
 			}
 		}
@@ -446,6 +486,80 @@ define(['jquery', 'd3'], function ($, d3) {
 	 */
 	function _barWidth(d) {
 		return barWidth - d.depth * nodeStep;
+	}
+
+	/**
+	 * Get selector
+	 *
+	 * @param key
+	 * @return {*|string}
+	 * @private
+	 */
+	function _getDomSelector(key) {
+		return domSelectors[key] || '';
+	}
+
+	/**
+	 * Redraw svg
+	 *
+	 * @private
+	 */
+	function _prepareRedraw() {
+		// Redraw tree with filtered results
+		svg.selectAll('*').remove();
+		// Reset links count
+		linksCount = 0;
+	}
+
+	/**
+	 * Remove filtering state
+	 *
+	 * @private
+	 */
+	function _resetFilter() {
+		_prepareRedraw();
+		isFilteringActive = false;
+		_update(root);
+	}
+
+	/**
+	 * Load filtered results with search word
+	 * @param searchWord
+	 * @private
+	 */
+	function _loadFilterTree(searchWord) {
+		searchRunning = true;
+
+		var dataSend = {
+			'searchWord': searchWord
+		};
+
+		$.ajax({
+			url: F.getFilteringUrl(),
+			method: 'POST',
+			data: dataSend
+		}).done(function (data) {
+			if (data.success) {
+				isFilteringActive = true;
+				_prepareRedraw();
+
+				rootFiltered = d3.hierarchy(data.treeData);
+				rootFiltered.children.forEach(_collapseFiltered);
+
+				_update(rootFiltered);
+			} else {
+				_resetFilter();
+			}
+		}).fail(function (jqXHR) {
+			F.trigger(
+				F.REQUEST_ERROR,
+				{
+					message: jqXHR.responseText
+				}
+			);
+		}).always(function () {
+			searchRunning = false;
+		});
 	}
 
 	/**

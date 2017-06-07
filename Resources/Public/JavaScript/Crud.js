@@ -37,7 +37,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	FrontendEditing.prototype.hideContent = hideRecord;
 	FrontendEditing.prototype.moveContent = moveRecord;
 	FrontendEditing.prototype.getBESessionId = getBESessionId;
-	FrontendEditing.prototype.filterTree = filterTree;
+	FrontendEditing.prototype.getFilteringUrl = getFilteringUrl;
 	FrontendEditing.prototype.setEndpointUrl = function (url) {
 		this._endpointUrl = url;
 	};
@@ -250,28 +250,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			);
 		}).always(function () {
 			F.trigger(F.REQUEST_COMPLETE);
-		});
-	}
-
-	function filterTree(searchWord) {
-		// Save the content
-		var dataSend = {
-			'searchWord': searchWord
-		};
-
-		$.ajax({
-			url: getFilteringUrl(),
-			method: 'POST',
-			data: dataSend
-		}).done(function (data) {
-			console.log(data);;
-		}).fail(function (jqXHR) {
-			F.trigger(
-				F.REQUEST_ERROR,
-				{
-					message: jqXHR.responseText
-				}
-			);
 		});
 	}
 
