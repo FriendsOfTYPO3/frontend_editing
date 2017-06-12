@@ -110,8 +110,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 					window.location.href = linkUrl;
 				} else {
 					this.confirm(F.translate('notifications.unsaved-changes'), {
-						yes: function () {
+						yes: function() {
 							window.location.href = linkUrl;
+						},
+						no: function() {
+							F.hideLoadingScreen();
 						}
 					});
 				}

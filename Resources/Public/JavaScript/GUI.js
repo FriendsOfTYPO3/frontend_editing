@@ -134,8 +134,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		// Add check for page tree navigation
 		$('.t3-frontend-editing__page-tree li').click(function () {
 			var linkUrl = $(this).data('url');
-			F.navigate(linkUrl);
 			F.showLoadingScreen();
+			F.navigate(linkUrl);
 		});
 
 		$('.top-right-title').on('click', function () {
