@@ -26,6 +26,19 @@ box and the editing can start directly.
 Fluid Styled Content
 """"""""""""""""""""
 
+Note:
+
+If fluid_styled_content is not included on the website or is disabled,
+the Typoscript of editIcons must be set manually.
+
+.. code-block:: typoscript
+
+	lib.fluidContent {
+		stdWrap {
+			editIcons = tt_content:header
+		}
+	}
+
 When it comes to fluid_styled_content there are some things that needs to be
 adjusted to your template to get the editing to work. First of all there is
 a view helper that needs to be included and configured.
