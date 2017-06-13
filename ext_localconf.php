@@ -15,6 +15,10 @@ if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] =
     \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
 
+// Hook to unset page setup before render the toolbars to speed up the render
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
+    \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->unsetPageSetup';
+
 // Hook to render toolbars
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->main';

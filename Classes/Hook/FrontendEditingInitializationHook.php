@@ -86,6 +86,24 @@ class FrontendEditingInitializationHook
     }
 
     /**
+     * Hook to unset page setup before render the toolbars to speed up the render
+     * the real frontend page will be called and rendered later
+     * with query parameter 'frontend_editing=true'
+     *
+     * @param array $params
+     * @param TypoScriptFrontendController $parentObject
+     * @return void
+     */
+    public function unsetPageSetup(array $params, TypoScriptFrontendController $parentObject)
+    {
+        if (!$this->isFrontendEditingEnabled($parentObject)) {
+            return;
+        }
+        $parentObject->pSetup = [];
+        $parentObject->config['config']['disableAllHeaderCode'] = true;
+    }
+
+    /**
      * Hook to change page output to add the topbar
      *
      * @param array $params
