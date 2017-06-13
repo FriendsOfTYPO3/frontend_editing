@@ -173,6 +173,12 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
 		$contenteditable.each(function () {
 			var $el = $(this);
+			var $parent = $el.parent();
+			// Prevent linked content element to be clickable in the frontend editing mode
+			if ($parent.is('a')) {
+				$parent.attr('href', 'javascript:;');
+			}
+
 			$.ajax({
 				url: configurationUrl,
 				method: 'GET',
@@ -183,7 +189,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					'field': $(this).data('field')
 				}
 			}).done(function (data) {
-				// ensure all plugins / buttons are loaded
+				// Ensure all plugins / buttons are loaded
 				if (typeof data.externalPlugins !== 'undefined') {
 					eval(data.externalPlugins);
 				}
@@ -196,7 +202,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					config = $.extend(true, config, defaultSimpleEditorConfig);
 				}
 
-				// initialize CKEditor now, when finished remember any change
+				// Initialize CKEditor now, when finished remember any change
 				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
 					// This moves the dom instances of ckeditor into the top bar
 					$('.' + editor.id).detach().appendTo($topBar);
