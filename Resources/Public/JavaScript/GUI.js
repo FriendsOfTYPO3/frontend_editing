@@ -268,6 +268,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 		deferred.done(function () {
 			Editor.init($iframe, editorConfigurationUrl, resourcePath);
+
+			if (sessionStorage.scrollTop !== 'undefined') {
+				$iframe.contents().scrollTop(sessionStorage.scrollTop);
+				sessionStorage.removeItem('scrollTop');
+			}
+
 			hideLoadingScreen();
 		});
 
@@ -275,6 +281,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function refreshIframe() {
+		sessionStorage.scrollTop = $iframe.contents().scrollTop();
+
 		loadPageIntoIframe(iframeUrl, editorConfigurationUrl);
 	}
 
