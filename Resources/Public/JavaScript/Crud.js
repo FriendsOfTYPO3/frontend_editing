@@ -23,6 +23,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 		REQUEST_START: 'REQUEST_START',
 		REQUEST_COMPLETE: 'REQUEST_COMPLETE',
 		UPDATE_CONTENT_COMPLETE: 'UPDATE_CONTENT_COMPLETE',
+		UPDATE_PAGES_COMPLETE: 'UPDATE_PAGES_COMPLETE',
 		REQUEST_ERROR: 'REQUEST_ERROR'
 	};
 
@@ -38,6 +39,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	FrontendEditing.prototype.moveContent = moveRecord;
 	FrontendEditing.prototype.getBESessionId = getBESessionId;
 	FrontendEditing.prototype.getFilteringUrl = getFilteringUrl;
+	FrontendEditing.prototype.getEndpointUrl = getEndpointUrl;
 	FrontendEditing.prototype.setEndpointUrl = function (url) {
 		this._endpointUrl = url;
 	};

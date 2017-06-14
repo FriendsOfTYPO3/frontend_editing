@@ -132,7 +132,7 @@ class FrontendEditingInitializationHook
         );
         $filteringUrl = $uriBuilder->buildUriFromRoute(
             'ajax_frontendediting_treefilter',
-            ['page' => $this->typoScriptFrontendController->id]
+            ['page' => $this->typoScriptFrontendController->rootLine[0]['uid']]
         );
 
         $returnUrl = PathUtility::getAbsoluteWebPath(

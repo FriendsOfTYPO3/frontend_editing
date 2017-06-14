@@ -95,6 +95,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			);
 		});
 
+		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
+			showSuccess(
+				data.message,
+				F.translate('notifications.save-pages-title')
+			);
+		});
+
 		F.on(F.REQUEST_ERROR, function (data) {
 			showError(
 				data.message,
@@ -226,7 +233,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			if (D3IndentedTree.isSearchRunning()) {
 				e.preventDefault();
 			} else {
-				var sword = $(this).val();
+				var sword = $(this).val().trim();
 				D3IndentedTree.treeFilter(sword);
 			}
 		});

@@ -43,7 +43,8 @@ define(['jquery', 'd3'], function ($, d3) {
 		rootFiltered,
 		svg,
 		tree,
-		initialized = false,
+		treeInitialized = false,
+		clickedRectOnce = false,
 		activeNodeClass = 'active',
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
@@ -63,12 +64,19 @@ define(['jquery', 'd3'], function ($, d3) {
 		isFilteringActive = false;
 
 	/**
+	 * Editing
+	 *
+	 */
+	var editingOriginalNode;
+
+	/**
 	 * Dom jquery selectors
 	 * @type {{}}
 	 */
 	var domSelectors = {
 		pageTree: '#page-tree-wrapper',
-		searchInput: 'input.search-page-tree'
+		searchInput: 'input.search-page-tree',
+		editInput: '#edit-page-tree-node'
 	};
 
 	/**
@@ -91,15 +99,33 @@ define(['jquery', 'd3'], function ($, d3) {
 		// Initialize function,
 		// Do it once after left bar open animation is complete
 		F.on(F.LEFT_PANEL_TOGGLE, function (isOpen) {
-			if (initialized === false && isOpen) {
+			if (treeInitialized === false && isOpen) {
 				_update(root);
 
 				// Reset search input
 				$(_getDomSelector('searchInput')).val('');
 
-				initialized = true;
+				treeInitialized = true;
 			}
 		});
+
+		// Editing initialize
+		$(_getDomSelector('editInput'))
+			.on('keyup', function (e) {
+				var code = (e.keyCode ? e.keyCode : e.which);
+
+				if(code === 13) {
+					_finishEditing($(this).val().trim());
+				} else if (code === 27) {
+					_resetEditing();
+				}
+			})
+			.on('focusout', function () {
+				var $this = $(this);
+				if ($this.is(':visible')) {
+					_finishEditing($this.val().trim());
+				}
+			});
 	}
 
 	/**
@@ -109,11 +135,11 @@ define(['jquery', 'd3'], function ($, d3) {
 	 */
 	function treeFilter(searchWord) {
 		setTimeout(function () {
-			if ($(_getDomSelector('searchInput')).val() === searchWord && searchWord !== lastSearchWord) {
+			if ($(_getDomSelector('searchInput')).val().trim() === searchWord && searchWord !== lastSearchWord) {
 				lastSearchWord = searchWord;
 				if (searchWord === '') {
 					_resetFilter();
-				} else if(searchWord.length > 2) {
+				} else if (searchWord.length > 2) {
 					_loadFilterTree(searchWord);
 				}
 			}
@@ -446,17 +472,125 @@ define(['jquery', 'd3'], function ($, d3) {
 	}
 
 	/**
-	 * Clicked on rect
+	 * Clicked on rect, check if was double click
 	 *
 	 * @param d
 	 * @private
 	 */
 	function _clickRect(d) {
+		if (clickedRectOnce) {
+			_clickRectDouble(d, this);
+		} else {
+			setTimeout(function () {
+				if (clickedRectOnce) {
+					_clickRectOnce(d);
+				}
+			}, 350);
+			clickedRectOnce = true;
+		}
+	}
+
+	/**
+	 * If clicked once go to link
+	 *
+	 * @param d
+	 * @private
+	 */
+	function _clickRectOnce(d) {
 		if (d.data.link) {
 			var linkUrl = d.data.link;
 			F.navigate(linkUrl);
 			F.showLoadingScreen();
 		}
+		clickedRectOnce = false;
+	}
+
+	/**
+	 * If double click start editing
+	 *
+	 * @private
+	 */
+	function _clickRectDouble(d, currentNode) {
+		var box = currentNode.getBBox();
+
+		clickedRectOnce = false;
+
+		// Save current active node
+		editingOriginalNode = {
+			d: d,
+			currentNode: currentNode
+		};
+
+		$(_getDomSelector('editInput'))
+			.val(d.data.name)
+			.css('width', box.width)
+			.css('height', box.height)
+			.css('left', d.y + xRect + nodeStep)
+			.css('top', d.x + nodeStep)
+			.show()
+			.focus();
+	}
+
+	/**
+	 * Call ajax to save new page name
+	 *
+	 * @param newValue
+	 * @private
+	 */
+	function _finishEditing(newValue) {
+		if (editingOriginalNode.d.data.name !== newValue) {
+			// Set new value for tree node
+			/**
+			 * @TODO is there a better way to get text element ?
+			 */
+			d3.select(editingOriginalNode.currentNode.nextElementSibling).text(newValue);
+
+			// Save the new title
+			var saveItemData = {
+				'action': 'update',
+				'table': 'pages',
+				'uid': editingOriginalNode.d.data.uid,
+				'field': 'title',
+				'content': newValue
+			};
+
+			F.trigger(F.REQUEST_START);
+
+			$.ajax({
+				url: F.getEndpointUrl(),
+				method: 'POST',
+				data: saveItemData
+			}).done(function (data) {
+				F.trigger(
+					F.UPDATE_PAGES_COMPLETE,
+					{
+						message: data.message
+					}
+				);
+			}).fail(function (jqXHR) {
+				F.trigger(
+					F.REQUEST_ERROR,
+					{
+						message: jqXHR.responseText
+					}
+				);
+			}).always(function () {
+				F.trigger(F.REQUEST_COMPLETE);
+			});
+		}
+
+		_resetEditing();
+	}
+
+	/**
+	 * Cancel editing of page
+	 *
+	 * @private
+	 */
+	function _resetEditing() {
+		// reset editing input
+		$(_getDomSelector('editInput')).hide();
+		editingOriginalNode = null;
 	}
 
 	/**
