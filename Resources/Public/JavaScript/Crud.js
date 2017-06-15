@@ -201,13 +201,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 		});
 	}
 
-	function moveRecord(uid, table, beforeUid, colPos) {
+	function moveRecord(uid, table, beforeUid, colPos, defVals) {
 		this.trigger(F.REQUEST_START);
 
 		var data = {
 			uid: uid,
 			table: table,
-			beforeUid: beforeUid
+			beforeUid: beforeUid,
+			defVals: defVals
 		};
 
 		if (typeof colPos !== 'undefined') {

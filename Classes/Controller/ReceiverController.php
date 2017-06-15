@@ -80,7 +80,8 @@ class ReceiverController
                             $uid,
                             (int)$request->getParsedBody()['beforeUid'],
                             $page,
-                            $colPos
+                            $colPos,
+                            $request->getParsedBody()['defVals'] ?? []
                         );
                         break;
                     case 'lockedRecord':
@@ -234,6 +235,7 @@ class ReceiverController
         int $beforeUid = 0,
         int $pid = 0,
         int $columnPosition = -2,
+        array $defaultValues = [],
         int $container = 0
     ) {
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
@@ -255,6 +257,9 @@ class ReceiverController
         if ($container) {
             $data[$table][$uid]['colPos'] = $container;
         }
+
+        // add default values to datamap array
+        $data[$table][$uid] = array_merge($data[$table][$uid], $defaultValues);
 
         $dataHandler->start($data, $command);
         $dataHandler->process_cmdmap();
