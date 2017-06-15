@@ -205,9 +205,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 				var ceUid = parseInt(ev.dataTransfer.getData('movableUid'), 10);
 				var moveAfter = parseInt($currentTarget.data('moveafter'), 10);
 				var colPos = parseInt($currentTarget.data('colpos'), 10);
+				var defVals = $currentTarget.data('defVals');
 
 				if (ceUid !== moveAfter) {
-					F.moveContent(ceUid, 'tt_content', moveAfter, colPos);
+					F.moveContent(ceUid, 'tt_content', moveAfter, colPos, defVals);
 				}
 			} else {
 				this.dropNewCe(ev);
