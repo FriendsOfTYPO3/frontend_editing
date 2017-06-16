@@ -174,6 +174,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		dragCeStart: function (ev) {
+			ev.stopPropagation();
 			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
 
 			ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
@@ -192,6 +193,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		dragCeEnd: function (ev) {
+			ev.stopPropagation();
 			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
 
 			if (movable === 1) {
