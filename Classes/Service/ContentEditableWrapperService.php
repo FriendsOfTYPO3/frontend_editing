@@ -155,14 +155,15 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__dropzone';
 
         $dropZone = sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals=\'%s\'></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
             $uid,
-            $colPos
+            $colPos,
+            json_encode($defaultValues)
         );
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);
