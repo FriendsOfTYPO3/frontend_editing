@@ -49,6 +49,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	var $iframe;
 	var $loadingScreen;
 	var $saveButton;
+	var $discardButton;
 	var iframeUrl;
 	var storage;
 	var editorConfigurationUrl;
@@ -59,6 +60,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		$iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
 		$loadingScreen = $('.t3-frontend-editing__loading-screen');
 		$saveButton = $('.t3-frontend-editing__save');
+		$discardButton = $('.t3-frontend-editing__discard');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
 
@@ -95,9 +97,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
+				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
+				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
 			}
