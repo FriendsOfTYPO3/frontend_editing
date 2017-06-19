@@ -258,8 +258,8 @@ class ReceiverController
             $data[$table][$uid]['colPos'] = $container;
         }
 
-        // add default values to datamap array
-        $data[$table][$uid] = array_merge($data[$table][$uid], $defaultValues);
+        // Add default values to datamap array
+        $data[$table][$uid] = isset($data[$table][$uid]) ? array_merge($data[$table][$uid], $defaultValues) : $defaultValues;
 
         $dataHandler->start($data, $command);
         $dataHandler->process_cmdmap();
