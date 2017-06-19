@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
 
 /*
@@ -15,13 +16,17 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
  */
 
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Utility\Integration;
 
 /**
  * Fixtures for ContentEditableProperties
  */
 class ContentEditableFixtures
 {
+
+    /**
+     * @var ContentEditableWrapperService
+     */
+    protected $contentEditableWrapperService;
 
     /**
      * @var string
@@ -52,6 +57,13 @@ class ContentEditableFixtures
         'colPos' => 0,
         'title' => 'Test title'
     ];
+
+    /**
+     * ContentEditableFixtures constructor
+     */
+    public function  __construct() {
+        $this->contentEditableWrapperService = new ContentEditableWrapperService();
+    }
 
     /**
      * @return string
@@ -105,7 +117,7 @@ class ContentEditableFixtures
             $this->table,
             $this->field,
             $this->uid,
-            ContentEditableWrapperService::checkIfContentElementIsHidden($this->table, $this->uid),
+            $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
             $this->content
         );
 
@@ -126,20 +138,20 @@ class ContentEditableFixtures
                     ' data-hidden="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
                 '%s' .
             '</div>',
-            ContentEditableWrapperService::checkIfContentElementIsHidden($this->table, $this->uid),
-            ContentEditableWrapperService::contentElementTitle($this->uid),
+            $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
+            $this->contentEditableWrapperService->recordTitle($this->table, $this->uid),
             $class,
             $this->table,
             $this->uid,
             0,
             $this->dataArr['colPos'],
-            ContentEditableWrapperService::renderEditOnClickReturnUrl(
-                ContentEditableWrapperService::renderEditUrl(
+            $this->contentEditableWrapperService->renderEditOnClickReturnUrl(
+                $this->contentEditableWrapperService->renderEditUrl(
                     $this->table,
                     $this->uid
                 )
             ),
-            ContentEditableWrapperService::renderInlineActionIcons(false),
+            $this->contentEditableWrapperService->renderInlineActionIcons($this->table, false),
             $this->content
         );
 
@@ -158,17 +170,23 @@ class ContentEditableFixtures
         $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
         $class = 't3-frontend-editing__dropzone';
 
+        $colPos = 0;
+        $defaultValues = [];
+
         $expectedOutput = sprintf(
             '%s' .
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
             $this->content,
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
-            ContentEditableWrapperService::renderEditOnClickReturnUrl(
-                ContentEditableWrapperService::renderNewUrl($this->table, $this->uid)
-            )
+            $this->contentEditableWrapperService->renderEditOnClickReturnUrl(
+                $this->contentEditableWrapperService->renderNewUrl($this->table, $this->uid)
+            ),
+            $this->uid,
+            $colPos,
+            htmlspecialchars(json_encode($defaultValues))
         );
 
         return $expectedOutput;

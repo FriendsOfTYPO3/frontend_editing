@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 /*
@@ -20,7 +21,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel.
@@ -37,6 +38,24 @@ class FrontendEditingPanelTest extends UnitTestCase
      * @var TypoScriptFrontendController
      */
     protected $frontendControllerMock;
+
+    /**
+     * @var ContentEditableWrapperService
+     */
+    protected $contentEditableWrapperService;
+
+    /**
+     * FrontendEditingPanelTest constructor
+     *
+     * @param null $name
+     * @param array $data
+     * @param string $dataName
+     */
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->contentEditableWrapperService = new ContentEditableWrapperService();
+    }
 
     /**
      * Set up
@@ -76,10 +95,10 @@ class FrontendEditingPanelTest extends UnitTestCase
         $content = $this->getUniqueId('content');
         return [
             'standard case call edit icons for tt_content:bodytext' => [
-                ContentEditableWrapperService::wrapContentWithDropzone(
+                $this->contentEditableWrapperService->wrapContentWithDropzone(
                     'tt_content',
                     1,
-                    ContentEditableWrapperService::wrapContent(
+                    $this->contentEditableWrapperService->wrapContent(
                         'tt_content',
                         1,
                         [],
@@ -99,10 +118,10 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with fe_users:email' => [
-                ContentEditableWrapperService::wrapContentWithDropzone(
+                $this->contentEditableWrapperService->wrapContentWithDropzone(
                     'fe_users',
                     12,
-                    ContentEditableWrapperService::wrapContent(
+                    $this->contentEditableWrapperService->wrapContent(
                         'fe_users',
                         12,
                         [],
@@ -123,10 +142,10 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with tt_content:header' => [
-                ContentEditableWrapperService::wrapContentWithDropzone(
+                $this->contentEditableWrapperService->wrapContentWithDropzone(
                     'tt_content',
                     12,
-                    ContentEditableWrapperService::wrapContent(
+                    $this->contentEditableWrapperService->wrapContent(
                         'tt_content',
                         12,
                         [],

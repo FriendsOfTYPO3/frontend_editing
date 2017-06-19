@@ -1,5 +1,6 @@
 <?php
-namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Utility\ContentEditable;
+declare(strict_types=1);
+namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,7 +15,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Utility\ContentEditable;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
@@ -150,7 +151,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
         try {
             $wrappedContent = $this->subject->wrapContent(
                 $this->fixtures->getTable(),
-                '',
+                0,
                 $this->fixtures->getDataArr(),
                 $this->fixtures->getContent()
             );
@@ -158,7 +159,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
             return;
         }
-        $this->fail('Expected Property "table" missing Exception has not been raised.');
+        $this->fail('Expected Property "uid" missing Exception has not been raised.');
     }
     /**
      * @test
@@ -186,13 +187,13 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
         try {
             $wrappedContent = $this->subject->wrapContentWithDropzone(
                 $this->fixtures->getTable(),
-                '',
+                -1,
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
+            $this->assertEquals($exception->getMessage(), 'Property "uid" is not valid!');
             return;
         }
-        $this->fail('Expected Property "table" missing Exception has not been raised.');
+        $this->fail('Expected Property "uid" missing Exception has not been raised.');
     }
 }
