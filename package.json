@@ -2,7 +2,6 @@
   "name": "frontend_editing",
   "version": "0.1.0",
   "description": "Enable editors to work with the content in the most intuitive way possible",
-  "sasslintConfig": "scss-lint.yml",
   "scripts": {
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr/toastr.js ./Resources/Public/Javascript/contrib/toastr.js",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable/dist/immutable.js ./Resources/Public/Javascript/Contrib/immutable.js",
