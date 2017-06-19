@@ -40,24 +40,6 @@ class FrontendEditingPanelTest extends UnitTestCase
     protected $frontendControllerMock;
 
     /**
-     * @var ContentEditableWrapperService
-     */
-    protected $contentEditableWrapperService;
-
-    /**
-     * FrontendEditingPanelTest constructor
-     *
-     * @param null $name
-     * @param array $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->contentEditableWrapperService = new ContentEditableWrapperService();
-    }
-
-    /**
      * Set up
      */
     protected function setUp()
@@ -92,20 +74,31 @@ class FrontendEditingPanelTest extends UnitTestCase
      */
     public function editIconsDataProvider()
     {
+        $contentEditableWrapperService = new ContentEditableWrapperService();
+
         $content = $this->getUniqueId('content');
         return [
             'standard case call edit icons for tt_content:bodytext' => [
-                $this->contentEditableWrapperService->wrapContentWithDropzone(
+                $contentEditableWrapperService->wrapContentWithDropzone(
                     'tt_content',
                     1,
-                    $this->contentEditableWrapperService->wrapContent(
+                    $contentEditableWrapperService->wrapContent(
                         'tt_content',
                         1,
                         [],
                         $content
                     )
                 ),
-                $content,
+                $contentEditableWrapperService->wrapContentWithDropzone(
+                    'tt_content',
+                    1,
+                    $contentEditableWrapperService->wrapContent(
+                        'tt_content',
+                        1,
+                        [],
+                        $content
+                    )
+                ),
                 'tt_content:bodytext',
                 ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'tt_content:1',
@@ -118,10 +111,10 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with fe_users:email' => [
-                $this->contentEditableWrapperService->wrapContentWithDropzone(
+                $contentEditableWrapperService->wrapContentWithDropzone(
                     'fe_users',
                     12,
-                    $this->contentEditableWrapperService->wrapContent(
+                    $contentEditableWrapperService->wrapContent(
                         'fe_users',
                         12,
                         [],
@@ -129,7 +122,17 @@ class FrontendEditingPanelTest extends UnitTestCase
                             . $content . '</div>'
                     )
                 ),
-                $content,
+                $contentEditableWrapperService->wrapContentWithDropzone(
+                    'fe_users',
+                    12,
+                    $contentEditableWrapperService->wrapContent(
+                        'fe_users',
+                        12,
+                        [],
+                        '<div contenteditable="true" data-table="fe_users" data-field="email" data-uid="12" class="">'
+                        . $content . '</div>'
+                    )
+                ),
                 'fe_users:email',
                 ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'fe_users:12',
@@ -142,17 +145,26 @@ class FrontendEditingPanelTest extends UnitTestCase
                 1
             ],
             'another case with tt_content:header' => [
-                $this->contentEditableWrapperService->wrapContentWithDropzone(
+                $contentEditableWrapperService->wrapContentWithDropzone(
                     'tt_content',
                     12,
-                    $this->contentEditableWrapperService->wrapContent(
+                    $contentEditableWrapperService->wrapContent(
                         'tt_content',
                         12,
                         [],
                         $content
                     )
                 ),
-                $content,
+                $contentEditableWrapperService->wrapContentWithDropzone(
+                    'tt_content',
+                    12,
+                    $contentEditableWrapperService->wrapContent(
+                        'tt_content',
+                        12,
+                        [],
+                        $content
+                    )
+                ),
                 'tt_content:header',
                 ['beforeLastTag' => '1','allow' => 'edit'],
                 'tt_content:12',

@@ -133,9 +133,12 @@ class ContentEditableFixtures
     {
         $class = 't3-frontend-editing__inline-actions';
         $expectedOutput = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s">' .
-                '<span class="%s" data-table="%s" data-uid="%s"' .
-                    ' data-hidden="%s" data-cid="%s" data-edit-url="%s">%s</span>' .
+            '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
+                ' data-movable="1"' .
+                ' ondragstart="window.parent.F.dragCeStart(event)"' .
+                ' ondragend="window.parent.F.dragCeEnd(event)">' .
+                '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
+                ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
             '</div>',
             $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
@@ -147,6 +150,12 @@ class ContentEditableFixtures
             $this->dataArr['colPos'],
             $this->contentEditableWrapperService->renderEditOnClickReturnUrl(
                 $this->contentEditableWrapperService->renderEditUrl(
+                    $this->table,
+                    $this->uid
+                )
+            ),
+            $this->contentEditableWrapperService->renderEditOnClickReturnUrl(
+                $this->contentEditableWrapperService->renderNewUrl(
                     $this->table,
                     $this->uid
                 )
