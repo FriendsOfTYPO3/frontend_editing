@@ -90,8 +90,11 @@ class ContentEditableViewHelper extends AbstractViewHelper
      *
      * @return string Rendered email link
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
         $content = $renderChildrenClosure();
         $access = GeneralUtility::makeInstance(AccessService::class);
         if (!$access->isEnabled()) {

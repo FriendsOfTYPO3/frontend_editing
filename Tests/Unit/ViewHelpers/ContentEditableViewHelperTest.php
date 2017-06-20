@@ -34,9 +34,27 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
         $instance = $this->getMock(ContentEditableViewHelper::class, ['registerArgument']);
-        $instance->expects($this->at(0))->method('registerArgument')->with('table', 'string', $this->anything(), true, false);
-        $instance->expects($this->at(1))->method('registerArgument')->with('field', 'string', $this->anything(), false, false);
-        $instance->expects($this->at(2))->method('registerArgument')->with('uid', 'string', $this->anything(), true, false);
+        $instance->expects($this->at(0))->method('registerArgument')->with(
+            'table',
+            'string',
+            $this->anything(),
+            true,
+            false
+        );
+        $instance->expects($this->at(1))->method('registerArgument')->with(
+            'field',
+            'string',
+            $this->anything(),
+            false,
+            false
+        );
+        $instance->expects($this->at(2))->method('registerArgument')->with(
+            'uid',
+            'string',
+            $this->anything(),
+            true,
+            false
+        );
         $instance->setRenderingContext(new RenderingContextFixture());
         $instance->initializeArguments();
     }

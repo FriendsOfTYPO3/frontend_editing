@@ -30,5 +30,11 @@ interface RequestPreProcessInterface
      * @param bool $isFinished
      * @return string the modified content
      */
-    public function preProcess(string $table, array $record, string &$fieldName, string $content, bool &$isFinished): string;
+    public function preProcess(
+        string $table,
+        array $record,
+        string &$fieldName,
+        string $content,
+        bool &$isFinished
+    ): string;
 }

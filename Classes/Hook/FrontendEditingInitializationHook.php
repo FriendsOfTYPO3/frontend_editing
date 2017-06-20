@@ -144,7 +144,11 @@ class FrontendEditingInitializationHook
             'ajax_icons'
         );
 
-        $returnUrl = PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName('EXT:frontend_editing/Resources/Public/Templates/Close.html') . '?');
+        $returnUrl = PathUtility::getAbsoluteWebPath(
+            GeneralUtility::getFileAbsFileName(
+                'EXT:frontend_editing/Resources/Public/Templates/Close.html'
+            ) . '?'
+        );
         $pageEditUrl = $this->accessService->isPageEditAllowed() ? $uriBuilder->buildUriFromRoute(
             'record_edit',
             [
@@ -161,15 +165,16 @@ class FrontendEditingInitializationHook
             ]
         ) : null;
 
-        // define the window size of the popups within the RTE
+        // Define the window size of the popups within the RTE
         $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
         if (!empty($rtePopupWindowSize)) {
             list($rtePopupWindowWidth, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
         }
         $rtePopupWindowHeight = !empty($rtePopupWindowHeight) ? (int)$rtePopupWindowHeight : 600;
 
-        // define DateTimePicker dateformat
-        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ? ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
+        // Define DateTimePicker dateformat
+        $dateFormat = ($GLOBALS['TYPO3_CONF_VARS']['SYS']['USdateFormat'] ?
+            ['MM-DD-YYYY', 'HH:mm MM-DD-YYYY'] : ['DD-MM-YYYY', 'HH:mm DD-MM-YYYY']);
 
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
@@ -183,6 +188,7 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->pageRenderer->setHtmlTag('<html lang="en">');
 
+        $resourcePath = 'EXT:frontend_editing/Resources/Public/';
         $this->loadStylesheets();
         $this->loadJavascriptResources();
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/GUI', 'function(FrontendEditing) {
@@ -191,7 +197,7 @@ class FrontendEditingInitializationHook
             window.F = new FrontendEditing();
             window.F.initGUI({
                 content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
-                resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
+                resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath($resourcePath)) . ',
                 iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
@@ -280,11 +286,19 @@ class FrontendEditingInitializationHook
                     'ckeditor-jquery-adapter' => ['jquery', 'ckeditor'],
                 ],
                 'paths' => [
-                    'ckeditor-jquery-adapter' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter'),
-                    'toastr' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'),
-                    'immutable' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'),
-                    'alertify' => $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/alertify'),
-                    'ckeditor' => $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'),
+                    'ckeditor-jquery-adapter' => $this->getAbsolutePath(),
+                    'toastr' => $this->getAbsolutePath(
+                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'
+                    ),
+                    'immutable' => $this->getAbsolutePath(
+                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'
+                    ),
+                    'alertify' => $this->getAbsolutePath(
+                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/alertify'
+                    ),
+                    'ckeditor' => $this->getAbsolutePath(
+                        'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'
+                    ),
                 ]
             ]
         );
@@ -372,10 +386,11 @@ class FrontendEditingInitializationHook
      */
     protected function wizardItemsHook(array &$wizardItems, NewContentElementController $contentController)
     {
+        $newContentElement = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'];
         // Wrapper for wizards
         // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el']['wizardItemsHook'] as $classData) {
+        if (is_array($newContentElement['wizardItemsHook'])) {
+            foreach ($newContentElement['wizardItemsHook'] as $classData) {
                 $hookObject = GeneralUtility::getUserObj($classData);
                 if (!$hookObject instanceof NewContentElementWizardHookInterface) {
                     throw new \UnexpectedValueException(

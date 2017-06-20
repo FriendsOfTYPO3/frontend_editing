@@ -61,7 +61,8 @@ class ContentEditableFixtures
     /**
      * ContentEditableFixtures constructor
      */
-    public function  __construct() {
+    public function __construct()
+    {
         $this->contentEditableWrapperService = new ContentEditableWrapperService();
     }
 
@@ -184,7 +185,8 @@ class ContentEditableFixtures
 
         $expectedOutput = sprintf(
             '%s' .
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" ' .
+                'data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
             $this->content,
             $class,
             $jsFuncOnDrop,
