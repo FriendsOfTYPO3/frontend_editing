@@ -123,6 +123,9 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				F.confirm(F.translate('notifications.delete-content-element'), {
 					yes: function () {
 						F.delete(that.data('uid'), that.data('table'));
+					},
+					no: function () {
+						// Do nothing
 					}
 				});
 			});
