@@ -286,7 +286,9 @@ class FrontendEditingInitializationHook
                     'ckeditor-jquery-adapter' => ['jquery', 'ckeditor'],
                 ],
                 'paths' => [
-                    'ckeditor-jquery-adapter' => $this->getAbsolutePath(),
+                    'ckeditor-jquery-adapter' => $this->getAbsolutePath(
+                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter'
+                    ),
                     'toastr' => $this->getAbsolutePath(
                         'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'
                     ),
