@@ -1,6 +1,6 @@
 # TYPO3 frontend editing
 
-[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg?style=flat-square)](https://typo3.org/)
+[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg?style=flat-square)](https://typo3.org/) [![Build Status](https://travis-ci.org/FriendsOfTYPO3/frontend_editing.svg?branch=master)](https://travis-ci.org/FriendsOfTYPO3/frontend_editing)
 
 ## TYPO3 frontend editing (frontend_editing)
 This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
