@@ -1,0 +1,43 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+env:
+  matrix:
+    - TYPO3_VERSION=~8.7
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - parallel
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer --version
+
+before_script:
+  - composer require typo3/cms="$TYPO3_VERSION"
+  # Restore composer.json
+  - git checkout composer.json
+  - export TYPO3_PATH_WEB=$PWD/.Build/Web
+
+script:
+
+  - >
+    echo;
+    echo "Running PHP codesniffer";
+    .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
+
+  - >
+    echo;
+    echo "Running unit tests";
+    .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/

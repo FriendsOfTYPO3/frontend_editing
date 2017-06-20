@@ -155,7 +155,8 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__dropzone';
 
         $dropZone = sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+                'data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
@@ -182,10 +183,12 @@ class ContentEditableWrapperService
         $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
 
         $visibilityIcon = ($elementIsHidden === true) ?
-            $this->renderIconWithWrap('unHide', 'actions-edit-unhide') : $this->renderIconWithWrap('hide', 'actions-edit-hide');
+            $this->renderIconWithWrap('unHide', 'actions-edit-unhide') :
+                $this->renderIconWithWrap('hide', 'actions-edit-hide');
 
         $moveIcons = ($table === 'tt_content') ?
-            $this->renderIconWithWrap('moveUp', 'actions-move-up') . $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
+            $this->renderIconWithWrap('moveUp', 'actions-move-up') .
+                $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
 
         $inlineIcons =
             $this->renderIconWithWrap('edit', 'actions-open') .
@@ -206,7 +209,11 @@ class ContentEditableWrapperService
      */
     private function renderIconWithWrap(string $titleKey, string $iconKey): string
     {
-        return '<span title="' . $this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey) . '">' . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
+        return '<span title="' .
+            $this->languageService->sL(
+                'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
+            ) .
+            '">' . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
     }
 
     /**
@@ -301,7 +308,8 @@ class ContentEditableWrapperService
         if ($tcaCtrl['enablecolumns']['disabled'] && $row[$tcaCtrl['enablecolumns']['disabled']] ||
             $tcaCtrl['enablecolumns']['fe_group'] && $GLOBALS['TSFE']->simUserGroup &&
             $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
-            $tcaCtrl['enablecolumns']['starttime'] && $row[$tcaCtrl['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
+            $tcaCtrl['enablecolumns']['starttime'] &&
+                $row[$tcaCtrl['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
             $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
             $row[$tcaCtrl['enablecolumns']['endtime']] < $GLOBALS['EXEC_TIME']
         ) {

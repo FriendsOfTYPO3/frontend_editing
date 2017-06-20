@@ -10,7 +10,8 @@ $GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing'] = [
 
 // Add overlay option User setting
 $GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing_overlay'] = [
-    'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:settings.field.frontend_editing_overlay',
+    'label' => 'LLL:EXT:frontend_editing/Resources/Private/Language/' .
+        'locallang.xlf:settings.field.frontend_editing_overlay',
     'type' => 'check',
     'default' => 0
 ];

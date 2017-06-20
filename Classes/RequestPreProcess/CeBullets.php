@@ -30,9 +30,14 @@ class CeBullets implements RequestPreProcessInterface
      * @param bool $isFinished
      * @return string the modified content
      */
-    public function preProcess(string $table, array $record, string &$fieldName, string $content, bool &$isFinished): string
-    {
-        // only allowed for bullet element
+    public function preProcess(
+        string $table,
+        array $record,
+        string &$fieldName,
+        string $content,
+        bool &$isFinished
+    ): string {
+        // Only allowed for bullet element
         if ($table === 'tt_content' && $fieldName === 'bodytext' && $record['CType'] === 'bullets') {
             $isFinished = true;
             $domDocument = new \DOMDocument();
