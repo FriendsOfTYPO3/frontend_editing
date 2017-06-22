@@ -94,6 +94,8 @@ class ContentEditableWrapperService
         $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
+        $recordTitle = $this->recordTitle($table, (int)$uid);
+
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
@@ -107,7 +109,7 @@ class ContentEditableWrapperService
                 '%s' .
             '</div>',
             $hiddenElementClassName,
-            $this->recordTitle($table, (int)$uid),
+            $recordTitle,
             $class,
             $table,
             $uid,
@@ -115,7 +117,7 @@ class ContentEditableWrapperService
             $dataArr['colPos'],
             $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid)),
-            $this->renderInlineActionIcons($table, $elementIsHidden),
+            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle),
             $content
         );
 
@@ -175,9 +177,10 @@ class ContentEditableWrapperService
      *
      * @param string $table
      * @param bool $elementIsHidden
+     * @param string $recordTitle
      * @return string
      */
-    public function renderInlineActionIcons(string $table, bool $elementIsHidden): string
+    public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = ''): string
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
@@ -191,7 +194,7 @@ class ContentEditableWrapperService
                 $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
 
         $inlineIcons =
-            $this->renderIconWithWrap('edit', 'actions-open') .
+            $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
             $this->renderIconWithWrap('delete', 'actions-edit-delete') .
             $this->renderIconWithWrap('new', 'actions-document-new') .
@@ -205,15 +208,22 @@ class ContentEditableWrapperService
      *
      * @param string $titleKey
      * @param string $iconKey
+     * @param string $recordTitle
      * @return string
      */
-    private function renderIconWithWrap(string $titleKey, string $iconKey): string
+    private function renderIconWithWrap(string $titleKey, string $iconKey, string $recordTitle = ''): string
     {
-        return '<span title="' .
-            $this->languageService->sL(
-                'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
-            ) .
-            '">' . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
+        $editRecordTitle = $this->languageService->sL(
+            'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
+        );
+
+        // Append record title to 'title' attribute
+        if ($recordTitle) {
+            $editRecordTitle .= ' \'' . $recordTitle . '\'';
+        }
+
+        return '<span title="' . $editRecordTitle. '">'
+            . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
     }
 
     /**
