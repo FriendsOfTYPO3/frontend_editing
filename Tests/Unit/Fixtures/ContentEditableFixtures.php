@@ -143,7 +143,7 @@ class ContentEditableFixtures
                 '%s' .
             '</div>',
             $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
-            $this->contentEditableWrapperService->recordTitle($this->table, $this->uid),
+            $this->contentEditableWrapperService->recordTitle($this->table, $this->dataArr),
             $class,
             $this->table,
             $this->uid,

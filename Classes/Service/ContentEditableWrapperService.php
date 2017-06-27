@@ -94,7 +94,7 @@ class ContentEditableWrapperService
         $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
-        $recordTitle = $this->recordTitle($table, (int)$uid);
+        $recordTitle = $this->recordTitle($table, $dataArr);
 
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
@@ -332,12 +332,11 @@ class ContentEditableWrapperService
      * Returns the title label used in Backend lists
      *
      * @param string $table of the record
-     * @param int $uid of the record
+     * @param array $rawRecord
      * @return string
      */
-    public function recordTitle(string $table, int $uid): string
+    public function recordTitle(string $table, array $rawRecord = []): string
     {
-        $rawRecord = BackendUtility::getRecord($table, $uid);
         return BackendUtility::getRecordTitle(
             $table,
             $rawRecord
