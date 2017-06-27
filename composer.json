@@ -11,8 +11,7 @@
 	"require-dev": {
 		"nimut/testing-framework": "^1.0",
 		"squizlabs/php_codesniffer": "2.*",
-		"phpunit/phpunit": "^5.4",
-		"mikey179/vfsStream": "~1.6.0"
+		"phpunit/phpunit": "^5.4"
 	},
 	"replace": {
 		"frontend_editing": "self.version"
