@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -33,11 +32,6 @@ class ContentEditableWrapperService
      * @var IconFactory
      */
     protected $iconFactory;
-
-    /**
-     * @var LanguageService
-     */
-    protected $languageService;
 
     /**
      * Add the proper wrapping (html tag) to make the content editable by CKEditor
@@ -183,7 +177,6 @@ class ContentEditableWrapperService
     public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = ''): string
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
 
         $visibilityIcon = ($elementIsHidden === true) ?
             $this->renderIconWithWrap('unHide', 'actions-edit-unhide') :
@@ -213,7 +206,7 @@ class ContentEditableWrapperService
      */
     private function renderIconWithWrap(string $titleKey, string $iconKey, string $recordTitle = ''): string
     {
-        $editRecordTitle = $this->languageService->sL(
+        $editRecordTitle = $GLOBALS['LANG']->sL(
             'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
         );
 
