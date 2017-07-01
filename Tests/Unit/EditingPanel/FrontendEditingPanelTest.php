@@ -17,6 +17,8 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 use TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
@@ -74,6 +76,8 @@ class FrontendEditingPanelTest extends UnitTestCase
      */
     public function editIconsDataProvider()
     {
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+
         $contentEditableWrapperService = new ContentEditableWrapperService();
 
         $content = $this->getUniqueId('content');
