@@ -213,7 +213,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					editor.on('change', function (changeEvent) {
 						if (typeof editor.element !== 'undefined') {
 							var dataSet = editor.element.$.dataset;
-							storage.addSaveItem(dataSet.uid + '_' + dataSet.field, {
+							storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
 								'action': 'save',
 								'table': dataSet.table,
 								'uid': dataSet.uid,
