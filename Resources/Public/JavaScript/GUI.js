@@ -14,8 +14,18 @@
 /**
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify', 'TYPO3/CMS/Backend/Modal'], function ($, FrontendEditing, Editor, toastr, alertify, Modal) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, alertify) {
 	'use strict';
+
+	// Extend FrontendEditing with additional events
+	var events = {
+		LEFT_PANEL_TOGGLE: 'LEFT_PANEL_TOGGLE'
+	};
+
+	// Add custom events to FrontendEditing
+	for (var key in events) {
+		FrontendEditing.addEvent(key, events[key]);
+	}
 
 	// Extend FrontendEditing with the following functions
 	FrontendEditing.prototype.initGUI = init;
@@ -28,6 +38,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	FrontendEditing.prototype.confirm = confirm;
 	FrontendEditing.prototype.windowOpen = windowOpen;
 	FrontendEditing.prototype.iframe = getIframe;
+	FrontendEditing.prototype.siteRootChange = siteRootChange;
 
 	var CLASS_HIDDEN = 'hidden';
 
@@ -66,6 +77,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 		initListeners();
 		bindActions();
+		D3IndentedTree.init(options.pageTree);
 		initGuiStates();
 		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
@@ -80,6 +92,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 			showSuccess(
 				data.message,
 				F.translate('notifications.save-title')
+			);
+		});
+
+		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
+			showSuccess(
+				data.message,
+				F.translate('notifications.save-pages-title')
 			);
 		});
 
@@ -154,15 +173,26 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 
 		$('.top-left-title').on('click', function () {
 			$('.left-bar-button').toggleClass('icon-icons-site-tree icon-icons-arrow-double');
-			if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
-				F.getStorage().addItem('leftPanelOpen', true);
-			}
+
+			// save state
+			F.getStorage().addItem('leftPanelOpen', !$('.t3-frontend-editing__left-bar').hasClass('open'));
 
 			$('.t3-frontend-editing__top-bar-left').toggleClass('push-toright');
 			$('.t3-frontend-editing__left-bar').toggleClass('open');
 			$('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
 			y = ++y % 2;
-			$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
+			$('.t3-frontend-editing__left-bar').stop().animate(
+				{
+					left: y ? 0 : -280
+				},
+				{
+					duration: pushDuration,
+					easing: pushEasing,
+					complete: function () {
+						F.trigger(F.LEFT_PANEL_TOGGLE, $(this).hasClass('open'));
+					}
+				}
+			);
 		});
 
 		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
@@ -205,6 +235,16 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		});
 
 		$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+
+		// Filter event
+		$('input.search-page-tree').on('keyup', function (e) {
+			if (D3IndentedTree.isSearchRunning()) {
+				e.preventDefault();
+			} else {
+				var sword = $(this).val().trim();
+				D3IndentedTree.treeFilter(sword);
+			}
+		});
 	}
 
 	function initGuiStates() {
@@ -212,7 +252,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		if (typeof states.leftPanelOpen !== 'undefined' && states.leftPanelOpen === true) {
 			// Trigger open left panel
 			$('.left-bar-button').trigger('click');
-			F.getStorage().addItem('leftPanelOpen', false);
 		}
 
 		if (typeof states.rightPanelState !== 'undefined') {
@@ -291,13 +330,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 	}
 
 	function showLoadingScreen() {
-		$loadingScreen.fadeIn('fast', function() {
+		$loadingScreen.fadeIn('fast', function () {
 			$loadingScreen.removeClass(CLASS_HIDDEN);
 		});
 	}
 
 	function hideLoadingScreen() {
-		$loadingScreen.fadeOut('slow', function() {
+		$loadingScreen.fadeOut('slow', function () {
 			$loadingScreen.addClass(CLASS_HIDDEN);
 		});
 	}
@@ -356,6 +395,23 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/E
 		var vHWin = window.open(url, 'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
 		vHWin.focus();
 		return false;
+	}
+
+	function siteRootChange(element) {
+		var linkUrl = String($(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()),
+			message = storage.isEmpty() ? 'notifications.change_site_root' : 'notifications.unsaved-changes';
+
+		if (linkUrl !== '0') {
+			F.confirm(F.translate(message), {
+				yes: function () {
+					window.location.href = linkUrl;
+				},
+				no: function () {
+					element.selectedIndex = 0;
+				}
+			});
+		}
+
 	}
 
 	return FrontendEditing;

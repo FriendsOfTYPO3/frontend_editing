@@ -63,6 +63,25 @@
             <trans-unit id="notifications.content-locked">
                 <source>The content is currently locked, do you still want to save?</source>
             </trans-unit>
+            <trans-unit id="notifications.change_site_root">
+                <source>You are going to switch to another site. Are you sure ?</source>
+            </trans-unit>
+            <trans-unit id="notifications.save-pages-title">
+                <source>Page saved</source>
+            </trans-unit>
+            <trans-unit id="notifications.update.content.success">
+                <source>Content updated (%s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.update.pages.success">
+                <source>Page title updated (%s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.update.content.fail">
+                <source>Content could not be updated (%s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.update.pages.fail">
+                <source>Page could not be updated (%s)</source>
+            </trans-unit>
+
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
             </trans-unit>
@@ -71,6 +90,16 @@
             </trans-unit>
             <trans-unit id="right-bar.on-page.title">
                 <source>Elements on page</source>
+            </trans-unit>
+
+            <trans-unit id="left-bar.installation-mounts.change">
+                <source>Choose site root</source>
+            </trans-unit>
+            <trans-unit id="left-bar.search-bar.search_tip">
+                <source>Search:</source>
+            </trans-unit>
+            <trans-unit id="left-bar.search-bar.search_placeholder">
+                <source>type to start...</source>
             </trans-unit>
         </body>
     </file>

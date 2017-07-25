@@ -21,6 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
 
 /**
@@ -151,10 +152,23 @@ class ReceiverController
         $dataHandler->start($data, []);
         $dataHandler->process_datamap();
 
+        $translateKey = sprintf(
+            'notifications.update.%s.',
+            $table === 'pages' ? 'pages' : 'content'
+        );
+
         if (empty($dataHandler->errorLog)) {
-            $this->writeSuccessMessage('Content updated (' . $uid . ')');
+            $this->writeSuccessMessage(LocalizationUtility::translate(
+                $translateKey . 'success',
+                'FrontendEditing',
+                [$uid]
+            ));
         } else {
-            $this->writeErrorMessage('Content could not be updated (' . $uid . ')');
+            $this->writeErrorMessage(LocalizationUtility::translate(
+                $translateKey . 'fail',
+                'FrontendEditing',
+                [$uid]
+            ));
         }
     }
 

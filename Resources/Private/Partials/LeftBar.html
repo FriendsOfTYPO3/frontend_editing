@@ -7,17 +7,27 @@
 		<span class="left-bar-button icons icon-icons-site-tree" title="{f:translate(key: 'left-bar.site-tree', extensionName: 'FrontendEditing')}"></span>
 	</div>
 	<div class="padding-wrapper">
-		<div class="t3-frontend-editing__page-tree-wrapper">
-			<ul class="t3-frontend-editing__page-tree">
-				<f:for each="{pageTree}" as="page">
-					<li data-url="{f:uri.page(pageUid: page.row.uid)}">
-						{page.depthData -> f:format.raw()}<f:format.raw>{page.HTML}</f:format.raw>
-						<span class="page-tree-item{f:if(condition: page.row.hidden, then: ' page-tree-status-hidden')}{f:if(condition: '{page.row.starttime} >= {currentTime}', then: ' page-tree-status-hidden')}{f:if(condition: '{page.row.uid} == {currentPage}', then: ' page-tree-active')}" title="id={page.row.uid} - {page.row.title}">
-							{page.row.title}
-						</span>
-					</li>
-				</f:for>
-			</ul>
+		<f:if condition="{mounts}">
+			<div class="t3-frontend-editing__page-site-root-wrapper">
+				<select id="installation-mounts" name="installation-mounts" onchange="F.siteRootChange(this);">
+					<option value="0" selected><f:translate key="left-bar.installation-mounts.change" extensionName="FrontendEditing"/></option>
+					<f:for each="{mounts}" key="uid" as="mount">
+						<f:if condition="{mount.domain}">
+							<option value="//{mount.domain}/">{mount.title}</option>
+						</f:if>
+					</f:for>
+				</select>
+			</div>
+		</f:if>
+		<div id="page-tree-filter-wrapper" class="t3-frontend-editing__page-tree-filter-wrapper">
+			<label>
+				<span><f:translate key="left-bar.search-bar.search_tip" extensionName="FrontendEditing"/></span>
+				<input type="text" value="" class="search-page-tree" placeholder="{f:translate(key: 'left-bar.search-bar.search_placeholder', extensionName: 'FrontendEditing')}">
+			</label>
+		</div>
+
+		<div id="page-tree-wrapper" class="t3-frontend-editing__page-tree-wrapper">
+			<input type="text" id="edit-page-tree-node" value="">
 		</div>
 	</div>
 </div>
