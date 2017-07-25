@@ -18,16 +18,16 @@ define(['jquery', 'd3'], function ($, d3) {
 	'use strict';
 
 	// Set the dimensions and margins of the tree
-	var margin = {top: 20, right: 20, bottom: 30, left: 10},
-		width = 280 - margin.right - margin.left,
+	var margin = {top: 20, right: 20, bottom: 30, left: 4},
+		width = 250 - margin.right - margin.left,
 
 		barHeight = 20,
-		barWidth = width * .9,
+		barWidth = width * 1.05,
 
-		nodeStep = 10,
+		nodeStep = 12,
 
-		dyText = 2.5,
-		dxText = 12,
+		dyText = 4,
+		dxText = 14,
 
 		xRect = 7,
 
@@ -48,6 +48,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		activeNodeClass = 'active',
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
+		hasChildrenExpandedClass = 'has-children-exp',
 		noChildrenClass = 'no-children';
 
 	/**
