@@ -34,8 +34,13 @@ class CeTable implements RequestPreProcessInterface
      * @param bool $isFinished
      * @return string the modified content
      */
-    public function preProcess(string $table, array $record, string &$fieldName, string $content, bool &$isFinished): string
-    {
+    public function preProcess(
+        string $table,
+        array $record,
+        string &$fieldName,
+        string $content,
+        bool &$isFinished
+    ): string {
         // Only allowed for element "table"
         if ($table  === 'tt_content' && $fieldName === 'bodytext' && $record['CType'] === 'table') {
             $isFinished = true;
@@ -79,7 +84,9 @@ class CeTable implements RequestPreProcessInterface
 
                 $xpath = new \DOMXpath($doc);
 
-                $oldNode = $xpath->query('//field[@index=\'acctables_caption\']//value')->item(0);
+                $oldNode = $xpath->query(
+                    '//field[@index=\'acctables_caption\']//value'
+                )->item(0);
                 $oldNode->parentNode->replaceChild($replacement, $oldNode);
                 $newPiFlexform = '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>' .
                     $doc->saveXml($doc->documentElement);

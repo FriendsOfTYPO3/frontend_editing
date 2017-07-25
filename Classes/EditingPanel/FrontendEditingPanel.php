@@ -139,8 +139,9 @@ class FrontendEditingPanel
             );
 
             $isWrappedWithDropzone = false;
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing']['FrontendEditingPanel']['dropzoneModifiers'])) {
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing']['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
+            $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'];
+            if (is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
+                foreach ($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
                     $hookObject = GeneralUtility::getUserObj($classData);
                     if (!$hookObject instanceof FrontendEditingDropzoneModifier) {
                         throw new \UnexpectedValueException(

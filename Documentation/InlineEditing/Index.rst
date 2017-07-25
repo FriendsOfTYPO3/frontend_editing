@@ -26,6 +26,19 @@ box and the editing can start directly.
 Fluid Styled Content
 """"""""""""""""""""
 
+Note:
+
+If fluid_styled_content is not included on the website or is disabled,
+the Typoscript of editIcons must be set manually.
+
+.. code-block:: typoscript
+
+	lib.fluidContent {
+		stdWrap {
+			editIcons = tt_content:header
+		}
+	}
+
 When it comes to fluid_styled_content there are some things that needs to be
 adjusted to your template to get the editing to work. First of all there is
 a view helper that needs to be included and configured.
@@ -42,10 +55,10 @@ helper:
 The available options are:
 
 - *table*: The database table name to where the data should be saved
-- *field*: The database field to where the data should be saved
+- *field*: The database field to where the data should be saved (optional)
 - *uid*: The database field to where the data should be saved
 
-A full example looks like this:
+A full example for inline editing of a certain field looks like this:
 
 .. code-block:: html
 
@@ -66,6 +79,15 @@ While not in frontend edit mode the output are the following:
 .. code-block:: html
 
 	This is the content text to edit
+
+There is also a possibility to make the content element editable through the popup backend editor.
+It is done by skipping the *field* option in the view helper:
+
+.. code-block:: html
+
+	<core:contentEditable table="tt_content" uid="{data.uid}">
+		{item.bodytext}
+	</core:contentEditable>
 
 .. _typoscript:
 

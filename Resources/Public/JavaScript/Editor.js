@@ -80,42 +80,54 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 
 			// Open/edit|new action
 			that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
-				var url = that.data('edit-url');
-				if ($(this).data('identifier') === 'actions-document-new') {
-					url = that.data('new-url');
-				}
-				require([
-					'jquery',
-					'TYPO3/CMS/Backend/Modal',
-					'TYPO3/CMS/Lang/Lang'
-					], function ($, Modal, Lang) {
-
-					Modal.advanced({
-						type: Modal.types.iframe,
-						title: '',
-						content: url,
-						size: Modal.sizes.large,
-						callback: function(currentModal) {
-							// Hide header of modal
-							currentModal.find('.modal-header').hide();
-
-							// Simulate BE environment with correct CKEditor instance for  RteLinkBrowser
-							currentModal.find(Modal.identifiers.iframe).on('load',function() {
-								top.TYPO3.Backend = top.TYPO3.Backend || {};
-								top.TYPO3.Backend.ContentContainer = {
-									get: function () {
-										return currentModal.find(Modal.identifiers.iframe).get(0).contentWindow;
-									}
-								};
-							});
-
-							currentModal.on('hidden.bs.modal', function (e) {
-								delete top.TYPO3.Backend;
-								F.refreshIframe();
-							});
+				if (!storage.isEmpty()) {
+					F.confirm(F.translate('notifications.unsaved-changes'), {
+						yes: function() {
+							// Do nothing
+						},
+						no: function() {
+							return false;
 						}
 					});
-				});
+				} else {
+					var url = that.data('edit-url');
+					if ($(this).data('identifier') === 'actions-document-new') {
+						url = that.data('new-url');
+					}
+					require([
+						'jquery',
+						'TYPO3/CMS/Backend/Modal',
+						'TYPO3/CMS/Lang/Lang'
+					], function ($, Modal, Lang) {
+
+						Modal.advanced({
+							type: Modal.types.iframe,
+							title: '',
+							content: url,
+							size: Modal.sizes.large,
+							callback: function(currentModal) {
+								// Hide header of modal
+								currentModal.find('.modal-header').hide();
+
+								// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
+								currentModal.find(Modal.identifiers.iframe).on('load',function() {
+									top.TYPO3.Backend = top.TYPO3.Backend || {};
+									top.TYPO3.Backend.ContentContainer = {
+										get: function () {
+											return currentModal.find(Modal.identifiers.iframe).get(0).contentWindow;
+										}
+									};
+								});
+
+								currentModal.on('hidden.bs.modal', function (e) {
+									delete top.TYPO3.Backend;
+									F.refreshIframe();
+								});
+							}
+						});
+					});
+				}
+
 			});
 
 			// Delete action
@@ -123,6 +135,9 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 				F.confirm(F.translate('notifications.delete-content-element'), {
 					yes: function () {
 						F.delete(that.data('uid'), that.data('table'));
+					},
+					no: function () {
+						// Do nothing
 					}
 				});
 			});
@@ -173,6 +188,12 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
 		$contenteditable.each(function () {
 			var $el = $(this);
+			var $parent = $el.parent();
+			// Prevent linked content element to be clickable in the frontend editing mode
+			if ($parent.is('a')) {
+				$parent.attr('href', 'javascript:;');
+			}
+
 			$.ajax({
 				url: configurationUrl,
 				method: 'GET',
@@ -183,7 +204,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					'field': $(this).data('field')
 				}
 			}).done(function (data) {
-				// ensure all plugins / buttons are loaded
+				// Ensure all plugins / buttons are loaded
 				if (typeof data.externalPlugins !== 'undefined') {
 					eval(data.externalPlugins);
 				}
@@ -196,7 +217,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					config = $.extend(true, config, defaultSimpleEditorConfig);
 				}
 
-				// initialize CKEditor now, when finished remember any change
+				// Initialize CKEditor now, when finished remember any change
 				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
 					// This moves the dom instances of ckeditor into the top bar
 					$('.' + editor.id).detach().appendTo($topBar);
@@ -204,7 +225,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					editor.on('change', function (changeEvent) {
 						if (typeof editor.element !== 'undefined') {
 							var dataSet = editor.element.$.dataset;
-							storage.addSaveItem(dataSet.uid + '_' + dataSet.field, {
+							storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
 								'action': 'save',
 								'table': dataSet.table,
 								'uid': dataSet.uid,

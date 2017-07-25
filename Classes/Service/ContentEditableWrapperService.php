@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -33,11 +32,6 @@ class ContentEditableWrapperService
      * @var IconFactory
      */
     protected $iconFactory;
-
-    /**
-     * @var LanguageService
-     */
-    protected $languageService;
 
     /**
      * Add the proper wrapping (html tag) to make the content editable by CKEditor
@@ -94,20 +88,22 @@ class ContentEditableWrapperService
         $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
+        $recordTitle = $this->recordTitle($table, $dataArr);
+
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
             '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
-                'data-movable="1"' .
-                'ondragstart="window.parent.F.dragCeStart(event)"' .
-                'ondragend="window.parent.F.dragCeEnd(event)">' .
+                ' data-movable="1"' .
+                ' ondragstart="window.parent.F.dragCeStart(event)"' .
+                ' ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
                     ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
             '</div>',
             $hiddenElementClassName,
-            $this->recordTitle($table, (int)$uid),
+            $recordTitle,
             $class,
             $table,
             $uid,
@@ -115,7 +111,7 @@ class ContentEditableWrapperService
             $dataArr['colPos'],
             $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid)),
-            $this->renderInlineActionIcons($table, $elementIsHidden),
+            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle),
             $content
         );
 
@@ -155,14 +151,16 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__dropzone';
 
         $dropZone = sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" data-new-url="%s" data-moveafter="%d" data-colpos="%d"></div>',
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+                'data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
             $uid,
-            $colPos
+            $colPos,
+            htmlspecialchars(json_encode($defaultValues))
         );
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);
@@ -173,21 +171,23 @@ class ContentEditableWrapperService
      *
      * @param string $table
      * @param bool $elementIsHidden
+     * @param string $recordTitle
      * @return string
      */
-    public function renderInlineActionIcons(string $table, bool $elementIsHidden): string
+    public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = ''): string
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-        $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
 
         $visibilityIcon = ($elementIsHidden === true) ?
-            $this->renderIconWithWrap('unHide', 'actions-edit-unhide') : $this->renderIconWithWrap('hide', 'actions-edit-hide');
+            $this->renderIconWithWrap('unHide', 'actions-edit-unhide') :
+                $this->renderIconWithWrap('hide', 'actions-edit-hide');
 
         $moveIcons = ($table === 'tt_content') ?
-            $this->renderIconWithWrap('moveUp', 'actions-move-up') . $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
+            $this->renderIconWithWrap('moveUp', 'actions-move-up') .
+                $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
 
         $inlineIcons =
-            $this->renderIconWithWrap('edit', 'actions-open') .
+            $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
             $this->renderIconWithWrap('delete', 'actions-edit-delete') .
             $this->renderIconWithWrap('new', 'actions-document-new') .
@@ -201,11 +201,22 @@ class ContentEditableWrapperService
      *
      * @param string $titleKey
      * @param string $iconKey
+     * @param string $recordTitle
      * @return string
      */
-    private function renderIconWithWrap(string $titleKey, string $iconKey): string
+    private function renderIconWithWrap(string $titleKey, string $iconKey, string $recordTitle = ''): string
     {
-        return '<span title="' . $this->languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey) . '">' . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
+        $editRecordTitle = $GLOBALS['LANG']->sL(
+            'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
+        );
+
+        // Append record title to 'title' attribute
+        if ($recordTitle) {
+            $editRecordTitle .= ' \'' . $recordTitle . '\'';
+        }
+
+        return '<span title="' . $editRecordTitle. '">'
+            . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
     }
 
     /**
@@ -300,7 +311,8 @@ class ContentEditableWrapperService
         if ($tcaCtrl['enablecolumns']['disabled'] && $row[$tcaCtrl['enablecolumns']['disabled']] ||
             $tcaCtrl['enablecolumns']['fe_group'] && $GLOBALS['TSFE']->simUserGroup &&
             $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
-            $tcaCtrl['enablecolumns']['starttime'] && $row[$tcaCtrl['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
+            $tcaCtrl['enablecolumns']['starttime'] &&
+                $row[$tcaCtrl['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
             $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
             $row[$tcaCtrl['enablecolumns']['endtime']] < $GLOBALS['EXEC_TIME']
         ) {
@@ -313,12 +325,11 @@ class ContentEditableWrapperService
      * Returns the title label used in Backend lists
      *
      * @param string $table of the record
-     * @param int $uid of the record
+     * @param array $rawRecord
      * @return string
      */
-    public function recordTitle(string $table, int $uid): string
+    public function recordTitle(string $table, array $rawRecord = []): string
     {
-        $rawRecord = BackendUtility::getRecord($table, $uid);
         return BackendUtility::getRecordTitle(
             $table,
             $rawRecord

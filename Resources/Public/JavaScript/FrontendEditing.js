@@ -110,8 +110,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 					window.location.href = linkUrl;
 				} else {
 					this.confirm(F.translate('notifications.unsaved-changes'), {
-						yes: function () {
+						yes: function() {
 							window.location.href = linkUrl;
+						},
+						no: function() {
+							F.hideLoadingScreen();
 						}
 					});
 				}
@@ -151,7 +154,27 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			}
 		},
 
+		parseQuery: function (queryString) {
+			var query = {};
+			var a = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+			for (var i = 0; i < a.length; i++) {
+				var b = a[i].split('=');
+				query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+			}
+			return query;
+		},
+
+		serializeObj: function (obj) {
+			var str = [];
+			for (var p in obj)
+				if (obj.hasOwnProperty(p)) {
+					str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+				}
+			return str.join('&');
+		},
+
 		dragCeStart: function (ev) {
+			ev.stopPropagation();
 			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
 
 			ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
@@ -170,6 +193,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		dragCeEnd: function (ev) {
+			ev.stopPropagation();
 			var movable = parseInt(ev.currentTarget.dataset.movable, 10);
 
 			if (movable === 1) {
@@ -202,9 +226,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 				var ceUid = parseInt(ev.dataTransfer.getData('movableUid'), 10);
 				var moveAfter = parseInt($currentTarget.data('moveafter'), 10);
 				var colPos = parseInt($currentTarget.data('colpos'), 10);
+				var defVals = $currentTarget.data('defvals');
 
 				if (ceUid !== moveAfter) {
-					F.moveContent(ceUid, 'tt_content', moveAfter, colPos);
+					F.moveContent(ceUid, 'tt_content', moveAfter, colPos, defVals);
 				}
 			} else {
 				this.dropNewCe(ev);
@@ -212,10 +237,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		},
 
 		dropNewCe: function (ev) {
-			var params = ev.dataTransfer.getData('params');
-			var newUrl = $(ev.currentTarget).data('new-url');
-			var fullUrl = newUrl + params;
-			F.loadInModal(fullUrl);
+			// Merge drop zone query string with new CE query string without override
+			var newUrlParts = $(ev.currentTarget).data('new-url').split('?');
+			var newUrlQueryStringObj = F.parseQuery(newUrlParts[1]);
+			var paramsObj = F.parseQuery(ev.dataTransfer.getData('params').substr(1));
+			var fullUrlObj = {};
+			$.extend(true, fullUrlObj, paramsObj, newUrlQueryStringObj);
+			var fullUrlQueryString = F.serializeObj(fullUrlObj);
+			F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
 		},
 
 		indicateCeStart: function (ev) {

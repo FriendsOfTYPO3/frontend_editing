@@ -55,8 +55,8 @@
 .dropzones-enabled .t3-frontend-editing__dropzone {
   height: 25px;
   &.active {
-    height: 60px;
     border: dashed 1px @gray;
+    background-color: @color-t3-green;
   }
   &.t3-frontend-editing__dropzone-hidden {
     display: none;
@@ -72,7 +72,8 @@
   left: -1px;
   color: @color-white;
   background-color: fade(@color-t3-gray-dark, 80%);
-  z-index: 2;
+  // Maximum z-index value to make sure it is always on top
+  z-index: 2147483647;
   text-align: right;
 
   .icon {

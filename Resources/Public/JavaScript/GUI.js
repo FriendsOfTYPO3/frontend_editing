@@ -60,26 +60,26 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 	var $iframe;
 	var $loadingScreen;
 	var $saveButton;
+	var $discardButton;
 	var iframeUrl;
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var firstSiteContent;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
 		$iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
 		$loadingScreen = $('.t3-frontend-editing__loading-screen');
 		$saveButton = $('.t3-frontend-editing__save');
+		$discardButton = $('.t3-frontend-editing__discard');
 		editorConfigurationUrl = options.editorConfigurationUrl;
 		resourcePath = options.resourcePath;
-		firstSiteContent = options.content;
 
 		initListeners();
 		bindActions();
 		D3IndentedTree.init(options.pageTree);
 		initGuiStates();
-		loadEditorConfig(options.iframeUrl, editorConfigurationUrl);
+		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
 	}
 
@@ -116,9 +116,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
+				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
+				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
 			}
@@ -152,6 +154,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		var t = 0;
 		var y = 0;
 
+		// Add check for page tree navigation
+		$('.t3-frontend-editing__page-tree li').click(function () {
+			var linkUrl = $(this).data('url');
+			F.showLoadingScreen();
+			F.navigate(linkUrl);
+		});
 
 		$('.top-right-title').on('click', function () {
 			$('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
@@ -291,38 +299,33 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		F.getStorage().addItem('rightPanelState', rightPanelState);
 	}
 
-	function loadEditorConfig(url, editorConfigurationUrl) {
-		showLoadingScreen();
-		var d = $iframe[0].contentWindow.document;
-		// Init iframe document
-		d.open();
-		d.close();
-		d.documentElement.innerHTML = firstSiteContent;
-
-		Editor.init($iframe, editorConfigurationUrl, resourcePath);
-		hideLoadingScreen();
-	}
-
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		$.ajax({
-			url: url,
-			headers: {
-				'X-Frontend-Editing': '1'
-			},
-			method: 'GET',
-			success: function (content) {
-				$iframe[0].contentWindow.document.documentElement.innerHTML = content;
-			},
-			complete: function () {
-				Editor.init($iframe, editorConfigurationUrl, resourcePath);
-				hideLoadingScreen();
-				iframeUrl = url;
-			}
+		var deferred = $.Deferred();
+
+		$iframe.attr({
+			'src': url
 		});
+
+		$iframe.on('load', deferred.resolve);
+
+		deferred.done(function () {
+			Editor.init($iframe, editorConfigurationUrl, resourcePath);
+
+			if (sessionStorage.scrollTop !== 'undefined') {
+				$iframe.contents().scrollTop(sessionStorage.scrollTop);
+				sessionStorage.removeItem('scrollTop');
+			}
+
+			hideLoadingScreen();
+		});
+
+		iframeUrl = url;
 	}
 
 	function refreshIframe() {
+		sessionStorage.scrollTop = $iframe.contents().scrollTop();
+
 		loadPageIntoIframe(iframeUrl, editorConfigurationUrl);
 	}
 

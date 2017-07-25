@@ -41,7 +41,7 @@ class FrontendEditingAvatarProvider extends DefaultAvatarProvider
         if ($image === null) {
             $image = GeneralUtility::makeInstance(
                 Image::class,
-                '//' . ExtensionManagementUtility::siteRelPath('core') .
+                ExtensionManagementUtility::siteRelPath('core') .
                 'Resources/Public/Icons/T3Icons/avatar/avatar-default.svg',
                 $size,
                 $size

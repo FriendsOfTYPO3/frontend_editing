@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 /*
@@ -14,94 +15,83 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Fluid\Tests\Unit\ViewHelpers\ViewHelperBaseTestcase;
+use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\FrontendEditing\ViewHelpers\ContentEditableViewHelper;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
+
+use Nimut\TestingFramework\Rendering\RenderingContextFixture;
 
 /**
  * Test case for TYPO3\CMS\FrontendEditing\ViewHelpers\EditableViewHelper
  */
 class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
 {
-    /**
-     * @var ContentEditableViewHelper
-     */
-    protected $viewHelper;
-
-    /**
-     * @var ContentEditableFixtures
-     */
-    protected $fixtures;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->fixtures = new ContentEditableFixtures();
-        $this->viewHelper = $this->getAccessibleMock(
-            ContentEditableViewHelper::class,
-            ['renderChildren']
-        );
-        $this->injectDependenciesIntoViewHelper($this->viewHelper);
-    }
 
     /**
      * @test
      */
-    public function renderTagStructureCorrectly()
+    public function testInitializeArgumentsRegistersExpectedArguments()
     {
-        $mockTagBuilder = $this->getMockBuilder(TagBuilder::class)
-            ->setMethods(['setTagName'])
-            ->getMock();
-        $mockTagBuilder->expects($this->once())->method('setTagName')->with('');
-        $this->viewHelper->_set('tag', $mockTagBuilder);
-
-        $this->viewHelper->expects($this->once())
-            ->method('renderChildren')->will(
-                $this->returnValue(
-                    $this->fixtures->getWrappedExpectedContent()
-                )
-            );
-
-        $this->viewHelper->initialize();
-        $this->viewHelper->render(
-            $this->fixtures->getTable(),
-            $this->fixtures->getField(),
-            $this->fixtures->getUid()
+        $instance = $this->getMock(ContentEditableViewHelper::class, ['registerArgument']);
+        $instance->expects($this->at(0))->method('registerArgument')->with(
+            'table',
+            'string',
+            $this->anything(),
+            true,
+            false
         );
+        $instance->expects($this->at(1))->method('registerArgument')->with(
+            'field',
+            'string',
+            $this->anything(),
+            false,
+            false
+        );
+        $instance->expects($this->at(2))->method('registerArgument')->with(
+            'uid',
+            'string',
+            $this->anything(),
+            true,
+            false
+        );
+        $instance->setRenderingContext(new RenderingContextFixture());
+        $instance->initializeArguments();
     }
 
     /**
-     * @test
+     * @dataProvider getRenderTestValues
+     * @param mixed $value
+     * @param array $arguments
+     * @param string $expected
      */
-    public function viewHelperRendersWithTheCorrectEditableWrapping()
+    public function testRender($value, array $arguments, $expected)
     {
-        $this->viewHelper = new ContentEditableViewHelper();
-        $this->injectDependenciesIntoViewHelper($this->viewHelper);
+        $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
+        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->setArguments($arguments);
+        $instance->setRenderingContext(new RenderingContextFixture());
+        $result = $instance->render();
+        $this->assertEquals($expected, $result);
+    }
 
-        $this->viewHelper->setRenderChildrenClosure(
-            function () {
-                return $this->fixtures->getContent();
-            }
-        );
+    /**
+     * @return array
+     */
+    public function getRenderTestValues()
+    {
+        $fixtures = new ContentEditableFixtures();
 
-        $this->setArgumentsUnderTest(
-            $this->viewHelper,
+        return [
             [
-                'table' => $this->fixtures->getTable(),
-                'field' => $this->fixtures->getField(),
-                'uid' => $this->fixtures->getUid()
+                $fixtures->getWrappedExpectedContent(),
+                [
+                    'table' => $fixtures->getTable(),
+                    'field' => $fixtures->getField(),
+                    'uid' => $fixtures->getUid()
+                ],
+                $fixtures->getWrappedExpectedContent()
             ]
-        );
-
-        $actualResult = $this->viewHelper->initializeArgumentsAndRender();
-
-        $this->assertEquals(
-            $this->fixtures->getWrappedExpectedContent(),
-            $actualResult
-        );
+        ];
     }
 }

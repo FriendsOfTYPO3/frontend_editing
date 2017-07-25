@@ -1,0 +1,34 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - parallel
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer --version
+  - composer install
+
+script:
+
+  - >
+    echo;
+    echo "Running PHP codesniffer";
+    .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
+
+  - >
+    echo;
+    echo "Running unit tests";
+    export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/

@@ -70,7 +70,8 @@ class EditorController
         ];
 
         $this->formData = $formDataCompiler->compile($formDataCompilerInput);
-        $this->rteConfiguration = $this->formData['processedTca']['columns'][$fieldName]['config']['richtextConfiguration']['editor'];
+        $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
+        $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
 
         $configuration = $this->prepareConfigurationForEditor();
 
@@ -122,7 +123,10 @@ class EditorController
                 unset($configuration['resource']);
 
                 if ($configuration['route']) {
-                    $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute($configuration['route'], $urlParameters);
+                    $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
+                        $configuration['route'],
+                        $urlParameters
+                    );
                 }
 
                 $pluginConfiguration[$pluginName]['config'] = $configuration;
@@ -214,7 +218,8 @@ class EditorController
         } else {
             $contentLanguage = $this->rteConfiguration['config']['defaultContentLanguage'] ?? 'en_US';
             $languageCodeParts = explode('_', $contentLanguage);
-            $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1] ? '_' . strtoupper($languageCodeParts[1]) : '');
+            $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1]
+                ? '_' . strtoupper($languageCodeParts[1]) : '');
             // Find the configured language in the list of localization locales
             $locales = GeneralUtility::makeInstance(Locales::class);
             // If not found, default to 'en'
