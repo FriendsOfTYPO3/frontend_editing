@@ -79,7 +79,7 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'pageUid',
             'string',
-            'Overriden page uid for new record droped in zone',
+            'Override storage page uid for new record droped in zone',
             false
         );
         $this->registerArgument(
