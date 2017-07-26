@@ -48,6 +48,13 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
             false
         );
         $instance->expects($this->at(2))->method('registerArgument')->with(
+            'pageUid',
+            'string',
+            $this->anything(),
+            false,
+            false
+        );
+        $instance->expects($this->at(3))->method('registerArgument')->with(
             'prepend',
             'bool',
             $this->anything(),
@@ -104,6 +111,7 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
                 [
                     'tables' => $fixtures->getCustomTables(),
                     'fields' => [],
+                    'pageUid' => 0,
                     'prepend' => false
                 ],
                 'My content',
@@ -124,6 +132,7 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
                 [
                     'tables' => $fixtures->getCustomTables(),
                     'fields' => [],
+                    'pageUid' => 0,
                     'prepend' => false
                 ],
                 $fixtures->getWrapWithCustomDropzoneExpectedContent('My content')

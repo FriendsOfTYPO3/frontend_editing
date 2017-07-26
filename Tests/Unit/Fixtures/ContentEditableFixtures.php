@@ -237,16 +237,18 @@ class ContentEditableFixtures
 
         $tables = implode(',', $this->customTables);
         $defaultValues = [];
+        $pageUid = 0;
 
         $expectedOutput = sprintf(
             '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-            'data-tables="%s" data-defvals="%s"></div>',
+            'data-tables="%s" data-defvals="%s" data-pid="%s"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
             $tables,
-            htmlspecialchars(json_encode($defaultValues))
+            htmlspecialchars(json_encode($defaultValues)),
+            $pageUid
         );
 
         return $content . $expectedOutput;
