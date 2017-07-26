@@ -15,6 +15,8 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
@@ -47,6 +49,14 @@ class ContentEditableFixtures
      * @var string
      */
     protected $content = 'This is my content';
+
+    /**
+     * @var array
+     */
+    protected $customTables = [
+        'tx_news_domain_model_model1',
+        'tx_news_domain_model_model2'
+    ];
 
     /**
      * @var array
@@ -96,6 +106,14 @@ class ContentEditableFixtures
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomTables()
+    {
+        return $this->customTables;
     }
 
     /**
@@ -201,5 +219,48 @@ class ContentEditableFixtures
         );
 
         return $expectedOutput;
+    }
+
+    /**
+     * A public getter for getting the correct expected wrapping for custom dropzone
+     *
+     * @param string $content
+     *
+     * @return string
+     */
+    public function getWrapWithCustomDropzoneExpectedContent(string $content = '')
+    {
+        $jsFuncOnDrop = 'window.parent.F.dropCr(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
+        $class = 't3-frontend-editing__dropzone';
+
+        $tables = implode(',', $this->customTables);
+        $defaultValues = [];
+
+        $expectedOutput = sprintf(
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+            'data-tables="%s" data-defvals="%s"></div>',
+            $class,
+            $jsFuncOnDrop,
+            $jsFuncOnDragover,
+            $jsFuncOnDragLeave,
+            $tables,
+            htmlspecialchars(json_encode($defaultValues))
+        );
+
+        return $content . $expectedOutput;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public static function setAccessServiceEnabled(bool $enabled)
+    {
+        $access = GeneralUtility::makeInstance(AccessService::class);
+        $reflection = new \ReflectionClass($access);
+        $reflectionProperty = $reflection->getProperty('isEnabled');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($access, $enabled);
     }
 }

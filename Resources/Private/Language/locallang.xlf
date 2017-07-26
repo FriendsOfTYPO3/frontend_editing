@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
-    <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing">
+    <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z"
+          product-name="frontend_editing">
         <header/>
         <body>
             <trans-unit id="settings.field.frontend_editing">
@@ -37,7 +38,7 @@
                 <source>Content saved</source>
             </trans-unit>
             <trans-unit id="notifications.save-description">
-                <source>Saved the content with identifier: </source>
+                <source>Saved the content with identifier:</source>
             </trans-unit>
             <trans-unit id="notifications.save-went-wrong">
                 <source>Something went wrong</source>
@@ -91,7 +92,9 @@
             <trans-unit id="right-bar.on-page.title">
                 <source>Elements on page</source>
             </trans-unit>
-
+            <trans-unit id="right-bar.custom-record.title">
+                <source>Custom records</source>
+            </trans-unit>
             <trans-unit id="left-bar.installation-mounts.change">
                 <source>Choose site root</source>
             </trans-unit>

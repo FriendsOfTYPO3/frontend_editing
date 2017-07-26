@@ -1,0 +1,31 @@
+{namespace core=TYPO3\CMS\Core\ViewHelpers}
+
+<div class="custom-record-tab dark-transparent-bg accordion-container accordion-list" data-wizard-type="ce-custom-records">
+	<div class="accordion ">
+		<div class="element-title">
+			<span class="title-left"><f:translate key="right-bar.custom-record.title" extensionName="FrontendEditing" /></span>
+		</div>
+		<div class="element-action">
+			<span class="icons icon-icons-arrow-down trigger"></span>
+		</div>
+	</div>
+	<div class="accordion-content">
+		<f:for each="{customRecords}" as="customRecord">
+			<div class="element"
+				 draggable="true"
+				 ondragstart="F.dragCrStart(event)"
+				 ondragend="F.dragCrEnd(event)"
+				 data-table="{customRecord.table}"
+				 data-url="{customRecord.url}"
+			>
+				<span class="content-icon-default">
+					<core:iconForRecord table="{customRecord.table}" row="{customRecord}" size="default" />
+				</span>
+				<div class="description">
+					<span class="title-default"><f:translate id="{customRecord.title}" /></span>
+					<span class="title-default title-normal-casing">{customRecord.table}</span>
+				</div>
+			</div>
+		</f:for>
+	</div>
+</div>

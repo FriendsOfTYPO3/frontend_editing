@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -167,6 +166,47 @@ class ContentEditableWrapperService
     }
 
     /**
+     * Add a drop zone before/after the content for custom records
+     *
+     * @param string $tables
+     * @param string $content
+     * @param array $defaultValues
+     * @param bool $prepend
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function wrapContentWithCustomDropzone(
+        string $tables,
+        string $content,
+        array $defaultValues = [],
+        bool $prepend = false
+    ): string {
+        // Check that data is not empty
+        if (empty($tables)) {
+            throw new \InvalidArgumentException('Property "tables" can not to be empty!', 1486163430);
+        }
+
+        $jsFuncOnDrop = 'window.parent.F.dropCr(event)';
+        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
+        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
+        $class = 't3-frontend-editing__dropzone';
+
+        $dropZone = sprintf(
+            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+            'data-tables="%s" data-defvals="%s"></div>',
+            $class,
+            $jsFuncOnDrop,
+            $jsFuncOnDragover,
+            $jsFuncOnDragLeave,
+            $tables,
+            htmlspecialchars(json_encode($defaultValues))
+        );
+
+        return $prepend ? ($dropZone . $content) : ($content . $dropZone);
+    }
+
+    /**
      * Renders the inline action icons
      *
      * @param string $table
@@ -246,16 +286,26 @@ class ContentEditableWrapperService
      * @param int $uid
      * @param int $colPos
      * @param array $defaultValues
+     * @param bool $uidAsPid
      * @return string
      */
-    public function renderNewUrl(string $table, int $uid = 0, int $colPos = 0, array $defaultValues = []): string
-    {
-        // Default to top of 'page'
-        $newId = (int)$GLOBALS['TSFE']->id;
+    public function renderNewUrl(
+        string $table,
+        int $uid = 0,
+        int $colPos = 0,
+        array $defaultValues = [],
+        bool $uidAsPid = false
+    ): string {
+        if ($uidAsPid) {
+            $newId = $uid > 0 ? $uid : (int)$GLOBALS['TSFE']->id;
+        } else {
+            // Default to top of 'page'
+            $newId = (int)$GLOBALS['TSFE']->id;
 
-        // If content uid is supplied, set new content to be 'after'
-        if ($uid > 0) {
-            $newId = $uid * -1;
+            // If content uid is supplied, set new content to be 'after'
+            if ($uid > 0) {
+                $newId = $uid * -1;
+            }
         }
 
         $urlParameters = [

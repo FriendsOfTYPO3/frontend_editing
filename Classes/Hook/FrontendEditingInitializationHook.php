@@ -32,11 +32,13 @@ use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -245,7 +247,8 @@ class FrontendEditingInitializationHook
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
-            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
+            'customRecords' => $this->getCustomRecords(),
+            'logoutUrl'  => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
@@ -606,6 +609,48 @@ class FrontendEditingInitializationHook
             $contentElement['_recordTitle'] = BackendUtility::getRecordTitle('tt_content', $contentElement);
         }
         return $contentElements;
+    }
+
+    /**
+     * Get custom records defined in TypoScript
+     *
+     * @return array
+     */
+    protected function getCustomRecords(): array
+    {
+        $records = [];
+        /** @var TypoScriptService $typoScriptService */
+        $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+        $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
+            $this->typoScriptFrontendController->tmpl->setup
+        );
+        if (is_array($configuration['plugin']['tx_frontendediting']['customRecords'])) {
+            /** @var ContentEditableWrapperService $wrapperService */
+            $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+            foreach ($configuration['plugin']['tx_frontendediting']['customRecords'] as $record) {
+                $pid = (int)$record['pid'] ?: $this->typoScriptFrontendController->id;
+                $page = BackendUtility::getRecord('pages', $pid);
+                if (is_array($record) &&
+                    $record['table'] &&
+                    isset($GLOBALS['TCA'][$record['table']]) &&
+                    $GLOBALS['BE_USER']->check('tables_modify', $record['table']) &&
+                    $page && $GLOBALS['BE_USER']->doesUserHaveAccess($page, 16)
+                ) {
+                    $records[] = [
+                        'title' => $GLOBALS['TCA'][$record['table']]['ctrl']['title'],
+                        'table' => $record['table'],
+                        'url' => $wrapperService->renderEditOnClickReturnUrl($wrapperService->renderNewUrl(
+                            $record['table'],
+                            (int)$pid,
+                            0,
+                            is_array($record['defVals']) ? $record['defVals'] : [],
+                            true
+                        )),
+                    ];
+                }
+            }
+        }
+        return $records;
     }
 
     /**
