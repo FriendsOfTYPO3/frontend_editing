@@ -77,6 +77,12 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
             false
         );
         $this->registerArgument(
+            'pageUid',
+            'string',
+            'Overriden page uid for new record droped in zone',
+            false
+        );
+        $this->registerArgument(
             'prepend',
             'bool',
             'Prepend the zone to the content',
@@ -117,6 +123,7 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
             implode(',', $arguments['tables']),
             (string)$content,
             $defaultValues,
+            (int)$arguments['pageUid'],
             (bool)$arguments['prepend']
         );
 

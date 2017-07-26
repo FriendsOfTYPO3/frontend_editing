@@ -171,6 +171,7 @@ class ContentEditableWrapperService
      * @param string $tables
      * @param string $content
      * @param array $defaultValues
+     * @param int $pageUid
      * @param bool $prepend
      *
      * @return string
@@ -180,6 +181,7 @@ class ContentEditableWrapperService
         string $tables,
         string $content,
         array $defaultValues = [],
+        int $pageUid = 0,
         bool $prepend = false
     ): string {
         // Check that data is not empty
@@ -194,13 +196,14 @@ class ContentEditableWrapperService
 
         $dropZone = sprintf(
             '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-            'data-tables="%s" data-defvals="%s"></div>',
+            'data-tables="%s" data-defvals="%s" data-pid="%s"></div>',
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
             $tables,
-            htmlspecialchars(json_encode($defaultValues))
+            htmlspecialchars(json_encode($defaultValues)),
+            $pageUid
         );
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);

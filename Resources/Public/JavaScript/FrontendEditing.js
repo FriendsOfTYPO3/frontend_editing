@@ -278,6 +278,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			if(!ev.dataTransfer.getData('table') && url){
 				return false;
 			}
+			var pageUid = parseInt($(ev.currentTarget).data('pid'), 10) || 0;
+			if (pageUid > 0) {
+				// TODO: Find a better solution than simply replace in URL
+				url = url.replace(/%5D%5B\d+%5D=new/, '%5D%5B' + pageUid + '%5D=new');
+			}
 			try{
 				var defaultValues = $(ev.currentTarget).data('defvals');
 				var newUrlParts = url.split('?');
