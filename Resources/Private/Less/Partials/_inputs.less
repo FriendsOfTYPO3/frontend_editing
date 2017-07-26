@@ -1,0 +1,17 @@
+input[type=text] {
+  background: @white;
+  color: @gray-dark;
+  font: @font-size-regular @font-family-user-input;
+  padding: 6px;
+  border: 2px solid @gray;
+  outline: none;
+  line-height: 1.25em;
+
+  &:hover {
+    border-color: @gray-light;
+  }
+
+  &:focus {
+    border-color: @orange-primary;
+  }
+}

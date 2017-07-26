@@ -18,16 +18,16 @@ define(['jquery', 'd3'], function ($, d3) {
 	'use strict';
 
 	// Set the dimensions and margins of the tree
-	var margin = {top: 20, right: 20, bottom: 30, left: 10},
-		width = 280 - margin.right - margin.left,
+	var margin = {top: 20, right: 20, bottom: 30, left: 4},
+		width = 245 - margin.right - margin.left,
 
 		barHeight = 20,
-		barWidth = width * .9,
+		barWidth = width + 12,
 
-		nodeStep = 10,
+		nodeStep = 12,
 
-		dyText = 2.5,
-		dxText = 12,
+		dyText = 4,
+		dxText = 14,
 
 		xRect = 7,
 
@@ -48,6 +48,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		activeNodeClass = 'active',
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
+		hasChildrenExpandedClass = 'has-children-exp',
 		noChildrenClass = 'no-children';
 
 	/**
@@ -523,8 +524,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		$(_getDomSelector('editInput'))
 			.val(d.data.name)
-			.css('width', box.width)
-			.css('height', box.height)
+			.css('width', box.width + 2)
 			.css('left', d.y + xRect + nodeStep)
 			.css('top', d.x + nodeStep)
 			.show()

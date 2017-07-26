@@ -1,7 +1,7 @@
 .t3-frontend-editing__page-tree-wrapper {
 
-  height: calc(~"100vh - "@top-bar-height);
-  max-height: calc(~"100vh - "@top-bar-height);
+  height: calc(~"100vh - "(@top-bar-height + @pagetree-filter-height));
+  max-height: calc(~"100vh - "(@top-bar-height + @pagetree-filter-height));
   width: @left-bar-width - 14px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -44,126 +44,74 @@
   }
 }
 
-.treeline-icon {
-  position: relative;
-  display: block;
-  float: left;
-  margin-top: -6px;
-  margin-bottom: -6px;
-  margin-right: 2px;
-  padding: 0;
-  height: 31px;
-  width: 16px;
-  white-space: nowrap;
+// D3 tree styling
+
+#page-tree-filter-wrapper {
+  width: 100%;
+  height: @pagetree-filter-height;
   overflow: hidden;
 
-  &::before {
-    top: 0;
-    height: 100%;
-    width: 2px;
-    margin-left: -1px;
-    border-left: 1px dotted @white;
+  label {
+    margin-top: 10px;
+    display: inline-block;
+    width: 25%;
   }
 
-  &::after {
-    border-top: 1px dotted @white;
-    height: 2px;
-    width: 100%;
-    top: 50%;
-    margin-top: -1px;
+  input {
+    margin-top: 10px;
+    display: inline-block;
+    width: 70%;
+  }
+}
+
+#page-tree-wrapper {
+
+  svg {
+    padding: 0 0 8px 0;
   }
 
-  &::after,
-  &::before {
+  // input field when you edit the name of a page
+  #edit-page-tree-node {
+    display: none;
     position: absolute;
-    content: '';
-    left: 50%;
+    margin: -8px 0 0 -9px;
   }
-}
 
-.treeline-icon-jointop {
-  &::before {
-    top: 50%;
-  }
-}
+  .node {
+    rect {
+      cursor: pointer;
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 2px;
 
-.treeline-icon-joinbottom {
-  &::before {
-    top: -50%;
-  }
-}
+      &.active {
+        stroke: @orange-primary;
+      }
+    }
 
-.treeline-icon-line {
-  &::after {
-    display: none;
-  }
-}
+    circle {
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 10px;
+      &.has-children {
+        fill: @white;
+      }
+      &.has-children-expanded {
+        fill: #000;
+      }
+    }
 
-.treeline-icon-blank {
-  display: none;
-}
-
-.treeline-icon-clear {
-  &::before,
-  &::after {
-    display: none;
-  }
-}
-
-.icon-overlay {
-  img {
-    width: 12px;
-    height: 12px;
-    position: relative;
-    left: -16px;
-    top: 1px;
-  }
-}
-
-.page-tree-item {
-  position: relative;
-  top: -2px;
-}
-
-.page-tree-status-hidden {
-  margin-left: -16px;
-}
-
-.page-tree-active {
-  color: @color-t3-primary;
-}
-
-// D3 tree temp styling
-#edit-page-tree-node {
-  display: none;
-  position: absolute;
-}
-.node {
-  rect {
-    cursor: pointer;
-    fill: #c6dbef;
-    stroke: #3182bd;
-    stroke-width: 1.5px;
-    &.active {
-      fill: @color-t3-primary;
+    text {
+      font: @font-size-small @font-family-base;
+      fill: @white;
+      pointer-events: none;
     }
   }
-  circle {
-    fill: #fff;
-    stroke: steelblue;
-    stroke-width: 1px;
-    &.has-children {
-      fill: #b0c4de;
-    }
-  }
-  text {
-    font: 10px sans-serif;
-    pointer-events: none;
-  }
-}
 
-path.link {
-  fill: none;
-  stroke: #9ecae1;
-  stroke-width: 1.5px;
+  path.link {
+    fill: none;
+    stroke: @gray-bright;
+    stroke-width: 2px;
+    stroke-dasharray: 1, 1;
+  }
 }
