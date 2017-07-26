@@ -52,23 +52,29 @@
   overflow: hidden;
 
   label {
-    margin-top: 12px;
+    margin-top: 10px;
     display: inline-block;
     width: 25%;
   }
 
   input {
-    margin-top: 12px;
+    margin-top: 10px;
     display: inline-block;
     width: 70%;
-    font: @font-size-regular @font-family-base;
   }
 }
 
 #page-tree-wrapper {
+
+  svg {
+    padding: 0 0 8px 0;
+  }
+
+  // input field when you edit the name of a page
   #edit-page-tree-node {
     display: none;
     position: absolute;
+    margin: -8px 0 0 -9px;
   }
 
   .node {
