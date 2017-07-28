@@ -189,6 +189,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			}
 
 			var $iframe = F.iframe();
+			$iframe.contents().find('.t3-frontend-editing__dropzone[data-tables]').addClass('t3-frontend-editing__dropzone-hidden');
 			$iframe.contents().find('body').addClass('dropzones-enabled');
 		},
 
@@ -204,6 +205,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			}
 
 			var $iframe = F.iframe();
+			$iframe.contents().find('.t3-frontend-editing__dropzone[data-tables]').removeClass('t3-frontend-editing__dropzone-hidden');
 			$iframe.contents().find('body').removeClass('dropzones-enabled');
 		},
 
@@ -268,6 +270,51 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var $iframe = F.iframe();
 			$iframe.contents().find('#c' + ev.currentTarget.dataset.uid).parent().removeClass('indicate-element');
 			window.clearTimeout(indicateCeScrollTimeoutId);
+		},
+
+		dropCr: function (ev) {
+			ev.preventDefault();
+			var url = ev.dataTransfer.getData('new-url');
+			if(!ev.dataTransfer.getData('table') && url){
+				return false;
+			}
+			var pageUid = parseInt($(ev.currentTarget).data('pid'), 10) || 0;
+			if (pageUid > 0) {
+				// TODO: Find a better solution than simply replace in URL
+				url = url.replace(/%5D%5B\d+%5D=new/, '%5D%5B' + pageUid + '%5D=new');
+			}
+			try{
+				var defaultValues = $(ev.currentTarget).data('defvals');
+				var newUrlParts = url.split('?');
+				var newUrlQueryStringObj = F.parseQuery(newUrlParts[1]);
+				var fullUrlObj = {};
+				$.extend(true, fullUrlObj, defaultValues, newUrlQueryStringObj);
+				var fullUrlQueryString = F.serializeObj(fullUrlObj);
+				F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
+			}catch(e){
+				F.loadInModal(url);
+			}
+		},
+
+		dragCrStart: function (ev) {
+			ev.stopPropagation();
+			var table = ev.currentTarget.dataset.table;
+			var $iframe = F.iframe();
+
+			ev.dataTransfer.setData('table', table);
+			ev.dataTransfer.setData('new-url', ev.currentTarget.dataset.url);
+
+			$iframe.contents().find('.t3-frontend-editing__dropzone').not('[data-tables~="' + table + '"]').addClass('t3-frontend-editing__dropzone-hidden');
+			$iframe.contents().find('body').addClass('dropzones-enabled');
+		},
+
+		dragCrEnd: function (ev) {
+			ev.stopPropagation();
+			var table = ev.currentTarget.dataset.table;
+			var $iframe = F.iframe();
+
+			$iframe.contents().find('.t3-frontend-editing__dropzone').not('[data-tables~="' + table + '"]').removeClass('t3-frontend-editing__dropzone-hidden');
+			$iframe.contents().find('body').removeClass('dropzones-enabled');
 		}
 	};
 
