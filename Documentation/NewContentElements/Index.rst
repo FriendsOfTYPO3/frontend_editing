@@ -2,10 +2,39 @@
 
 
 
+.. _custom-records-dropzone:
+
+Custom Records
+--------------
+
+With this feature, webmaster is allowed to insert directly record into custom configured zone.
+For example: a webmaster can insert directly news into the news list.
+
+The configuration is done in 2 parts.
+
+A custom zone is added via "CustomDropZoneViewHelper" in record listing
+Allowed record are registered in TypoScript as follows:
+
+  .. code-block:: typoscript
+
+    plugin.tx_frontendediting{
+        customRecords {
+            10 {
+                table = tx_news_domain_model_news
+                pid = 6
+            }
+        }
+    }
+
+The result will be this:
+
+  .. figure:: ../Images/CustomRecordsDropzone.png.png
+     :alt: Custom records for dropzones
+
 .. _new-content-elements:
 
 New Content Elements
-------------
+--------------------
 
 It's possible to add drop zones for new content elements in a custom content elements. This is done by the class called ContentEditableWrapperService.
 
