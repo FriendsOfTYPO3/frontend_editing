@@ -60,13 +60,30 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     }
 
     /**
-     * @dataProvider getRenderTestValues
+     * @dataProvider testRenderWithoutFrontendEditingEnabled
      * @param mixed $value
      * @param array $arguments
      * @param string $expected
      */
-    public function testRender($value, array $arguments, $expected)
+    public function testRenderWithoutFrontendEditingEnabled($value, array $arguments, $expected)
     {
+        $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
+        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->setArguments($arguments);
+        $instance->setRenderingContext(new RenderingContextFixture());
+        $result = $instance->render();
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider getRenderTestValuesWithFrontendEditionEnabled
+     * @param mixed $value
+     * @param array $arguments
+     * @param string $expected
+     */
+    public function testRenderWithFrontendEditingEnabled($value, array $arguments, $expected)
+    {
+        ContentEditableFixtures::setAccessServiceEnabled(true);
         $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
         $instance->expects($this->once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
@@ -78,7 +95,27 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     /**
      * @return array
      */
-    public function getRenderTestValues()
+    public function getRenderTestValuesWithoutFrontendEditionEnabled()
+    {
+        $fixtures = new ContentEditableFixtures();
+
+        return [
+            [
+                $fixtures->getWrappedExpectedContent(),
+                [
+                    'table' => $fixtures->getTable(),
+                    'field' => $fixtures->getField(),
+                    'uid' => $fixtures->getUid()
+                ],
+                $fixtures->getWrappedExpectedContent()
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getRenderTestValuesWithFrontendEditionEnabled()
     {
         $fixtures = new ContentEditableFixtures();
 
