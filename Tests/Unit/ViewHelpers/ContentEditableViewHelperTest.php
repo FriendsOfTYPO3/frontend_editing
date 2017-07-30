@@ -60,7 +60,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     }
 
     /**
-     * @dataProvider testRenderWithoutFrontendEditingEnabled
+     * @dataProvider getRenderTestValuesWithoutFrontendEditionEnabled
      * @param mixed $value
      * @param array $arguments
      * @param string $expected
@@ -121,7 +121,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
 
         return [
             [
-                $fixtures->getWrappedExpectedContent(),
+                'This is my content',
                 [
                     'table' => $fixtures->getTable(),
                     'field' => $fixtures->getField(),

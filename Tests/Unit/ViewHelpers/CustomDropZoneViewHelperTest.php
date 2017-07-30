@@ -17,7 +17,6 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
-
 use Nimut\TestingFramework\Rendering\RenderingContextFixture;
 use TYPO3\CMS\FrontendEditing\ViewHelpers\CustomDropZoneViewHelper;
 
@@ -114,7 +113,7 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
                     'pageUid' => 0,
                     'prepend' => false
                 ],
-                'My content',
+                $fixtures->getWrapWithCustomDropzoneExpectedContent('My content')
             ]
         ];
     }
