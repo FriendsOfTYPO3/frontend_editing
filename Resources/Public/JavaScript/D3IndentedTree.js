@@ -216,7 +216,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		nodeEnter.append('circle')
 			.attr('r', 1e-6)
 			.attr('class', function (d) {
-				return d._children ? hasChildrenClass : noChildrenClass;
+				return _determinateNodeClassDependingOnChildren(d);
 			})
 			.on('click', _clickCircle);
 
@@ -252,7 +252,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		nodeUpdate.select('circle')
 			.attr('r', circleRadius)
 			.attr('class', function (d) {
-				return d._children ? hasChildrenClass : noChildrenClass;
+				return _determinateNodeClassDependingOnChildren(d);
 			})
 			.attr('cursor', 'pointer');
 
@@ -694,6 +694,21 @@ define(['jquery', 'd3'], function ($, d3) {
 		}).always(function () {
 			searchRunning = false;
 		});
+	}
+
+	/**
+	 * Check if node is expanded and has children
+	 * @param node
+	 * @private
+	 */
+	function _determinateNodeClassDependingOnChildren(node) {
+		if (!node._children && !node.children) {
+			return noChildrenClass;
+		} else if (node._children && !node.children) {
+			return hasChildrenClass;
+		} else if (!node._children && node.children) {
+			return hasChildrenExpandedClass;
+		}
 	}
 
 	/**
