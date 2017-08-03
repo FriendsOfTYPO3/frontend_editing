@@ -115,7 +115,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.on('keyup', function (e) {
 				var code = (e.keyCode ? e.keyCode : e.which);
 
-				if(code === 13) {
+				if (code === 13) {
 					_finishEditing($(this).val().trim());
 				} else if (code === 27) {
 					_resetEditing();
@@ -544,6 +544,8 @@ define(['jquery', 'd3'], function ($, d3) {
 			 * @TODO is there a better way to get text element ?
 			 */
 			d3.select(editingOriginalNode.currentNode.nextElementSibling).text(newValue);
+			// Set new name in node
+			editingOriginalNode.d.data.name = newValue;
 
 			// Save the new title
 			var saveItemData = {
