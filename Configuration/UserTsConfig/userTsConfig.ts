@@ -13,3 +13,5 @@ admPanel {
     override.preview.showHiddenRecords = 1
     hide = 1
 }
+
+options.saveDocView = 0
