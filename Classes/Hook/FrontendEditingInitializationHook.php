@@ -288,7 +288,8 @@ class FrontendEditingInitializationHook
     protected function loadStylesheets()
     {
         $files = [
-            'EXT:frontend_editing/Resources/Public/Css/frontend_editing.css'
+            'EXT:frontend_editing/Resources/Public/Css/frontend_editing.css',
+            '/typo3/sysext/backend/Resources/Public/Css/backend.css'
         ];
         foreach ($files as $file) {
             $this->pageRenderer->addCssFile($file);
