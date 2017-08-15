@@ -55,12 +55,6 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					rel: 'stylesheet',
 					href: resourcePath + 'Css/inline_editing.css',
 					type: 'text/css'
-				},
-				'<link/>',
-				{
-					rel: 'stylesheet',
-					href: '/typo3/sysext/backend/Resources/Public/Css/backend.css',
-					type: 'text/css'
 				}
 			)
 		);
