@@ -5,47 +5,32 @@
 
 .btn {
   font-family: @font-family-base;
-  display: inline-block;
-  background-color: @color-t3-primary;
-  color: @white;
+  color: @white !important;
   border: 0;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  height: @top-bar-height - 10px;
-  font-size: @font-size-regular;
-  padding: 0 14px;
+  border-radius: 0 !important;
+  height: @top-bar-height - 10px !important;
+  font-size: @font-size-regular !important;
+  padding: 0 14px !important;
   text-transform: uppercase;
   outline: none;
 
-  &:hover {
-    background-color: darken(@color-t3-primary, 7%);
+  &:focus {
+    outline: none !important;
   }
 }
 
 .btn-default {
-  font-family: @font-family-base;
-  display: inline-block;
-  border: 1px solid @gray-light;
-  background-color: transparent;
-  color: @white;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  height: @top-bar-height - 10px;
-  font-size: @font-size-regular;
-  padding: 0 14px;
-  text-transform: uppercase;
-  outline: none;
+  border: 1px solid @gray-light !important;
+  background-color: transparent !important;
 
   &:hover {
-    background-color: lighten(@gray, 50%);
+    background-color: lighten(@gray, 50%) !important;
   }
 }
 
 .btn-inactive {
-  font-family: @font-family-base;
   cursor: not-allowed;
   pointer-events: none;
-  background-color: @gray;
+  background-color: @gray !important;
+  border-color: @gray !important;
 }
