@@ -14,3 +14,4 @@ composer.lock
 
 # NPM
 npm-debug.log
+package-lock.json
