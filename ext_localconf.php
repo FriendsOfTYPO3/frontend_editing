@@ -61,3 +61,84 @@ if (TYPO3_MODE === 'FE' &&
         'provider' => \TYPO3\CMS\FrontendEditing\Provider\FrontendEditingAvatarProvider::class
     ];
 }
+
+/**
+ * Custom icons
+ */
+$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+
+$iconRegistry->registerIcon(
+    'ext-news-wizard-icon',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:news/Resources/Public/Icons/plugin_wizard.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-2ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/2-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-3ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/3-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-4ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/4-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-adv1ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/adv1-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-adv2ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/adv2-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-adv3ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/adv3-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-adv4ColumnGrid',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/adv4-column-grid.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-collapsibleGroup',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/collapsibleGroup.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-collapsible',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/collapsible.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-parallax',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/parallax.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-simpleAccordion',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/simpleAccordion.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-sliderContainer',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/sliderContainer.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-tabGroup',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/tabGroup.svg']
+);
+$iconRegistry->registerIcon(
+    'grid-elements-tab',
+    \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+    ['source' => 'EXT:theme_t3kit/Resources/Public/Icons/GridElements/tab.svg']
+);
