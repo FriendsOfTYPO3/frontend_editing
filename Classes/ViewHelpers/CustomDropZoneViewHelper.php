@@ -113,9 +113,11 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
         $defaultValues = [];
-        foreach ($arguments['fields'] as $field => $value) {
-            foreach ($arguments['tables'] as $table) {
-                $defaultValues['defVals[' . $table . '][' . $field . ']'] = $value;
+        if (is_array($arguments['fields'])) {
+            foreach ($arguments['fields'] as $field => $value) {
+                foreach ($arguments['tables'] as $table) {
+                    $defaultValues['defVals[' . $table . '][' . $field . ']'] = $value;
+                }
             }
         }
 
