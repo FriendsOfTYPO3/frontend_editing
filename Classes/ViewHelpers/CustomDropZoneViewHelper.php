@@ -74,18 +74,21 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
             'fields',
             'array',
             'Default value for new record droped in zone',
-            false
+            false,
+            []
         );
         $this->registerArgument(
             'pageUid',
             'string',
             'Override storage page uid for new record droped in zone',
-            false
+            false,
+            0
         );
         $this->registerArgument(
             'prepend',
             'bool',
             'Prepend the zone to the content',
+            false,
             false
         );
     }
@@ -113,9 +116,11 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
         $defaultValues = [];
-        foreach ($arguments['fields'] as $field => $value) {
-            foreach ($arguments['tables'] as $table) {
-                $defaultValues['defVals[' . $table . '][' . $field . ']'] = $value;
+        if(is_array($arguments['fields'])) {
+            foreach ($arguments['fields'] as $field => $value) {
+                foreach ($arguments['tables'] as $table) {
+                    $defaultValues['defVals[' . $table . '][' . $field . ']'] = $value;
+                }
             }
         }
 
