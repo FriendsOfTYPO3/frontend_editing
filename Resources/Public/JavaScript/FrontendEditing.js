@@ -49,6 +49,36 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		FrontendEditing.events[key] = value;
 	};
 
+	// Scroll function when draging content elements to top or bottom of window
+	var stop = true;
+	var scroll = function(step) {
+		var scrollY = $('iframe').contents().scrollTop();
+		$('iframe').contents().scrollTop(scrollY + step);
+		if (!stop) {
+		setTimeout(function() {
+			scroll(step);
+		}, 20);
+		}
+	};
+
+	$('[draggable]').on("drag", function(e) {
+		stop = true;
+		if (e.originalEvent.clientY < 150) {
+			stop = false;
+			scroll(-1);
+		}
+
+		if (e.originalEvent.clientY > ($(document).height() - 100)) {
+			stop = false;
+			scroll(1);
+		}
+
+	});
+
+	$('[draggable]').on("dragend", function(e) {
+		stop = true;
+	});
+
 	// Public API
 	FrontendEditing.prototype = {
 		init: function (options) {
