@@ -55,27 +55,25 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		var scrollY = $('iframe').contents().scrollTop();
 		$('iframe').contents().scrollTop(scrollY + step);
 		if (!stop) {
-		setTimeout(function() {
-			scroll(step);
-		}, 20);
+			setTimeout(function() {
+				scroll(step);
+			}, 20);
 		}
 	};
 
-	$('[draggable]').on("drag", function(e) {
+	$('[draggable]').on('drag', function(event) {
 		stop = true;
-		if (e.originalEvent.clientY < 150) {
+		if (event.originalEvent.clientY < 150) {
 			stop = false;
 			scroll(-1);
 		}
-
-		if (e.originalEvent.clientY > ($(document).height() - 100)) {
+		if (event.originalEvent.clientY > ($(document).height() - 100)) {
 			stop = false;
 			scroll(1);
 		}
-
 	});
 
-	$('[draggable]').on("dragend", function(e) {
+	$('[draggable]').on('dragend', function(e) {
 		stop = true;
 	});
 
