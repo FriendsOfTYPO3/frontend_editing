@@ -33,14 +33,23 @@
 .t3-frontend-editing__ce {
   position: relative;
   min-height: 35px;
+  .cke_editable {
+    display: inline;
+  }
   &:hover {
     outline: 1px dotted fade(@color-t3-gray, 50%);
     .cke_editable {
       outline: 1px dotted @color-t3-primary;
       z-index: 5;
+      display: inline-block;
+      min-width: 50%;
     }
     .t3-frontend-editing__inline-actions {
       display: inline-block;
+    }
+    h3 span + div.cke_editable {
+      display: inline-block;
+      min-width: 20px;
     }
   }
   // Colored frame when hovering content element in right-column list

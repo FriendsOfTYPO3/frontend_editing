@@ -23,7 +23,8 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 		htmlEncodeOutput: false,
 		allowedContent: true,
 		customConfig: '',
-		stylesSet: []
+		stylesSet: [],
+		autoParagraph: false
 	};
 
 	/**
