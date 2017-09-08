@@ -94,8 +94,7 @@ class ContentEditableWrapperService
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
-                ' data-movable="1"' .
+            '<div class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
                 ' ondragstart="window.parent.F.dragCeStart(event)"' .
                 ' ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .

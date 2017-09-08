@@ -134,8 +134,7 @@ class ContentEditableFixtures
     {
         $class = 't3-frontend-editing__inline-actions';
         $expectedOutput = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s" draggable="true"' .
-                ' data-movable="1"' .
+            '<div class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
                 ' ondragstart="window.parent.F.dragCeStart(event)"' .
                 ' ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
