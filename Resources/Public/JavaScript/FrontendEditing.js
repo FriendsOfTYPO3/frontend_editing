@@ -63,11 +63,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 
 	$('[draggable]').on('drag', function(event) {
 		stop = true;
-		if (event.originalEvent.clientY < 150) {
+		if (event.clientY > 0 && event.clientY < 150) {
 			stop = false;
 			scroll(-1);
 		}
-		if (event.originalEvent.clientY > ($(document).height() - 100)) {
+		if (event.originalEvent.clientY > ($('iframe').height() - 100)) {
 			stop = false;
 			scroll(1);
 		}
