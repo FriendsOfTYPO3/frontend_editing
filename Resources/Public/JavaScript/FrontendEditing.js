@@ -67,6 +67,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			stop = false;
 			scroll(-1);
 		}
+		if (event.originalEvent.clientY > ($('iframe').height() - 100)) {
+			stop = false;
+			scroll(1);
+		}
 	});
 
 	$('[draggable]').on('dragend', function(e) {
