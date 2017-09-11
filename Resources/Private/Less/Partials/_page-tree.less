@@ -44,8 +44,19 @@
 }
 
 // D3 tree styling
-
-#page-tree-filter-wrapper {
+.t3-frontend-editing__page-site-root-wrapper {
+  #installation-mounts {
+    margin-top: 10px;
+    width: 70%;
+    display: inline-block;
+    color: @gray-dark;
+    font: @font-size-regular @font-family-user-input;
+    padding: 6px;
+    border: 2px solid @gray;
+    border-radius: 4px;
+  }
+}
+#page-tree-filter-wrapper, .t3-frontend-editing__page-site-root-wrapper {
   width: 100%;
   height: @pagetree-filter-height;
   overflow: hidden;
@@ -58,6 +69,8 @@
   input {
     margin-top: 10px;
     width: 70%;
+    border-radius: 4px;
+    height: 32px;
   }
 }
 
