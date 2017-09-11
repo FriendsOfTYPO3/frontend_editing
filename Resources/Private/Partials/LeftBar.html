@@ -9,7 +9,10 @@
 	<div class="padding-wrapper">
 		<f:if condition="{mounts}">
 			<div class="t3-frontend-editing__page-site-root-wrapper">
-				<select id="installation-mounts" name="installation-mounts" onchange="F.siteRootChange(this);">
+				<label>
+					<span><f:translate key="left-bar.installation-mounts.search_tip" extensionName="FrontendEditing"/></span>
+				</label>
+				<select id="installation-mounts" class="form-control form-control-adapt" name="installation-mounts" onchange="F.siteRootChange(this);">
 					<option value="0" selected><f:translate key="left-bar.installation-mounts.change" extensionName="FrontendEditing"/></option>
 					<f:for each="{mounts}" key="uid" as="mount">
 						<f:if condition="{mount.domain}">
