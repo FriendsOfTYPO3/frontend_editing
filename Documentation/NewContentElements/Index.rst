@@ -2,10 +2,16 @@
 
 
 
+.. _content-elements:
+
+Content elements
+----------------
+
+
 .. _custom-records-dropzone:
 
 Custom Records
---------------
+""""""""""""""
 
 With this feature, webmaster is allowed to insert directly record into custom configured zone.
 For example: a webmaster can insert directly news into the news list.
@@ -28,13 +34,13 @@ Allowed record are registered in TypoScript as follows:
 
 The result will be this:
 
-  .. figure:: ../Images/CustomRecordsDropzone.png.png
+  .. figure:: ../Images/CustomRecordsDropzone.png
      :alt: Custom records for dropzones
 
 .. _new-content-elements:
 
 New Content Elements
---------------------
+""""""""""""""""""""
 
 It's possible to add drop zones for new content elements in a custom content elements. This is done by the class called ContentEditableWrapperService.
 
@@ -91,9 +97,9 @@ It's possible to add drop zones for new content elements in a custom content ele
 .. _custom-dropzone-modifier:
 
 Custom Dropzone modifier (using frontend editing together with Gridelements)
-----------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Here is a full example of how to use the hook (wrapWithDropZone) together with
 Gridelements (https://github.com/TYPO3-extensions/gridelements) and multi column splitters:
 
-<https://gist.github.com/joekolade/674ecba5c2615901581d6c4e4c272b4a>
+https://gist.github.com/joekolade/674ecba5c2615901581d6c4e4c272b4a
