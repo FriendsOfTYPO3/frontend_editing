@@ -39,6 +39,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -141,8 +142,12 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-
         $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
+
+        // If not language service is set then create one
+        if ($GLOBALS['LANG'] === null) {
+            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+        }
 
         // Initialize backend routes
         /** @var UriBuilder $uriBuilder */
