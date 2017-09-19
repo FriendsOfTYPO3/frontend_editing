@@ -17,6 +17,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
 
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Check access of the user to display only those actions which are allowed and needed
@@ -40,8 +41,8 @@ class AccessService implements SingletonInterface
             $this->isEnabled = (bool)$GLOBALS['BE_USER']->uc['frontend_editing'] === true;
         }
         // Determine if page is loaded from the TYPO3 BE
-        if ($this->isEnabled && !empty($_SERVER['HTTP_REFERER'])) {
-            $parsedReferer = parse_url($_SERVER['HTTP_REFERER']);
+        if ($this->isEnabled && !empty(GeneralUtility::getIndpEnv('HTTP_REFERER'))) {
+            $parsedReferer = parse_url(GeneralUtility::getIndpEnv('HTTP_REFERER'));
             $pathArray = explode('/', $parsedReferer['path']);
             $viewPageView = isset($parsedReferer['query'])
                 && preg_match('/web_ViewpageView/i', $parsedReferer['query']);
