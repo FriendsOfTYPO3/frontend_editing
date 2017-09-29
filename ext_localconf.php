@@ -26,9 +26,6 @@ if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
             override.preview.showHiddenRecords = 1
             hide = 1
         }
-        
-        # Hide "Save and view page" from save options 
-        options.saveDocView = 0
     ');
 }
 
