@@ -87,6 +87,7 @@ class TcaButtons extends SplitButton
             }
             $buttonsByName[$key] = $button;
         }
+
         return $buttonsByName;
     }
 
