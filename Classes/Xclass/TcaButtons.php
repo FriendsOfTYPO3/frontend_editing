@@ -33,38 +33,41 @@ class TcaButtons extends SplitButton
      */
     public function render()
     {
-        $defaultSettings = [
-            'buttons' => '_saveandclosedok,_savedok',
-        ];
-        $settings = [];
-        $settings = array_replace($defaultSettings, $settings);
+        // Only display the minimize the number of save options when feEdit is present
+        if (\TYPO3\CMS\Core\Utility\GeneralUtility::_GET('feEdit')) {
+            $defaultSettings = [
+                'buttons' => '_saveandclosedok,_savedok',
+            ];
+            $settings = [];
+            $settings = array_replace($defaultSettings, $settings);
 
-        foreach ($defaultSettings as $name => $_) {
-            if (isset($this->getBeUser()->uc[$name])) {
-                $value = $this->getBeUser()->uc[$name];
-                if ($value !== 'default') {
-                    $settings[$name] = $value === 'enable';
+            foreach ($defaultSettings as $name => $_) {
+                if (isset($this->getBeUser()->uc[$name])) {
+                    $value = $this->getBeUser()->uc[$name];
+                    if ($value !== 'default') {
+                        $settings[$name] = $value === 'enable';
+                    }
                 }
             }
-        }
 
-        // Get flat array of buttons. Button name is the key of the array.
-        $buttonsByName = $this->getButtonsByName();
-        // Get flat array of buttons in new order
-        $newOrderedButtons = [];
-        foreach (explode(',', $settings['buttons']) as $buttonName) {
-            $buttonName = trim($buttonName);
-            if (isset($buttonsByName[$buttonName])) {
-                $newOrderedButtons[] = $buttonsByName[$buttonName];
-                unset($buttonsByName[$buttonName]);
+            // Get flat array of buttons. Button name is the key of the array.
+            $buttonsByName = $this->getButtonsByName();
+            // Get flat array of buttons in new order
+            $newOrderedButtons = [];
+            foreach (explode(',', $settings['buttons']) as $buttonName) {
+                $buttonName = trim($buttonName);
+                if (isset($buttonsByName[$buttonName])) {
+                    $newOrderedButtons[] = $buttonsByName[$buttonName];
+                    unset($buttonsByName[$buttonName]);
+                }
             }
-        }
-        // Append remaining buttons
-        /** @var InputButton[] $buttons */
-        $buttons = $newOrderedButtons;
+            // Append remaining buttons
+            /** @var InputButton[] $buttons */
+            $buttons = $newOrderedButtons;
 
-        // Change button order in configuration
-        $this->items = ['primary' => reset($buttons), 'options' => array_slice($buttons, 1, null, true)];
+            // Change button order in configuration
+            $this->items = ['primary' => reset($buttons), 'options' => array_slice($buttons, 1, null, true)];
+        }
 
         return parent::render();
     }
