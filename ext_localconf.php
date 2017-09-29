@@ -26,9 +26,6 @@ if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
             override.preview.showHiddenRecords = 1
             hide = 1
         }
-        
-        # Hide "Save and view page" from save options 
-        options.saveDocView = 0
     ');
 }
 
@@ -56,6 +53,12 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObj
 // Hook to initialize BE user
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/index_ts.php']['postBeUser']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\PostInitializationBEUserHook::class . '->initializeBackendUser';
+
+// Hook for the rendering for TCA save buttons
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Template\Components\Buttons\SplitButton::class] = [
+    'className' => \TYPO3\CMS\FrontendEditing\Xclass\TcaButtons::class
+];
+
 /**
  * Pre processors
  */
