@@ -177,7 +177,8 @@ class FrontendEditingInitializationHook
             'record_edit',
             [
                 'edit[pages][' . $this->typoScriptFrontendController->id . ']' => 'edit',
-                'returnUrl' => $returnUrl
+                'returnUrl' => $returnUrl,
+                'feEdit' => 1
             ]
         ) : null;
         $pageNewUrl = $this->accessService->isPageCreateAllowed() ? $uriBuilder->buildUriFromRoute(
