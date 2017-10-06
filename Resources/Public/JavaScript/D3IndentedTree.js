@@ -49,7 +49,10 @@ define(['jquery', 'd3'], function ($, d3) {
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
 		hasChildrenExpandedClass = 'has-children-exp',
-		noChildrenClass = 'no-children';
+		noChildrenClass = 'no-children',
+		hasChildrenTransform = 'rotate(270)',
+		hasChildrenExpandedTransform = 'rotate(0)',
+		noChildrenTransform = 'rotate(270)';
 
 	/**
 	 * Local storage
@@ -215,6 +218,9 @@ define(['jquery', 'd3'], function ($, d3) {
 		// Add triangle-polygon for the nodes
 		nodeEnter.append('polygon')
 			.attr('r', 1e-6)
+			.attr('transform', function (d) {
+				return _determinateNodeTransformDependingOnChildren(d);
+			})
 			.attr('class', function (d) {
 				return _determinateNodeClassDependingOnChildren(d);
 			})
@@ -251,6 +257,9 @@ define(['jquery', 'd3'], function ($, d3) {
 		// Update the node attributes and style
 		nodeUpdate.select('polygon')
 			.attr('points', polygonShape)
+			.attr('transform', function (d) {
+				return _determinateNodeTransformDependingOnChildren(d);
+			})
 			.attr('class', function (d) {
 				return _determinateNodeClassDependingOnChildren(d);
 			})
@@ -710,6 +719,21 @@ define(['jquery', 'd3'], function ($, d3) {
 			return hasChildrenClass;
 		} else if (!node._children && node.children) {
 			return hasChildrenExpandedClass;
+		}
+	}
+
+	/**
+	 * Check if node is expanded and has children
+	 * @param node
+	 * @private
+	 */
+	function _determinateNodeTransformDependingOnChildren(node) {
+		if (!node._children && !node.children) {
+			return noChildrenTransform;
+		} else if (node._children && !node.children) {
+			return hasChildrenTransform;
+		} else if (!node._children && node.children) {
+			return hasChildrenExpandedTransform;
 		}
 	}
 
