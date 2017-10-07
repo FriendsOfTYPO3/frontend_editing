@@ -18,7 +18,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	'use strict';
 
 	// Set the dimensions and margins of the tree
-	var margin = {top: 20, right: 20, bottom: 30, left: 4},
+	var margin = {top: 20, right: 20, bottom: 30, left: 5},
 		width = 245 - margin.right - margin.left,
 
 		barHeight = 20,
@@ -31,7 +31,7 @@ define(['jquery', 'd3'], function ($, d3) {
 
 		xRect = 7,
 
-		circleRadius = 5,
+		polygonShape = '-5, -3 5, -3 0 5',
 
 		iconHeight = 16,
 		iconWidth = 16;
@@ -49,7 +49,10 @@ define(['jquery', 'd3'], function ($, d3) {
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
 		hasChildrenExpandedClass = 'has-children-exp',
-		noChildrenClass = 'no-children';
+		noChildrenClass = 'no-children',
+		hasChildrenTransform = 'rotate(270)',
+		hasChildrenExpandedTransform = 'rotate(0)',
+		noChildrenTransform = 'rotate(270)';
 
 	/**
 	 * Local storage
@@ -212,13 +215,16 @@ define(['jquery', 'd3'], function ($, d3) {
 				}
 			});
 
-		// Add Circle for the nodes
-		nodeEnter.append('circle')
+		// Add triangle-polygon for the nodes
+		nodeEnter.append('polygon')
 			.attr('r', 1e-6)
+			.attr('transform', function (d) {
+				return _determinateNodeTransformDependingOnChildren(d);
+			})
 			.attr('class', function (d) {
 				return _determinateNodeClassDependingOnChildren(d);
 			})
-			.on('click', _clickCircle);
+			.on('click', _clickPolygon);
 
 		nodeEnter.append('rect')
 			.attr('y', -barHeight / 2)
@@ -249,8 +255,11 @@ define(['jquery', 'd3'], function ($, d3) {
 			.style('opacity', 1);
 
 		// Update the node attributes and style
-		nodeUpdate.select('circle')
-			.attr('r', circleRadius)
+		nodeUpdate.select('polygon')
+			.attr('points', polygonShape)
+			.attr('transform', function (d) {
+				return _determinateNodeTransformDependingOnChildren(d);
+			})
 			.attr('class', function (d) {
 				return _determinateNodeClassDependingOnChildren(d);
 			})
@@ -391,7 +400,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @param d
 	 * @private
 	 */
-	function _clickCircle(d) {
+	function _clickPolygon(d) {
 		if (d.children) {
 			d._children = d.children;
 			d.children = null;
@@ -710,6 +719,21 @@ define(['jquery', 'd3'], function ($, d3) {
 			return hasChildrenClass;
 		} else if (!node._children && node.children) {
 			return hasChildrenExpandedClass;
+		}
+	}
+
+	/**
+	 * Check if node is expanded and has children
+	 * @param node
+	 * @private
+	 */
+	function _determinateNodeTransformDependingOnChildren(node) {
+		if (!node._children && !node.children) {
+			return noChildrenTransform;
+		} else if (node._children && !node.children) {
+			return hasChildrenTransform;
+		} else if (!node._children && node.children) {
+			return hasChildrenExpandedTransform;
 		}
 	}
 

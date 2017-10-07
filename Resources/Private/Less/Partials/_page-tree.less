@@ -101,15 +101,18 @@
       }
     }
 
-    circle {
-      fill: transparent;
+    polygon {
       stroke: transparent;
-      stroke-width: 10px;
-      &.has-children {
-        fill: @white;
+      stroke-width: 8px;
+
+      &.no-children {
+        fill: transparent;
       }
-      &.has-children-expanded {
-        fill: #000;
+      &.has-children {
+        fill: @color-t3-gray;
+      }
+      &.has-children-exp {
+        fill: @white;
       }
     }
 
@@ -122,7 +125,7 @@
 
   path.link {
     fill: none;
-    stroke: @gray-bright;
+    stroke: @color-t3-gray;
     stroke-width: 2px;
     stroke-dasharray: 1, 1;
   }
