@@ -28,6 +28,12 @@
             <trans-unit id="right-bar.tools-properties">
                 <source>TOOLS &amp; PROPERTIES</source>
             </trans-unit>
+            <trans-unit id="right-bar.page-seo-score">
+                <source>Page SEO Score</source>
+            </trans-unit>
+            <trans-unit id="right-bar.seo-guide">
+                <source>SEO Guide</source>
+            </trans-unit>
             <trans-unit id="right-bar.page-edit">
                 <source>Edit page properties</source>
             </trans-unit>
