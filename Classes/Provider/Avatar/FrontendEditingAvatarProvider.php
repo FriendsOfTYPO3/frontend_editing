@@ -1,6 +1,6 @@
 <?php
 
-namespace TYPO3\CMS\FrontendEditing\Provider;
+namespace TYPO3\CMS\FrontendEditing\Provider\Avatar;
 
 /*
  * This file is part of the TYPO3 CMS project.
