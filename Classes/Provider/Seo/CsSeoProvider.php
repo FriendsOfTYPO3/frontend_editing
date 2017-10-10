@@ -19,6 +19,7 @@ use Clickstorm\CsSeo\Domain\Model\Evaluation;
 use Clickstorm\CsSeo\Domain\Repository\EvaluationRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 /**
  * SEO provider for Clickstorm SEO module: "[clickstorm] SEO" (cs_seo)
@@ -37,6 +38,12 @@ class CsSeoProvider extends BaseSeoProvider
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $evalutationRepository =  $objectManager->get(EvaluationRepository::class);
 
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $backendModuleUrl = $uriBuilder->buildUriFromModule(
+            'web_CsSeoMod1',
+            ['page' => $pageId]
+        );
+
         /** @var Evaluation $evaluation */
         $evaluation = $evalutationRepository->findByUidForeignAndTableName(
             $pageId,
@@ -54,7 +61,8 @@ class CsSeoProvider extends BaseSeoProvider
         }
 
         $scores = [
-            'pageScore' => $this->getPageScore()
+            'pageScore' => $this->getPageScore(),
+            'backendModuleUrl' => $backendModuleUrl
         ];
         $this->setScores($scores);
 
