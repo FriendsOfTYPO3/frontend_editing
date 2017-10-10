@@ -40,7 +40,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfiguration;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -706,7 +706,7 @@ class FrontendEditingInitializationHook
     protected function getSeoProviderData(): array
     {
         $providerData = [];
-        $settings = ExtensionManagerConfiguration::getSettings();
+        $settings = ExtensionManagerConfigurationService::getSettings();
         if (isset($settings['seoProvider']) && $settings['seoProvider'] !== 'none') {
             $extensionIsLoaded = ExtensionManagementUtility::isLoaded($settings['seoProvider']);
             if ($extensionIsLoaded === true) {

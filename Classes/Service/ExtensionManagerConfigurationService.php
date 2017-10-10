@@ -19,7 +19,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
 /**
  * Service class to get the settings from Extension Manager
  */
-class ExtensionManagerConfiguration
+class ExtensionManagerConfigurationService
 {
     /**
      * Parse settings and return it as an array
@@ -28,9 +28,12 @@ class ExtensionManagerConfiguration
      */
     public static function getSettings(): array
     {
-        $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
-        if (!is_array($settings)) {
-            $settings = [];
+        $settings = [];
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing'])) {
+            $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
+            if (!is_array($settings)) {
+                $settings = [];
+            }
         }
 
         return $settings;
