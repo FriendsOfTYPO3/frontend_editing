@@ -701,7 +701,8 @@ class FrontendEditingInitializationHook
     }
 
     /**
-     *
+     * Get the SEO data based on chosen Provider from
+     * Extension Manager settings
      */
     protected function getSeoProviderData(): array
     {
