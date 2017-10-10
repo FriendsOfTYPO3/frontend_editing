@@ -12,11 +12,11 @@
 
   > .cke {
     top: -1px !important;
-    left: 180px !important;
+    left: 50px !important;
     right: auto !important;
 
     &.left-open {
-      left: 420px !important;
+      left: 290px !important;
     }
   }
 }
@@ -35,41 +35,6 @@
   left: 0;
   width: 50%;
   float: left;
-
-  .back-backend {
-    .transition(margin @push-duration @push-timing);
-    display: inline-block;
-    position: relative;
-    border-right: 1px solid @black;
-    height: @top-bar-height;
-    margin-left: 45px;
-    background-color: @gray-dark;
-
-    &:hover {
-      background-color: lighten(@gray-dark, 20%);
-    }
-
-    a {
-      display: inline-block;
-      color: @white;
-      text-decoration: none;
-      padding: 10px 10px 14px;
-    }
-
-    .icon-icons-back {
-      padding-right: 5px;
-      top: 3px;
-      position: relative;
-      font-size: 20px;
-      color: @color-t3-primary;
-    }
-  }
-
-  &.push-toright {
-    .back-backend {
-      margin-left: 0;
-    }
-  }
 }
 
 .t3-frontend-editing__top-bar-right {
@@ -127,6 +92,11 @@
         li {
           display: block;
           padding: 10px 0;
+
+          .icon-icons-back {
+            top: 6px;
+            position: relative;
+          }
         }
       }
     }
