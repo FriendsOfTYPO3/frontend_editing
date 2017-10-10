@@ -264,7 +264,7 @@ class FrontendEditingInitializationHook
             'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'mounts' => $this->getBEUserMounts(),
-            'seoProviderData' => $this->getSeoProviderData()
+            'seoProviderData' => $this->getSeoProviderData($this->typoScriptFrontendController->id)
         ]);
 
         // Assign the content
@@ -703,8 +703,11 @@ class FrontendEditingInitializationHook
     /**
      * Get the SEO data based on chosen Provider from
      * Extension Manager settings
+     *
+     * @param int $pageId
+     * @return array
      */
-    protected function getSeoProviderData(): array
+    protected function getSeoProviderData(int $pageId): array
     {
         $providerData = [];
         $settings = ExtensionManagerConfigurationService::getSettings();
@@ -713,7 +716,7 @@ class FrontendEditingInitializationHook
             if ($extensionIsLoaded === true) {
                 if ($settings['seoProvider'] === 'cs_seo') {
                     $seoProvider = GeneralUtility::makeInstance(CsSeoProvider::class);
-                    $providerData = $seoProvider->getSeoScores();
+                    $providerData = $seoProvider->getSeoScores($pageId);
                 }
             }
         }

@@ -15,6 +15,11 @@ namespace TYPO3\CMS\FrontendEditing\Provider\Seo;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Clickstorm\CsSeo\Domain\Model\Evaluation;
+use Clickstorm\CsSeo\Domain\Repository\EvaluationRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
  * SEO provider for Clickstorm SEO module: "[clickstorm] SEO" (cs_seo)
  * @package TYPO3\CMS\FrontendEditing\Provider
@@ -24,10 +29,27 @@ class CsSeoProvider extends BaseSeoProvider
     /**
      * Return an array with the SEO scores for ClickStorm SEO module
      *
+     * @param int $pageId
      * @return array
      */
-    public function getSeoScores(): array
+    public function getSeoScores(int $pageId): array
     {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $evalutationRepository =  $objectManager->get(EvaluationRepository::class);
+
+        /** @var Evaluation $evaluation */
+        $evaluation = $evalutationRepository->findByUidForeignAndTableName(
+            $pageId,
+            'pages'
+        );
+        $evaluationResults = $evaluation->getResults();
+        // Make sure that there is results back
+        if (is_array($evaluationResults)) {
+            $this->setPageScore(
+                (int)$evaluationResults['Percentage']['count']
+            );
+        }
+
         $scores = [
             'pageScore' => $this->getPageScore()
         ];

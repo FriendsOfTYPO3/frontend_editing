@@ -68,9 +68,10 @@ class BaseSeoProvider
     /**
      * Return an array with the SEO scores
      *
+     * @param int $pageId
      * @return array
      */
-    public function getSeoScores(): array
+    public function getSeoScores(int $pageId): array
     {
         return $this->getScores();
     }
