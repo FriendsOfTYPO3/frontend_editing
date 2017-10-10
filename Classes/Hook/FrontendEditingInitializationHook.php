@@ -37,9 +37,12 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfiguration;
 use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -245,6 +248,7 @@ class FrontendEditingInitializationHook
                 }
             };
         }');
+
         $view = $this->initializeView();
         $view->assignMultiple([
             'overlayOption' => $GLOBALS['BE_USER']->uc['frontend_editing_overlay'],
@@ -259,7 +263,8 @@ class FrontendEditingInitializationHook
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-            'mounts' => $this->getBEUserMounts()
+            'mounts' => $this->getBEUserMounts(),
+            'seoProviderData' => $this->getSeoProviderData()
         ]);
 
         // Assign the content
@@ -693,5 +698,25 @@ class FrontendEditingInitializationHook
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']
             )
         );
+    }
+
+    /**
+     *
+     */
+    protected function getSeoProviderData(): array
+    {
+        $providerData = [];
+        $settings = ExtensionManagerConfiguration::getSettings();
+        if (isset($settings['seoProvider']) && $settings['seoProvider'] !== 'none') {
+            $extensionIsLoaded = ExtensionManagementUtility::isLoaded($settings['seoProvider']);
+            if ($extensionIsLoaded === true) {
+                if ($settings['seoProvider'] === 'cs_seo') {
+                    $seoProvider = GeneralUtility::makeInstance(CsSeoProvider::class);
+                    $providerData = $seoProvider->getSeoScores();
+                }
+            }
+        }
+
+        return $providerData;
     }
 }

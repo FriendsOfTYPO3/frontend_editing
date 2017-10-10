@@ -85,7 +85,7 @@ if (TYPO3_MODE === 'FE' &&
     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
 ) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['avatarProviders']['frontendEditingAvatarProvider'] = [
-        'provider' => \TYPO3\CMS\FrontendEditing\Provider\FrontendEditingAvatarProvider::class
+        'provider' => \TYPO3\CMS\FrontendEditing\Provider\Avatar\FrontendEditingAvatarProvider::class
     ];
 }
 

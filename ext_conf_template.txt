@@ -1,0 +1,2 @@
+# cat=providers/enable/100; type=options[None=none,[clickstorm] SEO (cs_seo)=cs_seo,Yoast SEO (yoast_seo)=yoast_seo]; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.seo_provider
+seoProvider = none
