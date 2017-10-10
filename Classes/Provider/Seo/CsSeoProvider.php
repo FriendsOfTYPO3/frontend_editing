@@ -42,12 +42,15 @@ class CsSeoProvider extends BaseSeoProvider
             $pageId,
             'pages'
         );
-        $evaluationResults = $evaluation->getResults();
-        // Make sure that there is results back
-        if (is_array($evaluationResults)) {
-            $this->setPageScore(
-                (int)$evaluationResults['Percentage']['count']
-            );
+
+        if ($evaluation !== null) {
+            $evaluationResults = $evaluation->getResults();
+            // Make sure that there is results back
+            if (is_array($evaluationResults)) {
+                $this->setPageScore(
+                    (int)$evaluationResults['Percentage']['count']
+                );
+            }
         }
 
         $scores = [
