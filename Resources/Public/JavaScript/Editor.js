@@ -107,9 +107,6 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 							content: url,
 							size: Modal.sizes.large,
 							callback: function(currentModal) {
-								// Hide header of modal
-								currentModal.find('.modal-header').hide();
-
 								// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
 								currentModal.find(Modal.identifiers.iframe).on('load',function() {
 									top.TYPO3.Backend = top.TYPO3.Backend || {};

@@ -161,7 +161,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 					content: url,
 					size: Modal.sizes.large,
 					callback: function(currentModal) {
-						currentModal.find('.modal-header').hide();
 						currentModal.on('hidden.bs.modal', function (e) {
 							F.refreshIframe();
 						});
@@ -169,7 +168,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 				});
 			});
 		},
-		
+
 		setTranslationLabels: function (labels) {
 			translationLabels = labels;
 		},
