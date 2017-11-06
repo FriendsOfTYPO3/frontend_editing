@@ -74,11 +74,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess'
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-CeHeader'] =
     \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeHeader::class;
 
-// Add UserTsConfig settings
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig(
-    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:frontend_editing/Configuration/UserTsConfig/userTsConfig.ts">'
-);
-
 // Register BE user avatar provider on FE
 if (TYPO3_MODE === 'FE' &&
     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
