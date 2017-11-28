@@ -27,6 +27,26 @@
   font-weight: 300;
   font-size: @font-size-regular;
   text-transform: uppercase;
+
+  .btn-backend {
+    height: 45px !important;
+    border-left: 1px solid #0f0f0f;
+
+    &:hover {
+      background-color: lighten(@gray-dark, 20%);
+    }
+
+    span {
+        display: inline-block;
+        position: relative;
+        top: 8px;
+        vertical-align: middle;
+    }
+    .icon-icons-back {
+        font-size: 24px;
+        color: @color-t3-primary;
+    }
+  }
 }
 
 .t3-frontend-editing__top-bar-left {
