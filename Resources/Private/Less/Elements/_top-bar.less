@@ -29,7 +29,7 @@
   text-transform: uppercase;
 
   .btn-backend {
-    height: 45px !important;
+    height: @top-bar-height !important;
     border-left: 1px solid #0f0f0f;
 
     &:hover {
@@ -39,7 +39,7 @@
     span {
         display: inline-block;
         position: relative;
-        top: 8px;
+        top: @top-bar-height / 5;
         vertical-align: middle;
     }
     .icon-icons-back {
@@ -131,6 +131,12 @@
   .top-bar-action-buttons {
     float: right;
     margin: 5px;
+    min-width: @right-bar-width;
+
+    button {
+        float: left;
+        margin-left: 15px;
+    }
 
     .t3-frontend-editing__save {
         &:not(.btn-inactive) {
@@ -159,8 +165,8 @@
     .avatar {
       display: inline-block;
       position: relative;
-      top: 7px;
-      vertical-align: bottom;
+      top: @top-bar-height / 5;
+      vertical-align: middle;
     }
 
     .avatar-image {
@@ -191,9 +197,10 @@
 
     .icon-avatar-title {
       position: relative;
-      top: 2px;
+      top: @top-bar-height / 5;
       color: @white;
       text-decoration: none;
+      vertical-align: middle;
     }
   }
 

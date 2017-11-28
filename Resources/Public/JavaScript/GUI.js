@@ -153,13 +153,42 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 
 		var t = 0;
 		var y = 0;
+		var u = 1;
 
 		// Add check for page tree navigation
-		$( ".site-root-knappen" ).click(function() {
-			$( ".t3-frontend-editing__page-site-root-wrapper" ).toggle();
+		$('.site-root-button').click(function() {
+			$('.t3-frontend-editing__page-site-root-wrapper').toggle();
 		});
-		$( ".sok-knappen" ).click(function() {
-			$( ".t3-frontend-editing__page-tree-filter-wrapper" ).toggle();
+		$('.search-button').click(function() {
+			$('.t3-frontend-editing__page-tree-filter-wrapper').toggle();
+		});
+
+		$('.t3-frontend-editing__full-view').on('click', function () {
+			t = ++t % 2;
+			y = ++y % 2;
+			u = ++u % 2;
+
+			$('.t3-frontend-editing__top-bar').stop().animate({top: u ? 0 : -55}, pushDuration, pushEasing);
+
+			$('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
+			$('.t3-frontend-editing__full-view').toggleClass('full-view-active');
+			
+			if ($('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
+				
+				$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+				$('.t3-frontend-editing__left-bar').stop().animate({left: t ? 0 : -280}, pushDuration, pushEasing);
+				
+				} else if ($('.t3-frontend-editing__right-bar').hasClass('open') && !$('.t3-frontend-editing__left-bar').hasClass('open')) {
+					$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+					$('.t3-frontend-editing__left-bar').toggleClass('closed');
+				} else if (!$('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
+					$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
+					$('.t3-frontend-editing__right-bar').toggleClass('closed');					
+				}
+				else {
+					$('.t3-frontend-editing__right-bar').toggleClass('closed');
+					$('.t3-frontend-editing__left-bar').toggleClass('closed');
+			}
 		});
 		
 

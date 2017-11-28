@@ -29,6 +29,14 @@
     display: block;
     box-shadow: 0 0 15px 0 @gray;
   }
+
+  &.full-view {
+    margin-top: 0;
+
+    iframe {
+        height: 100vh;
+    }
+  }
 }
 
 .t3-frontend-editing__loading-screen {
@@ -88,4 +96,28 @@ body {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.t3-frontend-editing__full-view {
+  width: 55px;
+  height: 55px;
+  z-index: 11000;
+  position: absolute;
+  right: 0;
+  left: auto;
+  background: none;
+  color: @color-t3-gray-light;
+  font-size: 24px;
+  border: 0;
+  border-left: 1px solid @black;
+  border-radius: 0;
+
+  &.full-view-active {
+    background-color: @black;
+    border: 1px dashed @color-t3-gray-light;
+  }
+
+  &:hover {
+    background-color: lighten(@gray-dark, 20%);
+  }
 }
