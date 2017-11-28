@@ -155,6 +155,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		var y = 0;
 
 		// Add check for page tree navigation
+		$( ".site-root-knappen" ).click(function() {
+			$( ".t3-frontend-editing__page-site-root-wrapper" ).toggle();
+		});
+		$( ".sok-knappen" ).click(function() {
+			$( ".t3-frontend-editing__page-tree-filter-wrapper" ).toggle();
+		});
+		
+
 		$('.t3-frontend-editing__page-tree li').click(function () {
 			var linkUrl = $(this).data('url');
 			F.showLoadingScreen();

@@ -2,7 +2,7 @@
   background: @transparent-opacity;
   color: @white;
   position: fixed;
-  top: 0;
+  top: @top-bar-height;
   left: -280px;
   width: @left-bar-width;
   min-height: 100%;
@@ -21,7 +21,7 @@
 
   .top-left-title {
     height: @top-bar-height;
-    background-color: @header-top-bg-color;
+    background-color: @gray-darker;
     cursor: pointer;
 
     .title-left {
@@ -44,7 +44,7 @@
       font-size: 32px;
       right: -45px;
       top: 0;
-      background-color: @black;
+      background-color: @gray-darker;
 
       &:hover {
         background-color: lighten(@black, 20%);
@@ -61,6 +61,20 @@
 
       .icon-icons-arrow-double {
         .transform(scaleX(-1));
+      }
+    }
+  }
+
+  .t3-frontend-editing__page-tree-options {
+    padding: 15px 10px 5px;
+    background: @gray-dark;
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+
+      li {
+        display: inline-block;
       }
     }
   }
