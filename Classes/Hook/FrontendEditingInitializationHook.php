@@ -141,6 +141,8 @@ class FrontendEditingInitializationHook
         // Special content is about to be shown, so the cache must be disabled.
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
+
+
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
         // Check if url has a ?, then decide on URL separator
         if (strpos($requestUrl, '?') !== false) {
@@ -148,7 +150,7 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&show_hidden_items=' . $this->showHiddenItems();
 
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
@@ -722,5 +724,26 @@ class FrontendEditingInitializationHook
             }
         }
         return $this->pluginConfiguration;
+    }
+
+    /**
+     * Get if to display hidden items or not in the rendering
+     *
+     * @return bool
+     */
+    protected function showHiddenItems(): bool
+    {
+        $defaultState = 1;
+        if (GeneralUtility::_GET('show_hidden_items')) {
+            $showHiddenItems = GeneralUtility::_GET('show_hidden_items');
+            if ($showHiddenItems !== $defaultState) {
+                $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+                $cacheManager->flushCaches();
+            }
+        } else {
+            $showHiddenItems = $defaultState;
+        }
+
+        return $showHiddenItems;
     }
 }
