@@ -1,7 +1,7 @@
 .t3-frontend-editing__iframe-wrapper {
 
   .transition(width @push-duration @push-timing);
-  margin-top: @top-bar-height;
+  margin-top: @top-bar-height * 2;
   margin-right: @right-bar-width;
   position: relative;
   width: 100%;
@@ -119,5 +119,37 @@ body {
 
   &:hover {
     background-color: lighten(@gray-dark, 20%);
+  }
+}
+
+.t3-frontend-editing__ckeditor-bar {
+  background: #2b2b2b;
+  color: #fff;
+  height: 55px;
+  position: absolute;
+  top: 55px;
+  z-index: 10998;
+  margin: 0 auto;
+  width: auto;
+  left: 280px;
+  right: 325px;
+
+  > .cke {
+    top: -1px !important;
+    left: 50px !important;
+    right: auto !important;
+
+    &.left-open {
+      left: 290px !important;
+    }
+  }
+  &.full-view-active {
+    display: none;
+  }
+  &.left-closed {
+    left: 45px;
+  }
+  &.right-closed {
+    right: 45px;
   }
 }

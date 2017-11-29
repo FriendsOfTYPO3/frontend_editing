@@ -172,6 +172,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 
 			$('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
 			$('.t3-frontend-editing__full-view').toggleClass('full-view-active');
+			$('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
 			
 			if ($('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
 				
@@ -205,6 +206,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__right-bar').toggleClass('open');
 			t = ++t % 2;
 			$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+
+			$('.t3-frontend-editing__ckeditor-bar').stop().animate({right: t ? 325 : 45}, pushDuration, pushEasing);
+			
 			updateRightPanelState();
 		});
 
@@ -218,6 +222,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__left-bar').toggleClass('open');
 			$('.t3-frontend-editing__top-bar').children('.cke').toggleClass('left-open');
 			y = ++y % 2;
+
+			$('.t3-frontend-editing__ckeditor-bar').stop().animate({left: y ? 280 : 45}, pushDuration, pushEasing);
+			
 			$('.t3-frontend-editing__left-bar').stop().animate(
 				{
 					left: y ? 0 : -280
@@ -231,7 +238,19 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 				}
 			);
 		});
+		$( document ).ready(function() {
+			if (!$('.t3-frontend-editing__right-bar').hasClass('open') ||  !$('.t3-frontend-editing__left-bar').hasClass('open')
+				|| $('.t3-frontend-editing__right-bar').hasClass('open') ||  $('.t3-frontend-editing__left-bar').hasClass('open')) {
 
+				if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
+					$('.t3-frontend-editing__ckeditor-bar').addClass('left-closed');
+				}
+				if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
+
+					$('.t3-frontend-editing__ckeditor-bar').addClass('right-closed');
+				}
+			}
+		});
 		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
 			var url = $(this).data('url');
 			F.loadInModal(url);
