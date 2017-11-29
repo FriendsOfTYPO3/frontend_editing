@@ -22,8 +22,8 @@ if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
             override.preview = 1
             override.preview.simulateDate = 0
             override.preview.simulateUserGroup = 0
-            override.preview.showHiddenPages = 1
-            override.preview.showHiddenRecords = 1
+            override.preview.showHiddenPages = ' . TYPO3\CMS\Core\Utility\GeneralUtility::_GET('show_hidden_items') . '
+            override.preview.showHiddenRecords = ' . TYPO3\CMS\Core\Utility\GeneralUtility::_GET('show_hidden_items') . '
             hide = 1
         }
     ');
