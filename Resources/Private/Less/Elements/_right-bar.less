@@ -103,8 +103,7 @@
   }
 
   .page-seo {
-    padding: 15px 0 0;
-    text-align: center;
+    display: inline-block;
 
     .page-seo-score {
       border: 4px solid @color-t3-primary;
@@ -125,10 +124,10 @@
     }
 
     .page-seo-devices {
-      padding-top: 12px;
       font-size: 24px;
       display: table;
       margin: 0 auto;
+      height: 100%;
 
       .page-seo-lg-desktop {
         font-size: 48px;
@@ -199,6 +198,19 @@
           color: @white;
         }
       }
+    }
+  }
+
+  .devices {
+    height: 55px;
+  }
+  .hidden-elements-toggle-wrapper {
+    float: right;
+
+    .hidden-elements-toggle-button {
+      font-size: 24px;
+      height: 100%;
+      background: transparent;
     }
   }
 }
