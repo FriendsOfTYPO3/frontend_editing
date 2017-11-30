@@ -1,3 +1,5 @@
+{namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
+
 <div class="t3-frontend-editing__left-bar">
 	<div class="top-left-title">
 		<span class="title-icon-left icons icon-icons-site-tree"></span>
@@ -11,20 +13,20 @@
 			<f:if condition="{pageNewUrl}">
 				<li>
 					<button type="#" class="btn t3-frontend-editing__page-new" data-url="{pageNewUrl}">
-						<core:icon identifier="actions-page-new" />
+						<fe:svg source="{f:uri.resource(path: 'Icons/T3Icons/actions/actions-page-new.svg', extensionName:'core')}"/>
 					</button>
 				</li>
 			</f:if>
 			<f:if condition="{pageEditUrl}">
 				<li>
 					<button type="#" class="btn t3-frontend-editing__page-edit" data-url="{pageEditUrl}">
-						<core:icon identifier="actions-page-open" />
+						<fe:svg source="{f:uri.resource(path: 'Icons/T3Icons/actions/actions-page-open.svg', extensionName:'core')}"/>
 					</button>
 				</li>
 			</f:if>
 			<li>
 				<button type="button" class="btn search-button">
-					<core:icon identifier="actions-filter" />
+					<fe:svg source="{f:uri.resource(path: 'Icons/T3Icons/actions/actions-filter.svg', extensionName:'core')}"/>
 				</button>
 			</li>
 
@@ -32,13 +34,13 @@
 			<f:if condition="{mounts}">
 				<li>
 					<button type="button" class="btn site-root-button">
-						<core:icon identifier="apps-pagetree-page-domain" />
+						<fe:svg source="{f:uri.resource(path: 'Icons/T3Icons/apps/apps-pagetree-page-domain.svg', extensionName:'core')}"/>
 					</button>
 				</li>
 			</f:if>
 			<li>
 				<button type="button" class="btn">
-					<core:icon identifier="actions-refresh" />
+					<fe:svg source="{f:uri.resource(path: 'Icons/T3Icons/actions/actions-refresh.svg', extensionName:'core')}"/>
 				</button>
 			</li>
 		</ul>
