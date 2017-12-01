@@ -91,9 +91,9 @@
   }
 
   .trigger {
-  @include rotate(0);
-  @include transition-duration(.2s);
-  @include transform-origin(center);
+  transform: rotate(0);
+  transition-duration: 0.2s;
+  transform-origin: center;
     font-size: 26px;
     position: relative;
     top: 5px;
@@ -101,9 +101,9 @@
     cursor: pointer;
 
     &.active {
-    @include rotate(180);
-    @include transition-duration(.2s);
-    @include transform-origin (center);
+    transform: rotate(180deg);
+    transition-duration: 0.2s;
+    transform-origin: center;
     }
   }
 
