@@ -1,7 +1,7 @@
 
 .content-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .content-icon-default {
@@ -138,13 +138,35 @@
 
   .element {
     display: block;
-    background-color: @gray;
+    background-color: @gray-dark;
     margin: -10px;
     padding: 10px;
     margin-bottom: 15px;
 
     .content-icon {
       vertical-align: top;
+      display: inline-block;
+      margin: 0 auto;
+      background-color: @gray;
+
+      .icon-size-default {
+        height: 100%;
+        width: 100%;
+
+        .icon-markup {
+          width: 27px;
+          text-align: center;
+          vertical-align: middle;
+          display: block;
+          margin: 0 auto;
+
+
+          img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+      }
     }
   }
 
