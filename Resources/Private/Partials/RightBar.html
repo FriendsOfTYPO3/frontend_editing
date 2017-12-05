@@ -1,3 +1,5 @@
+{namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
+
 <div class="t3-frontend-editing__right-bar {f:if(condition:overlayOption, then: 't3-frontend-editing__right-overlay')}">
 	<div class="top-right-bar-wrapper">
 		<div class="top-right-title">
@@ -18,7 +20,7 @@
 			</div>
 			<div class="hidden-elements-toggle-wrapper">
 				<button class="hidden-elements-toggle-button">
-					<span class="icons icon-icons-cancel"></span>
+					<fe:svg source="{f:uri.resource(path: 'Icons/visible_icon.svg', extensionName: 'FrontendEditing')}" width="40" height="40" class="hidden-elements-toggle-icon"/>
 				</button>
 			</div>
 		</div>
