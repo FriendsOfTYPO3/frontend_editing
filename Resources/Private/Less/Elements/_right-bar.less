@@ -26,7 +26,18 @@
     height: calc(~"100vh - "@top-bar-height);
     max-height: calc(~"100vh - "@top-bar-height);
     overflow-y: auto;
-    margin-top: @top-bar-height;
+    position: relative;
+
+    .top-right-fixed {
+      position: fixed;
+      height: 110px;
+      z-index: 1100;
+      background: @gray;
+    }
+
+    .elements-wrapper {
+      margin-top: @top-bar-height * 2;
+    }
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -51,8 +62,6 @@
     text-align: right;
     background-color: @header-top-bg-color;
     height: @top-bar-height;
-    position: absolute;
-    margin-top: -@top-bar-height;
     width: @right-bar-width;
     z-index: 1;
     cursor: pointer;
@@ -202,9 +211,11 @@
   }
 
   .devices {
-    height: 55px;
+    height: @top-bar-height;
     padding-right: 0;
+    width: @right-bar-width;
   }
+
   .hidden-elements-toggle-wrapper {
     float: right;
     width: 55px;
