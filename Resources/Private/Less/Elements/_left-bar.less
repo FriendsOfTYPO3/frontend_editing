@@ -79,6 +79,30 @@
 
       li {
         display: inline-block;
+
+        &:last-of-type {
+          float: right;
+        }
+
+        .btn {
+          background-color: #000;
+          height: 32px !important;
+          width: 32px !important;
+          padding: 0 !important;
+
+          &:hover {
+            background-color: lighten(@black, 20%);
+          }
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+
+          .icon-color {
+            fill: #fff;
+          }
+        }
       }
     }
   }

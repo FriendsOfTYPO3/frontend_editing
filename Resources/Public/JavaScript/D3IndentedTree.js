@@ -167,6 +167,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	function _initSvg() {
 		svg = d3.select(_getDomSelector('pageTree')).append('svg')
 			.attr('width', width + margin.right + margin.left)
+			.attr('id', 'd3-page-tree')
 			.append('g')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 	}
@@ -211,7 +212,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.call(function () {
 				if (linksCount < links.length) {
 					linksCount = links.length;
-					d3.select('svg').attr('height', (links.length + 2) * barHeight);
+					d3.select('#d3-page-tree').attr('height', (links.length + 2) * barHeight);
 				}
 			});
 
