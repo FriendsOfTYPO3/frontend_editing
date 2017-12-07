@@ -150,7 +150,7 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&show_hidden_items=' . $this->showHiddenItems();
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
 
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
@@ -267,7 +267,8 @@ class FrontendEditingInitializationHook
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-            'mounts' => $this->getBEUserMounts()
+            'mounts' => $this->getBEUserMounts(),
+            'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems()
         ]);
 
         // Assign the content
@@ -729,20 +730,21 @@ class FrontendEditingInitializationHook
     /**
      * Get if to display hidden items or not in the rendering
      *
-     * @return bool
+     * @return int
      */
-    protected function showHiddenItems(): bool
+    protected function showHiddenItems(): int
     {
         $defaultState = 1;
+        $showHiddenItems = 0;
         if (GeneralUtility::_GET('show_hidden_items')) {
             $showHiddenItems = GeneralUtility::_GET('show_hidden_items');
             if ($showHiddenItems !== $defaultState) {
                 $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
                 $cacheManager->flushCaches();
             }
-        } else {
-            $showHiddenItems = $defaultState;
         }
+
+        $showHiddenItems = ($showHiddenItems === $defaultState) ? 0 : $defaultState;
 
         return $showHiddenItems;
     }
