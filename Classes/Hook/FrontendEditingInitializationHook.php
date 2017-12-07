@@ -136,6 +136,11 @@ class FrontendEditingInitializationHook
         if (!$this->isFrontendEditingEnabled($parentObject)) {
             return;
         }
+
+        if (!GeneralUtility::_GP('id')) {
+            $_GET['id'] = $parentObject->getRequestedId();
+        }
+
         $this->typoScriptFrontendController = $parentObject;
 
         // Special content is about to be shown, so the cache must be disabled.
