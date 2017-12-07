@@ -215,6 +215,7 @@ class FrontendEditingInitializationHook
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
+
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
         $this->pageRenderer = new PageRenderer();
