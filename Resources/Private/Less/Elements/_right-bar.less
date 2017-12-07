@@ -7,7 +7,7 @@
   top: @top-bar-height;
   right: -@right-bar-width;
   width: @right-bar-width;
-  min-height: 100%;
+  bottom: 0;
   z-index: 10999;
   font-family: @font-family-base;
   text-transform: uppercase;
@@ -23,20 +23,17 @@
   }
 
   .top-right-bar-wrapper {
-    height: calc(~"100vh - "@top-bar-height);
-    max-height: calc(~"100vh - "@top-bar-height);
-    overflow-y: auto;
-    position: relative;
 
     .top-right-fixed {
-      position: fixed;
+      position: relative;
       height: 110px;
       z-index: 1100;
       background: @gray;
     }
 
     .elements-wrapper {
-      margin-top: @top-bar-height * 2;
+      overflow-y: scroll;
+      height: calc(~"100vh - " @top-bar-height * 3);
     }
 
     &::-webkit-scrollbar {
