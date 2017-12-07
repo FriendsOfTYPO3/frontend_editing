@@ -136,6 +136,11 @@ class FrontendEditingInitializationHook
         if (!$this->isFrontendEditingEnabled($parentObject)) {
             return;
         }
+
+        if (!GeneralUtility::_GP('id')) {
+            $_GET['id'] = $parentObject->getRequestedId();
+        }
+
         $this->typoScriptFrontendController = $parentObject;
 
         // Special content is about to be shown, so the cache must be disabled.
@@ -210,7 +215,6 @@ class FrontendEditingInitializationHook
         // Load available content elements right here, because it adds too much stuff to PageRenderer,
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
-
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
         $this->pageRenderer = new PageRenderer();
