@@ -259,7 +259,15 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 
 		$('.t3-frontend-editing__show-hidden-items').click(function () {
 			var url = $(this).data('url');
-            loadPageIntoIframe(url, editorConfigurationUrl);
+			loadPageIntoIframe(url, editorConfigurationUrl);
+			// Change the state of visible/hidden GET parameter
+			var changedUrlState = '';
+			if (url.indexOf('show_hidden_items=1') >= 0) {
+				changedUrlState = url.replace('show_hidden_items=1', 'show_hidden_items=0');
+			} else if (url.indexOf('show_hidden_items=0') >= 0) {
+				changedUrlState = url.replace('show_hidden_items=0', 'show_hidden_items=1');
+			}
+			$(this).data('url', changedUrlState);
 		});
 
 		$('.page-seo-devices span').on('click', function () {
