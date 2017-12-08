@@ -24,7 +24,7 @@
 
   iframe {
     width: 100%;
-    height: calc(~"100vh - "@top-bar-height);
+    height: calc(~"100vh - "@top-bar-height * 2);
     margin: 0 auto;
     display: block;
     box-shadow: 0 0 15px 0 @gray;
@@ -111,10 +111,17 @@ body {
   border: 0;
   border-left: 1px solid @black;
   border-radius: 0;
+  outline: 0;
 
   &.full-view-active {
-    background-color: @black;
-    border: 1px dashed @color-t3-gray-light;
+    background-color: @color-t3-primary;
+    border: 1px dashed @black;
+    color: @black;
+
+    &:hover {
+      background-color: lighten(@color-t3-primary, 10%);
+      color: @black;
+    }
   }
 
   &:hover {
@@ -136,7 +143,7 @@ body {
 
   > .cke {
     top: -1px !important;
-    left: 50px !important;
+    left: 0 !important;
     right: auto !important;
 
     &.left-open {
