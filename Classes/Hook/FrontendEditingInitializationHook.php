@@ -76,12 +76,18 @@ class FrontendEditingInitializationHook
     protected $pageRenderer;
 
     /**
+     * @var array
+     */
+    protected $pluginConfiguration;
+
+    /**
      * ContentPostProc constructor.
      */
     public function __construct()
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+        $this->pluginConfiguration = [];
     }
 
     /**
@@ -133,6 +139,11 @@ class FrontendEditingInitializationHook
         if (!$this->isFrontendEditingEnabled($parentObject)) {
             return;
         }
+
+        if (!GeneralUtility::_GP('id')) {
+            $_GET['id'] = $parentObject->getRequestedId();
+        }
+
         $this->typoScriptFrontendController = $parentObject;
 
         // Special content is about to be shown, so the cache must be disabled.
@@ -339,6 +350,13 @@ class FrontendEditingInitializationHook
                 ]
             ]
         );
+
+        $configuration = $this->getPluginConfiguration();
+        if (is_array($configuration['includeJS'])) {
+            foreach ($configuration['includeJS'] as $file) {
+                $this->pageRenderer->addJsFile($file);
+            }
+        }
     }
 
     /**
@@ -631,15 +649,11 @@ class FrontendEditingInitializationHook
     protected function getCustomRecords(): array
     {
         $records = [];
-        /** @var TypoScriptService $typoScriptService */
-        $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
-            $this->typoScriptFrontendController->tmpl->setup
-        );
-        if (is_array($configuration['plugin']['tx_frontendediting']['customRecords'])) {
+        $configuration = $this->getPluginConfiguration();
+        if (is_array($configuration['customRecords'])) {
             /** @var ContentEditableWrapperService $wrapperService */
             $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-            foreach ($configuration['plugin']['tx_frontendediting']['customRecords'] as $record) {
+            foreach ($configuration['customRecords'] as $record) {
                 $pid = (int)$record['pid'] ?: $this->typoScriptFrontendController->id;
                 $page = BackendUtility::getRecord('pages', $pid);
                 if (is_array($record) &&
@@ -722,5 +736,25 @@ class FrontendEditingInitializationHook
         }
 
         return $providerData;
+    }
+
+    /**
+     * Get plugin configuration from TypoScript
+     *
+     * @return array
+     */
+    protected function getPluginConfiguration(): array
+    {
+        if (!$this->pluginConfiguration) {
+            /** @var TypoScriptService $typoScriptService */
+            $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+            $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
+                $this->typoScriptFrontendController->tmpl->setup
+            );
+            if (is_array($configuration['plugin']['tx_frontendediting'])) {
+                $this->pluginConfiguration = $configuration['plugin']['tx_frontendediting'];
+            }
+        }
+        return $this->pluginConfiguration;
     }
 }
