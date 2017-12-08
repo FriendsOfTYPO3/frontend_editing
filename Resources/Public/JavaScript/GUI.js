@@ -252,7 +252,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			}
 		});
 
-		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
+		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new, .t3-frontend-editing__page-seo_module').click(function () {
 			var url = $(this).data('url');
 			F.loadInModal(url);
 		});

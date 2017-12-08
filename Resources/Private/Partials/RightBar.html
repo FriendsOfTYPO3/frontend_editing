@@ -13,6 +13,18 @@
 
 			<div class="padding-wrapper devices">
 				<div class="page-seo">
+					<f:if condition="{seoProviderData}">
+						<span class="title-default">
+							<f:translate key="right-bar.page-seo-score" extensionName="FrontendEditing" />
+						</span>
+						<span class="page-seo-score">{seoProviderData.pageScore}</span>
+						<button type="#" class="t3-frontend-editing__page-seo_module btn btn-default" data-url="{seoProviderData.backendModuleUrl}">
+							<span class="btn-text">
+								<f:translate key="right-bar.seo-guide" extensionName="FrontendEditing" />
+							</span>
+						</button>
+					</f:if>
+
 					<div class="page-seo-devices">
 						<span class="page-seo-lg-desktop icons icon-icons-lg-desktop active" data-width="100%" data-height="100%"></span>
 						<span class="page-seo-desktop icons icon-icons-desktop" data-width="1280px" data-height="100%"></span>

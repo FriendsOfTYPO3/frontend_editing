@@ -20,6 +20,8 @@ $EM_CONF[$_EXTKEY] = [
         'conflicts' => [
             'feedit' => '',
         ],
-        'suggests' => [],
+        'suggests' => [
+            'cs_seo' => '2.1.0-2.1.99'
+        ],
     ],
 ];
