@@ -27,7 +27,9 @@
     margin-left: 0;
   }
 }
-
+.accordion-list .element:last-of-type {
+  border-bottom: 0;
+}
 .element {
   display: inline-block;
   margin-bottom: 10px;
@@ -43,10 +45,12 @@
       width: 200px;
       padding: 0;
       line-height: 1.1;
+      color: @gray-light;
 
       &:first-of-type {
-        font-size: @font-size-large;
+        font-size: @font-size-smaller;
         padding-top: 4px;
+        color: #fff;
       }
     }
   }
@@ -128,6 +132,14 @@
   .grid {
     color: @white;
   }
+  .accordion-content {
+    padding: 10px;
+
+    .element {
+      margin-bottom: 0;
+    }
+  }
+
 }
 
 .accordion-list {
@@ -139,9 +151,10 @@
   .element {
     display: block;
     background-color: @gray-dark;
-    margin: -10px;
+    margin: 0;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid @gray;
 
     .content-icon {
       vertical-align: top;
@@ -159,7 +172,6 @@
           vertical-align: middle;
           display: block;
           margin: 0 auto;
-
 
           img {
             height: 100%;
