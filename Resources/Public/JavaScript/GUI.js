@@ -315,6 +315,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 				D3IndentedTree.treeFilter(sword);
 			}
 		});
+
+		// Refresh page tree
+		$('.t3-frontend-editing__page-tree-refresh').on('click', function (event) {
+			event.preventDefault();
+			D3IndentedTree.resetFilter();
+		});
 	}
 
 	function initGuiStates() {

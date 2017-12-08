@@ -179,7 +179,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _update(source) {
-		var nodes = tree(isFilteringActive ? rootFiltered : root), //returns a single node with the properties of d3.tree()
+		var nodes = tree(isFilteringActive ? rootFiltered : root), // returns a single node with the properties of d3.tree()
 			nodesSort = [];
 
 		var links = nodes.descendants().slice(1),
@@ -744,6 +744,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	return {
 		init: init,
 		treeFilter: treeFilter,
-		isSearchRunning: isSearchRunning
+		isSearchRunning: isSearchRunning,
+		resetFilter: _resetFilter
 	}
 });
