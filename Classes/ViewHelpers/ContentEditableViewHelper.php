@@ -95,7 +95,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ) {
-        $content = $renderChildrenClosure();
+        $content = ($renderChildrenClosure() != null ? $renderChildrenClosure() : '');
         $access = GeneralUtility::makeInstance(AccessService::class);
         if (!$access->isEnabled()) {
             return $content;
