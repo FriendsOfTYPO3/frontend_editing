@@ -34,9 +34,11 @@
 			<div class="elements">
 				<f:render partial="ContentElementHierarchyTab" arguments="{_all}"></f:render>
 			</div>
-			<div class="elements">
-				<f:render partial="CustomRecordTab" arguments="{_all}"></f:render>
-			</div>
+			<f:if condition="{customRecords}">
+				<div class="elements">
+					<f:render partial="CustomRecordTab" arguments="{_all}"></f:render>
+				</div>
+			</f:if>
 		</div>
 	</div>
 </div>
