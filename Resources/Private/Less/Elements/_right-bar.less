@@ -24,9 +24,9 @@
 
   .top-right-bar-wrapper {
 
-    .top-right-fixed {
+    .top-right-relative {
       position: relative;
-      height: 110px;
+      height: 165px;
       z-index: 1100;
       background: @gray;
     }
@@ -109,33 +109,42 @@
   }
 
   .page-seo {
-    display: inline-block;
+    height: 55px;
+    background: @transparent-opacity;
+    border-bottom: 1px solid @gray;
+    text-align: center;
 
     .page-seo-score {
       border: 4px solid @color-t3-primary;
-      font-size: 25px;
-      padding: 6px;
+      font-size: 20px;
       border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      text-align: center;
       display: inline-block;
       margin: 0 7px;
       position: relative;
-      top: 2px;
+      top: 4px;
+      width: 45px;
+      height: 45px;
+      color: #fff;
+      line-height: 37px;
+      text-align: center;
     }
+  }
+  .media-devices-wrapper {
+    display: inline-block;
+
+    
 
     .btn-default {
       margin-bottom: 8px;
     }
 
-    .page-seo-devices {
+    .media-devices {
       font-size: 24px;
       display: table;
       margin: 0 auto;
       height: 100%;
 
-      .page-seo-lg-desktop {
+      .media-device-lg-desktop {
         font-size: 48px;
         display: table-cell;
         vertical-align: middle;
@@ -152,7 +161,7 @@
         }
       }
 
-      .page-seo-desktop {
+      .media-device-desktop {
         font-size: 48px;
         display: table-cell;
         vertical-align: middle;
@@ -169,7 +178,7 @@
         }
       }
 
-      .page-seo-tablet {
+      .media-device-tablet {
         font-size: 34px;
         display: table-cell;
         vertical-align: middle;
@@ -187,7 +196,7 @@
         }
       }
 
-      .page-seo-phone {
+      .media-device-phone {
         font-size: 26px;
         display: table-cell;
         vertical-align: middle;
@@ -209,6 +218,7 @@
 
   .devices {
     height: @top-bar-height;
+    padding-left: 14px;
     padding-right: 0;
     width: @right-bar-width;
   }
@@ -232,8 +242,35 @@
       padding: 0;
       outline: 0;
 
+      &.active {
+        background: @color-t3-primary;
+        border-radius: 0;
+
+        &:hover {
+          background-color: lighten(@color-t3-primary, 10%);
+          color: @black;
+        }
+
+        .hidden-elements-toggle-icon {
+          .eye  {
+            fill: @black;
+          }
+
+          .eye-pupil {
+            fill: @black;
+          }
+
+          .eye-border {
+            fill: @black;
+          }
+        }
+      }
+
       .hidden-elements-toggle-icon {
         .eye  {
+          fill: @color-t3-primary;
+        }
+        .eye-pupil {
           fill: @color-t3-primary;
         }
 

@@ -268,10 +268,11 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 				changedUrlState = url.replace('show_hidden_items=0', 'show_hidden_items=1');
 			}
 			$(this).data('url', changedUrlState);
+			$('.t3-frontend-editing__show-hidden-items').toggleClass('active');
 		});
 
-		$('.page-seo-devices span').on('click', function () {
-			$('.page-seo-devices').find('span').removeClass('active');
+		$('.media-devices span').on('click', function () {
+			$('.media-devices').find('span').removeClass('active');
 			$(this).addClass('active');
 			$('.t3-frontend-editing__iframe-wrapper iframe').animate({
 				'width': $(this).data('width')
