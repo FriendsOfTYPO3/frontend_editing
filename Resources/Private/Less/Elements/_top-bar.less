@@ -20,8 +20,8 @@
 
   .btn-backend {
     height: @top-bar-height !important;
-    border-left: 1px solid #0f0f0f;
-
+    border: 0;
+    border-right: 1px solid darken(@color-t3-gray-dark, 10%);
     &:hover {
       background-color: lighten(@gray-dark, 20%);
     }
@@ -60,10 +60,11 @@
     margin: 0;
     padding: 0;
     display: inline-block;
-    border-left: 1px solid @black;
+    border-left: 1px solid @color-t3-gray-dark;
 
     .item {
-      border-right: 1px solid @black;
+      border-right: 1px solid darken(@color-t3-gray-dark, 10%);
+      border-left: 1px solid darken(@color-t3-gray-dark, 10%);
       float: left;
       height: @top-bar-height;
       position: relative;
@@ -157,6 +158,7 @@
       position: relative;
       top: @top-bar-height / 5;
       vertical-align: middle;
+      margin-right: 10px;
     }
 
     .avatar-image {
