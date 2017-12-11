@@ -1,4 +1,5 @@
 {namespace be=TYPO3\CMS\Backend\ViewHelpers}
+{namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
 
 <div class="t3-frontend-editing__top-bar">
 	<div class="t3-frontend-editing__topbar-inner">
@@ -19,6 +20,7 @@
 					<a class="dropdown-toggle user">
 						<be:avatar backendUser="{currentUser.uid}" />
 						<span class="icon-avatar-title" title="{currentUser.username}">{currentUser.username}</span>
+						<span class="icons icon-icons-arrow-down"></span>
 					</a>
 					<ul class="dropdown-menu">
 						<li>
