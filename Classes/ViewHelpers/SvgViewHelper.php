@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -79,13 +80,13 @@ class SvgViewHelper extends AbstractViewHelper
         // remove xml version tag
         $domXml = dom_import_simplexml($svgElement);
         if (isset($arguments['class'])) {
-            $domXml->setAttribute('class', $arguments['class']);
+            $domXml->setAttribute('class', (string)$arguments['class']);
         }
         if (isset($arguments['width'])) {
-            $domXml->setAttribute('width', $arguments['width']);
+            $domXml->setAttribute('width', (string)$arguments['width']);
         }
         if (isset($arguments['height'])) {
-            $domXml->setAttribute('height', $arguments['height']);
+            $domXml->setAttribute('height', (string)$arguments['height']);
         }
 
         return $domXml->ownerDocument->saveXML($domXml->ownerDocument->documentElement);
