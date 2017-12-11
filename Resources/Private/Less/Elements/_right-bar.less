@@ -26,14 +26,14 @@
 
     .top-right-relative {
       position: relative;
-      height: 165px;
+      height: @top-bar-height * 3 + @twenty;
       z-index: 1100;
       background: @gray;
     }
 
     .elements-wrapper {
       overflow-y: scroll;
-      height: calc(~"100vh - " @top-bar-height * 3);
+      height: calc(~"100vh - " @top-bar-height * 4 + @twenty);
     }
 
     &::-webkit-scrollbar {
@@ -109,10 +109,11 @@
   }
 
   .page-seo {
-    height: 55px;
+    height: 55px + @twenty;
     background: @transparent-opacity;
     border-bottom: 1px solid @gray;
     text-align: center;
+    padding: 10px;
 
     .page-seo-score {
       border: 4px solid @color-t3-primary;
