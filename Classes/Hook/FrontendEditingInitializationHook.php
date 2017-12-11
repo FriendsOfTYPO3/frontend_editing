@@ -635,7 +635,8 @@ class FrontendEditingInitializationHook
         $contentElements = $this->typoScriptFrontendController->cObj->getRecords(
             'tt_content',
             [
-                'pidInList' => $pageId
+                'pidInList' => $pageId,
+                'orderBy' => 'sorting'
             ]
         );
         foreach ($contentElements as &$contentElement) {
