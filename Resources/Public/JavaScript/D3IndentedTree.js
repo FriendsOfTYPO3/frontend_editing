@@ -615,13 +615,6 @@ define(['jquery', 'd3'], function ($, d3) {
 	 */
 	function _diagonal(s, d) {
 		return 'M ' + d.y + ' ' + d.x + ' V ' + s.x + ' H ' + s.y;
-
-		// Curved line
-		/*return `M ${s.y} ${s.x}
-		 C ${(s.y + d.y) / 2} ${s.x},
-		 ${(s.y + d.y) / 2} ${d.x},
-		 ${d.y} ${d.x}`;*/
-
 	}
 
 	/**
