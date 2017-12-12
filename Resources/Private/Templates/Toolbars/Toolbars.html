@@ -1,5 +1,9 @@
+{namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
+
 <button class="t3-frontend-editing__full-view" title="Full view">
-	<span class="icons icon-icons-cancel"></span>
+	<span class="icons">
+		<fe:svg source="{f:uri.resource(path: 'Icons/fullscreen_icon.svg', extensionName: 'FrontendEditing')}" width="28" height="28" class="hidden-elements-toggle-icon" />
+	</span>
 </button>
 <f:render partial="TopBar" arguments="{_all}"></f:render>
 <f:render partial="RightBar" arguments="{_all}"></f:render>

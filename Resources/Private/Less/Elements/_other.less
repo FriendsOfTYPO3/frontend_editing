@@ -106,7 +106,6 @@ body {
   right: 0;
   left: auto;
   background: none;
-  color: @color-t3-gray-light;
   font-size: 24px;
   border: 0;
   border-left: 1px solid darken(@color-t3-gray-dark, 10%);
@@ -116,7 +115,10 @@ body {
   &.full-view-active {
     background-color: @color-t3-primary;
     border: 1px dashed @black;
-    color: @black;
+
+    svg path {
+      fill: @black;
+    }
 
     &:hover {
       background-color: lighten(@color-t3-primary, 10%);
@@ -126,6 +128,10 @@ body {
 
   &:hover {
     background-color: lighten(@gray-dark, 20%);
+  }
+
+  svg path {
+    fill: @color-t3-gray-light;
   }
 }
 
