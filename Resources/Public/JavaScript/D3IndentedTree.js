@@ -167,6 +167,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	function _initSvg() {
 		svg = d3.select(_getDomSelector('pageTree')).append('svg')
 			.attr('width', width + margin.right + margin.left)
+			.attr('id', 'd3-page-tree')
 			.append('g')
 			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 	}
@@ -178,7 +179,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _update(source) {
-		var nodes = tree(isFilteringActive ? rootFiltered : root), //returns a single node with the properties of d3.tree()
+		var nodes = tree(isFilteringActive ? rootFiltered : root), // returns a single node with the properties of d3.tree()
 			nodesSort = [];
 
 		var links = nodes.descendants().slice(1),
@@ -211,7 +212,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.call(function () {
 				if (linksCount < links.length) {
 					linksCount = links.length;
-					d3.select('svg').attr('height', (links.length + 2) * barHeight);
+					d3.select('#d3-page-tree').attr('height', (links.length + 2) * barHeight);
 				}
 			});
 
@@ -614,13 +615,6 @@ define(['jquery', 'd3'], function ($, d3) {
 	 */
 	function _diagonal(s, d) {
 		return 'M ' + d.y + ' ' + d.x + ' V ' + s.x + ' H ' + s.y;
-
-		// Curved line
-		/*return `M ${s.y} ${s.x}
-		 C ${(s.y + d.y) / 2} ${s.x},
-		 ${(s.y + d.y) / 2} ${d.x},
-		 ${d.y} ${d.x}`;*/
-
 	}
 
 	/**
@@ -743,6 +737,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	return {
 		init: init,
 		treeFilter: treeFilter,
-		isSearchRunning: isSearchRunning
+		isSearchRunning: isSearchRunning,
+		resetFilter: _resetFilter
 	}
 });

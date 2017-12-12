@@ -10,7 +10,7 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'TYPO3 Community',
     'author_email' => 'typo3cms@typo3.org',
     'author_company' => '',
-    'version' => '1.2.5',
+    'version' => '1.3.0',
     'constraints' => [
         'depends' => [
             'typo3' => '8.7.0-8.7.99',
@@ -20,6 +20,8 @@ $EM_CONF[$_EXTKEY] = [
         'conflicts' => [
             'feedit' => '',
         ],
-        'suggests' => [],
+        'suggests' => [
+            'cs_seo' => '2.1.0-2.1.99'
+        ],
     ],
 ];

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+    <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z"
+          product-name="frontend_editing">
+        <header/>
+        <body>
+            <trans-unit id="extension_management.seo_provider">
+                <source>SEO provider</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

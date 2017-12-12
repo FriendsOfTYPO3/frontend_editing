@@ -2,7 +2,7 @@
   background: @transparent-opacity;
   color: @white;
   position: fixed;
-  top: 0;
+  top: @top-bar-height;
   left: -280px;
   width: @left-bar-width;
   min-height: 100%;
@@ -11,8 +11,12 @@
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 
+  &.closed {
+    display: none;
+  }
+
   .title-icon-left {
-    top: 7px;
+    top: 11px;
     position: relative;
     font-size: 32px;
     padding-left: 15px;
@@ -21,13 +25,14 @@
 
   .top-left-title {
     height: @top-bar-height;
-    background-color: @header-top-bg-color;
+    background-color: @gray-darker;
     cursor: pointer;
 
     .title-left {
       text-align: left;
       padding: 10px 5px 10px 10px;
       font-size: 18px;
+      vertical-align: middle;
     }
 
     .left-bar-button {
@@ -44,7 +49,7 @@
       font-size: 32px;
       right: -45px;
       top: 0;
-      background-color: @black;
+      background-color: @gray-darker;
 
       &:hover {
         background-color: lighten(@black, 20%);
@@ -64,9 +69,48 @@
       }
     }
   }
+
+  .t3-frontend-editing__page-tree-options {
+    padding: 15px 10px 5px;
+    background: @gray-dark;
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+
+      li {
+        display: inline-block;
+
+        &:last-of-type {
+          float: right;
+        }
+
+        .btn {
+          background-color: #000;
+          height: 32px !important;
+          width: 32px !important;
+          padding: 0 !important;
+          border-radius: 2px !important;
+
+          &:hover {
+            background-color: lighten(@black, 20%);
+          }
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+
+          .icon-color {
+            fill: #fff;
+          }
+        }
+      }
+    }
+  }
 }
 
 .push-toright {
-  left: @left-bar-width;
+  left: 0;
   position: relative;
 }
