@@ -10,6 +10,7 @@
 
 // Include Color Variables
 @import '_colors.less';
+@import '_inline_action_icon.less';
 
 *[contenteditable="true"] {
   &:focus{
@@ -17,9 +18,19 @@
   }
 }
 
-&.t3-frontend-editing__hidden-element {
+// hide preview info box from TYPO3 admin panel
+
+#typo3-previewInfo {
+  display: none;
+}
+
+// visualize hidden elements
+
+.t3-frontend-editing__hidden-element {
   opacity: .6;
 }
+
+// dropzone (areas where you can add content)
 
 .t3-frontend-editing__dropzone {
   height: 0;
@@ -30,60 +41,70 @@
   padding: 0;
 }
 
-.t3-frontend-editing__ce {
-  position: relative;
-  min-height: 35px;
-  .cke_editable {
-    display: inline;
-  }
-  &:hover {
-    outline: 1px dotted fade(@color-t3-gray, 50%);
-    .cke_editable {
-      outline: 1px dotted @color-t3-primary;
-      z-index: 5;
-      display: inline-block;
-      min-width: 50%;
-    }
-    .t3-frontend-editing__inline-actions {
-      display: inline-block;
-    }
-    h3 span + div.cke_editable {
-      display: inline-block;
-      min-width: 20px;
-    }
-  }
-  // Colored frame when hovering content element in right-column list
-  &.indicate-element {
-    outline: 1px solid @color-t3-primary;
-  }
-  &[draggable="true"]:hover {
-    cursor: pointer;
-  }
-}
-
 .dropzones-enabled .t3-frontend-editing__dropzone {
   height: 25px;
+
   &.active {
     border: dashed 1px @gray;
     background-color: @color-t3-green;
   }
+
   &.t3-frontend-editing__dropzone-hidden {
     display: none;
     visibility: hidden;
   }
 }
 
+// container for editing content element
+
+.t3-frontend-editing__ce {
+  position: relative;
+  min-height: 35px;
+
+  .cke_editable {
+    display: inline;
+  }
+
+  &:hover {
+    outline: 1px dotted fade(@color-t3-gray, 50%);
+
+    .cke_editable {
+      outline: 1px dotted @color-t3-primary;
+      z-index: 5;
+      display: inline-block;
+      min-width: 50%;
+    }
+
+    h3 span + div.cke_editable {
+      display: inline-block;
+      min-width: 20px;
+    }
+  }
+
+  // Colored frame when hovering content element in right-column list
+  &.indicate-element {
+    outline: 1px solid @color-t3-primary;
+  }
+
+  &[draggable="true"]:hover {
+    cursor: pointer;
+  }
+}
+
+// inline actions (buttons like edit, hide, delete, new)
+
 .t3-frontend-editing__inline-actions {
+  line-height: 1;
   display: none;
   position: absolute;
   bottom: 100%;
-
   left: -1px;
   color: @color-white;
   background-color: fade(@color-t3-gray-dark, 80%);
-  // Maximum z-index value to make sure it is always on top
-  z-index: 2147483647;
+  z-index: 2147483647;  // Maximum z-index value to make sure it is always on top
   text-align: right;
+
+  .inline-action-icon;
 
   .icon {
     background-color: fade(@color-white, 60%);
@@ -93,83 +114,8 @@
       background-color: fade(@gray-light, 60%);
     }
   }
-
-  // end section borrowed from backend.css - modified though
-  .icon {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    vertical-align: bottom;
-  }
-  .icon svg,
-  .icon img {
-    display: block;
-    height: 100%;
-    width: 100%;
-    transform: translate3d(0, 0, 0);
-  }
-  .icon * {
-    display: block;
-    line-height: inherit;
-  }
-  .icon-markup {
-    position: absolute;
-    display: block;
-    text-align: center;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-  }
-  .icon-overlay {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 68.75%;
-    width: 68.75%;
-    text-align: center;
-  }
-  .icon-color {
-    fill: currentColor;
-  }
-  .icon-spin .icon-markup {
-    animation: icon-spin 2s infinite linear;
-  }
-  @keyframes icon-spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(359deg);
-    }
-  }
-  .icon-state-disabled .icon-markup {
-    opacity: 0.5;
-  }
-  .icon-size-small {
-    height: 26px;
-    width: 26px;
-    line-height: 26px;
-  }
-  .icon-size-default {
-    height: 42px;
-    width: 42px;
-    line-height: 42px;
-  }
-  .icon-size-large {
-    height: 58px;
-    width: 58px;
-    line-height: 58px;
-  }
-  // end section borrowed from backend.css
 }
 
-.cke_toolbar_break {
-  display: none !important;
-}
-
-// Hide preview info box from TYPO3 admin panel
-#typo3-previewInfo {
-  display: none;
+.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
+  display: inline-block;
 }
