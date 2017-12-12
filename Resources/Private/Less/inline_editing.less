@@ -58,7 +58,7 @@
 // container for editing content element
 
 .t3-frontend-editing__ce {
-  position: relative;
+  position: relative !important;
   min-height: 35px;
 
   .cke_editable {
@@ -70,18 +70,11 @@
 
     .cke_editable {
       outline: 1px dotted @color-t3-primary;
-      z-index: 5;
-      display: inline-block;
-      min-width: 50%;
-    }
-
-    h3 span + div.cke_editable {
-      display: inline-block;
-      min-width: 20px;
     }
   }
 
-  // Colored frame when hovering content element in right-column list
+  // colored frame when hovering content element in right-column list
+
   &.indicate-element {
     outline: 1px solid @color-t3-primary;
   }
@@ -96,12 +89,12 @@
 .t3-frontend-editing__inline-actions {
   line-height: 1;
   display: none;
-  position: absolute;
+  position: absolute !important;
   bottom: 100%;
   left: -1px;
   color: @color-white;
   background-color: fade(@color-t3-gray-dark, 80%);
-  z-index: 2147483647;  // Maximum z-index value to make sure it is always on top
+  z-index: 16777271;  // maximum z-index value to make sure it is always on top
   text-align: right;
 
   .inline-action-icon;
@@ -116,6 +109,6 @@
   }
 }
 
-.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
+.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions { // show inline actions when hovering
   display: inline-block;
 }
