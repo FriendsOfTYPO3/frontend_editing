@@ -9,16 +9,6 @@
   z-index: 10999;
   font-family: @font-family-base;
   font-size: @font-size-regular;
-
-  > .cke {
-    top: -1px !important;
-    left: 50px !important;
-    right: auto !important;
-
-    &.left-open {
-      left: 290px !important;
-    }
-  }
 }
 
 .t3-frontend-editing__topbar-inner {
@@ -27,6 +17,26 @@
   font-weight: 300;
   font-size: @font-size-regular;
   text-transform: uppercase;
+
+  .btn-backend {
+    height: @top-bar-height !important;
+    border: 0;
+    border-right: 1px solid darken(@color-t3-gray-dark, 10%);
+    &:hover {
+      background-color: lighten(@gray-dark, 20%);
+    }
+
+    span {
+        display: inline-block;
+        position: relative;
+        top: @top-bar-height / 5;
+        vertical-align: middle;
+    }
+    .icon-icons-back {
+        font-size: 24px;
+        color: @color-t3-primary;
+    }
+  }
 }
 
 .t3-frontend-editing__top-bar-left {
@@ -47,15 +57,13 @@
 
   .top-bar-items {
     .transition(margin @push-duration @push-timing);
-    float: right;
     margin: 0;
-    margin-right: 45px;
     padding: 0;
     display: inline-block;
-    border-left: 1px solid @black;
 
     .item {
-      border-right: 1px solid @black;
+      border-right: 1px solid lighten(@gray-dark, 20%);
+      border-left: 1px solid lighten(@gray-dark, 20%);
       float: left;
       height: @top-bar-height;
       position: relative;
@@ -73,8 +81,26 @@
         cursor: pointer;
         text-decoration: none;
 
+        .icon-icons-arrow-down {
+          transform: rotate(0);
+          transition-duration: .2s;
+          transform-origin: center;
+          display: inline-block;
+          position: relative;
+          top: 11px;
+          vertical-align: middle;
+          color: white;
+          font-size: 24px;
+        }
+
         &.active {
           background: @gray;
+
+          .icon-icons-arrow-down {
+            transform: rotate(180deg);
+            transition-duration: .2s;
+            transform-origin: center;
+          }
         }
       }
 
@@ -103,7 +129,7 @@
   }
 
   &.push-toleft {
-    right: @right-bar-width;
+    right:0;
 
     .top-bar-items {
       margin-right: 0;
@@ -113,6 +139,12 @@
   .top-bar-action-buttons {
     float: right;
     margin: 5px;
+    min-width: @right-bar-width;
+
+    button {
+        float: left;
+        margin-left: 15px;
+    }
 
     .t3-frontend-editing__save {
         &:not(.btn-inactive) {
@@ -141,8 +173,9 @@
     .avatar {
       display: inline-block;
       position: relative;
-      top: 7px;
-      vertical-align: bottom;
+      top: @top-bar-height / 5;
+      vertical-align: middle;
+      margin-right: 10px;
     }
 
     .avatar-image {
@@ -173,9 +206,10 @@
 
     .icon-avatar-title {
       position: relative;
-      top: 2px;
+      top: @top-bar-height / 5;
       color: @white;
       text-decoration: none;
+      vertical-align: middle;
     }
   }
 
@@ -186,7 +220,7 @@
 
     .btn-text {
       position: relative;
-      top: 5px;
+      top: 9px;
     }
   }
 }

@@ -180,7 +180,7 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 			}
 		});
 
-		var $topBar = $('.t3-frontend-editing__top-bar');
+		var $topBar = $('.t3-frontend-editing__ckeditor-bar');
 
 		// Add custom configuration to ckeditor
 		var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');

@@ -3,6 +3,14 @@
 <div class="t3-frontend-editing__top-bar">
 	<div class="t3-frontend-editing__topbar-inner">
 		<div class="t3-frontend-editing__top-bar-left">
+			<div class="top-bar-action-buttons">
+				<a class="btn btn-backend" href="{backendUrl}">
+					<span class="icons icon-icons-back"></span>
+					<span class="btn-text" title="{f:translate(key: 'top-bar.to-backend', extensionName: 'FrontendEditing')}">
+						<f:translate key="top-bar.to-backend" extensionName="FrontendEditing" />
+					</span>
+				</a>
+			</div>
 		</div>
 		<div class="t3-frontend-editing__top-bar-right">
 
@@ -11,6 +19,7 @@
 					<a class="dropdown-toggle user">
 						<be:avatar backendUser="{currentUser.uid}" />
 						<span class="icon-avatar-title" title="{currentUser.username}">{currentUser.username}</span>
+						<span class="icons icon-icons-arrow-down"></span>
 					</a>
 					<ul class="dropdown-menu">
 						<li>
@@ -19,12 +28,7 @@
 									<f:translate key="top-bar.logout" extensionName="FrontendEditing" />
 								</span>
 							</a>
-							<a class="btn btn-logout pull-left" href="{backendUrl}">
-								<span class="icons icon-icons-back"></span>
-								<span class="btn-text" title="{f:translate(key: 'top-bar.to-backend', extensionName: 'FrontendEditing')}">
-									<f:translate key="top-bar.to-backend" extensionName="FrontendEditing" />
-								</span>
-							</a>
+							
 						</li>
 					</ul>
 				</li>

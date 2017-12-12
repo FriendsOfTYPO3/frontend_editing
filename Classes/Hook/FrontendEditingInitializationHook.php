@@ -37,9 +37,12 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -145,6 +148,8 @@ class FrontendEditingInitializationHook
 
         // Special content is about to be shown, so the cache must be disabled.
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
+
+
 
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
         // Check if url has a ?, then decide on URL separator
@@ -256,6 +261,7 @@ class FrontendEditingInitializationHook
                 }
             };
         }');
+
         $view = $this->initializeView();
         $view->assignMultiple([
             'overlayOption' => $GLOBALS['BE_USER']->uc['frontend_editing_overlay'],
@@ -270,7 +276,9 @@ class FrontendEditingInitializationHook
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-            'mounts' => $this->getBEUserMounts()
+            'mounts' => $this->getBEUserMounts(),
+            'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
+            'seoProviderData' => $this->getSeoProviderData($this->typoScriptFrontendController->id)
         ]);
 
         // Assign the content
@@ -627,7 +635,8 @@ class FrontendEditingInitializationHook
         $contentElements = $this->typoScriptFrontendController->cObj->getRecords(
             'tt_content',
             [
-                'pidInList' => $pageId
+                'pidInList' => $pageId,
+                'orderBy' => 'sorting'
             ]
         );
         foreach ($contentElements as &$contentElement) {
@@ -710,6 +719,30 @@ class FrontendEditingInitializationHook
     }
 
     /**
+     * Get the SEO data based on chosen Provider from
+     * Extension Manager settings
+     *
+     * @param int $pageId
+     * @return array
+     */
+    protected function getSeoProviderData(int $pageId): array
+    {
+        $providerData = [];
+        $settings = ExtensionManagerConfigurationService::getSettings();
+        if (isset($settings['seoProvider']) && $settings['seoProvider'] !== 'none') {
+            $extensionIsLoaded = ExtensionManagementUtility::isLoaded($settings['seoProvider']);
+            if ($extensionIsLoaded === true) {
+                if ($settings['seoProvider'] === 'cs_seo') {
+                    $seoProvider = GeneralUtility::makeInstance(CsSeoProvider::class);
+                    $providerData = $seoProvider->getSeoScores($pageId);
+                }
+            }
+        }
+
+        return $providerData;
+    }
+
+    /**
      * Get plugin configuration from TypoScript
      *
      * @return array
@@ -727,5 +760,27 @@ class FrontendEditingInitializationHook
             }
         }
         return $this->pluginConfiguration;
+    }
+
+    /**
+     * Get if to display hidden items or not in the rendering
+     *
+     * @return int
+     */
+    protected function showHiddenItems(): int
+    {
+        $defaultState = 1;
+        $showHiddenItems = 0;
+        if (GeneralUtility::_GET('show_hidden_items')) {
+            $showHiddenItems = GeneralUtility::_GET('show_hidden_items');
+            if ($showHiddenItems !== $defaultState) {
+                $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+                $cacheManager->flushCaches();
+            }
+        }
+
+        $showHiddenItems = ($showHiddenItems === $defaultState) ? 0 : $defaultState;
+
+        return $showHiddenItems;
     }
 }

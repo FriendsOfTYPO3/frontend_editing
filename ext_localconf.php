@@ -8,6 +8,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CM
 if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
     $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFoundOnCHashError'] = false;
 
+    $showHiddenItems = TYPO3\CMS\Core\Utility\GeneralUtility::_GET('show_hidden_items');
+
     // Add userTsConfig for displaying certain options
     // when browsing as 'frontend_editing'
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
@@ -22,8 +24,8 @@ if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
             override.preview = 1
             override.preview.simulateDate = 0
             override.preview.simulateUserGroup = 0
-            override.preview.showHiddenPages = 1
-            override.preview.showHiddenRecords = 1
+            override.preview.showHiddenPages = ' . $showHiddenItems . '
+            override.preview.showHiddenRecords = ' . $showHiddenItems . '
             hide = 1
         }
     ');
@@ -80,7 +82,7 @@ if (TYPO3_MODE === 'FE' &&
     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
 ) {
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['avatarProviders']['frontendEditingAvatarProvider'] = [
-        'provider' => \TYPO3\CMS\FrontendEditing\Provider\FrontendEditingAvatarProvider::class
+        'provider' => \TYPO3\CMS\FrontendEditing\Provider\Avatar\FrontendEditingAvatarProvider::class
     ];
 }
 

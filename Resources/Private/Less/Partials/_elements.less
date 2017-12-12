@@ -1,7 +1,7 @@
 
 .content-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
 }
 
 .content-icon-default {
@@ -27,26 +27,30 @@
     margin-left: 0;
   }
 }
-
+.accordion-list .element:last-of-type {
+  border-bottom: 0;
+}
 .element {
   display: inline-block;
   margin-bottom: 10px;
   position: relative;
 
   .description {
-    width: 212px;
+    width: 230px;
     display: none;
     margin-left: 5px;
 
     .title-default {
       display: inline-block;
-      width: 200px;
+      width: 230px;
       padding: 0;
       line-height: 1.1;
+      color: @gray-light;
 
       &:first-of-type {
-        font-size: @font-size-large;
+        font-size: @font-size-smaller;
         padding-top: 4px;
+        color: #fff;
       }
     }
   }
@@ -91,9 +95,9 @@
   }
 
   .trigger {
-  @include rotate(0);
-  @include transition-duration(.2s);
-  @include transform-origin(center);
+  transform: rotate(0);
+  transition-duration: 0.2s;
+  transform-origin: center;
     font-size: 26px;
     position: relative;
     top: 5px;
@@ -101,9 +105,9 @@
     cursor: pointer;
 
     &.active {
-    @include rotate(180);
-    @include transition-duration(.2s);
-    @include transform-origin (center);
+    transform: rotate(180deg);
+    transition-duration: 0.2s;
+    transform-origin: center;
     }
   }
 
@@ -128,6 +132,10 @@
   .grid {
     color: @white;
   }
+
+  .accordion-content {
+    padding: 10px;
+  }
 }
 
 .accordion-list {
@@ -138,13 +146,39 @@
 
   .element {
     display: block;
-    background-color: @gray;
-    margin: -10px;
+    background-color: @gray-dark;
+    margin: 0;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid @gray;
 
     .content-icon {
       vertical-align: top;
+      display: inline-block;
+      margin: 0 auto;
+      background-color: @gray;
+
+      .icon-size-default {
+        height: 100%;
+        width: 100%;
+
+        .icon-markup {
+          width: 50px;
+          height: 50px;
+          text-align: center;
+          vertical-align: middle;
+          display: block;
+          margin: 0 auto;
+
+          img {
+            height: 40px;
+            width: 40px;
+            margin: 0 auto;
+            top: 10%;
+            position: relative;
+          }
+        }
+      }
     }
   }
 
