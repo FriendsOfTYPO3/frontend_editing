@@ -13,6 +13,9 @@
 @import '_inline_action_icon.less';
 
 *[contenteditable="true"] {
+  &:hover{
+    outline: 1px dotted fade(@color-t3-primary, 30%);
+  }
   &:focus{
     outline: 1px dotted @color-t3-primary;
   }
@@ -61,16 +64,12 @@
   position: relative !important;
   min-height: 35px;
 
-  .cke_editable {
-    display: inline;
-  }
-
   &:hover {
     outline: 1px dotted fade(@color-t3-gray, 50%);
+  }
 
-    .cke_editable {
-      outline: 1px dotted @color-t3-primary;
-    }
+  .cke_editable {
+    display: inline;
   }
 
   // colored frame when hovering content element in right-column list
