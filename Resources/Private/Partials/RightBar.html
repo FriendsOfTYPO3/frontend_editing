@@ -1,7 +1,7 @@
 {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
 
 <div class="t3-frontend-editing__right-bar {f:if(condition:overlayOption, then: 't3-frontend-editing__right-overlay')}">
-	<div class="top-right-bar-wrapper">
+	<div class="top-right-bar-wrapper {f:if(condition: seoProviderData, then: 'seo-provider')}">
 		<div class="top-right-relative">
 			<div class="top-right-title">
 				<span class="right-bar-button icons icon-icons-tools-settings" title="{f:translate(key: 'right-bar.tools-properties', extensionName: 'FrontendEditing')}"></span>

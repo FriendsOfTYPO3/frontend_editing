@@ -24,16 +24,27 @@
 
   .top-right-bar-wrapper {
 
+    &.seo-provider {
+      .top-right-relative {
+        height: @top-bar-height * 3 + @twenty;
+        
+      }
+
+      .elements-wrapper {
+        height: calc(~"100vh - " @top-bar-height * 4 + @twenty);
+      }
+    }
+
     .top-right-relative {
       position: relative;
-      height: @top-bar-height * 3 + @twenty;
+      height: @top-bar-height * 2;
       z-index: 1100;
       background: @gray;
     }
 
     .elements-wrapper {
       overflow-y: scroll;
-      height: calc(~"100vh - " @top-bar-height * 4 + @twenty);
+      height: calc(~"100vh - " @top-bar-height * 3);
     }
 
     &::-webkit-scrollbar {
@@ -67,6 +78,7 @@
       font-size: @font-size-large;
       display: inline-block;
       padding-right: 5px;
+      vertical-align: middle;
     }
 
     .right-bar-button {
@@ -92,7 +104,7 @@
     }
 
     .title-icon-right {
-      top: 7px;
+      top: 11px;
       position: relative;
       font-size: 32px;
       padding-right: 15px;
