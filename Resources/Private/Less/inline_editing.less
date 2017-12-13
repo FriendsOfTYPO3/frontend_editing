@@ -110,7 +110,7 @@
   }
 
   line-height: 1;
-  display: none;
+  display: none; // has also been set inline to hide before this styling is being applied
   position: absolute !important;
   bottom: 100%;
   left: -1px;
@@ -132,5 +132,5 @@
 }
 
 .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions { // show inline actions when hovering
-  display: inline-block;
+  display: inline-block !important; // overrides inline styling
 }
