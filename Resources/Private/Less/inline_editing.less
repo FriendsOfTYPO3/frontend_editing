@@ -13,6 +13,13 @@
 @import '_inline_action_icon.less';
 
 *[contenteditable="true"] {
+
+  // minimize external css affecting ours (ckeditor can create momentary spans when hovering)
+  & > span:before,
+  & > span:after {
+    content: none !important;
+  }
+
   &:hover{
     outline: 1px dotted fade(@color-t3-primary, 30%);
   }
@@ -75,6 +82,11 @@
   // colored frame when hovering content element in right-column list
 
   &.indicate-element {
+    &:before,
+    &:after {
+      content: none !important;
+    }
+
     outline: 1px solid @color-t3-primary;
   }
 
@@ -86,6 +98,17 @@
 // inline actions (buttons like edit, hide, delete, new)
 
 .t3-frontend-editing__inline-actions {
+
+  // minimize external css affecting ours
+  &:before,
+  &:after,
+  span:before,
+  span:after,
+  img:before,
+  img:after {
+    content: none !important;
+  }
+
   line-height: 1;
   display: none;
   position: absolute !important;
