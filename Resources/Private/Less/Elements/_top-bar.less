@@ -43,13 +43,13 @@
   .transition(left @push-duration @push-timing);
   position: relative;
   left: 0;
-  width: 50%;
+  width: 30%;
   float: left;
 }
 
 .t3-frontend-editing__top-bar-right {
   .transition(right @push-duration @push-timing);
-  width: 50%;
+  width: 70%;
   float: right;
   text-align: right;
   right: 0;
@@ -138,12 +138,14 @@
 
   .top-bar-action-buttons {
     float: right;
-    margin: 5px;
-    min-width: @right-bar-width;
+    //margin: 5px 0 5px 5px;
+    margin: 0;
+    min-width: @right-bar-width - @top-bar-height;
+    padding: 5px @top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
 
     button {
         float: left;
-        margin-left: 15px;
+        margin-right: 5px;
     }
 
     .t3-frontend-editing__save {

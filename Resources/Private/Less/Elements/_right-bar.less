@@ -8,7 +8,7 @@
   right: -@right-bar-width;
   width: @right-bar-width;
   bottom: 0;
-  z-index: 10999;
+  z-index: 10998;
   font-family: @font-family-base;
   text-transform: uppercase;
 
@@ -121,7 +121,7 @@
   }
 
   .page-seo {
-    height: 55px + @twenty;
+    height: @top-bar-height + @twenty;
     background: @transparent-opacity;
     border-bottom: 1px solid @gray;
     text-align: center;
@@ -199,18 +199,18 @@
 
     .hidden-elements-toggle-wrapper {
       float: right;
-      width: 55px;
-      height: 55px;
+      width: @top-bar-height;
+      height: @top-bar-height;
       font-size: 1em;
       line-height: 1em;
       border-left: 1px solid @gray-mid;
-      background: @gray;
 
       &:hover {
         background-color: lighten(@gray, 7%);
       }
 
       .hidden-elements-toggle-button {
+        background: @gray;
         height: 100%;
         font-size: 1em;
         line-height: 1em;
