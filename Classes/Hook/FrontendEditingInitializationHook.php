@@ -494,7 +494,7 @@ class FrontendEditingInitializationHook
 
     /**
      * Get array of mount points
-     * For admin jsut get all root pages
+     * For admins only to get all root pages
      *
      * @return array
      */
