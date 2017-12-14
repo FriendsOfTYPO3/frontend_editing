@@ -6,7 +6,9 @@
 <f:render partial="TopBar" arguments="{_all}"></f:render>
 <f:render partial="RightBar" arguments="{_all}"></f:render>
 <f:render partial="LeftBar" arguments="{_all}"></f:render>
-<div class="t3-frontend-editing__ckeditor-bar">
+<div class="t3-frontend-editing__ckeditor-bar__wrapper">
+	<div class="t3-frontend-editing__ckeditor-bar">
+	</div>
 </div>
 <div class="t3-frontend-editing__iframe-wrapper inactive {f:if(condition:overlayOption, then: 't3-frontend-editing__iframe-overlay')}">
 	<iframe src="" frameborder="0" border="0"></iframe>

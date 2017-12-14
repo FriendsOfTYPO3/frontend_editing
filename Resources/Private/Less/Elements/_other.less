@@ -32,6 +32,7 @@
 
   &.full-view {
     margin-top: 0;
+    width: 100%;
 
     iframe {
         height: 100vh;
@@ -136,13 +137,26 @@ body {
     fill: @color-t3-gray-light;
   }
 }
+.t3-frontend-editing__ckeditor-bar__wrapper {
+  background: #2b2b2b;
+  height: @top-bar-height;
+  position: absolute;
+  top: @top-bar-height;
+  z-index: 1;
+  margin: 0 auto;
+  width: auto;
+  left: 0;
+  right: 0;
 
+  &.full-view-active {
+    display: none;
+  }
+}
 .t3-frontend-editing__ckeditor-bar {
   background: #2b2b2b;
   color: #fff;
   height: @top-bar-height;
   position: absolute;
-  top: @top-bar-height;
   z-index: 10998;
   margin: 0 auto;
   width: auto;

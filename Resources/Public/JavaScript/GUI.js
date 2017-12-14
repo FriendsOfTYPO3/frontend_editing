@@ -173,7 +173,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
 			$('.t3-frontend-editing__full-view').toggleClass('full-view-active');
 			$('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
-			
+			$('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
+
 			if ($('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
 				
 				$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
