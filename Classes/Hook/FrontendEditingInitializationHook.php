@@ -227,7 +227,7 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->setCharset('utf-8');
         $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
-        $this->pageRenderer->setHtmlTag('<html lang="en">');
+        $this->pageRenderer->setHtmlTag('<!DOCTYPE html><html lang="en">');
 
         $resourcePath = 'EXT:frontend_editing/Resources/Public/';
         $this->loadStylesheets();

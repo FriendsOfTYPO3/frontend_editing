@@ -8,7 +8,7 @@
   right: -@right-bar-width;
   width: @right-bar-width;
   bottom: 0;
-  z-index: 10999;
+  z-index: 10998;
   font-family: @font-family-base;
   text-transform: uppercase;
 
@@ -27,7 +27,7 @@
     &.seo-provider {
       .top-right-relative {
         height: @top-bar-height * 3 + @twenty;
-        
+
       }
 
       .elements-wrapper {
@@ -121,7 +121,7 @@
   }
 
   .page-seo {
-    height: 55px + @twenty;
+    height: @top-bar-height + @twenty;
     background: @transparent-opacity;
     border-bottom: 1px solid @gray;
     text-align: center;
@@ -137,95 +137,9 @@
       top: 4px;
       width: 45px;
       height: 45px;
-      color: #fff;
+      color: @white;
       line-height: 37px;
       text-align: center;
-    }
-  }
-  .media-devices-wrapper {
-    display: inline-block;
-
-    
-
-    .btn-default {
-      margin-bottom: 8px;
-    }
-
-    .media-devices {
-      font-size: 24px;
-      display: table;
-      margin: 0 auto;
-      height: 100%;
-
-      .media-device-lg-desktop {
-        font-size: 48px;
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 5px;
-        color: @gray-light;
-
-        &.active {
-          color: @white;
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: @white;
-        }
-      }
-
-      .media-device-desktop {
-        font-size: 48px;
-        display: table-cell;
-        vertical-align: middle;
-        padding-right: 5px;
-        color: @gray-light;
-
-        &.active {
-          color: @white;
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: @white;
-        }
-      }
-
-      .media-device-tablet {
-        font-size: 34px;
-        display: table-cell;
-        vertical-align: middle;
-        position: relative;
-        padding-right: 5px;
-        color: @gray-light;
-
-        &.active {
-          color: @white;
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: @white;
-        }
-      }
-
-      .media-device-phone {
-        font-size: 26px;
-        display: table-cell;
-        vertical-align: middle;
-        position: relative;
-        top: 3px;
-        color: @gray-light;
-
-        &.active {
-          color: @white;
-        }
-
-        &:hover {
-          cursor: pointer;
-          color: @white;
-        }
-      }
     }
   }
 
@@ -234,61 +148,114 @@
     padding-left: 14px;
     padding-right: 0;
     width: @right-bar-width;
-  }
+    line-height: 1em;
+    font-size: 1em;
 
-  .hidden-elements-toggle-wrapper {
-    float: right;
-    width: 55px;
-    height: 55px;
-    border-left: 1px solid @gray-mid;
+    .media-devices-wrapper {
+      display: inline-block;
 
-    &:hover {
-      background-color: @gray-mid;
+      .btn-default {
+        margin-bottom: 8px;
+      }
+
+      .media-devices {
+        display: table;
+        margin: 0 auto;
+        height: 100%;
+        line-height: 1em;
+        font-size: 1em;
+
+        .media-device-lg-desktop,
+        .media-device-desktop,
+        .media-device-tablet,
+        .media-device-phone {
+          font-size: 48px;
+          line-height: @top-bar-height;
+          display: table-cell;
+          vertical-align: middle;
+          padding-right: 5px;
+          color: @gray-light;
+
+          &.active {
+            color: @white;
+          }
+
+          &:hover {
+            cursor: pointer;
+            color: @white;
+          }
+        }
+
+        .media-device-tablet {
+          font-size: 34px;
+        }
+
+        .media-device-phone {
+          font-size: 26px;
+          top: 3px;
+        }
+      }
     }
 
-    .hidden-elements-toggle-button {
-      font-size: 24px;
-      height: 100%;
-      background: transparent;
-      width: 100%;
-      border: 0;
-      padding: 0;
-      outline: 0;
+    .hidden-elements-toggle-wrapper {
+      float: right;
+      width: @top-bar-height;
+      height: @top-bar-height;
+      font-size: 1em;
+      line-height: 1em;
+      border-left: 1px solid @gray-mid;
 
-      &.active {
-        background: @color-t3-primary;
-        border-radius: 0;
+      &:hover {
+        background-color: lighten(@gray, 7%);
+      }
 
-        &:hover {
-          background-color: lighten(@color-t3-primary, 10%);
-          color: @black;
+      .hidden-elements-toggle-button {
+        background: @gray;
+        height: 100%;
+        font-size: 1em;
+        line-height: 1em;
+
+        background: transparent;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        outline: 0;
+
+        &.active {
+          background: @color-t3-primary;
+          border-radius: 0;
+
+          &:hover {
+            background-color: lighten(@color-t3-primary, 10%);
+            color: @black;
+          }
+
+          .hidden-elements-toggle-icon {
+            .eye  {
+              fill: @black;
+            }
+
+            .eye-pupil {
+              fill: @black;
+            }
+
+            .eye-border {
+              fill: @black;
+            }
+          }
         }
 
         .hidden-elements-toggle-icon {
           .eye  {
-            fill: @black;
+            fill: @color-t3-primary;
           }
-
           .eye-pupil {
-            fill: @black;
+            fill: @color-t3-primary;
           }
 
           .eye-border {
-            fill: @black;
+            fill: @color-t3-gray;
           }
-        }
-      }
-
-      .hidden-elements-toggle-icon {
-        .eye  {
-          fill: @color-t3-primary;
-        }
-        .eye-pupil {
-          fill: @color-t3-primary;
-        }
-
-        .eye-border {
-          fill: @color-t3-gray;
         }
       }
     }

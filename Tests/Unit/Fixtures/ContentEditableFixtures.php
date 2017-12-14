@@ -155,7 +155,7 @@ class ContentEditableFixtures
             '<div class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
                 ' ondragstart="window.parent.F.dragCeStart(event)"' .
                 ' ondragend="window.parent.F.dragCeEnd(event)">' .
-                '<span class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
+                '<span style="display:none;" class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
                 ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
             '</div>',
