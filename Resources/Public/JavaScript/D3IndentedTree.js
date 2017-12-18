@@ -34,7 +34,10 @@ define(['jquery', 'd3'], function ($, d3) {
 		polygonShape = '-5, -3 5, -3 0 5',
 
 		iconHeight = 16,
-		iconWidth = 16;
+		iconWidth = 16,
+
+		iconOverlayHeight = 11,
+		iconOverlayWidth = 11;
 
 	var i = 0,
 		linksCount = 0,
@@ -321,6 +324,11 @@ define(['jquery', 'd3'], function ($, d3) {
 				return d.id;
 			});
 
+		var icon2 = svg.selectAll('image.tree-icon-overlay')
+			.data(icons, function (d) {
+				return d.id;
+			});
+
 		// Enter any new icon
 		var iconEnter = icon.enter().insert('image', 'svg')
 			.style('opacity', 1e-6)
@@ -332,9 +340,19 @@ define(['jquery', 'd3'], function ($, d3) {
 				return d.data.icon;
 			});
 
+		var iconEnter2 = icon2.enter().insert('image', 'svg')
+			.style('opacity', 1e-6)
+			.attr('class', 'tree-icon-overlay')
+			.attr('height', iconOverlayHeight)
+			.attr('width', iconOverlayWidth)
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
+			.attr('xlink:href', function (d) {
+				return d.data.iconOverlay;
+			});
+
 		// UPDATE
 		var iconUpdate = iconEnter.merge(icon);
-
+		var iconUpdate2 = iconEnter2.merge(icon2);
 		// Transition back to the parent element position
 		iconUpdate.transition()
 			.duration(duration)
@@ -343,8 +361,21 @@ define(['jquery', 'd3'], function ($, d3) {
 			})
 			.style('opacity', 1);
 
+		iconUpdate2.transition()
+			.duration(duration)
+			.attr('transform', function (d) {
+				return 'translate(' + (d.y + iconOverlayWidth / 2) + ',' + (d.x - iconOverlayHeight / 2) + ')';
+			})
+			.style('opacity', 1);
+
 		// Remove any exiting links
 		icon.exit().transition()
+			.duration(duration)
+			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
+			.style('opacity', 1e-6)
+			.remove();
+
+		icon2.exit().transition()
 			.duration(duration)
 			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
