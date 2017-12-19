@@ -451,7 +451,6 @@ class FrontendEditingInitializationHook
                     'link' => '/index.php?id=' . $item['row']['uid'],
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
-                    //'test' => $icon->getOverlayIcon()->getIdentifier(),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
                 ];
 
