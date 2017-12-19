@@ -1,8 +1,8 @@
 .t3-frontend-editing__iframe-wrapper {
 
-  .transition(width @push-duration @push-timing);
-  margin-top: @top-bar-height * 2;
-  margin-right: @right-bar-width;
+  @include transition(width $push-duration $push-timing);
+  margin-top: $top-bar-height * 2;
+  margin-right: $right-bar-width;
   position: relative;
   width: 100%;
 
@@ -13,8 +13,8 @@
   }
 
   &.push-toleft-iframe {
-    .transition(width @push-duration @push-timing);
-    width: calc(~"100% - "@right-bar-width);
+    @include transition(width $push-duration $push-timing);
+    width: calc(100% - #{$right-bar-width});
     position: relative;
   }
 
@@ -24,10 +24,10 @@
 
   iframe {
     width: 100%;
-    height: calc(~"100vh - "@top-bar-height * 2);
+    height: calc(100vh - #{$top-bar-height * 2});
     margin: 0 auto;
     display: block;
-    box-shadow: 0 0 15px 0 @gray;
+    box-shadow: 0 0 15px 0 $gray;
   }
 
   &.full-view {
@@ -44,9 +44,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  bottom: -@top-bar-height;
+  bottom: -$top-bar-height;
   right: 0;
-  background: fade(@color-t3-gray-dark, 80%);
+  background: fade($color-t3-gray-dark, 80%);
 
   .icon-spin {
     position: absolute;
@@ -81,12 +81,12 @@ body {
 }
 
 .alertify {
-  font-family: @font-family-base;
+  font-family: $font-family-base;
 
   button {
-    font-family: @font-family-base;
-    font-size: @font-size-regular !important;
-    border: 1px solid @gray-light !important;
+    font-family: $font-family-base;
+    font-size: $font-size-regular !important;
+    border: 1px solid $gray-light !important;
   }
 }
 
@@ -104,44 +104,44 @@ body {
   position: absolute;
   right: 0;
   left: auto;
-  width: @top-bar-height;
-  height: @top-bar-height;
-  background-color: @gray-dark;
+  width: $top-bar-height;
+  height: $top-bar-height;
+  background-color: $gray-dark;
   font-size: 1em;
   line-height: 1em;
   border: 0;
-  border-left: 1px solid darken(@color-t3-gray-dark, 10%);
+  border-left: 1px solid darken($color-t3-gray-dark, 10%);
   border-radius: 0;
   outline: 0;
   padding: 0;
 
   &:hover {
-    background-color: lighten(@gray-dark, 20%);
+    background-color: lighten($gray-dark, 20%);
   }
 
   &.full-view-active {
-    background-color: @color-t3-primary;
-    border: 1px dashed @black;
+    background-color: $color-t3-primary;
+    border: 1px dashed $black;
 
     svg path {
-      fill: @black;
+      fill: $black;
     }
 
     &:hover {
-      background-color: lighten(@color-t3-primary, 10%);
-      color: @black;
+      background-color: lighten($color-t3-primary, 10%);
+      color: $black;
     }
   }
 
   svg path {
-    fill: @color-t3-gray-light;
+    fill: $color-t3-gray-light;
   }
 }
 .t3-frontend-editing__ckeditor-bar__wrapper {
   background: #2b2b2b;
-  height: @top-bar-height;
+  height: $top-bar-height;
   position: absolute;
-  top: @top-bar-height;
+  top: $top-bar-height;
   z-index: 1;
   margin: 0 auto;
   width: auto;
@@ -155,7 +155,7 @@ body {
 .t3-frontend-editing__ckeditor-bar {
   background: #2b2b2b;
   color: #fff;
-  height: @top-bar-height;
+  height: $top-bar-height;
   position: absolute;
   z-index: 10998;
   margin: 0 auto;

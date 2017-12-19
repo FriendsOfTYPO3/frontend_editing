@@ -1,7 +1,7 @@
 .t3-frontend-editing__page-tree-wrapper {
-  height: calc(~"100vh - "(@top-bar-height + @pagetree-filter-height));
-  max-height: calc(~"100vh - "(@top-bar-height + @pagetree-filter-height));
-  width: @left-bar-width - 14px;
+  height: calc(100vh - #{$top-bar-height + $pagetree-filter-height});
+  max-height: calc(100vh - #{$top-bar-height + $pagetree-filter-height});
+  width: $left-bar-width - 14px;
   overflow-y: auto;
   overflow-x: hidden;
   position: absolute;
@@ -12,22 +12,22 @@
   }
 
   &::-webkit-scrollbar-corner {
-    background-color: @scroll-bar-track;
+    background-color: $scroll-bar-track;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: @black;
-    border: 1px solid @scroll-bar-color;
+    background-color: $black;
+    border: 1px solid $scroll-bar-color;
   }
 
   &::-webkit-scrollbar-track {
-    background-color: @scroll-bar-track;
+    background-color: $scroll-bar-track;
   }
 
   .t3-frontend-editing__page-tree {
     list-style-type: none;
     padding: 0;
-    font-size: @font-size-small;
+    font-size: $font-size-small;
 
     li {
       white-space: nowrap;
@@ -50,17 +50,17 @@
     margin-top: 10px;
     width: 70%;
     display: inline-block;
-    color: @gray-dark;
-    font: @font-size-regular @font-family-user-input;
+    color: $gray-dark;
+    font: $font-size-regular $font-family-user-input;
     padding: 6px;
-    border: 2px solid @gray;
+    border: 2px solid $gray;
     border-radius: 4px;
   }
 }
 
 #page-tree-filter-wrapper, .t3-frontend-editing__page-site-root-wrapper {
   width: 100%;
-  height: @pagetree-filter-height;
+  height: $pagetree-filter-height;
   overflow: hidden;
 
   label {
@@ -97,7 +97,7 @@
       stroke-width: 2px;
 
       &.active {
-        stroke: @orange-primary;
+        stroke: $orange-primary;
       }
     }
 
@@ -109,23 +109,23 @@
         fill: transparent;
       }
       &.has-children {
-        fill: @color-t3-gray;
+        fill: $color-t3-gray;
       }
       &.has-children-exp {
-        fill: @white;
+        fill: $white;
       }
     }
 
     text {
-      font: @font-size-small @font-family-base;
-      fill: @white;
+      font: $font-size-small $font-family-base;
+      fill: $white;
       pointer-events: none;
     }
   }
 
   path.link {
     fill: none;
-    stroke: @color-t3-gray;
+    stroke: $color-t3-gray;
     stroke-width: 2px;
     stroke-dasharray: 1, 1;
   }

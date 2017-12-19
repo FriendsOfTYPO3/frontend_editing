@@ -5,7 +5,7 @@
 }
 
 .content-icon-default {
-  background-color: @gray-icon-bg;
+  background-color: $gray-icon-bg;
   display: inline-block;
   width: 32px;
   height: 32px;
@@ -17,7 +17,7 @@
 }
 
 .content-icon-small {
-  background-color: @gray-icon-bg;
+  background-color: $gray-icon-bg;
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -45,10 +45,10 @@
       width: 230px;
       padding: 0;
       line-height: 1.1;
-      color: @gray-light;
+      color: $gray-light;
 
       &:first-of-type {
-        font-size: @font-size-smaller;
+        font-size: $font-size-smaller;
         padding-top: 4px;
         color: #fff;
       }
@@ -64,7 +64,7 @@
   }
 
   &:hover {
-    outline: solid 2px @color-t3-primary;
+    outline: solid 2px $color-t3-primary;
   }
 }
 
@@ -86,11 +86,11 @@
     width: 24px;
     display: inline-block;
     cursor: pointer;
-    color: @gray;
+    color: $gray;
 
     &:hover,
     &.active {
-      color: @white;
+      color: $white;
     }
   }
 
@@ -130,7 +130,7 @@
 
 .accordion-grid {
   .grid {
-    color: @white;
+    color: $white;
   }
 
   .accordion-content {
@@ -146,17 +146,17 @@
 
   .element {
     display: block;
-    background-color: @gray-dark;
+    background-color: $gray-dark;
     margin: 0;
     padding: 10px;
     margin-bottom: 2px;
-    border-bottom: 1px solid @gray;
+    border-bottom: 1px solid $gray;
 
     .content-icon {
       vertical-align: top;
       display: inline-block;
       margin: 0 auto;
-      background-color: @gray;
+      background-color: $gray;
 
       .icon-size-default {
         height: 100%;
@@ -183,6 +183,6 @@
   }
 
   .list-view {
-    color: @white;
+    color: $white;
   }
 }

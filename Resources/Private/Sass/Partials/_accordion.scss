@@ -1,12 +1,12 @@
 .accordion {
-  border-top: 1px solid @gray-light;
+  border-top: 1px solid $gray-light;
 }
 
 .accordion-content {
   padding: 0;
   display: none;
-  background-color: @black;
-  border-top: 1px solid @gray;
+  background-color: $black;
+  border-top: 1px solid $gray;
 
   &.show {
     display: block;

@@ -1,5 +1,5 @@
 // inline actions icons styling - end section borrowed from backend.css - modified though
-.inline-action-icon {
+@mixin inline-action-icon {
   .icon {
     position: relative;
     display: inline-block;
