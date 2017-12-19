@@ -506,7 +506,9 @@ class FrontendEditingInitializationHook
         $overlayPath = '';
 
         if ($overlayIdentifier) {
-            $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($overlayIdentifier->getIdentifier());
+            $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier(
+                $overlayIdentifier->getIdentifier()
+            );
             $source = $iconConfiguration['options']['source'];
 
             if (strpos($source, 'EXT:') === 0 || strpos($source, '/') !== 0) {
