@@ -30,7 +30,7 @@ not used?
   background-color: transparent !important;
 
   &:hover {
-    background-color: fade($gray-light, 50%) !important;
+    background-color: transparentize($gray-light, .5) !important;
   }
 }
 

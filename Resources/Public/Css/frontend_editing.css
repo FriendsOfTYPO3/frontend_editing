@@ -90,7 +90,7 @@ not used?
   border: 1px solid #838383 !important;
   background-color: transparent !important; }
   .btn-default:hover {
-    background-color: fade(#838383, 50%) !important; }
+    background-color: rgba(131, 131, 131, 0.5) !important; }
 
 .btn-inactive {
   cursor: not-allowed;
@@ -894,7 +894,7 @@ input[type=text] {
   top: 0;
   bottom: -55px;
   right: 0;
-  background: fade(#515151, 80%); }
+  background: rgba(81, 81, 81, 0.2); }
   .t3-frontend-editing__loading-screen .icon-spin {
     position: absolute;
     top: 50%;

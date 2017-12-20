@@ -46,7 +46,7 @@
   top: 0;
   bottom: -$top-bar-height;
   right: 0;
-  background: fade($color-t3-gray-dark, 80%);
+  background: transparentize($color-t3-gray-dark, .8);
 
   .icon-spin {
     position: absolute;

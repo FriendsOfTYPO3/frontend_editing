@@ -3,7 +3,7 @@
   content: none !important; }
 
 *[contenteditable="true"]:hover {
-  outline: 1px dotted fade(#FF8700, 30%); }
+  outline: 1px dotted rgba(255, 135, 0, 0.7); }
 
 *[contenteditable="true"]:focus {
   outline: 1px dotted #FF8700; }
@@ -35,7 +35,7 @@
   position: relative !important;
   min-height: 35px; }
   .t3-frontend-editing__ce:hover {
-    outline: 1px dotted fade(#8c8c8c, 50%); }
+    outline: 1px dotted rgba(140, 140, 140, 0.5); }
   .t3-frontend-editing__ce .cke_editable {
     display: inline; }
   .t3-frontend-editing__ce.indicate-element {
@@ -52,7 +52,7 @@
   bottom: 100%;
   left: -1px;
   color: #ffffff;
-  background-color: fade(#515151, 80%);
+  background-color: rgba(81, 81, 81, 0.2);
   z-index: 16777271;
   text-align: right; }
   .t3-frontend-editing__inline-actions:before, .t3-frontend-editing__inline-actions:after,
@@ -116,10 +116,10 @@
     width: 58px;
     line-height: 58px; }
   .t3-frontend-editing__inline-actions .icon {
-    background-color: fade(#ffffff, 60%);
+    background-color: rgba(255, 255, 255, 0.4);
     cursor: pointer; }
     .t3-frontend-editing__inline-actions .icon:hover {
-      background-color: fade(#d7d7d7, 60%); }
+      background-color: rgba(215, 215, 215, 0.4); }
 
 .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
   display: inline-block !important; }

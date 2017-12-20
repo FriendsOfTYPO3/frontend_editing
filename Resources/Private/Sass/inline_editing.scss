@@ -21,7 +21,7 @@
   }
 
   &:hover{
-    outline: 1px dotted fade($color-t3-primary, 30%);
+    outline: 1px dotted transparentize($color-t3-primary, .3%);
   }
   &:focus{
     outline: 1px dotted $color-t3-primary;
@@ -72,7 +72,7 @@
   min-height: 35px;
 
   &:hover {
-    outline: 1px dotted fade($color-t3-gray, 50%);
+    outline: 1px dotted transparentize($color-t3-gray, .5);
   }
 
   .cke_editable {
@@ -115,18 +115,18 @@
   bottom: 100%;
   left: -1px;
   color: $color-white;
-  background-color: fade($color-t3-gray-dark, 80%);
+  background-color: transparentize($color-t3-gray-dark, 0.8);
   z-index: 16777271;  // maximum z-index value to make sure it is always on top
   text-align: right;
 
   @include inline-action-icon;
 
   .icon {
-    background-color: fade($color-white, 60%);
+    background-color: transparentize($color-white, 0.6);
     cursor: pointer;
 
     &:hover {
-      background-color: fade($gray-light, 60%);
+      background-color: transparentize($gray-light, 0.6);
     }
   }
 }
