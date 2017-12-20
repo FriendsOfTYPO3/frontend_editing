@@ -19,7 +19,8 @@
     "alertify.js": "^1.0.12"
   },
   "devDependencies": {
-    "node-sass": "^4.7.2"
+    "node-sass": "^4.7.2",
+    "stylelint": "^8.4.0"
   },
   "repository": {
     "type": "git",
