@@ -2,15 +2,15 @@
 // Frontend editing, inline editing Styles
 // ---------------
 // Description: Global styles for inline editing wrapper.
-// Requires:    ../Less/Configuration/Variables/_colors.less
+// Requires:    ../Sass/Configuration/Variables/_colors.scss
 // Usage:       This file is compiled to the standalone CSS file:
 //              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
 //
 
 
 // Include Color Variables
-@import '_colors.less';
-@import '_inline_action_icon.less';
+@import '_colors.scss';
+@import '_inline_action_icon.scss';
 
 *[contenteditable="true"] {
 
@@ -21,10 +21,10 @@
   }
 
   &:hover{
-    outline: 1px dotted fade(@color-t3-primary, 30%);
+    outline: 1px dotted transparentize($color-t3-primary, .3%);
   }
   &:focus{
-    outline: 1px dotted @color-t3-primary;
+    outline: 1px dotted $color-t3-primary;
   }
 }
 
@@ -44,7 +44,7 @@
 
 .t3-frontend-editing__dropzone {
   height: 0;
-  background-color: @color-t3-primary;
+  background-color: $color-t3-primary;
   transition: height 0.2s;
   -webkit-transition: height 0.2s;
   margin: 0;
@@ -55,8 +55,8 @@
   height: 25px;
 
   &.active {
-    border: dashed 1px @gray;
-    background-color: @color-t3-green;
+    border: dashed 1px $gray;
+    background-color: $color-t3-green;
   }
 
   &.t3-frontend-editing__dropzone-hidden {
@@ -72,7 +72,7 @@
   min-height: 35px;
 
   &:hover {
-    outline: 1px dotted fade(@color-t3-gray, 50%);
+    outline: 1px dotted transparentize($color-t3-gray, .5);
   }
 
   .cke_editable {
@@ -87,7 +87,7 @@
       content: none !important;
     }
 
-    outline: 1px solid @color-t3-primary;
+    outline: 1px solid $color-t3-primary;
   }
 
   &[draggable="true"]:hover {
@@ -114,19 +114,19 @@
   position: absolute !important;
   bottom: 100%;
   left: -1px;
-  color: @color-white;
-  background-color: fade(@color-t3-gray-dark, 80%);
+  color: $color-white;
+  background-color: transparentize($color-t3-gray-dark, 0.8);
   z-index: 16777271;  // maximum z-index value to make sure it is always on top
   text-align: right;
 
-  .inline-action-icon;
+  @include inline-action-icon;
 
   .icon {
-    background-color: fade(@color-white, 60%);
+    background-color: transparentize($color-white, 0.6);
     cursor: pointer;
 
     &:hover {
-      background-color: fade(@gray-light, 60%);
+      background-color: transparentize($gray-light, 0.6);
     }
   }
 }

@@ -16,14 +16,14 @@
 .cke_toolgroup {
   border: 0 !important;
   box-shadow: none !important;
-  background: @white !important;
+  background: $white !important;
   background-image: none !important;
 }
 
 .cke_dialog_title {
   background-image: none !important;
-  color: @black !important;
-  text-shadow: 0 1px 0 lighten(@gray-light, 10%) !important;
+  color: $black !important;
+  text-shadow: 0 1px 0 lighten($gray-light, 10%) !important;
 }
 
 .cke_toolbar_break {

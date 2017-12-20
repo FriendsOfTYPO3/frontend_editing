@@ -1,0 +1,31 @@
+//
+// Frontend editing Styles
+// ---------------
+// Description: Global styles for frontend editing wrapper.
+// Requires:    ../Sass/Configuration/Variables/_colors.scss
+// Usage:       This file is compiled to the standalone CSS file:
+//              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/frontend_editing.css
+//
+
+
+// Include Color Variables
+@import '_colors.scss';
+@import '_constants.scss';
+@import '_icons.scss';
+@import 'Partials/_base.scss';
+@import 'Partials/_buttons.scss';
+@import 'Partials/_inputs.scss';
+@import 'Partials/_titles.scss';
+@import 'Partials/_accordion.scss';
+@import 'Partials/_wrappers.scss';
+@import 'Partials/_typography.scss';
+@import 'Partials/_elements.scss';
+@import 'Partials/_page-tree.scss';
+@import 'Elements/_top-bar.scss';
+@import 'Elements/_right-bar.scss';
+@import 'Elements/_left-bar.scss';
+@import 'Elements/_other.scss';
+@import 'Elements/_ckeditor.scss';
+@import 'Elements/_toastr.scss';
+@import 'Elements/_alertify.scss';
+@import 'Elements/_modal.scss';

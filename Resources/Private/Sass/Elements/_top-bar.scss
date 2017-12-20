@@ -1,46 +1,46 @@
 .t3-frontend-editing__top-bar {
-  background: @gray-dark;
-  color: @white;
-  height: @top-bar-height;
+  background: $gray-dark;
+  color: $white;
+  height: $top-bar-height;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 10999;
-  font-family: @font-family-base;
-  font-size: @font-size-regular;
+  font-family: $font-family-base;
+  font-size: $font-size-regular;
 }
 
 .t3-frontend-editing__topbar-inner {
   padding: 0;
-  height: @top-bar-height;
+  height: $top-bar-height;
   font-weight: 300;
-  font-size: @font-size-regular;
+  font-size: $font-size-regular;
   text-transform: uppercase;
 
   .btn-backend {
-    height: @top-bar-height !important;
+    height: $top-bar-height !important;
     border: 0;
-    border-right: 1px solid darken(@color-t3-gray-dark, 10%);
+    border-right: 1px solid darken($color-t3-gray-dark, 10%);
     &:hover {
-      background-color: lighten(@gray-dark, 20%);
+      background-color: lighten($gray-dark, 20%);
     }
 
     span {
         display: inline-block;
         position: relative;
-        top: @top-bar-height / 5;
+        top: $top-bar-height / 5;
         vertical-align: middle;
     }
     .icon-icons-back {
         font-size: 24px;
-        color: @color-t3-primary;
+        color: $color-t3-primary;
     }
   }
 }
 
 .t3-frontend-editing__top-bar-left {
-  .transition(left @push-duration @push-timing);
+  @include transition(left $push-duration $push-timing);
   position: relative;
   left: 0;
   width: 30%;
@@ -48,7 +48,7 @@
 }
 
 .t3-frontend-editing__top-bar-right {
-  .transition(right @push-duration @push-timing);
+  @include transition(right $push-duration $push-timing);
   width: 70%;
   float: right;
   text-align: right;
@@ -56,27 +56,27 @@
   position: relative;
 
   .top-bar-items {
-    .transition(margin @push-duration @push-timing);
+    @include transition(margin $push-duration $push-timing);
     margin: 0;
     padding: 0;
     display: inline-block;
 
     .item {
-      border-right: 1px solid lighten(@gray-dark, 20%);
-      border-left: 1px solid lighten(@gray-dark, 20%);
+      border-right: 1px solid lighten($gray-dark, 20%);
+      border-left: 1px solid lighten($gray-dark, 20%);
       float: left;
-      height: @top-bar-height;
+      height: $top-bar-height;
       position: relative;
       list-style: none;
       display: inline-block;
-      background: @gray-dark;
+      background: $gray-dark;
 
       &:hover {
-        background-color: lighten(@gray-dark, 20%);
+        background-color: lighten($gray-dark, 20%);
       }
 
       .dropdown-toggle {
-        height: @top-bar-height;
+        height: $top-bar-height;
         display: inline-block;
         cursor: pointer;
         text-decoration: none;
@@ -94,7 +94,7 @@
         }
 
         &.active {
-          background: @gray;
+          background: $gray;
 
           .icon-icons-arrow-down {
             transform: rotate(180deg);
@@ -106,9 +106,9 @@
 
       .dropdown-menu {
         display: none;
-        background: @gray;
+        background: $gray;
         position: absolute;
-        top: @top-bar-height;
+        top: $top-bar-height;
         min-width: 350px;
         right: 0;
         left: auto;
@@ -139,8 +139,8 @@
   .top-bar-action-buttons {
     float: right;
     margin: 0;
-    min-width: @right-bar-width - @top-bar-height;
-    padding: 5px @top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
+    min-width: $right-bar-width - $top-bar-height;
+    padding: 5px $top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
 
     button {
         float: left;
@@ -149,11 +149,11 @@
 
     .t3-frontend-editing__save {
         &:not(.btn-inactive) {
-            background-color: @color-t3-primary !important;
+            background-color: $color-t3-primary !important;
             border: none !important;
 
             &:hover {
-              background-color: darken(@color-t3-primary, 7%) !important;
+              background-color: darken($color-t3-primary, 7%) !important;
             }
         }
     }
@@ -174,7 +174,7 @@
     .avatar {
       display: inline-block;
       position: relative;
-      top: @top-bar-height / 5;
+      top: $top-bar-height / 5;
       vertical-align: middle;
       margin-right: 10px;
     }
@@ -207,8 +207,8 @@
 
     .icon-avatar-title {
       position: relative;
-      top: @top-bar-height / 5;
-      color: @white;
+      top: $top-bar-height / 5;
+      color: $white;
       text-decoration: none;
       vertical-align: middle;
     }
@@ -217,7 +217,7 @@
   .btn-logout {
     text-decoration: none;
     display: inline-block;
-    border: 1px solid @gray-light !important;
+    border: 1px solid $gray-light !important;
 
     .btn-text {
       position: relative;

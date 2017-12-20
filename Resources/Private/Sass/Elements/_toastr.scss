@@ -12,14 +12,14 @@
   }
 
   label {
-    color: @white;
+    color: $white;
   }
 
   a {
-    color: @white;
+    color: $white;
 
     &:hover {
-      color: @gray-light;
+      color: $gray-light;
       text-decoration: none;
     }
   }
@@ -32,16 +32,16 @@
   float: right;
   font-size: 20px;
   font-weight: bold;
-  color: @white;
-  -webkit-text-shadow: 0 1px 0 @white;
-  text-shadow: 0 1px 0 @white;
+  color: $white;
+  -webkit-text-shadow: 0 1px 0 $white;
+  text-shadow: 0 1px 0 $white;
   opacity: .8;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   filter: alpha(opacity=80);
 
   &:hover,
   &:focus {
-    color: @black;
+    color: $black;
     text-decoration: none;
     cursor: pointer;
     opacity: .4;
@@ -86,12 +86,12 @@ button.toast-close-button {
 }
 
 .toast-top-left {
-  top: @top-bar-height + 12px;
+  top: $top-bar-height + 12px;
   left: 12px;
 }
 
 .toast-top-right {
-  top: @top-bar-height + 12px;
+  top: $top-bar-height + 12px;
   right: 12px;
 }
 
@@ -128,23 +128,23 @@ button.toast-close-button {
     border-radius: 3px;
     background-position: 15px center;
     background-repeat: no-repeat;
-    -moz-box-shadow: 0 0 12px @gray-light;
-    -webkit-box-shadow: 0 0 12px @gray-light;
-    box-shadow: 0 0 12px @gray-light;
-    color: @white;
+    -moz-box-shadow: 0 0 12px $gray-light;
+    -webkit-box-shadow: 0 0 12px $gray-light;
+    box-shadow: 0 0 12px $gray-light;
+    color: $white;
     opacity: .95;
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
     filter: alpha(opacity=95);
 
-    font-family: @font-family-base;
-    font-size: @font-size-regular;
+    font-family: $font-family-base;
+    font-size: $font-size-regular;
     line-height: 1.25em;
   }
 
   & > :hover {
-    -moz-box-shadow: 0 0 12px @black;
-    -webkit-box-shadow: 0 0 12px @black;
-    box-shadow: 0 0 12px @black;
+    -moz-box-shadow: 0 0 12px $black;
+    -webkit-box-shadow: 0 0 12px $black;
+    box-shadow: 0 0 12px $black;
     opacity: 1;
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     filter: alpha(opacity=100);
@@ -181,23 +181,23 @@ button.toast-close-button {
 }
 
 .toast {
-  background-color: @black;
+  background-color: $black;
 }
 
 .toast-success {
-  background-color: @black;
+  background-color: $black;
 }
 
 .toast-error {
-  background-color: @color-t3-red;
+  background-color: $color-t3-red;
 }
 
 .toast-info {
-  background-color: @gray;
+  background-color: $gray;
 }
 
 .toast-warning {
-  background-color: @color-t3-primary;
+  background-color: $color-t3-primary;
 }
 
 .toast-progress {
@@ -205,7 +205,7 @@ button.toast-close-button {
   left: 0;
   bottom: 0;
   height: 4px;
-  background-color: @black;
+  background-color: $black;
   opacity: .4;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
   filter: alpha(opacity=40);
