@@ -450,6 +450,7 @@ class FrontendEditingInitializationHook
                     'name' => $item['row']['title'],
                     'link' => '/index.php?id=' . $item['row']['uid'],
                     'icon' => $this->getTreeItemIconPath($item['row']),
+                    'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
                 ];
 
@@ -477,10 +478,10 @@ class FrontendEditingInitializationHook
     protected function getTreeItemIconPath(array $row): string
     {
         $iconIdentifier = $this->iconFactory->mapRecordTypeToIconIdentifier('pages', $row);
+
         if (!$iconIdentifier || !$this->iconRegistry->isRegistered($iconIdentifier)) {
             $iconIdentifier = $this->iconRegistry->getDefaultIconIdentifier();
         }
-
         $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($iconIdentifier);
 
         $source = $iconConfiguration['options']['source'];
@@ -490,6 +491,32 @@ class FrontendEditingInitializationHook
         }
 
         return PathUtility::getAbsoluteWebPath($source);
+    }
+
+    /**
+     * Get path to page tree item icon
+     *
+     * @param array $row
+     * @return string
+     */
+    protected function getTreeItemIconOverlayPath(array $row): string
+    {
+        $overlayIdentifier = $this->iconFactory->getIconForRecord('pages', $row)->getOverlayIcon();
+        $overlayPath = '';
+
+        if ($overlayIdentifier) {
+            $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier(
+                $overlayIdentifier->getIdentifier()
+            );
+            $source = $iconConfiguration['options']['source'];
+
+            if (strpos($source, 'EXT:') === 0 || strpos($source, '/') !== 0) {
+                $source = GeneralUtility::getFileAbsFileName($source);
+            }
+
+            $overlayPath = PathUtility::getAbsoluteWebPath($source);
+        }
+        return $overlayPath;
     }
 
     /**
