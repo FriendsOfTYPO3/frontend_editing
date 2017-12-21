@@ -54,7 +54,7 @@ Add the alertify.js (confirms) node_module to Public/Resources folder:
 Styling
 -------
 
-The extension is using LESS.
+The extension is using SASS.
 Use the following command to build the stylesheets:
 
 ::
