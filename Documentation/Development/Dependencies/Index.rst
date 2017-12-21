@@ -19,9 +19,3 @@ Composer must also be installed. Download and install it from https://getcompose
 ::
 
    composer install
-
-.. note::
-
-   NOTE: For Ubuntu users: be sure to have php5 and php5-curl installed
-
-   When asked for a token, go to to your GitHub account to Settings->Personal access tokens and click 'Generate new token', then copy-paste the token into the input
