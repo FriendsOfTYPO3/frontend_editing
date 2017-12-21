@@ -20,7 +20,7 @@
     }
 
     &:hover {
-        outline: 1px dotted transparentize($color-t3-primary, 0.3);
+        outline: 1px dotted transparentize($color-t3-primary, 0.7);
     }
 
     &:focus {
@@ -117,18 +117,18 @@
     bottom: 100%;
     left: -1px;
     color: $color-white;
-    background-color: transparentize($color-t3-gray-dark, 0.8);
+    background-color: transparentize($color-t3-gray-dark, 0.2);
     z-index: 16777271;  // maximum z-index value to make sure it is always on top
     text-align: right;
 
     @include inline-action-icon;
 
     .icon {
-        background-color: transparentize($color-white, 0.6);
+        background-color: transparentize($color-white, 0.4);
         cursor: pointer;
 
         &:hover {
-            background-color: transparentize($gray-light, 0.6);
+            background-color: transparentize($gray-light, 0.4);
         }
     }
 }

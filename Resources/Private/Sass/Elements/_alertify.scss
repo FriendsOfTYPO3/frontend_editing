@@ -168,7 +168,7 @@ $border-radius: 1px;
 
         &,
         &.default {
-            background: transparentize($black, 0.8);
+            background: transparentize($black, 0.2);
         }
 
         &.error {

@@ -36,8 +36,6 @@
     -webkit-text-shadow: 0 1px 0 $white;
     text-shadow: 0 1px 0 $white;
     opacity: 0.8;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-    filter: alpha(opacity=80);
 
     &:hover,
     &:focus {
@@ -45,8 +43,6 @@
         text-decoration: none;
         cursor: pointer;
         opacity: 0.4;
-        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
-        filter: alpha(opacity=40);
     }
 }
 
@@ -133,8 +129,6 @@ button.toast-close-button {
         box-shadow: 0 0 12px $gray-light;
         color: $white;
         opacity: 0.95;
-        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
-        filter: alpha(opacity=95);
         font-family: $font-family-base;
         font-size: $font-size-regular;
         line-height: 1.25em;
@@ -145,8 +139,6 @@ button.toast-close-button {
         -webkit-box-shadow: 0 0 12px $black;
         box-shadow: 0 0 12px $black;
         opacity: 1;
-        -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-        filter: alpha(opacity=100);
         cursor: pointer;
     }
 
@@ -206,8 +198,6 @@ button.toast-close-button {
     height: 4px;
     background-color: $black;
     opacity: 0.4;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
-    filter: alpha(opacity=40);
 }
 
 // Responsive Design
