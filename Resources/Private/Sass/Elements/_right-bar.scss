@@ -1,284 +1,279 @@
-
-
 .t3-frontend-editing__right-bar {
-  background-color: $gray;
-  color: $white;
-  position: absolute;
-  top: $top-bar-height;
-  right: -$right-bar-width;
-  width: $right-bar-width;
-  bottom: 0;
-  z-index: 10998;
-  font-family: $font-family-base;
-  text-transform: uppercase;
-
-  &.closed {
-    display: none;
-  }
-
-  &.t3-frontend-editing__right-overlay {
-    background: $transparent-opacity;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-  }
-
-  .top-right-bar-wrapper {
-
-    &.seo-provider {
-      .top-right-relative {
-        height: $top-bar-height * 3 + $twenty;
-
-      }
-
-      .elements-wrapper {
-        height: calc(100vh - #{$top-bar-height * 4 + $twenty});
-      }
-    }
-
-    .top-right-relative {
-      position: relative;
-      height: $top-bar-height * 2;
-      z-index: 1100;
-      background: $gray;
-    }
-
-    .elements-wrapper {
-      overflow-y: scroll;
-      height: calc(100vh - #{$top-bar-height * 3});
-    }
-
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    &::-webkit-scrollbar-corner {
-      background-color: $scroll-bar-color;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: $black;
-      border: 1px solid $scroll-bar-color;
-    }
-
-    &::-webkit-scrollbar-track {
-      background-color: $scroll-bar-color;
-    }
-  }
-
-  .top-right-title {
-    text-align: right;
-    background-color: $header-top-bg-color;
-    height: $top-bar-height;
+    background-color: $gray;
+    color: $white;
+    position: absolute;
+    top: $top-bar-height;
+    right: -$right-bar-width;
     width: $right-bar-width;
-    z-index: 1;
-    cursor: pointer;
+    bottom: 0;
+    z-index: 10998;
+    font-family: $font-family-base;
+    text-transform: uppercase;
 
-    .title-right {
-      font-size: $font-size-large;
-      display: inline-block;
-      padding-right: 5px;
-      vertical-align: middle;
+    &.closed {
+        display: none;
     }
 
-    .right-bar-button {
-      @include transition(left ($push-duration / 2) $push-timing);
-      @include transform-origin(center);
-      float: left;
-      display: block;
-      height: $top-bar-height;
-      line-height: $top-bar-height;
-      width: 45px;
-      text-align: center;
-      position: absolute;
-      color: $gray-light;
-      font-size: 32px;
-      left: -45px;
-      top: 0;
-      background-color: $black;
-
-      &:hover {
-        background-color: lighten($black, 20%);
-        color: $white;
-      }
+    &.t3-frontend-editing__right-overlay {
+        background: $transparent-opacity;
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
     }
 
-    .title-icon-right {
-      top: 11px;
-      position: relative;
-      font-size: 32px;
-      padding-right: 15px;
-      color: $color-t3-primary;
-    }
-  }
+    .top-right-bar-wrapper {
+        &.seo-provider {
+            .top-right-relative {
+                height: $top-bar-height * 3 + $twenty;
+            }
 
-  &.open {
+            .elements-wrapper {
+                height: calc(100vh - #{$top-bar-height * 4 + $twenty});
+            }
+        }
+
+        .top-right-relative {
+            position: relative;
+            height: $top-bar-height * 2;
+            z-index: 1100;
+            background: $gray;
+        }
+
+        .elements-wrapper {
+            overflow-y: scroll;
+            height: calc(100vh - #{$top-bar-height * 3});
+        }
+
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-corner {
+            background-color: $scroll-bar-color;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $black;
+            border: 1px solid $scroll-bar-color;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $scroll-bar-color;
+        }
+    }
+
     .top-right-title {
-      .right-bar-button {
-        left: 0;
-      }
+        text-align: right;
+        background-color: $header-top-bg-color;
+        height: $top-bar-height;
+        width: $right-bar-width;
+        z-index: 1;
+        cursor: pointer;
+
+        .title-right {
+            font-size: $font-size-large;
+            display: inline-block;
+            padding-right: 5px;
+            vertical-align: middle;
+        }
+
+        .right-bar-button {
+            @include transition(left ($push-duration / 2) $push-timing);
+            @include transform-origin(center);
+
+            float: left;
+            display: block;
+            height: $top-bar-height;
+            line-height: $top-bar-height;
+            width: 45px;
+            text-align: center;
+            position: absolute;
+            color: $gray-light;
+            font-size: 32px;
+            left: -45px;
+            top: 0;
+            background-color: $black;
+
+            &:hover {
+                background-color: lighten($black, 20%);
+                color: $white;
+            }
+        }
+
+        .title-icon-right {
+            top: 11px;
+            position: relative;
+            font-size: 32px;
+            padding-right: 15px;
+            color: $color-t3-primary;
+        }
     }
-  }
 
-  .page-seo {
-    height: $top-bar-height + $twenty;
-    background: $transparent-opacity;
-    border-bottom: 1px solid $gray;
-    text-align: center;
-    padding: 10px;
-
-    .page-seo-score {
-      border: 4px solid $color-t3-primary;
-      font-size: 20px;
-      border-radius: 50%;
-      display: inline-block;
-      margin: 0 7px;
-      position: relative;
-      top: 4px;
-      width: 45px;
-      height: 45px;
-      color: $white;
-      line-height: 37px;
-      text-align: center;
+    &.open {
+        .top-right-title {
+            .right-bar-button {
+                left: 0;
+            }
+        }
     }
-  }
 
-  .devices {
-    height: $top-bar-height;
-    padding-left: 14px;
-    padding-right: 0;
-    width: $right-bar-width;
-    line-height: 1em;
-    font-size: 1em;
+    .page-seo {
+        height: $top-bar-height + $twenty;
+        background: $transparent-opacity;
+        border-bottom: 1px solid $gray;
+        text-align: center;
+        padding: 10px;
 
-    .media-devices-wrapper {
-      display: inline-block;
+        .page-seo-score {
+            border: 4px solid $color-t3-primary;
+            font-size: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 7px;
+            position: relative;
+            top: 4px;
+            width: 45px;
+            height: 45px;
+            color: $white;
+            line-height: 37px;
+            text-align: center;
+        }
+    }
 
-      .btn-default {
-        margin-bottom: 8px;
-      }
-
-      .media-devices {
-        display: table;
-        margin: 0 auto;
-        height: 100%;
+    .devices {
+        height: $top-bar-height;
+        padding-left: 14px;
+        padding-right: 0;
+        width: $right-bar-width;
         line-height: 1em;
         font-size: 1em;
 
-        .media-device-lg-desktop,
-        .media-device-desktop,
-        .media-device-tablet,
-        .media-device-phone {
-          font-size: 48px;
-          line-height: $top-bar-height;
-          display: table-cell;
-          vertical-align: middle;
-          padding-right: 5px;
-          color: $gray-light;
+        .media-devices-wrapper {
+            display: inline-block;
 
-          &.active {
-            color: $white;
-          }
+            .btn-default {
+                margin-bottom: 8px;
+            }
 
-          &:hover {
-            cursor: pointer;
-            color: $white;
-          }
+            .media-devices {
+                display: table;
+                margin: 0 auto;
+                height: 100%;
+                line-height: 1em;
+                font-size: 1em;
+
+                .media-device-lg-desktop,
+                .media-device-desktop,
+                .media-device-tablet,
+                .media-device-phone {
+                    font-size: 48px;
+                    line-height: $top-bar-height;
+                    display: table-cell;
+                    vertical-align: middle;
+                    padding-right: 5px;
+                    color: $gray-light;
+
+                    &.active {
+                        color: $white;
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+                        color: $white;
+                    }
+                }
+
+                .media-device-tablet {
+                    font-size: 34px;
+                }
+
+                .media-device-phone {
+                    font-size: 26px;
+                    top: 3px;
+                }
+            }
         }
 
-        .media-device-tablet {
-          font-size: 34px;
-        }
+        .hidden-elements-toggle-wrapper {
+            float: right;
+            width: $top-bar-height;
+            height: $top-bar-height;
+            font-size: 1em;
+            line-height: 1em;
+            border-left: 1px solid $gray-mid;
 
-        .media-device-phone {
-          font-size: 26px;
-          top: 3px;
+            &:hover {
+                background-color: lighten($gray, 7%);
+            }
+
+            .hidden-elements-toggle-button {
+                background: transparent;
+                height: 100%;
+                font-size: 1em;
+                line-height: 1em;
+                width: 100%;
+                border: 0;
+                padding: 0;
+                outline: 0;
+
+                &.active {
+                    background: $color-t3-primary;
+                    border-radius: 0;
+
+                    &:hover {
+                        background-color: lighten($color-t3-primary, 10%);
+                        color: $black;
+                    }
+
+                    .hidden-elements-toggle-icon {
+                        .eye {
+                            fill: $black;
+                        }
+
+                        .eye-pupil {
+                            fill: $black;
+                        }
+
+                        .eye-border {
+                            fill: $black;
+                        }
+                    }
+                }
+
+                .hidden-elements-toggle-icon {
+                    .eye {
+                        fill: $color-t3-primary;
+                    }
+
+                    .eye-pupil {
+                        fill: $color-t3-primary;
+                    }
+
+                    .eye-border {
+                        fill: $color-t3-gray;
+                    }
+                }
+            }
         }
-      }
     }
-
-    .hidden-elements-toggle-wrapper {
-      float: right;
-      width: $top-bar-height;
-      height: $top-bar-height;
-      font-size: 1em;
-      line-height: 1em;
-      border-left: 1px solid $gray-mid;
-
-      &:hover {
-        background-color: lighten($gray, 7%);
-      }
-
-      .hidden-elements-toggle-button {
-        background: $gray;
-        height: 100%;
-        font-size: 1em;
-        line-height: 1em;
-
-        background: transparent;
-        width: 100%;
-        border: 0;
-        padding: 0;
-        outline: 0;
-
-        &.active {
-          background: $color-t3-primary;
-          border-radius: 0;
-
-          &:hover {
-            background-color: lighten($color-t3-primary, 10%);
-            color: $black;
-          }
-
-          .hidden-elements-toggle-icon {
-            .eye  {
-              fill: $black;
-            }
-
-            .eye-pupil {
-              fill: $black;
-            }
-
-            .eye-border {
-              fill: $black;
-            }
-          }
-        }
-
-        .hidden-elements-toggle-icon {
-          .eye  {
-            fill: $color-t3-primary;
-          }
-          .eye-pupil {
-            fill: $color-t3-primary;
-          }
-
-          .eye-border {
-            fill: $color-t3-gray;
-          }
-        }
-      }
-    }
-  }
 }
 
 .t3-frontend-editing__save,
 .t3-frontend-editing__discard {
+    .btn-text {
+        position: relative;
+        top: -3px;
+    }
 
-  .btn-text {
-    position: relative;
-    top: -3px;
-  }
+    .icon-icons-save {
+        font-size: 26px;
+        position: relative;
+        top: 1px;
+    }
 
-  .icon-icons-save {
-    font-size: 26px;
-    position: relative;
-    top: 1px;
-  }
-
-  .icon-icons-cancel {
-    font-size: 26px;
-    position: relative;
-    top: 2px;
-  }
+    .icon-icons-cancel {
+        font-size: 26px;
+        position: relative;
+        top: 2px;
+    }
 }

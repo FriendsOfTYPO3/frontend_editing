@@ -1,42 +1,35 @@
-
-/*.btn-min-width(...) {
-  min-width: 130px;
-}
-not used?
-*/
-
 .btn-min-width {
-  min-width: 130px;
+    min-width: 130px;
 }
 
 .btn {
-  font-family: $font-family-base;
-  color: $white !important;
-  border: 0;
-  border-radius: 0 !important;
-  height: $top-bar-height - 10px !important;
-  font-size: $font-size-regular !important;
-  padding: 0 14px !important;
-  text-transform: uppercase;
-  outline: none;
+    font-family: $font-family-base;
+    color: $white !important;
+    border: 0;
+    border-radius: 0 !important;
+    height: $top-bar-height - 10px !important;
+    font-size: $font-size-regular !important;
+    padding: 0 14px !important;
+    text-transform: uppercase;
+    outline: none;
 
-  &:focus {
-    outline: none !important;
-  }
+    &:focus {
+        outline: none !important;
+    }
 }
 
 .btn-default {
-  border: 1px solid $gray-light !important;
-  background-color: transparent !important;
+    border: 1px solid $gray-light !important;
+    background-color: transparent !important;
 
-  &:hover {
-    background-color: transparentize($gray-light, .5) !important;
-  }
+    &:hover {
+        background-color: transparentize($gray-light, 0.5) !important;
+    }
 }
 
 .btn-inactive {
-  cursor: not-allowed;
-  pointer-events: none;
-  background-color: $gray !important;
-  border-color: $gray !important;
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: $gray !important;
+    border-color: $gray !important;
 }

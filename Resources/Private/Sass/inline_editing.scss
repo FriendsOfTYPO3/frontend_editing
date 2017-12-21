@@ -7,130 +7,134 @@
 //              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
 //
 
-
 // Include Color Variables
 @import '_colors.scss';
 @import '_inline_action_icon.scss';
 
+// minimize external css affecting ours (ckeditor can create momentary spans when hovering)
+
 *[contenteditable="true"] {
+    & > span:before,
+    & > span:after {
+        content: none !important;
+    }
 
-  // minimize external css affecting ours (ckeditor can create momentary spans when hovering)
-  & > span:before,
-  & > span:after {
-    content: none !important;
-  }
+    &:hover {
+        outline: 1px dotted transparentize($color-t3-primary, 0.3);
+    }
 
-  &:hover{
-    outline: 1px dotted transparentize($color-t3-primary, .3%);
-  }
-  &:focus{
-    outline: 1px dotted $color-t3-primary;
-  }
+    &:focus {
+        outline: 1px dotted $color-t3-primary;
+    }
 }
 
 // hide preview info box from TYPO3 admin panel
 
-#typo3-previewInfo, #typo3-preview-info {
-  display: none !important;
+#typo3-previewInfo,
+#typo3-preview-info {
+    display: none !important;
 }
 
 // visualize hidden elements
 
 .t3-frontend-editing__hidden-element {
-  opacity: .6;
+    opacity: 0.6;
 }
 
 // dropzone (areas where you can add content)
 
 .t3-frontend-editing__dropzone {
-  height: 0;
-  background-color: $color-t3-primary;
-  transition: height 0.2s;
-  -webkit-transition: height 0.2s;
-  margin: 0;
-  padding: 0;
+    height: 0;
+    background-color: $color-t3-primary;
+    transition: height 0.2s;
+    -webkit-transition: height 0.2s;
+    margin: 0;
+    padding: 0;
 }
 
 .dropzones-enabled .t3-frontend-editing__dropzone {
-  height: 25px;
+    height: 25px;
 
-  &.active {
-    border: dashed 1px $gray;
-    background-color: $color-t3-green;
-  }
+    &.active {
+        border: dashed 1px $gray;
+        background-color: $color-t3-green;
+    }
 
-  &.t3-frontend-editing__dropzone-hidden {
-    display: none;
-    visibility: hidden;
-  }
+    &.t3-frontend-editing__dropzone-hidden {
+        display: none;
+        visibility: hidden;
+    }
 }
 
 // container for editing content element
 
 .t3-frontend-editing__ce {
-  position: relative !important;
-  min-height: 35px;
+    position: relative !important;
+    min-height: 35px;
 
-  &:hover {
-    outline: 1px dotted transparentize($color-t3-gray, .5);
-  }
-
-  .cke_editable {
-    display: inline;
-  }
-
-  // colored frame when hovering content element in right-column list
-
-  &.indicate-element {
-    &:before,
-    &:after {
-      content: none !important;
+    &:hover {
+        outline: 1px dotted transparentize($color-t3-gray, 0.5);
     }
 
-    outline: 1px solid $color-t3-primary;
-  }
+    .cke_editable {
+        display: inline;
+    }
 
-  &[draggable="true"]:hover {
-    cursor: pointer;
-  }
+    // colored frame when hovering content element in right-column list
+
+    &.indicate-element {
+        &:before,
+        &:after {
+            content: none !important;
+        }
+
+        outline: 1px solid $color-t3-primary;
+    }
+
+    &[draggable="true"]:hover {
+        cursor: pointer;
+    }
 }
 
 // inline actions (buttons like edit, hide, delete, new)
 
 .t3-frontend-editing__inline-actions {
 
-  // minimize external css affecting ours
-  &:before,
-  &:after,
-  span:before,
-  span:after,
-  img:before,
-  img:after {
-    content: none !important;
-  }
+    // minimize external css affecting ours
 
-  line-height: 1;
-  display: none; // has also been set inline to hide before this styling is being applied
-  position: absolute !important;
-  bottom: 100%;
-  left: -1px;
-  color: $color-white;
-  background-color: transparentize($color-t3-gray-dark, 0.8);
-  z-index: 16777271;  // maximum z-index value to make sure it is always on top
-  text-align: right;
-
-  @include inline-action-icon;
-
-  .icon {
-    background-color: transparentize($color-white, 0.6);
-    cursor: pointer;
-
-    &:hover {
-      background-color: transparentize($gray-light, 0.6);
+    &:before,
+    &:after,
+    span:before,
+    span:after,
+    img:before,
+    img:after {
+        content: none !important;
     }
-  }
+
+    line-height: 1;
+    display: none;  // has also been set inline to hide before this styling is being applied
+    position: absolute !important;
+    bottom: 100%;
+    left: -1px;
+    color: $color-white;
+    background-color: transparentize($color-t3-gray-dark, 0.8);
+    z-index: 16777271;  // maximum z-index value to make sure it is always on top
+    text-align: right;
+
+    @include inline-action-icon;
+
+    .icon {
+        background-color: transparentize($color-white, 0.6);
+        cursor: pointer;
+
+        &:hover {
+            background-color: transparentize($gray-light, 0.6);
+        }
+    }
 }
 
-.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions { // show inline actions when hovering
-  display: inline-block !important; // overrides inline styling
+// show inline actions when hovering
+
+.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
+    display: inline-block !important;   // overrides inline styling
 }

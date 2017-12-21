@@ -1,31 +1,30 @@
 .cke_float {
-
-  .cke_top {
-    box-shadow: none !important;
-    background-image: none !important;
-    background-color: #2b2b2b !important;
-    padding: 13px 8px 10px !important;
-    border: 0 !important;
-  }
+    .cke_top {
+        box-shadow: none !important;
+        background-image: none !important;
+        background-color: #2b2b2b !important;
+        padding: 13px 8px 10px !important;
+        border: 0 !important;
+    }
 }
 
 .cke_bottom {
-  background-image: none !important;
+    background-image: none !important;
 }
 
 .cke_toolgroup {
-  border: 0 !important;
-  box-shadow: none !important;
-  background: $white !important;
-  background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: $white !important;
+    background-image: none !important;
 }
 
 .cke_dialog_title {
-  background-image: none !important;
-  color: $black !important;
-  text-shadow: 0 1px 0 lighten($gray-light, 10%) !important;
+    background-image: none !important;
+    color: $black !important;
+    text-shadow: 0 1px 0 lighten($gray-light, 10%) !important;
 }
 
 .cke_toolbar_break {
-  display: none !important;
+    display: none !important;
 }
