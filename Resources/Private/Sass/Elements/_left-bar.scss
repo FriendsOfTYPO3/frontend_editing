@@ -35,9 +35,8 @@
         }
 
         .left-bar-button {
-            @include transition(right ($push-duration / 2) $push-timing);
-            @include transform-origin (center);
-
+            transition: right ($push-duration / 2) $push-timing;
+            transform-origin: center;
             float: right;
             display: block;
             height: $top-bar-height;
@@ -65,7 +64,7 @@
             }
 
             .icon-icons-arrow-double {
-                @include transform(scaleX(-1));
+                transform: scaleX(-1);
             }
         }
     }

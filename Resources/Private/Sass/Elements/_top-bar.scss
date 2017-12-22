@@ -42,8 +42,7 @@
 }
 
 .t3-frontend-editing__top-bar-left {
-    @include transition(left $push-duration $push-timing);
-
+    transition: left $push-duration $push-timing;
     position: relative;
     left: 0;
     width: 30%;
@@ -51,8 +50,7 @@
 }
 
 .t3-frontend-editing__top-bar-right {
-    @include transition(right $push-duration $push-timing);
-
+    transition: right $push-duration $push-timing;
     width: 70%;
     float: right;
     text-align: right;
@@ -60,8 +58,7 @@
     position: relative;
 
     .top-bar-items {
-        @include transition(margin $push-duration $push-timing);
-
+        transition: margin $push-duration $push-timing;
         margin: 0;
         padding: 0;
         display: inline-block;

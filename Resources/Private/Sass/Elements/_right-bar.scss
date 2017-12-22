@@ -77,9 +77,8 @@
         }
 
         .right-bar-button {
-            @include transition(left ($push-duration / 2) $push-timing);
-            @include transform-origin(center);
-
+            transition: left ($push-duration / 2) $push-timing;
+            transform-origin: center;
             float: left;
             display: block;
             height: $top-bar-height;
