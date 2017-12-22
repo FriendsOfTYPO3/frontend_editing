@@ -54,12 +54,12 @@ Add the alertify.js (confirms) node_module to Public/Resources folder:
 Styling
 -------
 
-The extension is using SASS.
-Use the following command to build the stylesheets:
+The extension is using SASS. The build-process order is:
 
-::
-
-   npm run build:css
+* CSS linting, based on TYPO3.CMS (stylelint)
+* Compile to CSS (node-sass)
+* Add vendor prefixes, based on TYPO3.CMS (autoprefixer)
+* Minifying CSS (postcss-clean)
 
 Use the following watch command while developing:
 
@@ -67,10 +67,17 @@ Use the following watch command while developing:
 
    npm run watch:css
 
+Use the following command to build the stylesheets:
+
+::
+
+   npm run build:css
+
+
 Publish
 -------
 
-Use the following command to copy all necessary node_modules into Public/Resources folder and compile the LESS:
+Use the following command to copy all necessary node_modules into Public/Resources folder and compile the SASS:
 ::
 
    npm run build:extension

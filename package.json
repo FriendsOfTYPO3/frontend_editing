@@ -7,11 +7,11 @@
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable/dist/immutable.js ./Resources/Public/Javascript/Contrib/immutable.js",
     "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js/dist/js/alertify.js ./Resources/Public/Javascript/Contrib/alertify.js",
     "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run build:css",
-    "build:css": "npm run check:css && npm run compile:css && npm run postcss:css",
     "watch:css": "node-sass -rwx Resources/Private/Sass/ -o Resources/Public/Css/",
     "check:css": "stylelint -s scss Resources/Private/Sass/",
     "compile:css": "node-sass -x Resources/Private/Sass/ -o Resources/Public/Css/",
     "postcss:css": "postcss -r Resources/Public/Css/*.css",
+    "build:css": "npm run check:css && npm run compile:css && npm run postcss:css",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/",
     "build:suite": "npm run php:codesniffer && npm run php:unittests"
