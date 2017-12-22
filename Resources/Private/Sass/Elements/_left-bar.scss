@@ -9,7 +9,6 @@
     z-index: 10998;
     font-family: $font-family-base;
     backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
 
     &.closed {
         display: none;
