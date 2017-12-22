@@ -861,8 +861,7 @@ input[type=text] {
     height: calc(100vh - 110px);
     margin: 0 auto;
     display: block;
-    -webkit-box-shadow: 0 0 15px 0 #4c4c4c;
-            box-shadow: 0 0 15px 0 #4c4c4c; }
+    box-shadow: 0 0 15px 0 #4c4c4c; }
   .t3-frontend-editing__iframe-wrapper.full-view {
     margin-top: 0;
     width: 100%; }
@@ -995,8 +994,7 @@ body {
     right: 45px; }
 
 .cke_float .cke_top {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
+  box-shadow: none !important;
   background-image: none !important;
   background-color: #2b2b2b !important;
   padding: 13px 8px 10px !important;
@@ -1007,8 +1005,7 @@ body {
 
 .cke_toolgroup {
   border: 0 !important;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
+  box-shadow: none !important;
   background: #fff !important;
   background-image: none !important; }
 
@@ -1100,7 +1097,6 @@ button.toast-close-button {
   position: fixed;
   z-index: 999999; }
   #toast-container * {
-    -webkit-box-sizing: border-box;
     box-sizing: border-box; }
   #toast-container > div {
     position: relative;
@@ -1112,7 +1108,6 @@ button.toast-close-button {
     border-radius: 3px;
     background-position: 15px center;
     background-repeat: no-repeat;
-    -webkit-box-shadow: 0 0 12px #838383;
     box-shadow: 0 0 12px #838383;
     color: #fff;
     opacity: 0.95;
@@ -1120,7 +1115,6 @@ button.toast-close-button {
     font-size: 16px;
     line-height: 1.25em; }
   #toast-container > :hover {
-    -webkit-box-shadow: 0 0 12px #0f0f0f;
     box-shadow: 0 0 12px #0f0f0f;
     opacity: 1;
     cursor: pointer; }
@@ -1200,8 +1194,7 @@ button.toast-close-button {
     opacity: 0;
     pointer-events: none; }
   .alertify, .alertify.show {
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+    box-sizing: border-box;
     -webkit-transition: opacity 0.2s linear;
     transition: opacity 0.2s linear; }
   .alertify .dialog,
@@ -1221,8 +1214,7 @@ button.toast-close-button {
       text-align: center;
       padding: 0;
       background: #fff;
-      -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
     .alertify .dialog .msg,
     .alertify .alert .msg {
       padding: 15px;
@@ -1250,14 +1242,13 @@ button.toast-close-button {
         margin: 6px 4px; }
       .alertify .dialog nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button),
       .alertify .alert nav button:not(.btn):not(.pure-button):not(.md-button):not(.mdl-button) {
-        -webkit-box-sizing: border-box;
-                box-sizing: border-box;
+        box-sizing: border-box;
         color: #0f0f0f;
         position: relative;
         outline: 0;
         display: inline-block;
         -webkit-box-align: center;
-            -ms-flex-align: center;
+        -webkit-align-items: center;
                 align-items: center;
         padding: 0;
         margin: 0 0 0 5px;
@@ -1307,11 +1298,9 @@ button.toast-close-button {
   .alertify-logs > * {
     padding: 15px 30px;
     color: #fff;
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 1px;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+    box-sizing: border-box;
     -webkit-transition: opacity 0.2s linear;
     transition: opacity 0.2s linear;
     position: relative;
