@@ -11,6 +11,14 @@ module.exports = {
         'Android >= 4',
         'Opera >= 43'
       ]
+    }),
+    require('postcss-clean')({
+      rebase: false,
+      level: {
+        1: {
+          specialComments: 0
+        }
+      }
     })
   ]
 }
