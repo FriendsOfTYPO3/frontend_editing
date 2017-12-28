@@ -27,21 +27,5 @@ before_install:
   - npm install
 
 script:
-
   # Run full test suite and linting of the code base
   - npm run build:suite
-
-   #- >
-   # echo;
-   # echo "Running SASS ";
-   # .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
-
-  #- >
-  #  echo;
-  #  echo "Running PHP codesniffer";
-  #  .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
-
-  #- >
-  #  echo;
-  #  echo "Running unit tests";
-  #  export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/
