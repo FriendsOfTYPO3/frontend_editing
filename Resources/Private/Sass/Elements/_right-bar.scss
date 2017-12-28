@@ -17,7 +17,6 @@
     &.t3-frontend-editing__right-overlay {
         background: $transparent-opacity;
         backdrop-filter: blur(3px);
-        -webkit-backdrop-filter: blur(3px);
     }
 
     .top-right-bar-wrapper {
@@ -78,9 +77,8 @@
         }
 
         .right-bar-button {
-            @include transition(left ($push-duration / 2) $push-timing);
-            @include transform-origin(center);
-
+            transition: left ($push-duration / 2) $push-timing;
+            transform-origin: center;
             float: left;
             display: block;
             height: $top-bar-height;

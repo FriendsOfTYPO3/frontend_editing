@@ -1,6 +1,5 @@
 .t3-frontend-editing__iframe-wrapper {
-    @include transition(width $push-duration $push-timing);
-
+    transition: width $push-duration $push-timing;
     margin-top: $top-bar-height * 2;
     margin-right: $right-bar-width;
     position: relative;
@@ -13,8 +12,7 @@
     }
 
     &.push-toleft-iframe {
-        @include transition(width $push-duration $push-timing);
-
+        transition: width $push-duration $push-timing;
         width: calc(100% - #{$right-bar-width});
         position: relative;
     }
