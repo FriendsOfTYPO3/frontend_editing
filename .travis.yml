@@ -1,11 +1,8 @@
-language: php, node_js
+language: php
 
 php:
   - 7.0
   - 7.1
-
-node_js:
-  - 6
 
 sudo: false
 
@@ -14,12 +11,16 @@ addons:
     packages:
       - parallel
 
+env:
+  - NODE_VERSION="6.0"
+
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - nvm install $NODE_VERSION
   - composer self-update
   - composer --version
   - composer install
