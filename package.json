@@ -14,7 +14,7 @@
     "build:css": "npm run check:css && npm run compile:css && npm run postcss:css",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/",
-    "build:suite": "npm run check:css && npm run php:codesniffer && npm run php:unittests"
+    "build:suite": "npm run build:css && npm run php:codesniffer && npm run php:unittests"
   },
   "dependencies": {
     "toastr": "^2.1.2",
