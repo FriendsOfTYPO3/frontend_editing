@@ -1,184 +1,191 @@
 .t3-frontend-editing__iframe-wrapper {
-
-  @include transition(width $push-duration $push-timing);
-  margin-top: $top-bar-height * 2;
-  margin-right: $right-bar-width;
-  position: relative;
-  width: 100%;
-
-  &.t3-frontend-editing__iframe-overlay {
-    &.push-toleft-iframe  {
-      width: 100%;
-    }
-  }
-
-  &.push-toleft-iframe {
     @include transition(width $push-duration $push-timing);
-    width: calc(100% - #{$right-bar-width});
+
+    margin-top: $top-bar-height * 2;
+    margin-right: $right-bar-width;
     position: relative;
-  }
-
-  &.inactive {
-    margin-right: 0;
-  }
-
-  iframe {
     width: 100%;
-    height: calc(100vh - #{$top-bar-height * 2});
-    margin: 0 auto;
-    display: block;
-    box-shadow: 0 0 15px 0 $gray;
-  }
 
-  &.full-view {
-    margin-top: 0;
-    width: 100%;
+    &.t3-frontend-editing__iframe-overlay {
+        &.push-toleft-iframe {
+            width: 100%;
+        }
+    }
+
+    &.push-toleft-iframe {
+        @include transition(width $push-duration $push-timing);
+
+        width: calc(100% - #{$right-bar-width});
+        position: relative;
+    }
+
+    &.inactive {
+        margin-right: 0;
+    }
 
     iframe {
-        height: 100vh;
+        width: 100%;
+        height: calc(100vh - #{$top-bar-height * 2});
+        margin: 0 auto;
+        display: block;
+        box-shadow: 0 0 15px 0 $gray;
     }
-  }
+
+    &.full-view {
+        margin-top: 0;
+        width: 100%;
+
+        iframe {
+            height: 100vh;
+        }
+    }
 }
 
 .t3-frontend-editing__loading-screen {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: -$top-bar-height;
-  right: 0;
-  background: transparentize($color-t3-gray-dark, .8);
-
-  .icon-spin {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -28px 0 0 -25px;
+    left: 0;
+    top: 0;
+    bottom: -$top-bar-height;
+    right: 0;
+    background: transparentize($color-t3-gray-dark, 0.2);
 
-    .icon-markup {
-      animation: icon-spin 2s infinite linear;
-      display: block;
-    }
-    @keyframes icon-spin {
-      0% {
-        transform: rotate(0deg);
-      }
+    .icon-spin {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -28px 0 0 -25px;
 
-      100% {
-        transform: rotate(359deg);
-      }
+        .icon-markup {
+            animation: icon-spin 2s infinite linear;
+            display: block;
+        }
+
+        @keyframes icon-spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(359deg);
+            }
+        }
     }
-  }
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 body {
-  margin: 0;
-  overflow-x: hidden;
-  -webkit-font-smoothing: subpixel-antialiased;
+    margin: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 .alertify {
-  font-family: $font-family-base;
-
-  button {
     font-family: $font-family-base;
-    font-size: $font-size-regular !important;
-    border: 1px solid $gray-light !important;
-  }
+
+    button {
+        font-family: $font-family-base;
+        font-size: $font-size-regular !important;
+        border: 1px solid $gray-light !important;
+    }
 }
 
 * {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
 .t3-frontend-editing__full-view {
-  z-index: 11000;
-  position: absolute;
-  right: 0;
-  left: auto;
-  width: $top-bar-height;
-  height: $top-bar-height;
-  background-color: $gray-dark;
-  font-size: 1em;
-  line-height: 1em;
-  border: 0;
-  border-left: 1px solid darken($color-t3-gray-dark, 10%);
-  border-radius: 0;
-  outline: 0;
-  padding: 0;
-
-  &:hover {
-    background-color: lighten($gray-dark, 20%);
-  }
-
-  &.full-view-active {
-    background-color: $color-t3-primary;
-    border: 1px dashed $black;
-
-    svg path {
-      fill: $black;
-    }
+    z-index: 11000;
+    position: absolute;
+    right: 0;
+    left: auto;
+    width: $top-bar-height;
+    height: $top-bar-height;
+    background-color: $gray-dark;
+    font-size: 1em;
+    line-height: 1em;
+    border: 0;
+    border-left: 1px solid darken($color-t3-gray-dark, 10%);
+    border-radius: 0;
+    outline: 0;
+    padding: 0;
 
     &:hover {
-      background-color: lighten($color-t3-primary, 10%);
-      color: $black;
+        background-color: lighten($gray-dark, 20%);
     }
-  }
 
-  svg path {
-    fill: $color-t3-gray-light;
-  }
+    &.full-view-active {
+        background-color: $color-t3-primary;
+        border: 1px dashed $black;
+
+        svg path {
+            fill: $black;
+        }
+
+        &:hover {
+            background-color: lighten($color-t3-primary, 10%);
+            color: $black;
+        }
+    }
+
+    svg path {
+        fill: $color-t3-gray-light;
+    }
 }
+
 .t3-frontend-editing__ckeditor-bar__wrapper {
-  background: #2b2b2b;
-  height: $top-bar-height;
-  position: absolute;
-  top: $top-bar-height;
-  z-index: 1;
-  margin: 0 auto;
-  width: auto;
-  left: 0;
-  right: 0;
+    background: #2b2b2b;
+    height: $top-bar-height;
+    position: absolute;
+    top: $top-bar-height;
+    z-index: 1;
+    margin: 0 auto;
+    width: auto;
+    left: 0;
+    right: 0;
 
-  &.full-view-active {
-    display: none;
-  }
-}
-.t3-frontend-editing__ckeditor-bar {
-  background: #2b2b2b;
-  color: #fff;
-  height: $top-bar-height;
-  position: absolute;
-  z-index: 10998;
-  margin: 0 auto;
-  width: auto;
-  left: 280px;
-  right: 325px;
-
-  > .cke {
-    top: -1px !important;
-    left: 0 !important;
-    right: auto !important;
-
-    &.left-open {
-      left: 290px !important;
+    &.full-view-active {
+        display: none;
     }
-  }
-  &.full-view-active {
-    display: none;
-  }
-  &.left-closed {
-    left: 45px;
-  }
-  &.right-closed {
-    right: 45px;
-  }
+}
+
+.t3-frontend-editing__ckeditor-bar {
+    background: #2b2b2b;
+    color: #fff;
+    height: $top-bar-height;
+    position: absolute;
+    z-index: 10998;
+    margin: 0 auto;
+    width: auto;
+    left: 280px;
+    right: 325px;
+
+    > .cke {
+        top: -1px !important;
+        left: 0 !important;
+        right: auto !important;
+
+        &.left-open {
+            left: 290px !important;
+        }
+    }
+
+    &.full-view-active {
+        display: none;
+    }
+
+    &.left-closed {
+        left: 45px;
+    }
+
+    &.right-closed {
+        right: 45px;
+    }
 }

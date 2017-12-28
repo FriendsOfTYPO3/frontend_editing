@@ -1,188 +1,187 @@
-
 .content-icon {
-  width: 50px;
-  height: 50px;
+    width: 50px;
+    height: 50px;
 }
 
 .content-icon-default {
-  background-color: $gray-icon-bg;
-  display: inline-block;
-  width: 32px;
-  height: 32px;
+    background-color: $gray-icon-bg;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
 
-  img {
-    margin-top: 0;
-    margin-left: 0;
-  }
+    img {
+        margin-top: 0;
+        margin-left: 0;
+    }
 }
 
 .content-icon-small {
-  background-color: $gray-icon-bg;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
+    background-color: $gray-icon-bg;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
 
-  img {
-    margin-top: 0;
-    margin-left: 0;
-  }
-}
-.accordion-list .element:last-of-type {
-  border-bottom: 0;
-}
-.element {
-  display: inline-block;
-  margin-bottom: 10px;
-  position: relative;
-
-  .description {
-    width: 220px;
-    display: none;
-    margin-left: 5px;
-
-    .title-default {
-      display: inline-block;
-      width: 230px;
-      padding: 0;
-      line-height: 1.1;
-      color: $gray-light;
-
-      &:first-of-type {
-        font-size: $font-size-smaller;
-        padding-top: 4px;
-        color: #fff;
-      }
+    img {
+        margin-top: 0;
+        margin-left: 0;
     }
-  }
+}
 
-  div {
-    pointer-events: none;
-  }
+.accordion-list .element:last-of-type {
+    border-bottom: 0;
+}
 
-  span {
-    pointer-events: none;
-  }
+.element {
+    display: inline-block;
+    margin-bottom: 10px;
+    position: relative;
 
-  &:hover {
-    outline: solid 2px $color-t3-primary;
-  }
+    .description {
+        width: 220px;
+        display: none;
+        margin-left: 5px;
+
+        .title-default {
+            display: inline-block;
+            width: 230px;
+            padding: 0;
+            line-height: 1.1;
+            color: $gray-light;
+
+            &:first-of-type {
+                font-size: $font-size-smaller;
+                padding-top: 4px;
+                color: $white;
+            }
+        }
+    }
+
+    div {
+        pointer-events: none;
+    }
+
+    span {
+        pointer-events: none;
+    }
+
+    &:hover {
+        outline: solid 2px $color-t3-primary;
+    }
 }
 
 .content-element-hierarchy-tab .element:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .wizard-elements-tabs .element:hover {
-  cursor: move;
+    cursor: move;
 }
 
 .accordion {
+    .grid,
+    .list-view {
+        font-size: 32px;
+        position: relative;
+        top: 7px;
+        width: 24px;
+        display: inline-block;
+        cursor: pointer;
+        color: $gray;
 
-  .grid,
-  .list-view {
-    font-size: 32px;
-    position: relative;
-    top: 7px;
-    width: 24px;
-    display: inline-block;
-    cursor: pointer;
-    color: $gray;
-
-    &:hover,
-    &.active {
-      color: $white;
+        &:hover,
+        &.active {
+            color: $white;
+        }
     }
-  }
 
-  .trigger {
-  transform: rotate(0);
-  transition-duration: 0.2s;
-  transform-origin: center;
-    font-size: 26px;
-    position: relative;
-    top: 5px;
-    display: inline-block;
-    cursor: pointer;
+    .trigger {
+        transform: rotate(0);
+        transition-duration: 0.2s;
+        transform-origin: center;
+        font-size: 26px;
+        position: relative;
+        top: 5px;
+        display: inline-block;
+        cursor: pointer;
 
-    &.active {
-    transform: rotate(180deg);
-    transition-duration: 0.2s;
-    transform-origin: center;
+        &.active {
+            transform: rotate(180deg);
+            transition-duration: 0.2s;
+            transform-origin: center;
+        }
     }
-  }
 
-  .element-title {
-    display: inline-block;
-    font-size: 16px;
-    padding: 3px 0;
-    max-width: 205px;
-    cursor: pointer;
-  }
+    .element-title {
+        display: inline-block;
+        font-size: 16px;
+        padding: 3px 0;
+        max-width: 205px;
+        cursor: pointer;
+    }
 
-  .element-action {
-    text-align: right;
-    width: auto;
-    display: inline-block;
-    float: right;
-    padding: 2px 10px;
-  }
+    .element-action {
+        text-align: right;
+        width: auto;
+        display: inline-block;
+        float: right;
+        padding: 2px 10px;
+    }
 }
 
 .accordion-grid {
-  .grid {
-    color: $white;
-  }
+    .grid {
+        color: $white;
+    }
 
-  .accordion-content {
-    padding: 10px;
-  }
+    .accordion-content {
+        padding: 10px;
+    }
 }
 
 .accordion-list {
-
-  .description {
-    display: inline-block;
-  }
-
-  .element {
-    display: block;
-    background-color: $gray-dark;
-    margin: 0;
-    padding: 10px;
-    margin-bottom: 2px;
-    border-bottom: 1px solid $gray;
-
-    .content-icon {
-      vertical-align: top;
-      display: inline-block;
-      margin: 0 auto;
-      background-color: $gray;
-
-      .icon-size-default {
-        height: 100%;
-        width: 100%;
-
-        .icon-markup {
-          width: 50px;
-          height: 50px;
-          text-align: center;
-          vertical-align: middle;
-          display: block;
-          margin: 0 auto;
-
-          img {
-            height: 40px;
-            width: 40px;
-            margin: 0 auto;
-            top: 10%;
-            position: relative;
-          }
-        }
-      }
+    .description {
+        display: inline-block;
     }
-  }
 
-  .list-view {
-    color: $white;
-  }
+    .element {
+        display: block;
+        background-color: $gray-dark;
+        margin: 0;
+        padding: 10px;
+        margin-bottom: 2px;
+        border-bottom: 1px solid $gray;
+
+        .content-icon {
+            vertical-align: top;
+            display: inline-block;
+            margin: 0 auto;
+            background-color: $gray;
+
+            .icon-size-default {
+                height: 100%;
+                width: 100%;
+
+                .icon-markup {
+                    width: 50px;
+                    height: 50px;
+                    text-align: center;
+                    vertical-align: middle;
+                    display: block;
+                    margin: 0 auto;
+
+                    img {
+                        height: 40px;
+                        width: 40px;
+                        margin: 0 auto;
+                        top: 10%;
+                        position: relative;
+                    }
+                }
+            }
+        }
+    }
+
+    .list-view {
+        color: $white;
+    }
 }

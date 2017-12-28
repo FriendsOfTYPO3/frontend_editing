@@ -1,9 +1,9 @@
 // Colors
-$orange-primary: #FF8700;
+$orange-primary: #ff8700;
 $gray-dark: #191919;
 $gray: #4c4c4c;
 $gray-light: #838383;
-$gray-bright: #EFEFEF;
+$gray-bright: #efefef;
 $gray-mid:#737373;
 
 $gray-icon-bg: #555f63;
@@ -11,9 +11,9 @@ $black: #0f0f0f;
 $white: #fff;
 
 $scroll-bar-color: #3f3f3f;
-$scroll-bar-track: rgba(63, 63, 63, .6);
+$scroll-bar-track: rgba(63, 63, 63, 0.6);
 
-$transparent-opacity: rgba(30, 30, 30, .9);
+$transparent-opacity: rgba(30, 30, 30, 0.9);
 
 // Font
 $font-family-base: "Share", Verdana, Helvetica, Arial, sans-serif;
@@ -44,16 +44,16 @@ $pagetree-filter-height: 50px;
 $drop-zone-bg-color: rgba(167, 215, 255, 1);
 $drop-zone-enabled-height: 25px;
 $drop-zone-active-height: 60px;
-$drop-zone-active-border-color: rgba( 0, 145, 210, 1);
+$drop-zone-active-border-color: rgba(0, 145, 210, 1);
 
 // Modal
-$modal-background-color: rgba(255, 255, 255, .5);
+$modal-background-color: rgba(255, 255, 255, 0.5);
 
 // Timing
-$push-duration: .2s;
+$push-duration: 0.2s;
 $push-timing: linear;
 
-$fade-duration: .2s;
+$fade-duration: 0.2s;
 $fade-timing: linear;
 
 // Extra space

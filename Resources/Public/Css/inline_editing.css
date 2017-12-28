@@ -3,20 +3,21 @@
   content: none !important; }
 
 *[contenteditable="true"]:hover {
-  outline: 1px dotted rgba(255, 135, 0, 0.7); }
+  outline: 1px dotted rgba(255, 135, 0, 0.3); }
 
 *[contenteditable="true"]:focus {
-  outline: 1px dotted #FF8700; }
+  outline: 1px dotted #ff8700; }
 
-#typo3-previewInfo, #typo3-preview-info {
+#typo3-previewInfo,
+#typo3-preview-info {
   display: none !important; }
 
 .t3-frontend-editing__hidden-element {
-  opacity: .6; }
+  opacity: 0.6; }
 
 .t3-frontend-editing__dropzone {
   height: 0;
-  background-color: #FF8700;
+  background-color: #ff8700;
   transition: height 0.2s;
   -webkit-transition: height 0.2s;
   margin: 0;
@@ -39,7 +40,7 @@
   .t3-frontend-editing__ce .cke_editable {
     display: inline; }
   .t3-frontend-editing__ce.indicate-element {
-    outline: 1px solid #FF8700; }
+    outline: 1px solid #ff8700; }
     .t3-frontend-editing__ce.indicate-element:before, .t3-frontend-editing__ce.indicate-element:after {
       content: none !important; }
   .t3-frontend-editing__ce[draggable="true"]:hover {
@@ -51,8 +52,8 @@
   position: absolute !important;
   bottom: 100%;
   left: -1px;
-  color: #ffffff;
-  background-color: rgba(81, 81, 81, 0.2);
+  color: #fff;
+  background-color: rgba(81, 81, 81, 0.8);
   z-index: 16777271;
   text-align: right; }
   .t3-frontend-editing__inline-actions:before, .t3-frontend-editing__inline-actions:after,
@@ -116,10 +117,10 @@
     width: 58px;
     line-height: 58px; }
   .t3-frontend-editing__inline-actions .icon {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.6);
     cursor: pointer; }
     .t3-frontend-editing__inline-actions .icon:hover {
-      background-color: rgba(215, 215, 215, 0.4); }
+      background-color: rgba(215, 215, 215, 0.6); }
 
 .t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
   display: inline-block !important; }
