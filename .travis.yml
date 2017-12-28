@@ -11,24 +11,21 @@ addons:
     packages:
       - parallel
 
+env:
+  - NODE_VERSION="6.0"
+
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - nvm install $NODE_VERSION
   - composer self-update
   - composer --version
   - composer install
+  - npm install
 
 script:
-
-  - >
-    echo;
-    echo "Running PHP codesniffer";
-    .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
-
-  - >
-    echo;
-    echo "Running unit tests";
-    export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/
+  # Run full test suite and linting of the code base
+  - npm run build:suite
