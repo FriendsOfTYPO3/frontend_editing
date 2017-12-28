@@ -1,8 +1,11 @@
-language: php
+language: php, node_js
 
 php:
   - 7.0
   - 7.1
+
+node_js:
+  - 6
 
 sudo: false
 
@@ -20,15 +23,24 @@ before_install:
   - composer self-update
   - composer --version
   - composer install
+  - npm install
 
 script:
 
-  - >
-    echo;
-    echo "Running PHP codesniffer";
-    .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
+  # Run full test suite and linting of the code base
+  - npm run build:suite
 
-  - >
-    echo;
-    echo "Running unit tests";
-    export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/
+   #- >
+   # echo;
+   # echo "Running SASS ";
+   # .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
+
+  #- >
+  #  echo;
+  #  echo "Running PHP codesniffer";
+  #  .Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php
+
+  #- >
+  #  echo;
+  #  echo "Running unit tests";
+  #  export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit/
