@@ -14,7 +14,7 @@
 /**
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'alertify'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, alertify) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'TYPO3/CMS/Backend/Modal'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr) {
 	'use strict';
 
 	// Extend FrontendEditing with additional events
@@ -65,6 +65,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
+	var Modal;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -127,16 +128,20 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		});
 	}
 
+	function save() {
+		if (!storage.isEmpty()) {
+			F.saveAll();
+		} else {
+			showWarning(
+				F.translate('notifications.no-changes-description'),
+				F.translate('notifications.no-changes-title')
+			);
+		}
+	}
+
 	function bindActions() {
 		$saveButton.on('click', function (e) {
-			if (!storage.isEmpty()) {
-				F.saveAll();
-			} else {
-				showWarning(
-					F.translate('notifications.no-changes-description'),
-					F.translate('notifications.no-changes-title')
-				);
-			}
+			save();
 		});
 
 		$('.t3-frontend-editing__discard').on('click', function () {
@@ -457,16 +462,109 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		callbacks = callbacks || {};
 
 		// Confirm dialog
-		alertify.confirm(message, function () {
-			// User clicked "ok"
-			if (typeof callbacks.yes === 'function') {
-				callbacks.yes();
-			}
-		}, function () {
-			if (typeof callbacks.no === 'function') {
-				callbacks.no();
-			}
-		});
+		if (message === F.translate('notifications.remove-all-changes')) {
+			TYPO3.Modal.confirm(
+				'Discard',
+				message,
+				top.TYPO3.Severity.warning,
+				[
+					{
+						text: 'Cancel',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.no === 'function') {
+								callbacks.no();
+							}
+						},
+						active: true,
+						btnClass: 'btn-default'
+					},
+					{
+						text: 'OK',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.yes === 'function') {
+								callbacks.yes();
+							}
+						},
+						active: false,
+						btnClass: 'btn-warning'
+					}
+				]
+			);
+		} else if (message === F.translate('notifications.unsaved-changes')) {
+			TYPO3.Modal.confirm(
+				'Navigate',
+				message,
+				top.TYPO3.Severity.warning,
+				[
+					{
+						text: 'Cancel',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.no === 'function') {
+								callbacks.no();
+							}
+						},
+						active: true,
+						btnClass: 'btn-default'
+					},
+					{
+						text: 'Save All',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.yes === 'function') {
+								save();
+								callbacks.yes();
+							}
+						},
+						active: false,
+						btnClass: 'btn-warning'
+					},
+					{
+						text: 'Discard and Navigate',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.yes === 'function') {
+								callbacks.yes();
+							}
+						},
+						active: false,
+						btnClass: 'btn-danger'
+					}
+				]
+			);
+		} else {
+			TYPO3.Modal.confirm(
+				'',
+				message,
+				top.TYPO3.Severity.warning,
+				[
+					{
+						text: 'Cancel',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.no === 'function') {
+								callbacks.no();
+							}
+						},
+						active: true,
+						btnClass: 'btn-default'
+					},
+					{
+						text: 'OK',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.yes === 'function') {
+								callbacks.yes();
+							}
+						},
+						active: false,
+						btnClass: 'btn-warning'
+					}
+				]
+			);
+		}
 	}
 
 	function windowOpen(url) {
