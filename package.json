@@ -5,8 +5,7 @@
   "scripts": {
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr/toastr.js ./Resources/Public/Javascript/contrib/toastr.js",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable/dist/immutable.js ./Resources/Public/Javascript/Contrib/immutable.js",
-    "add:resource:alertify": "NODE_ENV=production npm install && cp -a ./node_modules/alertify.js/dist/js/alertify.js ./Resources/Public/Javascript/Contrib/alertify.js",
-    "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:alertify && npm run build:css",
+    "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css",
     "watch:css": "node-sass -rwx Resources/Private/Sass/ -o Resources/Public/Css/",
     "check:css": "stylelint -s scss Resources/Private/Sass/",
     "compile:css": "node-sass -x Resources/Private/Sass/ -o Resources/Public/Css/",
@@ -18,8 +17,7 @@
   },
   "dependencies": {
     "toastr": "^2.1.2",
-    "immutable": "^3.8",
-    "alertify.js": "^1.0.12"
+    "immutable": "^3.8"
   },
   "devDependencies": {
     "node-sass": "^4.7.2",
