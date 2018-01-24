@@ -462,37 +462,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 		callbacks = callbacks || {};
 
 		// Confirm dialog
-		if (message === F.translate('notifications.remove-all-changes')) {
-			TYPO3.Modal.confirm(
-				'Discard',
-				message,
-				top.TYPO3.Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'OK',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					}
-				]
-			);
-		} else if (message === F.translate('notifications.unsaved-changes')) {
+		if (message === F.translate('notifications.unsaved-changes')) {
 			TYPO3.Modal.confirm(
 				'Navigate',
 				message,
@@ -536,7 +506,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			);
 		} else {
 			TYPO3.Modal.confirm(
-				'',
+				message,
 				message,
 				top.TYPO3.Severity.warning,
 				[
