@@ -534,6 +534,36 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 					}
 				]
 			);
+		} else {
+			TYPO3.Modal.confirm(
+				'',
+				message,
+				top.TYPO3.Severity.warning,
+				[
+					{
+						text: 'Cancel',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.no === 'function') {
+								callbacks.no();
+							}
+						},
+						active: true,
+						btnClass: 'btn-default'
+					},
+					{
+						text: 'OK',
+						trigger: function () {
+							$(this).trigger('modal-dismiss');
+							if (typeof callbacks.yes === 'function') {
+								callbacks.yes();
+							}
+						},
+						active: false,
+						btnClass: 'btn-warning'
+					}
+				]
+			);
 		}
 	}
 
