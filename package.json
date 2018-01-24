@@ -29,9 +29,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pixelant/frontend_editing.git"
+    "url": "https://github.com/friendsoftypo3/frontend_editing.git"
   },
-  "author": "Pixelant",
+  "author": "TYPO3 Community",
   "license": "ISC",
-  "homepage": "https://github.com/pixelant/frontend_editing"
+  "homepage": "https://github.com/friendsoftypo3/frontend_editing"
 }
