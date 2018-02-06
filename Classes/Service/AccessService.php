@@ -64,13 +64,18 @@ class AccessService implements SingletonInterface
     }
 
     /**
-     * Has the user edit rights for page?
+     * Has the user edit rights for page? (works with current page by default)
+     *
+     * @param array $page
      *
      * @return bool
      */
-    public function isPageEditAllowed(): bool
+    public function isPageEditAllowed($page = []): bool
     {
-        return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_EDIT);
+        if (!$page) {
+            $page = $GLOBALS['TSFE']->page;
+        }
+        return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::PAGE_EDIT);
     }
 
     /**
@@ -81,5 +86,20 @@ class AccessService implements SingletonInterface
     public function isPageCreateAllowed(): bool
     {
         return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_NEW);
+    }
+
+    /**
+     * Has the user edit rights for the parent page of a given content element?
+     *
+     * @param string $table
+     * @param int $uid
+     *
+     * @return bool
+     */
+    public function isParentPageEditAllowed($table, $uid): bool
+    {
+		$currentCE = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid);
+		$pageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class);
+        return $this->isPageEditAllowed($pageRepository->getPage($currentCE['pid']), Permission::PAGE_EDIT);
     }
 }

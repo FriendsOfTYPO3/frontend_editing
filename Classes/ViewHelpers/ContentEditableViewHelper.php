@@ -98,7 +98,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
         $content = $renderChildrenClosure();
         $content = ($content != null ? $content : '');
         $access = GeneralUtility::makeInstance(AccessService::class);
-        if (!$access->isEnabled()) {
+        if (!$access->isEnabled() || !$access->isParentPageEditAllowed($arguments['table'], $arguments['uid'])) {
             return $content;
         }
 
