@@ -98,8 +98,8 @@ class AccessService implements SingletonInterface
      */
     public function isParentPageEditAllowed($table, $uid): bool
     {
-		$currentCE = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid);
-		$pageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class);
+        $currentCE = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid);
+        $pageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class);
         return $this->isPageEditAllowed($pageRepository->getPage($currentCE['pid']), Permission::PAGE_EDIT);
     }
 }
