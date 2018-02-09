@@ -84,8 +84,8 @@ class ContentEditableViewHelper extends AbstractViewHelper
     /**
      * Add a content-editable div around the content
      *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
+     * @param array                     $arguments
+     * @param \Closure                  $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
      * @return string Rendered email link
@@ -98,7 +98,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
         $content = $renderChildrenClosure();
         $content = ($content != null ? $content : '');
         $access = GeneralUtility::makeInstance(AccessService::class);
-        if (!$access->isEnabled()) {
+        if (!$access->isEnabled() || !$access->isParentPageEditAllowed($arguments['table'], $arguments['uid'])) {
             return $content;
         }
 
