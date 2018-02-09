@@ -84,8 +84,8 @@ class ContentEditableViewHelper extends AbstractViewHelper
     /**
      * Add a content-editable div around the content
      *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
+     * @param array                     $arguments
+     * @param \Closure                  $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
      * @return string Rendered email link

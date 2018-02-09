@@ -92,7 +92,7 @@ class AccessService implements SingletonInterface
      * Has the user edit rights for the parent page of a given content element?
      *
      * @param string $table
-     * @param int $uid
+     * @param int    $uid
      *
      * @return bool
      */
