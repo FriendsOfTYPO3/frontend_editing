@@ -328,6 +328,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			event.preventDefault();
 			D3IndentedTree.resetFilter();
 		});
+
+		// Allow external scripts to iframeUrl when main window url is updated by script (history.pushState)
+        $iframe.on('update-url', function(e, url){
+            if(url.indexOf('frontend_editing') === -1){
+                url += (url.indexOf('?') === -1 ? '?' : '&') + 'frontend_editing=true';
+            }
+            iframeUrl = url;
+        });
 	}
 
 	function initGuiStates() {
