@@ -149,8 +149,6 @@ class FrontendEditingInitializationHook
         // Special content is about to be shown, so the cache must be disabled.
         $this->typoScriptFrontendController->set_no_cache('Display frontend editing', true);
 
-
-
         $requestUrl = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
         // Check if url has a ?, then decide on URL separator
         if (strpos($requestUrl, '?') !== false) {
@@ -158,7 +156,7 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true';
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
 
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
