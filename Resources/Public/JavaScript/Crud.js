@@ -174,6 +174,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			F.trigger(
 				F.UPDATE_CONTENT_COMPLETE,
 				{
+					title: 'Content deleted',
 					message: data.message
 				}
 			);
