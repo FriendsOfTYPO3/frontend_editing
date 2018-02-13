@@ -181,23 +181,26 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
 
 			if ($('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
-				
+
 				$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
 				$('.t3-frontend-editing__left-bar').stop().animate({left: t ? 0 : -280}, pushDuration, pushEasing);
-				
-				} else if ($('.t3-frontend-editing__right-bar').hasClass('open') && !$('.t3-frontend-editing__left-bar').hasClass('open')) {
-					$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
-					$('.t3-frontend-editing__left-bar').toggleClass('closed');
-				} else if (!$('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
-					$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
-					$('.t3-frontend-editing__right-bar').toggleClass('closed');					
-				}
-				else {
-					$('.t3-frontend-editing__right-bar').toggleClass('closed');
-					$('.t3-frontend-editing__left-bar').toggleClass('closed');
+
+			} else if ($('.t3-frontend-editing__right-bar').hasClass('open') && !$('.t3-frontend-editing__left-bar').hasClass('open')) {
+				$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+				$('.t3-frontend-editing__left-bar').toggleClass('closed');
+			} else if (!$('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
+				$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
+				$('.t3-frontend-editing__right-bar').toggleClass('closed');
 			}
+			else {
+				$('.t3-frontend-editing__right-bar').toggleClass('closed');
+				$('.t3-frontend-editing__left-bar').toggleClass('closed');
+			}
+			F.getStorage().addItem('fullScreenState', {
+				isActive: $('.t3-frontend-editing__full-view').hasClass('full-view-active')
+			});
 		});
-		
+
 
 		$('.t3-frontend-editing__page-tree li').click(function () {
 			var linkUrl = $(this).data('url');
@@ -214,7 +217,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			$('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
 
 			$('.t3-frontend-editing__ckeditor-bar').stop().animate({right: t ? 325 : 45}, pushDuration, pushEasing);
-			
+
 			updateRightPanelState();
 		});
 
@@ -230,7 +233,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			y = ++y % 2;
 
 			$('.t3-frontend-editing__ckeditor-bar').stop().animate({left: y ? 280 : 45}, pushDuration, pushEasing);
-			
+
 			$('.t3-frontend-editing__left-bar').stop().animate(
 				{
 					left: y ? 0 : -280
@@ -328,6 +331,14 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			event.preventDefault();
 			D3IndentedTree.resetFilter();
 		});
+
+		// Allow external scripts to iframeUrl when main window url is updated by script (history.pushState)
+		$iframe.on('update-url', function(e, url){
+			if(url.indexOf('frontend_editing') === -1){
+				url += (url.indexOf('?') === -1 ? '?' : '&') + 'frontend_editing=true';
+			}
+			iframeUrl = url;
+		});
 	}
 
 	function initGuiStates() {
@@ -355,6 +366,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 						}
 					}
 				}
+			}
+		}
+
+		if (typeof states.fullScreenState !== 'undefined') {
+			if(states.fullScreenState.isActive) {
+				$('.t3-frontend-editing__full-view').trigger('click');
 			}
 		}
 	}
