@@ -36,7 +36,4 @@ config.tx_extbase{
     }
 }
 
-# prevent links from being parsed to FE url
-lib.parseFunc_RTE.tags.a >
-
 [global]
