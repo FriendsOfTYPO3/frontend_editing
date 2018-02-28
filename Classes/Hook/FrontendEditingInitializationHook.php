@@ -163,6 +163,7 @@ class FrontendEditingInitializationHook
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
             $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
         // Initialize backend routes
