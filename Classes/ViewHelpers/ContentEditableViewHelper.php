@@ -14,6 +14,7 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
@@ -103,11 +104,12 @@ class ContentEditableViewHelper extends AbstractViewHelper
         }
 
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+        $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
         if (empty($arguments['field'])) {
             $content = $wrapperService->wrapContent(
                 $arguments['table'],
                 (int)$arguments['uid'],
-                [],
+                ($record ? $record : []),
                 $content
             );
         } else {
