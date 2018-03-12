@@ -188,9 +188,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		var links = nodes.descendants().slice(1),
 			icons = nodes.descendants();
 
-		d3.select('svg')
-			.transition()
-			.duration(duration); //transition to make svg looks smoother
+		d3.transition().duration(duration);
 
 		// returns all nodes and each descendant in pre-order traversal (sort)
 		nodes.eachBefore(function (n) {
@@ -251,8 +249,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		var nodeUpdate = nodeEnter.merge(node);
 
 		// Transition nodes to their new position.
-		nodeUpdate.transition()
-			.duration(duration)
+		nodeUpdate
 			.attr('transform', function (d) {
 				return 'translate(' + d.y + ',' + d.x + ')';
 			})
@@ -270,8 +267,7 @@ define(['jquery', 'd3'], function ($, d3) {
 			.attr('cursor', 'pointer');
 
 		// Transition exiting nodes to the parent's new position.
-		var nodeExit = node.exit().transition()
-			.duration(duration)
+		var nodeExit = node.exit()
 			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
 			.remove();
@@ -304,15 +300,13 @@ define(['jquery', 'd3'], function ($, d3) {
 		var linkUpdate = linkEnter.merge(link);
 
 		// Transition back to the parent element position
-		linkUpdate.transition()
-			.duration(duration)
+		linkUpdate
 			.attr('d', function (d) {
 				return _diagonal(d, d.parent)
 			});
 
 		// Remove any exiting links
-		link.exit().transition()
-			.duration(duration)
+		link.exit()
 			.attr('d', function (d) {
 				var o = {x: source.x, y: source.y};
 				return _diagonal(o, o)
@@ -354,29 +348,25 @@ define(['jquery', 'd3'], function ($, d3) {
 		var iconUpdate = iconEnter.merge(icon);
 		var iconUpdate2 = iconEnter2.merge(icon2);
 		// Transition back to the parent element position
-		iconUpdate.transition()
-			.duration(duration)
+		iconUpdate
 			.attr('transform', function (d) {
 				return 'translate(' + (d.y + iconWidth / 2) + ',' + (d.x - iconHeight / 2) + ')';
 			})
 			.style('opacity', 1);
 
-		iconUpdate2.transition()
-			.duration(duration)
+		iconUpdate2
 			.attr('transform', function (d) {
 				return 'translate(' + (d.y + iconOverlayWidth / 2) + ',' + (d.x - iconOverlayHeight / 2) + ')';
 			})
 			.style('opacity', 1);
 
 		// Remove any exiting links
-		icon.exit().transition()
-			.duration(duration)
+		icon.exit()
 			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
 			.remove();
 
-		icon2.exit().transition()
-			.duration(duration)
+		icon2.exit()
 			.attr('transform', 'translate(' + source.y + ',' + source.x + ')')
 			.style('opacity', 1e-6)
 			.remove();
