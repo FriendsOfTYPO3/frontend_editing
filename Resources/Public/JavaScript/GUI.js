@@ -14,7 +14,7 @@
 /**
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'TYPO3/CMS/Backend/Modal'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'TYPO3/CMS/Backend/Modal', 'TYPO3/CMS/Backend/Severity'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, Modal, Severity) {
 	'use strict';
 
 	// Extend FrontendEditing with additional events
@@ -483,7 +483,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			TYPO3.Modal.confirm(
 				'Navigate',
 				message,
-				top.TYPO3.Severity.warning,
+				Severity.warning,
 				[
 					{
 						text: 'Cancel',
@@ -525,7 +525,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			TYPO3.Modal.confirm(
 				message,
 				message,
-				top.TYPO3.Severity.warning,
+				Severity.warning,
 				[
 					{
 						text: 'Cancel',
