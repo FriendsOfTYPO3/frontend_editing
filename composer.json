@@ -17,7 +17,8 @@
 		"clickstorm/cs_seo": "~2.1.0"
 	},
 	"replace": {
-		"frontend_editing": "self.version"
+		"frontend_editing": "self.version",
+		"typo3-ter/frontend-editing": "self.version"
 	},
 	"autoload": {
 		"psr-4": {
