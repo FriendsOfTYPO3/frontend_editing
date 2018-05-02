@@ -173,7 +173,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D
 			y = ++y % 2;
 			u = ++u % 2;
 
-			$('.t3-frontend-editing__top-bar').stop().animate({top: u ? 0 : -55}, pushDuration, pushEasing);
+			$('.t3-frontend-editing__top-bar').stop().animate({top: u ? 0 : -160}, pushDuration, pushEasing);
 
 			$('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
 			$('.t3-frontend-editing__full-view').toggleClass('full-view-active');
