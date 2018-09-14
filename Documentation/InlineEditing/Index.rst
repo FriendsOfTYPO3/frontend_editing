@@ -43,11 +43,19 @@ When it comes to fluid_styled_content there are some things that needs to be
 adjusted to your template to get the editing to work. First of all there is
 a view helper that needs to be included and configured.
 
+Namespace:
+
+.. code-block:: html
+	
+	<html xmlns:core="http://typo3.org/ns/TYPO3/CMS/FrontendEditing/ViewHelpers"
+	      data-namespace-typo3-fluid="true">
+		
+	</html>
+
 First, find the content that you want editable and wrap it with the view
 helper:
 
 .. code-block:: html
-
 	<core:contentEditable table="tt_content" field="bodytext" uid="{item.uid}">
 		{item.bodytext}
 	</core:contentEditable>
