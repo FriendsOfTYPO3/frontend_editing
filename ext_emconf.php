@@ -10,12 +10,12 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'TYPO3 Community',
     'author_email' => 'typo3cms@typo3.org',
     'author_company' => '',
-    'version' => '1.3.7',
+    'version' => '1.4.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-9.1.99',
-            'setup' => '8.7.0-9.1.99',
-            'rte_ckeditor' => '8.7.0-9.1.99'
+            'typo3' => '8.7.0-9.5.99',
+            'setup' => '8.7.0-9.5.99',
+            'rte_ckeditor' => '8.7.0-9.5.99'
         ],
         'conflicts' => [
             'feedit' => '',
