@@ -14,7 +14,23 @@
 /**
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Crud', 'TYPO3/CMS/FrontendEditing/D3IndentedTree', 'TYPO3/CMS/FrontendEditing/Editor', 'toastr', 'TYPO3/CMS/Backend/Modal', 'TYPO3/CMS/Backend/Severity'], function ($, FrontendEditing, D3IndentedTree, Editor, toastr, Modal, Severity) {
+define([
+		'jquery',
+		'TYPO3/CMS/FrontendEditing/Crud',
+		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
+		'TYPO3/CMS/FrontendEditing/Editor',
+		'toastr',
+		'TYPO3/CMS/Backend/Modal',
+		'TYPO3/CMS/Backend/Severity'
+	], function (
+		$,
+		FrontendEditing,
+		D3IndentedTree,
+		Editor,
+		toastr,
+		Modal,
+		Severity
+	) {
 	'use strict';
 
 	// Extend FrontendEditing with additional events

@@ -318,7 +318,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 				$.extend(true, fullUrlObj, defaultValues, newUrlQueryStringObj);
 				var fullUrlQueryString = F.serializeObj(fullUrlObj);
 				F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
-			}catch(e){
+			} catch(e) {
 				F.loadInModal(url);
 			}
 		},
