@@ -15,22 +15,22 @@
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
 define([
+		'/typo3/sysext/backend/Resources/Public/JavaScript/backend.js',
 		'jquery',
 		'TYPO3/CMS/FrontendEditing/Crud',
 		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 		'TYPO3/CMS/FrontendEditing/Editor',
 		'toastr',
-		// 'TYPO3/CMS/Backend/Modal',
-		// 'TYPO3/CMS/Backend/Icons',
+		'TYPO3/CMS/Backend/Modal',
 		'TYPO3/CMS/Backend/Severity'
 	], function (
+		backend,
 		$,
 		FrontendEditing,
 		D3IndentedTree,
 		Editor,
 		toastr,
-		// Modal,
-		// Icons,
+		Modal,
 		Severity
 	) {
 	'use strict';
@@ -498,7 +498,7 @@ define([
 
 		// Confirm dialog
 		if (message === F.translate('notifications.unsaved-changes')) {
-			Modal.confirm(
+			TYPO3.Modal.confirm(
 				'Navigate',
 				message,
 				Severity.warning,
@@ -540,7 +540,7 @@ define([
 				]
 			);
 		} else {
-			Modal.confirm(
+			TYPO3.Modal.confirm(
 				message,
 				message,
 				Severity.warning,
