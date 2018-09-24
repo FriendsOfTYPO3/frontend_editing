@@ -20,7 +20,8 @@ define([
 		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 		'TYPO3/CMS/FrontendEditing/Editor',
 		'toastr',
-		'TYPO3/CMS/Backend/Modal',
+		// 'TYPO3/CMS/Backend/Modal',
+		// 'TYPO3/CMS/Backend/Icons',
 		'TYPO3/CMS/Backend/Severity'
 	], function (
 		$,
@@ -28,7 +29,8 @@ define([
 		D3IndentedTree,
 		Editor,
 		toastr,
-		Modal,
+		// Modal,
+		// Icons,
 		Severity
 	) {
 	'use strict';
@@ -496,7 +498,7 @@ define([
 
 		// Confirm dialog
 		if (message === F.translate('notifications.unsaved-changes')) {
-			TYPO3.Modal.confirm(
+			Modal.confirm(
 				'Navigate',
 				message,
 				Severity.warning,
@@ -538,7 +540,7 @@ define([
 				]
 			);
 		} else {
-			TYPO3.Modal.confirm(
+			Modal.confirm(
 				message,
 				message,
 				Severity.warning,

@@ -235,6 +235,7 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/GUI', 'function(FrontendEditing) {
 
             // The global F object for API calls
+            // var TYPO3 = TYPO3 || {};
             window.F = new FrontendEditing();
             window.F.initGUI({
                 content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
