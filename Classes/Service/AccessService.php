@@ -89,23 +89,14 @@ class AccessService implements SingletonInterface
     }
 
     /**
-     * Has the user edit rights for the parent page of a given content element?
+     * Has the user edit rights for the content of the page?
      *
-     * @param string $table
-     * @param int    $uid
+     * @param array $page
      *
      * @return bool
      */
-    public function isParentPageEditAllowed($table, $uid): bool
+    public function isPageContentEditAllowed(array $page): bool
     {
-        try {
-            $currentCE = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord($table, $uid);
-            $pageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class);
-            return $this->isPageEditAllowed($pageRepository->getPage($currentCE['pid']), Permission::PAGE_EDIT);
-        } catch (\Exception $exception) {
-            // Suppress and continue access check
-        }
-
-        return true;
+        return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::CONTENT_EDIT);
     }
 }
