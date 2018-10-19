@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
@@ -85,8 +86,8 @@ class ContentEditableViewHelper extends AbstractViewHelper
     /**
      * Add a content-editable div around the content
      *
-     * @param array                     $arguments
-     * @param \Closure                  $renderChildrenClosure
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
      * @return string Rendered email link
@@ -98,13 +99,16 @@ class ContentEditableViewHelper extends AbstractViewHelper
     ) {
         $content = $renderChildrenClosure();
         $content = ($content != null ? $content : '');
+        $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
+
         $access = GeneralUtility::makeInstance(AccessService::class);
-        if (!$access->isEnabled() || !$access->isParentPageEditAllowed($arguments['table'], $arguments['uid'])) {
+        if (!$access->isEnabled()
+            || !$access->isPageContentEditAllowed(GeneralUtility::makeInstance(PageRepository::class)->getPage_noCheck($record['pid']))
+        ) {
             return $content;
         }
 
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
         if (empty($arguments['field'])) {
             $content = $wrapperService->wrapContent(
                 $arguments['table'],
