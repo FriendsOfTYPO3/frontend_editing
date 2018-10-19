@@ -255,6 +255,7 @@ class ContentEditableFixtures
 
     /**
      * @param bool $enabled
+     * @throws \Exception
      */
     public static function setAccessServiceEnabled(bool $enabled)
     {
