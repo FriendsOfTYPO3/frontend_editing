@@ -102,35 +102,37 @@ class ContentEditableViewHelper extends AbstractViewHelper
         $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
 
         $access = GeneralUtility::makeInstance(AccessService::class);
-        $isPageContentEditAllowed = true;
-        try {
-            $isPageContentEditAllowed = $access->isPageContentEditAllowed(
-                GeneralUtility::makeInstance(PageRepository::class)
-                ->getPage_noCheck($record['pid'])
-            );
-        } catch (\Exception $exception) {
-            // Suppress Exception
-        }
+        if ($access->isBackendContext()) {
+            $isPageContentEditAllowed = true;
+            try {
+                $isPageContentEditAllowed = $access->isPageContentEditAllowed(
+                    GeneralUtility::makeInstance(PageRepository::class)
+                        ->getPage_noCheck($record['pid'])
+                );
+            } catch (\Exception $exception) {
+                // Suppress Exception
+            }
 
-        if (!$access->isEnabled() || !$isPageContentEditAllowed) {
-            return $content;
-        }
+            if (!$access->isEnabled() || !$isPageContentEditAllowed) {
+                return $content;
+            }
 
-        $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        if (empty($arguments['field'])) {
-            $content = $wrapperService->wrapContent(
-                $arguments['table'],
-                (int)$arguments['uid'],
-                ($record ? $record : []),
-                $content
-            );
-        } else {
-            $content = $wrapperService->wrapContentToBeEditable(
-                $arguments['table'],
-                $arguments['field'],
-                (int)$arguments['uid'],
-                $content
-            );
+            $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+            if (empty($arguments['field'])) {
+                $content = $wrapperService->wrapContent(
+                    $arguments['table'],
+                    (int)$arguments['uid'],
+                    ($record ? $record : []),
+                    $content
+                );
+            } else {
+                $content = $wrapperService->wrapContentToBeEditable(
+                    $arguments['table'],
+                    $arguments['field'],
+                    (int)$arguments['uid'],
+                    $content
+                );
+            }
         }
         return $content;
     }

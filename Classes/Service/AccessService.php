@@ -99,4 +99,14 @@ class AccessService implements SingletonInterface
     {
         return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::CONTENT_EDIT);
     }
+
+    /**
+     * Check if it is backend context
+     *
+     * @return bool
+     */
+    public function isBackendContext(): bool
+    {
+        return (isset($GLOBALS['BE_USER'])) ? true : false;
+    }
 }
