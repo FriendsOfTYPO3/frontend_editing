@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
  */
 
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3\CMS\FrontendEditing\ViewHelpers\ContentEditableViewHelper;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
@@ -80,9 +81,18 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
      * @param mixed $value
      * @param array $arguments
      * @param string $expected
+     * @throws \Exception
      */
     public function testRenderWithFrontendEditingEnabled($value, array $arguments, $expected)
     {
+        // Simulate BackendUserAuthentication object
+        $GLOBALS['BE_USER'] = $this->getMock(
+            BackendUserAuthentication::class,
+            [],
+            [],
+            '',
+            false
+        );
         ContentEditableFixtures::setAccessServiceEnabled(true);
         $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
         $instance->expects($this->once())->method('renderChildren')->willReturn($value);

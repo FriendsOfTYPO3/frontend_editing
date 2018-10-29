@@ -103,14 +103,15 @@ class ContentEditableViewHelper extends AbstractViewHelper
 
         $access = GeneralUtility::makeInstance(AccessService::class);
         if ($access->isBackendContext()) {
-            $isPageContentEditAllowed = true;
+            $isPageContentEditAllowed = false;
             try {
                 $isPageContentEditAllowed = $access->isPageContentEditAllowed(
                     GeneralUtility::makeInstance(PageRepository::class)
                         ->getPage_noCheck($record['pid'])
                 );
             } catch (\Exception $exception) {
-                // Suppress Exception
+                // Suppress Exception and no database access
+                $isPageContentEditAllowed = true;
             }
 
             if (!$access->isEnabled() || !$isPageContentEditAllowed) {
