@@ -133,6 +133,7 @@ class FrontendEditingInitializationHook
      * @param array $params
      * @param TypoScriptFrontendController $parentObject
      * @return void
+     * @throws \Exception
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
@@ -344,9 +345,6 @@ class FrontendEditingInitializationHook
                     ),
                     'immutable' => $this->getAbsolutePath(
                         'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'
-                    ),
-                    'alertify' => $this->getAbsolutePath(
-                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/alertify'
                     ),
                     'ckeditor' => $this->getAbsolutePath(
                         'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'
