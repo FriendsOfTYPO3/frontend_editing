@@ -17,6 +17,8 @@ namespace TYPO3\CMS\FrontendEditing\RequestPreProcess;
 
 /**
  * Hook for saving content element "bullets"
+ *
+ * Thanks for to Georg Ringer (mail@ringer.it) for the initial work.
  */
 class CeBullets implements RequestPreProcessInterface
 {

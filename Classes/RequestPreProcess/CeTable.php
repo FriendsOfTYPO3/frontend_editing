@@ -21,6 +21,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook for saving content element "table"
+ *
+ * Thanks for to Georg Ringer (mail@ringer.it) for the initial work.
  */
 class CeTable implements RequestPreProcessInterface
 {

@@ -17,6 +17,8 @@ namespace TYPO3\CMS\FrontendEditing\RequestPreProcess;
 
 /**
  * Hook for saving content element "header"
+ *
+ * Thanks for to Georg Ringer (mail@ringer.it) for the initial work.
  */
 class CeHeader implements RequestPreProcessInterface
 {

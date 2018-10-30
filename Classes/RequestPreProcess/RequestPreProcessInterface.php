@@ -17,6 +17,8 @@ namespace TYPO3\CMS\FrontendEditing\RequestPreProcess;
 
 /**
  * Interface RequestPreProcessInterface
+ *
+ * Thanks for to Georg Ringer (mail@ringer.it) for the initial work.
  */
 interface RequestPreProcessInterface
 {
