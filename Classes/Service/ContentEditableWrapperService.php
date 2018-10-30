@@ -21,16 +21,43 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 
 /**
  * A class for adding wrapping for a content element to be editable
  */
 class ContentEditableWrapperService
 {
+    const DEFAULT_WRAPPER_TAG_NAME = 'div';
+
+    /**
+     * @var ExtensionManagerConfigurationService
+     */
+    protected $extensionManagerConfigurationService;
+
     /**
      * @var IconFactory
      */
     protected $iconFactory;
+
+    /**
+     * @var string
+     */
+    protected $contentEditableWrapperTagName;
+
+    /**
+     * ContentEditableWrapperService constructor
+     */
+    public function __construct()
+    {
+        $this->extensionManagerConfigurationService =
+            GeneralUtility::makeInstance(ExtensionManagerConfigurationService::class);
+        $this->contentEditableWrapperTagName = self::DEFAULT_WRAPPER_TAG_NAME;
+        $tagName = $this->extensionManagerConfigurationService->getSettings()['contentEditableWrapperTagName'];
+        if ($tagName) {
+            $this->contentEditableWrapperTagName = $tagName;
+        }
+    }
 
     /**
      * Add the proper wrapping (html tag) to make the content editable by CKEditor
@@ -53,13 +80,17 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163287);
         }
 
+
+
         $content = sprintf(
-            '<div contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</div>',
+            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</%s>',
+            $this->contentEditableWrapperTagName,
             $table,
             $field,
             $uid,
             $this->checkIfContentElementIsHidden($table, (int)$uid),
-            $content
+            $content,
+            $this->contentEditableWrapperTagName
         );
 
         return $content;
@@ -93,13 +124,14 @@ class ContentEditableWrapperService
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
         $content = sprintf(
-            '<div class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
+            '<%s class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
                 ' ondragstart="window.parent.F.dragCeStart(event)"' .
                 ' ondragend="window.parent.F.dragCeEnd(event)">' .
                 '<span style="display:none;" class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
                     ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
-            '</div>',
+            '</%s>',
+            $this->contentEditableWrapperTagName,
             $hiddenElementClassName,
             $recordTitle,
             $class,
@@ -110,7 +142,8 @@ class ContentEditableWrapperService
             $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid)),
             $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle),
-            $content
+            $content,
+            $this->contentEditableWrapperTagName
         );
 
         return $content;
@@ -149,8 +182,9 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__dropzone';
 
         $dropZone = sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-                'data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></div>',
+            '<%s class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+                'data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></%s>',
+            $this->contentEditableWrapperTagName,
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
@@ -158,7 +192,8 @@ class ContentEditableWrapperService
             $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
             $uid,
             $colPos,
-            htmlspecialchars(json_encode($defaultValues))
+            htmlspecialchars(json_encode($defaultValues)),
+            $this->contentEditableWrapperTagName
         );
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);
@@ -194,15 +229,17 @@ class ContentEditableWrapperService
         $class = 't3-frontend-editing__dropzone';
 
         $dropZone = sprintf(
-            '<div class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-            'data-tables="%s" data-defvals="%s" data-pid="%s"></div>',
+            '<%s class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
+            'data-tables="%s" data-defvals="%s" data-pid="%s"></%s>',
+            $this->contentEditableWrapperTagName,
             $class,
             $jsFuncOnDrop,
             $jsFuncOnDragover,
             $jsFuncOnDragLeave,
             $tables,
             htmlspecialchars(json_encode($defaultValues)),
-            $pageUid
+            $pageUid,
+            $this->contentEditableWrapperTagName
         );
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);

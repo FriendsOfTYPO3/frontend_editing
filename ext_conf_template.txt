@@ -1,2 +1,5 @@
 # cat=providers/enable/100; type=options[None=none,[clickstorm] SEO (cs_seo)=cs_seo]; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.seo_provider
 seoProvider = none
+
+# cat=basic/enable/20; type=string; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.content_editable_wrapper_tag_name
+contentEditableWrapperTagName = div
