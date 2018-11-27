@@ -108,11 +108,11 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 								size: Modal.sizes.large,
 								callback: function (currentModal) {
 									// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
-									currentModal.find(Modal.identifiers.iframe).on('load', function () {
+									currentModal.find(Modal.types.iframe).on('load', function () {
 										top.TYPO3.Backend = top.TYPO3.Backend || {};
 										top.TYPO3.Backend.ContentContainer = {
 											get: function () {
-												return currentModal.find(Modal.identifiers.iframe).get(0).contentWindow;
+												return currentModal.find(Modal.types.iframe).get(0).contentWindow;
 											}
 										};
 									});
