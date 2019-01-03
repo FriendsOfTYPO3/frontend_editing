@@ -85,15 +85,19 @@ define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR)
 					if (!storage.isEmpty()) {
 						F.confirm(F.translate('notifications.unsaved-changes'), {
 							yes: function () {
-								// Do nothing
+								openModal($(this));
 							},
 							no: function () {
 								return false;
 							}
 						});
 					} else {
+						openModal($(this));
+					}
+
+					function openModal(button) {
 						var url = that.data('edit-url');
-						if ($(this).data('identifier') === 'actions-document-new') {
+						if (button.data('identifier') === 'actions-document-new') {
 							url = that.data('new-url');
 						}
 						require([
