@@ -531,6 +531,9 @@ define([
 						trigger: function () {
 							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.yes === 'function') {
+								storage.clear();
+								F.refreshIframe();
+								F.trigger(F.CONTENT_CHANGE);
 								callbacks.yes();
 							}
 						},
