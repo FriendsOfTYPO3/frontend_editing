@@ -20,7 +20,7 @@ define([
 		'TYPO3/CMS/FrontendEditing/Crud',
 		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 		'TYPO3/CMS/FrontendEditing/Editor',
-		'toastr',
+		'TYPO3/CMS/FrontendEditing/Contrib/toastr',
 		'TYPO3/CMS/Backend/Modal',
 		'TYPO3/CMS/Backend/Severity'
 	], function (

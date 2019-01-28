@@ -14,7 +14,11 @@
 /**
  * Editor: used in iframe for DOM interaction
  */
-define(['jquery', 'ckeditor', 'ckeditor-jquery-adapter'], function ($, CKEDITOR) {
+define([
+	'jquery'
+], function (
+	$
+) {
 	'use strict';
 
 	var defaultEditorConfig = {

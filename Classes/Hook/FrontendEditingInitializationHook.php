@@ -337,20 +337,22 @@ class FrontendEditingInitializationHook
                     'ckeditor-jquery-adapter' => ['jquery', 'ckeditor'],
                 ],
                 'paths' => [
-                    'ckeditor-jquery-adapter' => $this->getAbsolutePath(
-                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter'
-                    ),
-                    'toastr' => $this->getAbsolutePath(
+                    'TYPO3/CMS/FrontendEditing/Contrib/toastr' => $this->getAbsolutePath(
                         'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'
                     ),
-                    'immutable' => $this->getAbsolutePath(
+                    'TYPO3/CMS/FrontendEditing/Contrib/immutable' => $this->getAbsolutePath(
                         'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'
-                    ),
-                    'ckeditor' => $this->getAbsolutePath(
-                        'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor'
                     )
                 ]
             ]
+        );
+
+        // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
+        $this->pageRenderer->addJsFile(
+            $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js')
+        );
+        $this->pageRenderer->addJsFile(
+            $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js')
         );
 
         $configuration = $this->getPluginConfiguration();
@@ -376,6 +378,7 @@ class FrontendEditingInitializationHook
      * Get the page tree structure of the current tree
      *
      * @return array
+     * @throws \Exception
      */
     protected function getPageTreeStructure(): array
     {
@@ -393,6 +396,7 @@ class FrontendEditingInitializationHook
      *
      * @param int $startingPoint
      * @return array
+     * @throws \Exception
      */
     protected function getStructureForSinglePageTree(int $startingPoint): array
     {
@@ -435,6 +439,7 @@ class FrontendEditingInitializationHook
      * @param array $tree
      * @param int $depth
      * @return array
+     * @throws \Exception
      */
     protected function generateTreeData(array $tree, int $depth = 1000): array
     {
@@ -473,6 +478,7 @@ class FrontendEditingInitializationHook
      *
      * @param array $row
      * @return string
+     * @throws \Exception
      */
     protected function getTreeItemIconPath(array $row): string
     {
@@ -497,6 +503,7 @@ class FrontendEditingInitializationHook
      *
      * @param array $row
      * @return string
+     * @throws \Exception
      */
     protected function getTreeItemIconOverlayPath(array $row): string
     {

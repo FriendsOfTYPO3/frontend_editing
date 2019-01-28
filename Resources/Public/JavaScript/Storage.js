@@ -16,7 +16,7 @@
  * has no dependencies to any other Frontend Editing related functionality
  * but is used in the main Frontend Editing app js.
  */
-define(['immutable'], function (Immutable) {
+define(['TYPO3/CMS/FrontendEditing/Contrib/immutable'], function (Immutable) {
 	'use strict';
 
 	var Storage = function(storageKey) {
