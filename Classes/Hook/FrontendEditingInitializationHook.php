@@ -352,7 +352,9 @@ class FrontendEditingInitializationHook
             $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js')
         );
         $this->pageRenderer->addJsFile(
-            $this->getAbsolutePath('EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js')
+            $this->getAbsolutePath(
+                'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
+            )
         );
 
         $configuration = $this->getPluginConfiguration();
