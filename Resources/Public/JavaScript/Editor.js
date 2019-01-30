@@ -115,6 +115,7 @@ define([
 								content: url,
 								size: Modal.sizes.large,
 								callback: function (currentModal) {
+									currentModal.find('iframe').attr('name', 'list_frame');
 									// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
 									currentModal.find(Modal.types.iframe).on('load', function () {
 										top.TYPO3.Backend = top.TYPO3.Backend || {};
