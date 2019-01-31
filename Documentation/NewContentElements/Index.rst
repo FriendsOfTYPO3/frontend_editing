@@ -32,6 +32,14 @@ Allowed record are registered in TypoScript as follows:
         }
     }
 
+After the Typoscript is added you also need to adjust the Fluid template with
+the following code:
+
+.. code-block:: html
+
+	<core:customDropZone tables="{0:'tx_news_domain_model_news'}">
+	</core:customDropZone>
+
 The result will be this:
 
   .. figure:: ../Images/CustomRecordsDropzone.png
