@@ -37,8 +37,8 @@ the following code:
 
 .. code-block:: html
 
-	<core:customDropZone tables="{0:'tx_news_domain_model_news'}">
-	</core:customDropZone>
+    <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
+    </core:customDropZone>
 
 The result will be this:
 
