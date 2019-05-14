@@ -3,6 +3,7 @@ language: php
 php:
   - 7.0
   - 7.1
+  - 7.2
 
 sudo: false
 
@@ -29,3 +30,4 @@ before_install:
 script:
   # Run full test suite and linting of the code base
   - npm run build:suite
+  - .Build/bin/php-cs-fixer fix --config=Build/.php_cs -v --dry-run --using-cache=no
