@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\CMS\FrontendEditing\Service;
 
@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -74,13 +73,13 @@ class ContentEditableWrapperService
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
-        } elseif (empty($field)) {
+        }
+        if (empty($field)) {
             throw new \InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
-        } elseif (empty($uid)) {
+        }
+        if (empty($uid)) {
             throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163287);
         }
-
-
 
         $content = sprintf(
             '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</%s>',
@@ -111,7 +110,8 @@ class ContentEditableWrapperService
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163297);
-        } elseif (empty($uid)) {
+        }
+        if (empty($uid)) {
             throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163305);
         }
 
@@ -172,7 +172,8 @@ class ContentEditableWrapperService
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
-        } elseif ($uid < 0) {
+        }
+        if ($uid < 0) {
             throw new \InvalidArgumentException('Property "uid" is not valid!', 1486163439);
         }
 
@@ -263,7 +264,7 @@ class ContentEditableWrapperService
 
         $moveIcons = ($table === 'tt_content') ?
             $this->renderIconWithWrap('moveUp', 'actions-move-up') .
-                $this->renderIconWithWrap("moveDown", 'actions-move-down') : '';
+                $this->renderIconWithWrap('moveDown', 'actions-move-down') : '';
 
         $inlineIcons =
             $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
@@ -294,7 +295,7 @@ class ContentEditableWrapperService
             $editRecordTitle .= ' \'' . $recordTitle . '\'';
         }
 
-        return '<span title="' . $editRecordTitle. '">'
+        return '<span title="' . $editRecordTitle . '">'
             . $this->iconFactory->getIcon($iconKey, Icon::SIZE_SMALL)->render() . '</span>';
     }
 

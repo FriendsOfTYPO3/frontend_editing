@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\CMS\FrontendEditing\Provider\Seo;
 
@@ -18,7 +18,6 @@ namespace TYPO3\CMS\FrontendEditing\Provider\Seo;
 
 /**
  * The Base SEO provider for ranking.
- * @package TYPO3\CMS\FrontendEditing\Provider\Seo
  */
 class BaseSeoProvider
 {
@@ -29,7 +28,7 @@ class BaseSeoProvider
     protected $scores;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $pageScore = 0;
 

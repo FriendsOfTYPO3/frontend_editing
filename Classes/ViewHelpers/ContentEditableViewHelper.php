@@ -16,8 +16,8 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -57,8 +57,6 @@ class ContentEditableViewHelper extends AbstractViewHelper
 
     /**
      * Initialize arguments
-     *
-     * @return void
      */
     public function initializeArguments()
     {

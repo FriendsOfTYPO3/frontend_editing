@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
 /*
@@ -22,8 +22,6 @@ use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 /**
  * Hook is called in ContentObjectRenderer when rendering CONTENT
  * It's used to determine if content column is empty and add drop zone
- *
- * @package TYPO3\CMS\FrontendEditing\Hook
  */
 class ContentObjectRendererHook
 {

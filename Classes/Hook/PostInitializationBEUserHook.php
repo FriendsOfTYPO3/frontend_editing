@@ -17,7 +17,6 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -25,8 +24,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * Hook is called in TypoScriptFrontendController after BE user initialization
  * Used for BE user initialization if FEEDIT_BE_SESSION_KEY was passed
- *
- * @package TYPO3\CMS\FrontendEditing\Hook
  */
 class PostInitializationBEUserHook implements SingletonInterface
 {
@@ -40,8 +37,6 @@ class PostInitializationBEUserHook implements SingletonInterface
 
     /**
      * Initialize BE user if session key is valid
-     *
-     * @return void
      */
     public function initializeBackendUser(array $params, TypoScriptFrontendController $parentOject)
     {

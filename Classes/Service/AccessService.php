@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Service;
 
 /*
@@ -15,8 +15,8 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**

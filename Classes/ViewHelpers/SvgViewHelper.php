@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -24,7 +24,7 @@ class SvgViewHelper extends AbstractViewHelper
     use CompileWithRenderStatic;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
@@ -57,7 +57,7 @@ class SvgViewHelper extends AbstractViewHelper
         $sourceAbs = GeneralUtility::getFileAbsFileName($arguments['source']);
 
         if (!file_exists($sourceAbs)) {
-            return 'no SVG file on /'.$arguments['source'];
+            return 'no SVG file on /' . $arguments['source'];
         }
 
         return self::getInlineSvg($sourceAbs, $arguments);

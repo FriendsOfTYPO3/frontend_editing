@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
@@ -30,9 +30,10 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -42,7 +43,6 @@ use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\Lang\LanguageService;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -116,7 +116,6 @@ class FrontendEditingInitializationHook
      *
      * @param array $params
      * @param TypoScriptFrontendController $parentObject
-     * @return void
      */
     public function unsetPageSetup(array $params, TypoScriptFrontendController $parentObject)
     {
@@ -132,7 +131,6 @@ class FrontendEditingInitializationHook
      *
      * @param array $params
      * @param TypoScriptFrontendController $parentObject
-     * @return void
      * @throws \Exception
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
@@ -262,7 +260,6 @@ class FrontendEditingInitializationHook
                 }
             };
         }');
-
 
         $view = $this->initializeView();
         $view->assignMultiple([
