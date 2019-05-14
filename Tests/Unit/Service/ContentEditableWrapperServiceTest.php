@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 
 /*
@@ -16,8 +16,8 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
  */
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
-use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService.
@@ -36,8 +36,6 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
 
     /**
      * Set up for the
-     *
-     * @return void
      */
     protected function setUp()
     {
@@ -46,7 +44,6 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
     }
 
     /**
-     * @return void
      */
     protected function tearDown()
     {

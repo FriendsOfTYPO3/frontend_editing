@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 /*
@@ -15,9 +15,9 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Nimut\TestingFramework\Rendering\RenderingContextFixture;
 use Nimut\TestingFramework\TestCase\ViewHelperBaseTestcase;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
-use Nimut\TestingFramework\Rendering\RenderingContextFixture;
 use TYPO3\CMS\FrontendEditing\ViewHelpers\CustomDropZoneViewHelper;
 
 /**

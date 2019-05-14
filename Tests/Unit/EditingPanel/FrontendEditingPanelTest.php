@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 /*
@@ -15,15 +15,15 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
-use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel.
@@ -69,11 +69,11 @@ class FrontendEditingPanelTest extends UnitTestCase
         $GLOBALS['TSFE'] = $this->frontendControllerMock;
     }
 
-     /**
-     * Data provider for editIcons.
-     *
-     * @return array []
-     */
+    /**
+    * Data provider for editIcons.
+    *
+    * @return array []
+    */
     public function editIconsDataProvider()
     {
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
@@ -170,9 +170,9 @@ class FrontendEditingPanelTest extends UnitTestCase
                     )
                 ),
                 'tt_content:header',
-                ['beforeLastTag' => '1','allow' => 'edit'],
+                ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'tt_content:12',
-                ['uid' => 12, 'pid' => 1,'CType' => 'text', 'header' => $content],
+                ['uid' => 12, 'pid' => 1, 'CType' => 'text', 'header' => $content],
                 '',
                 'tt_content',
                 '12',
@@ -184,9 +184,9 @@ class FrontendEditingPanelTest extends UnitTestCase
                 $content,
                 $content,
                 'tt_content:bodytext',
-                ['beforeLastTag' => '1','allow' => 'edit'],
+                ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'tt_content:1',
-                ['uid' => 1, 'pid' => 1,'CType' => 'text', 'bodytext' => $content],
+                ['uid' => 1, 'pid' => 1, 'CType' => 'text', 'bodytext' => $content],
                 '',
                 'tt_content',
                 '1',
@@ -198,9 +198,9 @@ class FrontendEditingPanelTest extends UnitTestCase
                 $content,
                 $content,
                 'tt_content:bodytext',
-                ['beforeLastTag' => '1','allow' => 'edit'],
+                ['beforeLastTag' => '1', 'allow' => 'edit'],
                 'tt_content:1',
-                ['uid' => 1, 'pid' => 1,'CType' => 'text', 'bodytext' => $content],
+                ['uid' => 1, 'pid' => 1, 'CType' => 'text', 'bodytext' => $content],
                 '',
                 'tt_content',
                 '1',
@@ -236,7 +236,6 @@ class FrontendEditingPanelTest extends UnitTestCase
      * @param int $times Times editIcons is called (0 or 1).
      * @param array $param3 The expected third parameter.
      * @param string $will Return value of editIcons.
-     * @return void
      */
     public function editIcons(
         $expect,
