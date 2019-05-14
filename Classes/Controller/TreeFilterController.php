@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace TYPO3\CMS\FrontendEditing\Controller;
 
 /*
@@ -15,9 +15,9 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Tree\Pagetree\DataProvider;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -25,7 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Used to filter pages in tree on FE in left bar
  *
  * Class TreeFilterController
- * @package TYPO3\CMS\FrontendEditing\Controller
  */
 class TreeFilterController
 {

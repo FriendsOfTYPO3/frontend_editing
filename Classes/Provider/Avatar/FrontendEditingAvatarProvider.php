@@ -22,7 +22,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Provide avatar for top panel
- * @package TYPO3\CMS\FrontendEditing\Provider
  */
 class FrontendEditingAvatarProvider extends DefaultAvatarProvider
 {
@@ -31,7 +30,7 @@ class FrontendEditingAvatarProvider extends DefaultAvatarProvider
      *
      * @param array $backendUser be_users record
      * @param int $size
-     * @return Image|NULL
+     * @return Image|null
      */
     public function getImage(array $backendUser, $size)
     {

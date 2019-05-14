@@ -17,13 +17,12 @@ namespace TYPO3\CMS\FrontendEditing\Provider\Seo;
 
 use Clickstorm\CsSeo\Domain\Model\Evaluation;
 use Clickstorm\CsSeo\Domain\Repository\EvaluationRepository;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 /**
  * SEO provider for Clickstorm SEO module: "[clickstorm] SEO" (cs_seo)
- * @package TYPO3\CMS\FrontendEditing\Provider
  */
 class CsSeoProvider extends BaseSeoProvider
 {
