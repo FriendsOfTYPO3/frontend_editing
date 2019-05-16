@@ -107,7 +107,7 @@ class EditorController
             'P' => [
                 'table'      => $this->formData['tableName'],
                 'uid'        => $this->formData['databaseRow']['uid'],
-                'fieldName'  => $this->formData['fieldName'],
+                'fieldName'  => $this->formData['fieldName'] ?? '',
                 'recordType' => $this->formData['recordTypeValue'],
                 'pid'        => $this->formData['effectivePid'],
             ]
