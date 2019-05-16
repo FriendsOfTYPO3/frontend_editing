@@ -44,6 +44,7 @@
 // dropzone (areas where you can add content)
 
 .t3-frontend-editing__dropzone {
+    display: block;
     height: 0;
     background-color: $color-t3-primary;
     transition: height 0.2s;
