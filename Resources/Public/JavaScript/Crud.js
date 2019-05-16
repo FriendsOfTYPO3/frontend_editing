@@ -85,7 +85,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 				if (data === false) {
 					// Check if the CKEditor has configuration, otherwise remove HTML tags
 					var content;
-					if (item.hasCkeditorConfiguration) {
+					var isInlineElement = item.inlineElement || false;
+
+					if (isInlineElement) {
+						content = item.text;
+					}
+					else if (item.hasCkeditorConfiguration) {
 						content = CKEDITOR.instances[item.editorInstance].getData();
 					} else {
 						content = CKEDITOR.instances[item.editorInstance].editable().getText();
