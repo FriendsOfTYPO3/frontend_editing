@@ -48,6 +48,7 @@ define(['jquery', 'd3'], function ($, d3) {
 		tree,
 		treeInitialized = false,
 		clickedRectOnce = false,
+		unclickableNodeClass = 'unclickable',
 		activeNodeClass = 'active',
 		nonActiveNodeClass = 'no-active',
 		hasChildrenClass = 'has-children',
@@ -85,6 +86,16 @@ define(['jquery', 'd3'], function ($, d3) {
 		searchInput: 'input.search-page-tree',
 		editInput: '#edit-page-tree-node'
 	};
+
+	/**
+	 * Allowed page types for navigation
+	 *
+	 * @type array
+	 */
+	var allowedNavigationDoktypes = [
+		1, // standard page
+		4 // link
+	];
 
 	/**
 	 * Main method
@@ -234,7 +245,12 @@ define(['jquery', 'd3'], function ($, d3) {
 			.attr('height', barHeight)
 			.attr('width', _barWidth)
 			.attr('class', function (d) {
-				return d.data.isActive ? activeNodeClass : nonActiveNodeClass;
+				var classValue = d.data.isActive ? activeNodeClass : nonActiveNodeClass;
+				if (false === allowedNavigationDoktypes.contains(d.data.doktype)) {
+					classValue += ' ' + unclickableNodeClass;
+				}
+
+				return classValue;
 			})
 			.on('click', _clickRect);
 
@@ -529,7 +545,7 @@ define(['jquery', 'd3'], function ($, d3) {
 	 * @private
 	 */
 	function _clickRectOnce(d) {
-		if (d.data.link) {
+		if (d.data.link && allowedNavigationDoktypes.contains(d.data.doktype)) {
 			var linkUrl = d.data.link;
 			F.navigate(linkUrl);
 			F.showLoadingScreen();

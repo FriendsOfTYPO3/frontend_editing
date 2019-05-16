@@ -90,7 +90,6 @@
 
     .node {
         rect {
-            cursor: pointer;
             fill: transparent;
             stroke: transparent;
             stroke-width: 2px;
@@ -98,6 +97,10 @@
             &.active {
                 stroke: $orange-primary;
             }
+        }
+
+        rect:not(.unclickable) {
+            cursor: pointer;
         }
 
         polygon {
