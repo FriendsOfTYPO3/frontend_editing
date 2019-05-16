@@ -246,6 +246,7 @@ class FrontendEditingInitializationHook
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setFilteringUrl(' . GeneralUtility::quoteJSvalue($filteringUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
+            window.FrontendEditingMode = true;
             window.TYPO3.settings = {
                 Textarea: {
                     RTEPopupWindow: {

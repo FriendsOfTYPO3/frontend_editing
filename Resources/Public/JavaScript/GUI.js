@@ -57,6 +57,7 @@ define([
 	FrontendEditing.prototype.windowOpen = windowOpen;
 	FrontendEditing.prototype.iframe = getIframe;
 	FrontendEditing.prototype.siteRootChange = siteRootChange;
+	FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
 
 	var CLASS_HIDDEN = 'hidden';
 
@@ -439,6 +440,10 @@ define([
 		});
 
 		iframeUrl = url;
+	}
+
+	function initCustomLoadedContent(customElement) {
+		Editor.init(customElement, editorConfigurationUrl, resourcePath);
 	}
 
 	function refreshIframe() {
