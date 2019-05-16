@@ -244,11 +244,11 @@ define([
 					}
 
 					// If there is no CKEditor configuration.
-					var config = defaultEditorConfig;
+					var config = {};
 					if (data.hasCkeditorConfiguration) {
-						config = $.extend(true, config, data.configuration);
+						$.extend(true, config, defaultEditorConfig, data.configuration);
 					} else {
-						config = $.extend(true, config, defaultSimpleEditorConfig);
+						$.extend(true, config, defaultEditorConfig, defaultSimpleEditorConfig);
 					}
 
 					// Initialize CKEditor now, when finished remember any change
