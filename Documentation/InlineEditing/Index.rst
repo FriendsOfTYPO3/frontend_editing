@@ -129,3 +129,7 @@ This example lists editable the frontend user names and emails:
 		stdWrap.editIcons = pages:users
 		stdWrap.editIcons.hasEditableFields = 1
 	}
+
+.. _tip::
+
+	Are you using :typoscript:`editIcons.beforeLastTag = 1` or :typoscript:`editIcons.beforeLastTag = 0`? Used wrong, you may set the entire content element as editable, resulting in problems correctly saving the data and content from other fields appearing elsewhere after saving.
