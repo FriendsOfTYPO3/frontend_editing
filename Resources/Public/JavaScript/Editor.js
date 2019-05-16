@@ -192,7 +192,7 @@ define([
 		};
 		$inlineActions.each(initializeInlineAction);
 		// Make sure that elements inserted after page initialization are initialized.
-		$iframeContents.on('mouseover', 'span.t3-frontend-editing__inline-actions', function(){
+		$iframeContents.on('mouseover', 'span.t3-frontend-editing__inline-actions', function () {
 			// TODO: Find a clean solution to update move up/move down action
 			// Index is set to -10 to make sure both action are hidden
 			initializeInlineAction.call(this, [-10]);
@@ -202,7 +202,7 @@ define([
 		var $topBar = $('.t3-frontend-editing__ckeditor-bar');
 
 		// Add custom configuration to ckeditor
-		var $contenteditable = $iframeContents.find('div[contenteditable=\'true\']');
+		var $contenteditable = $iframeContents.find('[contenteditable=\'true\']');
 		$contenteditable.each(function () {
 			var $el = $(this);
 			var $parent = $el.parent();
@@ -211,50 +211,68 @@ define([
 				$parent.attr('href', 'javascript:;');
 			}
 
-			$.ajax({
-				url: configurationUrl,
-				method: 'GET',
-				dataType: 'json',
-				data: {
-					'table': $(this).data('table'),
-					'uid': $(this).data('uid'),
-					'field': $(this).data('field')
-				}
-			}).done(function (data) {
-				// Ensure all plugins / buttons are loaded
-				if (typeof data.externalPlugins !== 'undefined') {
-					eval(data.externalPlugins);
-				}
+			// Only div is allowed for CKeditor instance
+			if ($el.prop('tagName').toLowerCase() !== 'div') {
+				$el.on('blur keyup paste input', function (event) {
+					var dataSet = $el.data();
+					storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
+						'action': 'save',
+						'table': dataSet.table,
+						'uid': dataSet.uid,
+						'field': dataSet.field,
+						'hasCkeditorConfiguration': null,
+						'editorInstance': null,
+						'inlineElement': true,
+						'text': $el.text()
+					});
+					F.trigger(F.CONTENT_CHANGE);
+				});
+			} else {
+				$.ajax({
+					url: configurationUrl,
+					method: 'GET',
+					dataType: 'json',
+					data: {
+						'table': $(this).data('table'),
+						'uid': $(this).data('uid'),
+						'field': $(this).data('field')
+					}
+				}).done(function (data) {
+					// Ensure all plugins / buttons are loaded
+					if (typeof data.externalPlugins !== 'undefined') {
+						eval(data.externalPlugins);
+					}
 
-				// If there is no CKEditor configuration.
-				var config = defaultEditorConfig;
-				if (data.hasCkeditorConfiguration) {
-					config = $.extend(true, config, data.configuration);
-				} else {
-					config = $.extend(true, config, defaultSimpleEditorConfig);
-				}
+					// If there is no CKEditor configuration.
+					var config = defaultEditorConfig;
+					if (data.hasCkeditorConfiguration) {
+						config = $.extend(true, config, data.configuration);
+					} else {
+						config = $.extend(true, config, defaultSimpleEditorConfig);
+					}
 
-				// Initialize CKEditor now, when finished remember any change
-				$el.ckeditor(config).on('instanceReady.ckeditor', function(event, editor) {
-					// This moves the dom instances of ckeditor into the top bar
-					$('.' + editor.id).detach().appendTo($topBar);
+					// Initialize CKEditor now, when finished remember any change
+					$el.ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
+						// This moves the dom instances of ckeditor into the top bar
+						$('.' + editor.id).detach().appendTo($topBar);
 
-					editor.on('change', function (changeEvent) {
-						if (typeof editor.element !== 'undefined') {
-							var dataSet = editor.element.$.dataset;
-							storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
-								'action': 'save',
-								'table': dataSet.table,
-								'uid': dataSet.uid,
-								'field': dataSet.field,
-								'hasCkeditorConfiguration': data.hasCkeditorConfiguration,
-								'editorInstance': editor.name
-							});
-							F.trigger(F.CONTENT_CHANGE);
-						}
+						editor.on('change', function (changeEvent) {
+							if (typeof editor.element !== 'undefined') {
+								var dataSet = editor.element.$.dataset;
+								storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
+									'action': 'save',
+									'table': dataSet.table,
+									'uid': dataSet.uid,
+									'field': dataSet.field,
+									'hasCkeditorConfiguration': data.hasCkeditorConfiguration,
+									'editorInstance': editor.name
+								});
+								F.trigger(F.CONTENT_CHANGE);
+							}
+						});
 					});
 				});
-			});
+			}
 		});
 	}
 
