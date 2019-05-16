@@ -451,6 +451,7 @@ class FrontendEditingInitializationHook
                 $treeItem = [
                     'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
+                    'doktype' => $item['row']['doktype'],
                     'link' => '/index.php?id=' . $item['row']['uid'],
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
