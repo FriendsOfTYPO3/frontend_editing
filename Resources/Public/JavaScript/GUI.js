@@ -15,7 +15,6 @@
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
 define([
-		'/typo3/sysext/backend/Resources/Public/JavaScript/backend.js',
 		'jquery',
 		'TYPO3/CMS/FrontendEditing/Crud',
 		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
@@ -24,7 +23,6 @@ define([
 		'TYPO3/CMS/Backend/Modal',
 		'TYPO3/CMS/Backend/Severity'
 	], function (
-		backend,
 		$,
 		FrontendEditing,
 		D3IndentedTree,
