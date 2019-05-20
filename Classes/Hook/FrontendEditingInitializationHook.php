@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
@@ -270,7 +270,7 @@ class FrontendEditingInitializationHook
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
-            'logoutUrl'  => $uriBuilder->buildUriFromRoute('logout'),
+            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
@@ -283,6 +283,7 @@ class FrontendEditingInitializationHook
         // Assign the content
         $this->pageRenderer->setBodyContent($view->render());
         $parentObject->content = $this->pageRenderer->render();
+        $parentObject->setAbsRefPrefix();
         // Remove any preview info
         unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_previewInfo']);
     }
@@ -313,7 +314,7 @@ class FrontendEditingInitializationHook
     {
         $files = [
             'EXT:frontend_editing/Resources/Public/Css/frontend_editing.css',
-            '/typo3/sysext/backend/Resources/Public/Css/backend.css'
+            'EXT:backend/Resources/Public/Css/backend.css'
         ];
         foreach ($files as $file) {
             $this->pageRenderer->addCssFile($file);
@@ -344,6 +345,9 @@ class FrontendEditingInitializationHook
             ]
         );
 
+        $this->pageRenderer->addJsFile(
+            'EXT:backend/Resources/Public/JavaScript/backend.js'
+        );
         // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
         $this->pageRenderer->addJsFile(
             $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js')
@@ -383,7 +387,7 @@ class FrontendEditingInitializationHook
     {
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'icon' => '/typo3/sysext/core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg',
+            'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
             'children' => $this->getStructureForSinglePageTree(
                 $this->typoScriptFrontendController->rootLine[0]['uid']
             )
@@ -448,11 +452,17 @@ class FrontendEditingInitializationHook
         foreach ($tree as $item) {
             $index++;
             if ($item['invertedDepth'] === $depth) {
+                $link = sprintf(
+                    '%sindex.php?id=%d',
+                    $this->typoScriptFrontendController->absRefPrefix ?: '/',
+                    $item['row']['uid']
+                );
+
                 $treeItem = [
                     'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
                     'doktype' => $item['row']['doktype'],
-                    'link' => '/index.php?id=' . $item['row']['uid'],
+                    'link' => $link,
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
