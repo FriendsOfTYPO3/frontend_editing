@@ -15,11 +15,11 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -46,10 +46,9 @@ class EditorController
      * kicks FormEngine in since this is used to resolve the proper record type
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
+     * @return JsonResponse
      */
-    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function getConfigurationAction(ServerRequestInterface $request): JsonResponse
     {
         $queryParameters = $request->getQueryParams();
         $table = $queryParameters['table'];
@@ -92,8 +91,7 @@ class EditorController
             'hasCkeditorConfiguration' => $this->rteConfiguration !== null
         ];
 
-        $response->getBody()->write(json_encode($data));
-        return $response;
+        return new JsonResponse($data);
     }
 
     /**

@@ -16,10 +16,10 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
@@ -32,22 +32,18 @@ use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
 class ReceiverController
 {
     /**
-     * @var ResponseInterface
+     * @var array
      */
-    protected $response;
+    protected $response = [];
 
     /**
      * Main entrypoint, dispatches to the appropriate methods
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     *
-     * @return ResponseInterface
+     * @return JsonResponse
      */
-    public function processRequest(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function processRequest(ServerRequestInterface $request): JsonResponse
     {
-        $this->response = $response;
-
         $table = $request->getParsedBody()['table'];
         $uid = (int)$request->getParsedBody()['uid'];
 
@@ -103,7 +99,7 @@ class ReceiverController
             default:
                 $this->writeErrorMessage('Invalid action');
         }
-        return $response;
+        return new JsonResponse($this->response);
     }
 
     /**
@@ -317,7 +313,7 @@ class ReceiverController
             'success' => true,
             'message' => $message
         ];
-        $this->response->getBody()->write(json_encode($message));
+        $this->response = $message;
     }
 
     /**
@@ -331,6 +327,6 @@ class ReceiverController
             'success' => false,
             'message' => $message
         ];
-        $this->response->getBody()->write(json_encode($message));
+        $this->response = $message;
     }
 }
