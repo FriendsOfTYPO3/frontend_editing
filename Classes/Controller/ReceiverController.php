@@ -207,7 +207,9 @@ class ReceiverController
             if (empty($dataHandler->errorLog)) {
                 $this->writeSuccessMessage('Content ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')');
             } else {
-                $this->writeErrorMessage('Content could not be set' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')');
+                $this->writeErrorMessage(
+                    'Content could not be set' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')'
+                );
             }
         } else {
             $this->writeErrorMessage('Table does not have a hidden field (' . $table . ')');
