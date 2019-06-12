@@ -127,7 +127,7 @@ define([
 									});
 
 									currentModal.on('hidden.bs.modal', function (e) {
-										delete top.TYPO3.Backend;
+										delete top.TYPO3.Backend.ContentContainer;
 										F.refreshIframe();
 									});
 								}
