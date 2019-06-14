@@ -19,7 +19,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Tree\Pagetree\DataProvider;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,9 +32,10 @@ class TreeFilterController
      * Process ajax request for filtering
      *
      * @param ServerRequestInterface $request
-     * @return JsonResponse
+     * @param ResponseInterface $response
+     * @return ResponseInterface
      */
-    public function filterAction(ServerRequestInterface $request): JsonResponse
+    public function filterAction(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $page = (int)$request->getQueryParams()['page'];
         $mounts = array_map('intval', $this->getBeUser()->returnWebmounts());
@@ -67,7 +67,9 @@ class TreeFilterController
             ];
         }
 
-        return new JsonResponse($data);
+        $response->getBody()->write(json_encode($data));
+
+        return $response;
     }
 
     /**

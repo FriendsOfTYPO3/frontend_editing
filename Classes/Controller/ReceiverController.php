@@ -16,10 +16,10 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
@@ -32,18 +32,22 @@ use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
 class ReceiverController
 {
     /**
-     * @var array
+     * @var ResponseInterface
      */
-    protected $response = [];
+    protected $response;
 
     /**
      * Main entrypoint, dispatches to the appropriate methods
      *
      * @param ServerRequestInterface $request
-     * @return JsonResponse
+     * @param ResponseInterface $response
+     *
+     * @return ResponseInterface
      */
-    public function processRequest(ServerRequestInterface $request): JsonResponse
+    public function processRequest(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $this->response = $response;
+
         $table = $request->getParsedBody()['table'];
         $uid = (int)$request->getParsedBody()['uid'];
 
@@ -99,7 +103,7 @@ class ReceiverController
             default:
                 $this->writeErrorMessage('Invalid action');
         }
-        return new JsonResponse($this->response);
+        return $response;
     }
 
     /**
@@ -315,7 +319,7 @@ class ReceiverController
             'success' => true,
             'message' => $message
         ];
-        $this->response = $message;
+        $this->response->getBody()->write(json_encode($message));
     }
 
     /**
@@ -329,6 +333,6 @@ class ReceiverController
             'success' => false,
             'message' => $message
         ];
-        $this->response = $message;
+        $this->response->getBody()->write(json_encode($message));
     }
 }
