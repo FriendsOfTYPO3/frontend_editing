@@ -212,7 +212,7 @@ class ReceiverController
                 $this->writeSuccessMessage('Content ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')');
             } else {
                 $this->writeErrorMessage(
-                    'Content could not be set' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')'
+                    'Content could not be set ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')'
                 );
             }
         } else {
