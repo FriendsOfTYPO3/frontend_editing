@@ -161,7 +161,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 					content: url,
 					size: Modal.sizes.large,
 					callback: function(currentModal) {
-						currentModal.find('iframe').attr('name', 'list_frame');
+						var modalIframe = currentModal.find(Modal.types.iframe);
+						modalIframe.attr('name', 'list_frame');
+						
+						modalIframe.on('load', function () {
+							$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
+						});
+
 						currentModal.on('hidden.bs.modal', function (e) {
 							F.refreshIframe();
 						});
