@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -45,6 +46,11 @@ class ContentEditableWrapperService
     protected $contentEditableWrapperTagName;
 
     /**
+     * @var UriBuilder
+     */
+    protected $uriBuilder;
+
+    /**
      * ContentEditableWrapperService constructor
      */
     public function __construct()
@@ -56,6 +62,7 @@ class ContentEditableWrapperService
         if ($tagName) {
             $this->contentEditableWrapperTagName = $tagName;
         }
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
     }
 
     /**
@@ -308,7 +315,7 @@ class ContentEditableWrapperService
      */
     public function renderEditUrl($table, $uid): string
     {
-        $newUrl = BackendUtility::getModuleUrl(
+        $newUrl = $this->uriBuilder->buildUriFromRoute(
             'record_edit',
             [
                 'edit[' . $table . '][' . $uid . ']' => 'edit',
@@ -363,7 +370,7 @@ class ContentEditableWrapperService
             $urlParameters['defVals'][$table] = array_merge($urlParameters['defVals'][$table] ?? [], $defaultValues);
         }
 
-        $newUrl = BackendUtility::getModuleUrl(
+        $newUrl = $this->uriBuilder->buildUriFromRoute(
             'record_edit',
             $urlParameters
         );
