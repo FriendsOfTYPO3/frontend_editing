@@ -37,39 +37,53 @@ class ContentObjectRendererHook
      */
     public function cObjGetSingleExt(string $name, array $conf, string $TSkey, ContentObjectRenderer $pObject): string
     {
-        $content = '';
-
         $contentObject = $pObject->getContentObject($name);
-        if ($contentObject) {
-            $content .= $pObject->render($contentObject, $conf);
 
-            // If not content found wrap with drop zone
-            // Add drop zone only if colPos is set
-
-            /** @var AccessService $access */
-            $access = GeneralUtility::makeInstance(AccessService::class);
-
-            if (empty($content)
-                && GeneralUtility::_GET('frontend_editing')
-                && $access->isEnabled()
-                && $conf['table'] === 'tt_content'
-                && !empty($conf['select.']['where'])
-                && GeneralUtility::isFirstPartOfStr(ltrim($conf['select.']['where']), 'colPos')
-            ) {
-                list(, $colPos) = GeneralUtility::intExplode('=', $conf['select.']['where'], true);
-
-                /** @var ContentEditableWrapperService $wrapperService */
-                $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-
-                $content = $wrapperService->wrapContentWithDropzone(
-                    $conf['table'],
-                    0,
-                    $content,
-                    $colPos
-                );
-            }
+        if (!$contentObject) {
+            return '';
         }
 
-        return $content;
+        $content = $pObject->render($contentObject, $conf);
+
+        // If content found or not tt_content with colPos is fetched or not in
+        // frontend_editing context than return the content.
+        if ($content
+            || $conf['table'] !== 'tt_content'
+            || !isset($conf['select.']['where'])
+            || empty($conf['select.']['where'])
+            || strpos($conf['select.']['where'], 'colPos') === false
+            || !GeneralUtility::_GET('frontend_editing')
+        ) {
+            return $content;
+        }
+
+        /** @var AccessService $access */
+        $access = GeneralUtility::makeInstance(AccessService::class);
+
+        if (!$access->isEnabled()) {
+            return '';
+        }
+
+        // Maybe the where clause needs parsed to stdwrap befor we get the colPos
+        if (isset($conf['select.']['where.'])) {
+            $conf['select.']['where'] = $pObject->stdWrapValue('where', $conf['select.']);
+        }
+
+        // Extract the colPos, will match {#colPos}= or colPos= 
+        preg_match('/colPos\}? *= *([-]?[1-9]\d*|0)/', $conf['select.']['where'], $colPosFinding);
+
+        if (!isset($colPosFinding[1])) {
+            return '';
+        }
+
+        /** @var ContentEditableWrapperService $wrapperService */
+        $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+
+        return $wrapperService->wrapContentWithDropzone(
+            $conf['table'],
+            0,
+            '',
+            (int)$colPosFinding[1]
+        );
     }
 }
