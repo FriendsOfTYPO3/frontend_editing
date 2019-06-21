@@ -61,7 +61,7 @@ class EditorController
 
         $configurations = [];
         $elements = [];
-        foreach($queryParameters['elements'] as $element) {
+        foreach ($queryParameters['elements'] as $element) {
             $table = $element['table'];
             $uid = (int)$element['uid'];
             $fieldName = $element['field'];
