@@ -257,7 +257,7 @@ define([
 				}
 
 				$(configurableEditableElements).each(function() {
-					var elementIdentifier = $(this).data('table') + '_' + $(this).data('uid') + '_' + $(this).data('field');
+					var elementIdentifier = $(this).data('uid') + '_' + $(this).data('table') + '_' + $(this).data('field');
 
 					var elementData = data.configurations[data.elementToConfiguration[elementIdentifier]];
 

@@ -110,7 +110,7 @@ class EditorController
                 $configurations[$configurationKey] = $configuration;
             }
 
-            $elements[$table . '_' . $uid . '_' . $fieldName] = $configurationKey;
+            $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
         }
 
         $response->getBody()->write(json_encode([
