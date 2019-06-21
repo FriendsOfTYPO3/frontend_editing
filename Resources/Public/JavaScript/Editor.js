@@ -251,15 +251,16 @@ define([
 					'elements': requestData
 				}
 			}).done(function (data) {
-				// Ensure all plugins / buttons are loaded
-				if (typeof data.externalPlugins !== 'undefined') {
-					eval(data.externalPlugins);
-				}
-
 				$(configurableEditableElements).each(function() {
 					var elementIdentifier = $(this).data('uid') + '_' + $(this).data('table') + '_' + $(this).data('field');
 
 					var elementData = data.configurations[data.elementToConfiguration[elementIdentifier]];
+
+					// Ensure all plugins / buttons are loaded
+					if (typeof elementData.externalPlugins !== 'undefined') {
+						eval(elementData.externalPlugins);
+					}
+
 
 					var config = {};
 					if (elementData.hasCkeditorConfiguration) {
