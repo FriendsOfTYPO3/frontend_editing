@@ -21,6 +21,7 @@ use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Localization\Locales;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -51,48 +52,72 @@ class EditorController
      */
     public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $queryParameters = $request->getQueryParams();
-        $table = $queryParameters['table'];
-        $uid = (int)$queryParameters['uid'];
-        $fieldName = $queryParameters['field'];
-
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
         /** @var FormDataCompiler $formDataCompiler */
         $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
 
-        $formDataCompilerInput = [
-            'vanillaUid' => (int)$uid,
-            'tableName' => $table,
-            'command' => 'edit',
-            // done intentionally to speed up the compilation of the processedTca
-            'disabledWizards' => true
-        ];
+        $queryParameters = $request->getParsedBody();
 
-        $this->formData = $formDataCompiler->compile($formDataCompilerInput);
-        $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
-        $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
+        $configurations = [];
+        $elements = [];
+        foreach ($queryParameters['elements'] as $element) {
+            $table = $element['table'];
+            $uid = (int)$element['uid'];
+            $fieldName = $element['field'];
 
-        $configuration = $this->prepareConfigurationForEditor();
+            $formDataCompilerInput = [
+                'vanillaUid' => (int)$uid,
+                'tableName' => $table,
+                'command' => 'edit',
+                // done intentionally to speed up the compilation of the processedTca
+                'disabledWizards' => true
+            ];
 
-        $externalPlugins = '';
-        foreach ($this->getExtraPlugins() as $pluginName => $config) {
-            $configuration[$pluginName] = $config['config'];
-            $configuration['extraPlugins'] .= ',' . $pluginName;
+            $this->formData = $formDataCompiler->compile($formDataCompilerInput);
+            $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
+            $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
 
-            $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
-            $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
-            $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
-            $externalPlugins .= '\'\');';
+            $editorConfiguration = $this->prepareConfigurationForEditor();
+
+            $externalPlugins = '';
+            foreach ($this->getExtraPlugins() as $pluginName => $config) {
+                $editorConfiguration[$pluginName] = $config['config'];
+                $editorConfiguration['extraPlugins'] .= ',' . $pluginName;
+
+                $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
+                $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
+                $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
+                $externalPlugins .= '\'\');';
+            }
+
+            $configuration = [
+                'configuration' => $editorConfiguration,
+                'hasCkeditorConfiguration' => $this->rteConfiguration !== null,
+                'externalPlugins' => $externalPlugins,
+            ];
+
+            $configurationKey = '';
+            foreach ($configurations as $existingConfigurationKey => $existingConfiguration) {
+                if (json_encode($existingConfiguration) === json_encode($configuration)) {
+                    $configurationKey = $existingConfigurationKey;
+                    break;
+                }
+            }
+
+            if ($configurationKey === '') {
+                $configurationKey = count($configurations);
+                $configurations[$configurationKey] = $configuration;
+            }
+
+            $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
         }
 
-        $data = [
-            'configuration' => $configuration,
-            'externalPlugins' => $externalPlugins,
-            'hasCkeditorConfiguration' => $this->rteConfiguration !== null
-        ];
+        $response->getBody()->write(json_encode([
+            'elementToConfiguration' => $elements,
+            'configurations' => $configurations,
+        ]));
 
-        $response->getBody()->write(json_encode($data));
         return $response;
     }
 

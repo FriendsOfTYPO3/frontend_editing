@@ -203,6 +203,7 @@ define([
 
 		// Add custom configuration to ckeditor
 		var $contenteditable = $iframeContents.find('[contenteditable=\'true\']');
+		var configurableEditableElements = [];
 		$contenteditable.each(function () {
 			var $el = $(this);
 			var $parent = $el.parent();
@@ -228,31 +229,48 @@ define([
 					F.trigger(F.CONTENT_CHANGE);
 				});
 			} else {
-				$.ajax({
-					url: configurationUrl,
-					method: 'GET',
-					dataType: 'json',
-					data: {
-						'table': $(this).data('table'),
-						'uid': $(this).data('uid'),
-						'field': $(this).data('field')
-					}
-				}).done(function (data) {
+				configurableEditableElements.push(this);
+			}
+		});
+
+		var requestData = [];
+		$(configurableEditableElements).each(function() {
+			requestData.push({
+				'table': $(this).data('table'),
+				'uid': $(this).data('uid'),
+				'field': $(this).data('field')
+			});
+		});
+
+		if (requestData.length > 0) {
+			$.ajax({
+				url: configurationUrl,
+				method: 'POST',
+				dataType: 'json',
+				data: {
+					'elements': requestData
+				}
+			}).done(function (data) {
+				$(configurableEditableElements).each(function() {
+					var elementIdentifier = $(this).data('uid') + '_' + $(this).data('table') + '_' + $(this).data('field');
+
+					var elementData = data.configurations[data.elementToConfiguration[elementIdentifier]];
+
 					// Ensure all plugins / buttons are loaded
-					if (typeof data.externalPlugins !== 'undefined') {
-						eval(data.externalPlugins);
+					if (typeof elementData.externalPlugins !== 'undefined') {
+						eval(elementData.externalPlugins);
 					}
 
-					// If there is no CKEditor configuration.
+
 					var config = {};
-					if (data.hasCkeditorConfiguration) {
-						$.extend(true, config, defaultEditorConfig, data.configuration);
+					if (elementData.hasCkeditorConfiguration) {
+						$.extend(true, config, defaultEditorConfig, elementData.configuration);
 					} else {
 						$.extend(true, config, defaultEditorConfig, defaultSimpleEditorConfig);
 					}
 
 					// Initialize CKEditor now, when finished remember any change
-					$el.ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
+					$(this).ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
 						// This moves the dom instances of ckeditor into the top bar
 						$('.' + editor.id).detach().appendTo($topBar);
 
@@ -264,7 +282,7 @@ define([
 									'table': dataSet.table,
 									'uid': dataSet.uid,
 									'field': dataSet.field,
-									'hasCkeditorConfiguration': data.hasCkeditorConfiguration,
+									'hasCkeditorConfiguration': elementData.hasCkeditorConfiguration,
 									'editorInstance': editor.name
 								});
 								F.trigger(F.CONTENT_CHANGE);
@@ -272,8 +290,8 @@ define([
 						});
 					});
 				});
-			}
-		});
+			});
+		}
 	}
 
 	return {
