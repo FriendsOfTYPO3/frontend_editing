@@ -69,7 +69,7 @@ class ContentObjectRendererHook
             $conf['select.']['where'] = $pObject->stdWrapValue('where', $conf['select.']);
         }
 
-        // Extract the colPos, will match {#colPos}= or colPos= 
+        // Extract the colPos, will match {#colPos}= or colPos=
         preg_match('/colPos\}? *= *([-]?[1-9]\d*|0)/', $conf['select.']['where'], $colPosFinding);
 
         if (!isset($colPosFinding[1])) {
