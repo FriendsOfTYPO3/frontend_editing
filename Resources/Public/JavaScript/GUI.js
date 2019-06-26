@@ -427,6 +427,9 @@ define([
 		$iframe.on('load', deferred.resolve);
 
 		deferred.done(function () {
+			document.title = $iframe[0].contentDocument.title;
+			history.replaceState(history.state, document.title, window.location.href)
+
 			Editor.init($iframe, editorConfigurationUrl, resourcePath);
 
 			if (sessionStorage.scrollTop !== 'undefined') {

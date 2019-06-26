@@ -115,19 +115,23 @@ define([
 								content: url,
 								size: Modal.sizes.large,
 								callback: function (currentModal) {
-									currentModal.find('iframe').attr('name', 'list_frame');
-									// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
-									currentModal.find(Modal.types.iframe).on('load', function () {
+									var modalIframe = currentModal.find(Modal.types.iframe);
+									modalIframe.attr('name', 'list_frame');
+									
+									modalIframe.on('load', function () {
+										$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
+
+										// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
 										top.TYPO3.Backend = top.TYPO3.Backend || {};
 										top.TYPO3.Backend.ContentContainer = {
 											get: function () {
-												return currentModal.find(Modal.types.iframe).get(0).contentWindow;
+												return modalIframe[0].contentWindow;
 											}
 										};
 									});
 
 									currentModal.on('hidden.bs.modal', function (e) {
-										delete top.TYPO3.Backend;
+										delete top.TYPO3.Backend.ContentContainer;
 										F.refreshIframe();
 									});
 								}

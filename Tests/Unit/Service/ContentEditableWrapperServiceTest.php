@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
  */
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 
@@ -39,6 +40,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
      */
     protected function setUp()
     {
+        Bootstrap::getInstance()->initializeBackendRouter();
         $this->subject = new ContentEditableWrapperService();
         $this->fixtures = new ContentEditableFixtures();
     }
