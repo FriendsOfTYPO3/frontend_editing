@@ -40,7 +40,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
      */
     protected function setUp()
     {
-        Bootstrap::initializeBackendRouter();
+        Bootstrap::getInstance()->initializeBackendRouter();
         $this->subject = new ContentEditableWrapperService();
         $this->fixtures = new ContentEditableFixtures();
     }
