@@ -6,12 +6,12 @@
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
 		"php": "^7.0",
-		"typo3/cms-core": "^8.7|| >=9.1.0 <9.6.0"
+		"typo3/cms-core": "^8.7 || ^9.1"
 	},
 	"require-dev": {
-		"nimut/testing-framework": "^2.0",
+		"nimut/testing-framework": "^2.0 || ^4.0",
 		"squizlabs/php_codesniffer": "2.*",
-		"phpunit/phpunit": "^5.4",
+		"phpunit/phpunit": "^5.4 || ^6.0",
 		"friendsofphp/php-cs-fixer": "^2.15"
 	},
 	"suggest": {
