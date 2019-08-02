@@ -33,7 +33,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
      */
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
-        $instance = $this->getMock(ContentEditableViewHelper::class, ['registerArgument']);
+        $instance = $this->createMock(ContentEditableViewHelper::class, ['registerArgument']);
         $instance->expects($this->at(0))->method('registerArgument')->with(
             'table',
             'string',
@@ -67,7 +67,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
      */
     public function testRenderWithoutFrontendEditingEnabled($value, array $arguments, $expected)
     {
-        $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
+        $instance = $this->createMock(ContentEditableViewHelper::class, ['renderChildren']);
         $instance->expects($this->once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
@@ -85,7 +85,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     public function testRenderWithFrontendEditingEnabled($value, array $arguments, $expected)
     {
         // Simulate BackendUserAuthentication object
-        $GLOBALS['BE_USER'] = $this->getMock(
+        $GLOBALS['BE_USER'] = $this->createMock(
             BackendUserAuthentication::class,
             [],
             [],
@@ -93,7 +93,7 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
             false
         );
         ContentEditableFixtures::setAccessServiceEnabled(true);
-        $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
+        $instance = $this->createMock(ContentEditableViewHelper::class, ['renderChildren']);
         $instance->expects($this->once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());

@@ -19,6 +19,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Backend\Routing\Route;
 use TYPO3\CMS\Backend\Routing\Router;
+use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -49,12 +50,12 @@ class FrontendEditingPanelTest extends UnitTestCase
     protected function setUp()
     {
         $this->templateServiceMock =
-            $this->getMockBuilder(TemplateService::class)
-            ->setMethods(['getFileName', 'linkData'])->getMock();
+            $this->createMockBuilder(TemplateService::class)
+            ->setMethods(['getFileName', 'linkData'])->createMock();
 
         $pageRepositoryMock =
-            $this->getMockBuilder(PageRepositoryFixture::class)
-            ->setMethods(['getRawRecord', 'getMountPointInfo'])->getMock();
+            $this->createMockBuilder(PageRepositoryFixture::class)
+            ->setMethods(['getRawRecord', 'getMountPointInfo'])->createMock();
 
         $this->frontendControllerMock = $this->getAccessibleMock(
             TypoScriptFrontendController::class,

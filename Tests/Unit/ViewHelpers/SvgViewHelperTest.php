@@ -31,7 +31,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
      */
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
-        $instance = $this->getMock(SvgViewHelper::class, ['registerArgument']);
+        $instance = $this->createMock(SvgViewHelper::class, ['registerArgument']);
         $instance->expects($this->at(0))->method('registerArgument')->with(
             'source',
             'string',
@@ -72,7 +72,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
      */
     public function testRenderWithWrongPathToIcon($value, array $arguments, $expected)
     {
-        $instance = $this->getMock(SvgViewHelper::class, ['renderChildren']);
+        $instance = $this->createMock(SvgViewHelper::class, ['renderChildren']);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
