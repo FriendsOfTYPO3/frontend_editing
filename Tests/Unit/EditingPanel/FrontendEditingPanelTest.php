@@ -17,6 +17,8 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\Backend\Routing\Route;
+use TYPO3\CMS\Backend\Routing\Router;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -77,6 +79,9 @@ class FrontendEditingPanelTest extends UnitTestCase
     public function editIconsDataProvider()
     {
         $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+
+        $router = GeneralUtility::makeInstance(Router::class);
+        $router->addRoute('record_edit', new Route('record_edit', []));
 
         $contentEditableWrapperService = new ContentEditableWrapperService();
 
