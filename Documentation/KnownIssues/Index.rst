@@ -21,13 +21,6 @@ If you edit content on a page, these actions will reload the page without saving
 
 *More info:* https://github.com/FriendsOfTYPO3/frontend_editing/issues/235
 
-Unavailable functions in TYPO3 v9 LTS
-"""""""""""""""""""""""""""""""""""""
-
-Edit icons (hide, delete, move, etc.) and drop zones are not displayed in TYPO3 v9 LTS due to a missing hook implementation in the core. We are working on solving this by implementing PSR-15 middleware instead.
-
-*More info:* https://github.com/FriendsOfTYPO3/frontend_editing/issues/349
-
 Other issues
 """"""""""""
 
