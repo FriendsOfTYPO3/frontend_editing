@@ -22,6 +22,8 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -30,10 +32,14 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Core\Routing\RouterInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -81,6 +87,13 @@ class FrontendEditingInitializationHook
     protected $pluginConfiguration;
 
     /**
+     * Flag if can use router for URL generation
+     *
+     * @var bool
+     */
+    protected $isSiteConfigurationFound = false;
+
+    /**
      * ContentPostProc constructor.
      */
     public function __construct()
@@ -88,6 +101,18 @@ class FrontendEditingInitializationHook
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
         $this->pluginConfiguration = [];
+
+        // If this is TYPO3 9 and site configuration was found
+        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
+            && isset($GLOBALS['TYPO3_REQUEST'])
+            && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
+        ) {
+            $this->isSiteConfigurationFound = true;
+
+            // Allow hidden pages for links generation
+            $context = GeneralUtility::makeInstance(Context::class);
+            $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, true));
+        }
     }
 
     /**
@@ -448,17 +473,11 @@ class FrontendEditingInitializationHook
         foreach ($tree as $item) {
             $index++;
             if ($item['invertedDepth'] === $depth) {
-                $link = sprintf(
-                    '%sindex.php?id=%d',
-                    $this->typoScriptFrontendController->absRefPrefix ?: '/',
-                    $item['row']['uid']
-                );
-
                 $treeItem = [
                     'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
                     'doktype' => $item['row']['doktype'],
-                    'link' => $link,
+                    'link' => $this->getTreeItemLink($item),
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
@@ -478,6 +497,49 @@ class FrontendEditingInitializationHook
 
         return $treeData;
     }
+
+    /**
+     * Generate url for single tree item
+     *
+     * @param array $item
+     * @return string
+     */
+    protected function getTreeItemLink(array $item): string
+    {
+        if ($this->isSiteConfigurationFound) {
+            /** @var Site $site */
+            $site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
+
+            try {
+                return (string)$site->getRouter()->generateUri(
+                    (int)$item['row']['uid'],
+                    [],
+                    '',
+                    RouterInterface::ABSOLUTE_URL
+                );
+            } catch (InvalidRouteArgumentsException $exception) {
+                // Just fallback to old format links
+            }
+        }
+
+        return $this->fallbackTreeItemLinkFormat($item);
+    }
+
+    /**
+     * Create "/index.php?id=" page url
+     *
+     * @param array $item
+     * @return string
+     */
+    protected function fallbackTreeItemLinkFormat(array $item): string
+    {
+        return sprintf(
+            '%sindex.php?id=%d',
+            $this->typoScriptFrontendController->absRefPrefix ?: '/',
+            $item['row']['uid']
+        );
+    }
+
 
     /**
      * Get path to page tree item icon
