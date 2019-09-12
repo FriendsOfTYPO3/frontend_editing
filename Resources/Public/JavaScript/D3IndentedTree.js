@@ -17,6 +17,16 @@
 define(['jquery', 'd3'], function ($, d3) {
 	'use strict';
 
+	/**
+	 * Original page tree loaded on page load
+	 */
+	var treeData;
+
+	/**
+	 * Tree nodes
+	 */
+	var nodes = {};
+
 	// Set the dimensions and margins of the tree
 	var margin = {top: 20, right: 20, bottom: 30, left: 5},
 		width = 245 - margin.right - margin.left,
@@ -100,12 +110,15 @@ define(['jquery', 'd3'], function ($, d3) {
 	/**
 	 * Main method
 	 *
-	 * @param treeData
+	 * @param initialTreeData
 	 */
-	function init(treeData) {
+	function init(initialTreeData) {
+		treeData = initialTreeData;
+
 		storage = F.getStorage();
 		storageData = storage.getAllData();
 
+		_convertTreeDataToNodesArray(treeData);
 		_initArrayContains();
 		_initSvg();
 
@@ -158,7 +171,7 @@ define(['jquery', 'd3'], function ($, d3) {
 				if (searchWord === '') {
 					_resetFilter();
 				} else if (searchWord.length > 2) {
-					_loadFilterTree(searchWord);
+					_filterTree(searchWord);
 				}
 			}
 		}, 1000);
@@ -699,43 +712,74 @@ define(['jquery', 'd3'], function ($, d3) {
 	}
 
 	/**
-	 * Load filtered results with search word
+	 * Filtered tree with search word
+	 *
 	 * @param searchWord
 	 * @private
 	 */
-	function _loadFilterTree(searchWord) {
+	function _filterTree(searchWord) {
 		searchRunning = true;
 
-		var dataSend = {
-			'searchWord': searchWord
-		};
-
-		$.ajax({
-			url: F.getFilteringUrl(),
-			method: 'POST',
-			data: dataSend
-		}).done(function (data) {
-			if (data.success) {
-				isFilteringActive = true;
-				_prepareRedraw();
-
-				rootFiltered = d3.hierarchy(data.treeData);
-				rootFiltered.children.forEach(_collapseFiltered);
-
-				_update(rootFiltered);
-			} else {
-				_resetFilter();
+		// Update nodes state
+		for (var prop in nodes) {
+			if (!nodes.hasOwnProperty(prop)) {
+				continue;
 			}
-		}).fail(function (jqXHR) {
-			F.trigger(
-				F.REQUEST_ERROR,
-				{
-					message: jqXHR.responseText
-				}
-			);
-		}).always(function () {
-			searchRunning = false;
+
+			var node = nodes[prop];
+			var regex = new RegExp(searchWord, 'i');
+			if (node.uid.toString() === searchWord || regex.test(node.name)) {
+				_showParents(node);
+				node.expanded = true;
+				node.hidden = false;
+			} else {
+				node.hidden = true;
+				node.expanded = false;
+			}
+		}
+
+		// Create copy of original tree
+		var treeDataFilterCopy = JSON.parse(JSON.stringify(treeData));
+
+		// Update tree state according to nodes state
+		treeDataFilterCopy.children = _updateStateForFilteredTreeData(treeDataFilterCopy.children);
+		// Redraw tree
+		isFilteringActive = true;
+		_prepareRedraw();
+
+		rootFiltered = d3.hierarchy(treeDataFilterCopy);
+		if (rootFiltered.children) {
+			rootFiltered.children.forEach(_collapseFiltered);
+		}
+
+		_update(rootFiltered);
+
+		searchRunning = false;
+	}
+
+	/**
+	 * Go through page tree and update it according to filter nodes state
+	 *
+	 * @param treeData
+	 * @returns {*}
+	 * @private
+	 */
+	function _updateStateForFilteredTreeData(treeData) {
+		treeData = treeData.filter(function (treeItem) {
+			var node = nodes[treeItem.uid];
+			return node.hidden === false;
 		});
+
+		treeData.forEach(function (treeItem, index) {
+			var node = nodes[treeItem.uid];
+			treeData[index].expanded = node.expanded;
+
+			if (treeItem.children) {
+				treeItem.children = _updateStateForFilteredTreeData(treeItem.children);
+			}
+		});
+
+		return treeData;
 	}
 
 	/**
@@ -766,6 +810,59 @@ define(['jquery', 'd3'], function ($, d3) {
 		} else if (!node._children && node.children) {
 			return hasChildrenExpandedTransform;
 		}
+	}
+
+	/**
+	 * Create nodes object from original page tree
+	 *
+	 * @param treeData
+	 * @private
+	 */
+	function _convertTreeDataToNodesArray(treeData) {
+		_createSingleNode(treeData);
+	}
+
+	/**
+	 * Add single node item to nodes
+	 *
+	 * @param treeItem
+	 * @param nodeParent
+	 * @private
+	 */
+	function _createSingleNode(treeItem, nodeParent) {
+		var uid = treeItem.uid || 0;
+
+		if (typeof nodeParent !== 'undefined') {
+			nodes[uid] = {
+				'uid': uid,
+				'name': treeItem.name,
+				'hidden': false,
+				'expanded': false,
+				'parent': nodeParent
+			};
+		}
+
+		if (treeItem.children) {
+			treeItem.children.forEach(function (child) {
+				_createSingleNode(child, uid)
+			})
+		}
+	}
+
+	/**
+	 * Finds and show all parents of node
+	 */
+	function _showParents(node) {
+		if (node.parent <= 0) {
+			return;
+		}
+
+		var parentNode = nodes[node.parent];
+		parentNode.hidden = false;
+
+		//expand parent node
+		parentNode.expanded = true;
+		_showParents(parentNode);
 	}
 
 	/**
