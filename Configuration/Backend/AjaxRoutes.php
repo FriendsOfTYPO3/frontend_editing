@@ -14,9 +14,4 @@ return [
         'path' => '/frontend-editing/editor-configuration',
         'target' => \TYPO3\CMS\FrontendEditing\Controller\EditorController::class . '::getConfigurationAction'
     ],
-    // Filter page tree items
-    'frontendediting_treefilter' => [
-        'path' => '/frontend-editing/treefilter',
-        'target' => \TYPO3\CMS\FrontendEditing\Controller\TreeFilterController::class . '::filterAction'
-    ],
 ];
