@@ -202,10 +202,6 @@ class FrontendEditingInitializationHook
         $ajaxUrlIcons = $uriBuilder->buildUriFromRoute(
             'ajax_icons'
         );
-        $filteringUrl = $uriBuilder->buildUriFromRoute(
-            'ajax_frontendediting_treefilter',
-            ['page' => $this->typoScriptFrontendController->rootLine[0]['uid']]
-        );
 
         $returnUrl = PathUtility::getAbsoluteWebPath(
             GeneralUtility::getFileAbsFileName(
@@ -269,7 +265,6 @@ class FrontendEditingInitializationHook
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
-            window.F.setFilteringUrl(' . GeneralUtility::quoteJSvalue($filteringUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.FrontendEditingMode = true;
             window.TYPO3.settings = {
