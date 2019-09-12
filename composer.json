@@ -17,6 +17,9 @@
 	"suggest": {
 		"clickstorm/cs_seo": "~2.1.0"
 	},
+	"conflict": {
+		"typo3/cms-feedit": "*"
+	},
 	"replace": {
 		"frontend_editing": "self.version",
 		"typo3-ter/frontend-editing": "self.version"
