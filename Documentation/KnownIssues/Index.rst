@@ -21,6 +21,11 @@ If you edit content on a page, these actions will reload the page without saving
 
 *More info:* https://github.com/FriendsOfTYPO3/frontend_editing/issues/235
 
+Blank page when disableNoCacheParameter is set
+""""""""""""""""""""""""""""""""""""""""""""""
+
+Pages may not render properly (blank page) if the setting `[FE][disableNoCacheParameter]` is enabled when using the Frontend Editor.
+
 Other issues
 """"""""""""
 
