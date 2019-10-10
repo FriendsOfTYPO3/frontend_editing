@@ -298,15 +298,19 @@ class ContentEditableWrapperService
         $frontendController = $GLOBALS['TSFE'];
 
         if ($frontendController->sys_language_uid !== 0) {
-            $translatedRecord = array_pop(BackendUtility::getRecordLocalization(
+            $translatedRecords = BackendUtility::getRecordLocalization(
                 $table,
                 $uid,
                 $frontendController->sys_language_uid
-            ));
+            );
 
-            if ($translatedRecord) {
-                $table = BackendUtility::getOriginalTranslationTable($table);
-                $uid = $translatedRecord['uid'];
+            if (is_array($translatedRecords) && count($translatedRecords) > 0) {
+                $translatedRecord = array_pop($translatedRecords);
+
+                if ($translatedRecord) {
+                    $table = BackendUtility::getOriginalTranslationTable($table);
+                    $uid = $translatedRecord['uid'];
+                }
             }
         }
     }
