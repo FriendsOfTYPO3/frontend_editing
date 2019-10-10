@@ -30,7 +30,7 @@ The following steps are required to active the frontend editing for a TYPO3 inst
      :alt: User activation of frontend editing
 
 - Optional part is to be able to set the baseUrl for the frontend editing if server path is not a top
-  directory. It is done by adding the following part to Setup typoscript:
+  directory. It is done by adding the following part to setup typoscript:
 
   .. code-block:: typoscript
 
