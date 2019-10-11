@@ -138,25 +138,33 @@ class EditorController
             ]
         ];
 
-        $pluginConfiguration = [];
-        if (isset($this->rteConfiguration['externalPlugins']) && is_array($this->rteConfiguration['externalPlugins'])) {
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            foreach ($this->rteConfiguration['externalPlugins'] as $pluginName => $configuration) {
-                $pluginConfiguration[$pluginName] = [
-                    'resource' => $this->resolveUrlPath($configuration['resource'])
-                ];
-                unset($configuration['resource']);
-
-                if ($configuration['route']) {
-                    $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
-                        $configuration['route'],
-                        $urlParameters
-                    );
-                }
-
-                $pluginConfiguration[$pluginName]['config'] = $configuration;
-            }
+        if (!isset($this->rteConfiguration['externalPlugins']) || !is_array($this->rteConfiguration['externalPlugins'])) {
+            $this->rteConfiguration['externalPlugins'] = [];
         }
+
+        $this->rteConfiguration['externalPlugins']['confighelper'] = [
+            'resource' => 'EXT:frontend_editing/Resources/Public/JavaScript/Plugins/confighelper/plugin.js'
+        ];
+
+        $pluginConfiguration = [];
+
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        foreach ($this->rteConfiguration['externalPlugins'] as $pluginName => $configuration) {
+            $pluginConfiguration[$pluginName] = [
+                'resource' => $this->resolveUrlPath($configuration['resource'])
+            ];
+            unset($configuration['resource']);
+
+            if ($configuration['route']) {
+                $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
+                    $configuration['route'],
+                    $urlParameters
+                );
+            }
+
+            $pluginConfiguration[$pluginName]['config'] = $configuration;
+        }
+
         return $pluginConfiguration;
     }
 
@@ -202,12 +210,14 @@ class EditorController
         // Of course this can be overriden by the editor configuration below
         $configuration = [
             'customConfig' => '',
+            'extraPlugins' => ['confighelper'],
         ];
 
         if (is_array($this->rteConfiguration['config'])) {
             $configuration = array_replace_recursive($configuration, $this->rteConfiguration['config']);
         }
         $configuration['contentsLanguage'] = $this->getLanguageIsoCodeOfContent();
+        $configuration['extraPlugins'] = ['confighelper'];
 
         // replace all paths
         $configuration = $this->replaceAbsolutePathsToRelativeResourcesPath($configuration);

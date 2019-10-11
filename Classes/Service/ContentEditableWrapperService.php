@@ -92,7 +92,7 @@ class ContentEditableWrapperService
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
         $content = sprintf(
-            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</%s>',
+            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s" placeholder="Placeholder text">%s</%s>',
             $this->contentEditableWrapperTagName,
             $table,
             $field,

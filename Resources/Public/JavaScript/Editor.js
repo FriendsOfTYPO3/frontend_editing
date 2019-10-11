@@ -117,7 +117,7 @@ define([
 								callback: function (currentModal) {
 									var modalIframe = currentModal.find(Modal.types.iframe);
 									modalIframe.attr('name', 'list_frame');
-									
+
 									modalIframe.on('load', function () {
 										$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
 
