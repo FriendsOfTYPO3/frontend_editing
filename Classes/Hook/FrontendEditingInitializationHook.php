@@ -240,10 +240,12 @@ class FrontendEditingInitializationHook
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
 
+        $baseUrl = ($this->getPluginConfiguration()['baseUrl']) ? $this->getPluginConfiguration()['baseUrl'] : '/';
+
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
         $this->pageRenderer = new PageRenderer();
-        $this->pageRenderer->setBaseUrl('/');
+        $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
         $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
