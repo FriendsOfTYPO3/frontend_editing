@@ -81,8 +81,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 
 					if (isInlineElement) {
 						content = item.text;
-					}
-					else if (item.hasCkeditorConfiguration) {
+					} else if (item.hasCkeditorConfiguration) {
 						content = CKEDITOR.instances[item.editorInstance].getData();
 					} else {
 						content = CKEDITOR.instances[item.editorInstance].editable().getText();

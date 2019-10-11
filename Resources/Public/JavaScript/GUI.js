@@ -97,8 +97,8 @@ define([
 		bindActions();
 		D3IndentedTree.init(options.pageTree);
 		initGuiStates();
-		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
+		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 	}
 
 	function initListeners() {
@@ -429,6 +429,32 @@ define([
 		deferred.done(function () {
 			document.title = $iframe[0].contentDocument.title;
 			history.replaceState(history.state, document.title, window.location.href)
+
+			// check if LocalStorage contains any changes prior to iframe reload
+			var items = storage.getSaveItems();
+
+			if (items.count()) {
+				items.forEach(function (item) {
+					var content;
+					var isInlineElement = item.inlineElement || false;
+
+					if (isInlineElement) {
+						content = item.text;
+					} else if (item.hasCkeditorConfiguration) {
+						content = CKEDITOR.instances[item.editorInstance].getData();
+					} else {
+						content = CKEDITOR.instances[item.editorInstance].editable().getText();
+					}
+
+					// if match is found, replace content in iframe with LocalStorage
+					$iframe.contents().find('[contenteditable=\'true\']').each(function () {
+						var dataSet = $(this).data();
+						if ((dataSet.uid == item.uid) && (dataSet.field == item.field) && (dataSet.table == item.table)) {
+							$(this).html(content);
+						}
+					});
+				});
+			}
 
 			Editor.init($iframe, editorConfigurationUrl, resourcePath);
 
