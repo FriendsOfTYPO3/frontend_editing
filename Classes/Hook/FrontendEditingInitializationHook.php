@@ -163,7 +163,7 @@ class FrontendEditingInitializationHook
     {
         if (!$this->isFrontendEditingEnabled($parentObject)) {
             $dom = new \DOMDocument();
-            $dom->loadHTML($parentObject->content);
+            $dom->loadHTML($parentObject->content, LIBXML_NOWARNING | LIBXML_NOERROR);
 
             $domWasModified = false;
 
