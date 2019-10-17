@@ -279,8 +279,13 @@ class FrontendEditingInitializationHook
         $this->pageRenderer = new PageRenderer();
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
-        $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
-        $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        if (method_exists($this->pageRenderer, 'setMetaTag')) {
+            $this->pageRenderer->setMetaTag('name', 'viewport', 'width=device-width, initial-scale=1');
+            $this->pageRenderer->setMetaTag('http-equiv', 'X-UA-Compatible', 'IE=edge');
+        } else {
+            $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
+            $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        }
         $this->pageRenderer->setHtmlTag('<!DOCTYPE html><html lang="en">');
 
         $resourcePath = 'EXT:frontend_editing/Resources/Public/';
