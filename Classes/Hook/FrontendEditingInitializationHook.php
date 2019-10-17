@@ -337,7 +337,7 @@ class FrontendEditingInitializationHook
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'mounts' => $this->getBEUserMounts(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
-            'seoProviderData' => $this->getSeoProviderData($this->typoScriptFrontendController->id)
+            'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)
         ]);
 
         // Assign the content
@@ -386,8 +386,15 @@ class FrontendEditingInitializationHook
      */
     protected function loadJavascriptResources()
     {
-        // $this->pageRenderer->loadJquery();
+        if (method_exists($this->pageRenderer, 'loadJquery')) {
+            $this->pageRenderer->loadJquery();
+        } else {
+            $this->pageRenderer->addJsFile(
+                'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
+            );
+        }
         $this->pageRenderer->loadRequireJs();
+
         $this->pageRenderer->addRequireJsConfiguration(
             [
                 'shim' => [
