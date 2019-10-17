@@ -386,7 +386,7 @@ class FrontendEditingInitializationHook
      */
     protected function loadJavascriptResources()
     {
-        $this->pageRenderer->loadJquery();
+        // $this->pageRenderer->loadJquery();
         $this->pageRenderer->loadRequireJs();
         $this->pageRenderer->addRequireJsConfiguration(
             [
@@ -700,7 +700,11 @@ class FrontendEditingInitializationHook
 
         // Populate mounts with domains
         foreach ($mounts as $uid => &$mount) {
-            $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
+            if (method_exists(BackendUtility::class, 'firstDomainRecord')) {
+                $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
+            } else {
+                $mount['domain'] = BackendUtility::getViewDomain($mount);
+            }
         }
 
         return $mounts;
@@ -720,7 +724,7 @@ class FrontendEditingInitializationHook
             $wizardItems = $contentController->getWizards();
         } else {
             $contentController = GeneralUtility::makeInstance(
-                \TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController::class
+                NewContentElementController::class
             );
             $wizardItems = $contentController->wizardArray();
         }
