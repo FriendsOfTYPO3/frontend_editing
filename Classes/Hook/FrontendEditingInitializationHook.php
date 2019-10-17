@@ -254,7 +254,11 @@ class FrontendEditingInitializationHook
         ) : null;
 
         // Define the window size of the popups within the RTE
-        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
+        if (method_exists($GLOBALS['BE_USER'], 'getTSConfigVal')) {
+            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
+        } else {
+            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
+        }
         if (!empty($rtePopupWindowSize)) {
             list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
         }
@@ -659,7 +663,13 @@ class FrontendEditingInitializationHook
         } else {
             $allowedMounts = $beUSER->returnWebmounts();
 
-            if ($pidList = $beUSER->getTSConfigVal('options.hideRecords.pages')) {
+            if (method_exists($beUSER, 'getTSConfigVal')) {
+                $hideRecordsPages = $beUSER->getTSConfigVal('options.hideRecords.pages');
+            } else {
+                $hideRecordsPages = $beUSER->getTSConfig()['options.']['hideRecords.']['pages'];
+            }
+
+            if ($pidList = $hideRecordsPages) {
                 $hideList += GeneralUtility::intExplode(',', $pidList, true);
             }
 
