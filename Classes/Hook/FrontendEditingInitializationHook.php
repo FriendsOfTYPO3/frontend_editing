@@ -708,9 +708,17 @@ class FrontendEditingInitializationHook
      */
     protected function getContentItems(): array
     {
-        /** @var NewContentElementController $contentController */
-        $contentController = GeneralUtility::makeInstance(NewContentElementController::class);
-        $wizardItems = $contentController->wizardArray();
+        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 10000000) {
+            $contentController = GeneralUtility::makeInstance(
+                \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+            );
+            $wizardItems = $contentController->getWizards();
+        } else {
+            $contentController = GeneralUtility::makeInstance(
+                \TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController::class
+            );
+            $wizardItems = $contentController->wizardArray();
+        }
         $this->wizardItemsHook($wizardItems, $contentController);
 
         $contentItems = [];
