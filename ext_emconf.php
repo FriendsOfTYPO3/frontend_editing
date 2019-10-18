@@ -13,8 +13,8 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '1.8.1',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-9.5.99',
-            'rte_ckeditor' => '8.7.0-9.5.99'
+            'typo3' => '8.7.0-10.1.99',
+            'rte_ckeditor' => '8.7.0-10.1.99'
         ],
         'conflicts' => [
             'feedit' => '',
