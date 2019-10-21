@@ -19,7 +19,8 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 
 /**
  * Script Class for the New Content element wizard
- * @internal This class is a specific Backend controller implementation and is not considered part of the Public TYPO3 API.
+ * @internal This class is a specific Backend controller implementation
+ * and is not considered part of the Public TYPO3 API.
  */
 class NewContentElementController extends \TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController
 {

@@ -724,7 +724,10 @@ class FrontendEditingInitializationHook
      */
     protected function getContentItems(): array
     {
-        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 10000000) {
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+        if ($typo3VersionNumber > 10000000) {
             $contentController = GeneralUtility::makeInstance(
                 \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
             );
