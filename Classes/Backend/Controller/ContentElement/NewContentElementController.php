@@ -15,6 +15,8 @@ namespace TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Http\ServerRequest;
+
 /**
  * Script Class for the New Content element wizard
  * @internal This class is a specific Backend controller implementation and is not considered part of the Public TYPO3 API.
@@ -30,6 +32,7 @@ class NewContentElementController extends \TYPO3\CMS\Backend\Controller\ContentE
      */
     public function getWizards(): array
     {
+        parent::wizardAction(new ServerRequest());
         return parent::getWizards();
     }
 }
