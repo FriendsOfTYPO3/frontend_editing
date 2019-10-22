@@ -58,4 +58,5 @@ a GNU/GPL CMS/Framework available from `www.typo3.org
    ExtensionManagerSettings/Index
    SeoProviders/Index
    Development/Index
+   KnownIssues/Index
 

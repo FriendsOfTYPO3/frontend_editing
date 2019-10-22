@@ -9,6 +9,10 @@
     z-index: 10999;
     font-family: $font-family-base;
     font-size: $font-size-regular;
+
+    .btn {
+        color: $white !important;
+    }
 }
 
 .t3-frontend-editing__topbar-inner {

@@ -22,6 +22,8 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -30,10 +32,15 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Core\Routing\RouterInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -81,6 +88,13 @@ class FrontendEditingInitializationHook
     protected $pluginConfiguration;
 
     /**
+     * Flag if can use router for URL generation
+     *
+     * @var bool
+     */
+    protected $isSiteConfigurationFound = false;
+
+    /**
      * ContentPostProc constructor.
      */
     public function __construct()
@@ -88,6 +102,18 @@ class FrontendEditingInitializationHook
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $this->iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
         $this->pluginConfiguration = [];
+
+        // If this is TYPO3 9 and site configuration was found
+        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
+            && isset($GLOBALS['TYPO3_REQUEST'])
+            && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
+        ) {
+            $this->isSiteConfigurationFound = true;
+
+            // Allow hidden pages for links generation
+            $context = GeneralUtility::makeInstance(Context::class);
+            $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, true));
+        }
     }
 
     /**
@@ -136,6 +162,33 @@ class FrontendEditingInitializationHook
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
         if (!$this->isFrontendEditingEnabled($parentObject)) {
+            $dom = new \DOMDocument();
+            $dom->loadHTML($parentObject->content, LIBXML_NOWARNING | LIBXML_NOERROR);
+
+            $domWasModified = false;
+
+            /** @var \DOMElement $element */
+            foreach ($dom->getElementsByTagName('a') as $element) {
+                $parsedUrl = parse_url($element->getAttribute('href'));
+
+                if ($parsedUrl['query'] !== null) {
+                    $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
+
+                    if (isset($queryArguments['frontend_editing'])) {
+                        unset($queryArguments['frontend_editing']);
+
+                        $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
+
+                        $element->setAttribute('href', HttpUtility::buildUrl($parsedUrl));
+                        $domWasModified = true;
+                    }
+                }
+            }
+
+            if ($domWasModified) {
+                $parentObject->content = $dom->saveHTML();
+            }
+
             return;
         }
 
@@ -177,10 +230,6 @@ class FrontendEditingInitializationHook
         $ajaxUrlIcons = $uriBuilder->buildUriFromRoute(
             'ajax_icons'
         );
-        $filteringUrl = $uriBuilder->buildUriFromRoute(
-            'ajax_frontendediting_treefilter',
-            ['page' => $this->typoScriptFrontendController->rootLine[0]['uid']]
-        );
 
         $returnUrl = PathUtility::getAbsoluteWebPath(
             GeneralUtility::getFileAbsFileName(
@@ -219,10 +268,12 @@ class FrontendEditingInitializationHook
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
 
+        $baseUrl = ($this->getPluginConfiguration()['baseUrl']) ? $this->getPluginConfiguration()['baseUrl'] : '/';
+
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
         $this->pageRenderer = new PageRenderer();
-        $this->pageRenderer->setBaseUrl('/');
+        $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
         $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
@@ -244,8 +295,8 @@ class FrontendEditingInitializationHook
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
-            window.F.setFilteringUrl(' . GeneralUtility::quoteJSvalue($filteringUrl) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
+            window.FrontendEditingMode = true;
             window.TYPO3.settings = {
                 Textarea: {
                     RTEPopupWindow: {
@@ -270,7 +321,7 @@ class FrontendEditingInitializationHook
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
-            'logoutUrl'  => $uriBuilder->buildUriFromRoute('logout'),
+            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'pageEditUrl' => $pageEditUrl,
             'pageNewUrl' => $pageNewUrl,
@@ -283,6 +334,7 @@ class FrontendEditingInitializationHook
         // Assign the content
         $this->pageRenderer->setBodyContent($view->render());
         $parentObject->content = $this->pageRenderer->render();
+        $parentObject->setAbsRefPrefix();
         // Remove any preview info
         unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_previewInfo']);
     }
@@ -313,7 +365,7 @@ class FrontendEditingInitializationHook
     {
         $files = [
             'EXT:frontend_editing/Resources/Public/Css/frontend_editing.css',
-            '/typo3/sysext/backend/Resources/Public/Css/backend.css'
+            'EXT:backend/Resources/Public/Css/backend.css'
         ];
         foreach ($files as $file) {
             $this->pageRenderer->addCssFile($file);
@@ -344,6 +396,9 @@ class FrontendEditingInitializationHook
             ]
         );
 
+        $this->pageRenderer->addJsFile(
+            'EXT:backend/Resources/Public/JavaScript/backend.js'
+        );
         // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
         $this->pageRenderer->addJsFile(
             $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js')
@@ -383,7 +438,7 @@ class FrontendEditingInitializationHook
     {
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'icon' => '/typo3/sysext/core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg',
+            'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
             'children' => $this->getStructureForSinglePageTree(
                 $this->typoScriptFrontendController->rootLine[0]['uid']
             )
@@ -452,7 +507,7 @@ class FrontendEditingInitializationHook
                     'uid' => $item['row']['uid'],
                     'name' => $item['row']['title'],
                     'doktype' => $item['row']['doktype'],
-                    'link' => '/index.php?id=' . $item['row']['uid'],
+                    'link' => $this->getTreeItemLink($item),
                     'icon' => $this->getTreeItemIconPath($item['row']),
                     'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
                     'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
@@ -471,6 +526,48 @@ class FrontendEditingInitializationHook
         }
 
         return $treeData;
+    }
+
+    /**
+     * Generate url for single tree item
+     *
+     * @param array $item
+     * @return string
+     */
+    protected function getTreeItemLink(array $item): string
+    {
+        if ($this->isSiteConfigurationFound) {
+            /** @var Site $site */
+            $site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
+
+            try {
+                return (string)$site->getRouter()->generateUri(
+                    (int)$item['row']['uid'],
+                    [],
+                    '',
+                    RouterInterface::ABSOLUTE_URL
+                );
+            } catch (InvalidRouteArgumentsException $exception) {
+                // Just fallback to old format links
+            }
+        }
+
+        return $this->fallbackTreeItemLinkFormat($item);
+    }
+
+    /**
+     * Create "/index.php?id=" page url
+     *
+     * @param array $item
+     * @return string
+     */
+    protected function fallbackTreeItemLinkFormat(array $item): string
+    {
+        return sprintf(
+            '%sindex.php?id=%d',
+            $this->typoScriptFrontendController->absRefPrefix ?: '/',
+            $item['row']['uid']
+        );
     }
 
     /**

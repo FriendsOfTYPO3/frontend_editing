@@ -6,6 +6,8 @@ lib.fluidContent {
     }
 }
 
+lib.contentElement.stdWrap < lib.fluidContent.stdWrap
+
 tt_content.bullets.stdWrap < lib.fluidContent.stdWrap
 tt_content.div.stdWrap < lib.fluidContent.stdWrap
 tt_content.header.stdWrap < lib.fluidContent.stdWrap

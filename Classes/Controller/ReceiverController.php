@@ -203,15 +203,17 @@ class ReceiverController
         $tcaCtrl = $GLOBALS['TCA'][$table]['ctrl'];
         if (isset($tcaCtrl['enablecolumns']['disabled'])) {
             $data = [];
-            $data[$table][$uid][$tcaCtrl['enablecolumns']['disabled']] = $hide;
+            $data[$table][$uid][$tcaCtrl['enablecolumns']['disabled']] = $hide ? 1 : 0;
             $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
             $dataHandler->start($data, []);
             $dataHandler->process_datamap();
 
             if (empty($dataHandler->errorLog)) {
-                $this->writeSuccessMessage('Content hidden (' . $uid . ')');
+                $this->writeSuccessMessage('Content ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')');
             } else {
-                $this->writeErrorMessage('Content could not be hidden (' . $uid . ')');
+                $this->writeErrorMessage(
+                    'Content could not be set ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')'
+                );
             }
         } else {
             $this->writeErrorMessage('Table does not have a hidden field (' . $table . ')');

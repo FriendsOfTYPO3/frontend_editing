@@ -15,7 +15,6 @@
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
 define([
-		'/typo3/sysext/backend/Resources/Public/JavaScript/backend.js',
 		'jquery',
 		'TYPO3/CMS/FrontendEditing/Crud',
 		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
@@ -24,7 +23,6 @@ define([
 		'TYPO3/CMS/Backend/Modal',
 		'TYPO3/CMS/Backend/Severity'
 	], function (
-		backend,
 		$,
 		FrontendEditing,
 		D3IndentedTree,
@@ -57,6 +55,7 @@ define([
 	FrontendEditing.prototype.windowOpen = windowOpen;
 	FrontendEditing.prototype.iframe = getIframe;
 	FrontendEditing.prototype.siteRootChange = siteRootChange;
+	FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
 
 	var CLASS_HIDDEN = 'hidden';
 
@@ -98,8 +97,8 @@ define([
 		bindActions();
 		D3IndentedTree.init(options.pageTree);
 		initGuiStates();
-		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 		storage = F.getStorage();
+		loadPageIntoIframe(options.iframeUrl, editorConfigurationUrl);
 	}
 
 	function initListeners() {
@@ -428,6 +427,35 @@ define([
 		$iframe.on('load', deferred.resolve);
 
 		deferred.done(function () {
+			document.title = $iframe[0].contentDocument.title;
+			history.replaceState(history.state, document.title, window.location.href)
+
+			// check if LocalStorage contains any changes prior to iframe reload
+			var items = storage.getSaveItems();
+
+			if (items.count()) {
+				items.forEach(function (item) {
+					var content;
+					var isInlineElement = item.inlineElement || false;
+
+					if (isInlineElement) {
+						content = item.text;
+					} else if (item.hasCkeditorConfiguration) {
+						content = CKEDITOR.instances[item.editorInstance].getData();
+					} else {
+						content = CKEDITOR.instances[item.editorInstance].editable().getText();
+					}
+
+					// if match is found, replace content in iframe with LocalStorage
+					$iframe.contents().find('[contenteditable=\'true\']').each(function () {
+						var dataSet = $(this).data();
+						if ((dataSet.uid == item.uid) && (dataSet.field == item.field) && (dataSet.table == item.table)) {
+							$(this).html(content);
+						}
+					});
+				});
+			}
+
 			Editor.init($iframe, editorConfigurationUrl, resourcePath);
 
 			if (sessionStorage.scrollTop !== 'undefined') {
@@ -439,6 +467,10 @@ define([
 		});
 
 		iframeUrl = url;
+	}
+
+	function initCustomLoadedContent(customElement) {
+		Editor.init(customElement, editorConfigurationUrl, resourcePath);
 	}
 
 	function refreshIframe() {
