@@ -281,7 +281,8 @@ class ContentEditableWrapperService
             $visibilityIcon .
             $this->renderIconWithWrap('delete', 'actions-edit-delete') .
             $this->renderIconWithWrap('new', 'actions-document-new') .
-            $moveIcons;
+            $moveIcons .
+            $this->renderIconWithWrap('move', 'actions-move');
 
         return $inlineIcons;
     }

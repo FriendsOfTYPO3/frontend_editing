@@ -117,7 +117,7 @@ define([
 								callback: function (currentModal) {
 									var modalIframe = currentModal.find(Modal.types.iframe);
 									modalIframe.attr('name', 'list_frame');
-									
+
 									modalIframe.on('load', function () {
 										$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
 
@@ -160,6 +160,11 @@ define([
 						hide = 0;
 					}
 					F.hideContent(that.data('uid'), that.data('table'), hide);
+				});
+
+				// Draggable action
+				that.find('.icon-actions-move').on('click', function () {
+					that.parent().attr('draggable', true);
 				});
 
 				if (typeof $inlineActions[index - 1] !== 'undefined' &&
