@@ -107,8 +107,11 @@ class FrontendEditingInitializationHook
         if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
             && isset($GLOBALS['TYPO3_REQUEST'])
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
+            && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
         ) {
             $this->isSiteConfigurationFound = true;
+
+            $GLOBALS['TSFE']->fePreview = 0;
 
             // Allow hidden pages for links generation
             $context = GeneralUtility::makeInstance(Context::class);
@@ -126,6 +129,7 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $this->accessService = GeneralUtility::makeInstance(AccessService::class);
+
         if ($this->accessService->isEnabled() && $tsfe->type === 0) {
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
