@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -87,6 +88,8 @@ class ContentEditableWrapperService
         if (empty($uid)) {
             throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163287);
         }
+
+        $this->switchToLocalLanguageEquivalent($table, $uid);
 
         $content = sprintf(
             '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</%s>',
@@ -281,6 +284,35 @@ class ContentEditableWrapperService
             $moveIcons;
 
         return $inlineIcons;
+    }
+
+    /**
+     * Changes the $table and $uid into the record's equivalent in the current language.
+     *
+     * @param string $table
+     * @param int $uid
+     */
+    protected function switchToLocalLanguageEquivalent(string &$table, int &$uid)
+    {
+        /** @var TypoScriptFrontendController $frontendController */
+        $frontendController = $GLOBALS['TSFE'];
+
+        if ($frontendController->sys_language_uid !== 0) {
+            $translatedRecords = BackendUtility::getRecordLocalization(
+                $table,
+                $uid,
+                $frontendController->sys_language_uid
+            );
+
+            if (is_array($translatedRecords) && count($translatedRecords) > 0) {
+                $translatedRecord = array_pop($translatedRecords);
+
+                if ($translatedRecord) {
+                    $table = BackendUtility::getOriginalTranslationTable($table);
+                    $uid = $translatedRecord['uid'];
+                }
+            }
+        }
     }
 
     /**

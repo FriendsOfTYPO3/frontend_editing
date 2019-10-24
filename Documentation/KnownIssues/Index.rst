@@ -9,24 +9,10 @@ Known issues
 
 We are aware of a few issues that can affect the user experience. By explaining the issues here, we hope you will be able to circumvent them until they are fixed.
 
-Risk of losing changes
-""""""""""""""""""""""
+Blank page when disableNoCacheParameter is set
+""""""""""""""""""""""""""""""""""""""""""""""
 
-If you edit content on a page, these actions will reload the page without saving your changes:
-
-    * Adding a new content element by dragging and dropping it.
-    * Hiding or unhiding a content element on the page.
-
-*Suggested solution:* Save your changes first.
-
-*More info:* https://github.com/FriendsOfTYPO3/frontend_editing/issues/235
-
-Unavailable functions in TYPO3 v9 LTS
-"""""""""""""""""""""""""""""""""""""
-
-Edit icons (hide, delete, move, etc.) and drop zones are not displayed in TYPO3 v9 LTS due to a missing hook implementation in the core. We are working on solving this by implementing PSR-15 middleware instead.
-
-*More info:* https://github.com/FriendsOfTYPO3/frontend_editing/issues/349
+Pages may not render properly (blank page) if the setting `[FE][disableNoCacheParameter]` is enabled when using the Frontend Editor.
 
 Other issues
 """"""""""""
