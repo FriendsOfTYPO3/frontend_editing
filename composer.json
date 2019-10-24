@@ -21,7 +21,6 @@
 		"typo3/cms-feedit": "*"
 	},
 	"replace": {
-		"friendsoftypo3/frontend_editing": "self.version",
 		"typo3-ter/frontend-editing": "self.version"
 	},
 	"autoload": {
@@ -54,7 +53,7 @@
 			"dev-master": "0.0.x-dev"
 		},
 		"typo3/cms": {
-      "extension-key": "frontend_editing",
+			"extension-key": "frontend_editing",
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"web-dir": ".Build/Web"
 		}
