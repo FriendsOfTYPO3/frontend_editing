@@ -107,8 +107,11 @@ class FrontendEditingInitializationHook
         if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
             && isset($GLOBALS['TYPO3_REQUEST'])
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
+            && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
         ) {
             $this->isSiteConfigurationFound = true;
+
+            $GLOBALS['TSFE']->fePreview = 0;
 
             // Allow hidden pages for links generation
             $context = GeneralUtility::makeInstance(Context::class);
@@ -126,6 +129,7 @@ class FrontendEditingInitializationHook
     protected function isFrontendEditingEnabled(TypoScriptFrontendController $tsfe): bool
     {
         $this->accessService = GeneralUtility::makeInstance(AccessService::class);
+
         if ($this->accessService->isEnabled() && $tsfe->type === 0) {
             $isFrontendEditing = GeneralUtility::_GET('frontend_editing');
             if (!isset($isFrontendEditing) && (bool)$isFrontendEditing !== true) {
@@ -386,12 +390,10 @@ class FrontendEditingInitializationHook
                     'ckeditor-jquery-adapter' => ['jquery', 'ckeditor'],
                 ],
                 'paths' => [
-                    'TYPO3/CMS/FrontendEditing/Contrib/toastr' => $this->getAbsolutePath(
-                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr'
-                    ),
-                    'TYPO3/CMS/FrontendEditing/Contrib/immutable' => $this->getAbsolutePath(
+                    'TYPO3/CMS/FrontendEditing/Contrib/toastr' =>
+                        'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/toastr',
+                    'TYPO3/CMS/FrontendEditing/Contrib/immutable' =>
                         'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/immutable'
-                    )
                 ]
             ]
         );
@@ -400,13 +402,9 @@ class FrontendEditingInitializationHook
             'EXT:backend/Resources/Public/JavaScript/backend.js'
         );
         // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
+        $this->pageRenderer->addJsFile('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js');
         $this->pageRenderer->addJsFile(
-            $this->getAbsolutePath('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js')
-        );
-        $this->pageRenderer->addJsFile(
-            $this->getAbsolutePath(
-                'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
-            )
+            'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
         );
 
         $configuration = $this->getPluginConfiguration();
