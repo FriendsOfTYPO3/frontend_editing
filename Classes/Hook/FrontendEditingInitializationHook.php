@@ -16,7 +16,6 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
@@ -49,6 +48,7 @@ use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\FrontendEditing\Xclass\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Lang\LanguageService;
 
 /**
