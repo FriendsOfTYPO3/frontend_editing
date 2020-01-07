@@ -6,7 +6,7 @@
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
 		"php": "^7.0",
-		"typo3/cms-core": "^8.7|| >=9.1.0 <10.2.0 "
+		"typo3/cms-core": "^8.7|| >=9.1.0 <10.3.0 "
 	},
 	"require-dev": {
 		"nimut/testing-framework": "^2.0",
