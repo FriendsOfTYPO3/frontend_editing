@@ -20,8 +20,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
@@ -47,10 +47,9 @@ class EditorController
      * kicks FormEngine in since this is used to resolve the proper record type
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function getConfigurationAction(ServerRequestInterface $request): ResponseInterface
     {
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
@@ -113,6 +112,7 @@ class EditorController
             $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
         }
 
+        $response = new Response();
         $response->getBody()->write(json_encode([
             'elementToConfiguration' => $elements,
             'configurations' => $configurations,
