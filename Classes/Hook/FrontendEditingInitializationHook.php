@@ -258,7 +258,11 @@ class FrontendEditingInitializationHook
         ) : null;
 
         // Define the window size of the popups within the RTE
-        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
+        if (method_exists($GLOBALS['BE_USER'], 'getTSConfigVal')) {
+            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
+        } else {
+            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
+        }
         if (!empty($rtePopupWindowSize)) {
             list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
         }
@@ -279,8 +283,13 @@ class FrontendEditingInitializationHook
         $this->pageRenderer = new PageRenderer();
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
-        $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
-        $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        if (method_exists($this->pageRenderer, 'setMetaTag')) {
+            $this->pageRenderer->setMetaTag('name', 'viewport', 'width=device-width, initial-scale=1');
+            $this->pageRenderer->setMetaTag('http-equiv', 'X-UA-Compatible', 'IE=edge');
+        } else {
+            $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
+            $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        }
         $this->pageRenderer->setHtmlTag('<!DOCTYPE html><html lang="en">');
 
         $resourcePath = 'EXT:frontend_editing/Resources/Public/';
@@ -332,7 +341,7 @@ class FrontendEditingInitializationHook
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'mounts' => $this->getBEUserMounts(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
-            'seoProviderData' => $this->getSeoProviderData($this->typoScriptFrontendController->id)
+            'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)
         ]);
 
         // Assign the content
@@ -381,8 +390,15 @@ class FrontendEditingInitializationHook
      */
     protected function loadJavascriptResources()
     {
-        $this->pageRenderer->loadJquery();
+        if (method_exists($this->pageRenderer, 'loadJquery')) {
+            $this->pageRenderer->loadJquery();
+        } else {
+            $this->pageRenderer->addJsFile(
+                'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
+            );
+        }
         $this->pageRenderer->loadRequireJs();
+
         $this->pageRenderer->addRequireJsConfiguration(
             [
                 'shim' => [
@@ -657,7 +673,13 @@ class FrontendEditingInitializationHook
         } else {
             $allowedMounts = $beUSER->returnWebmounts();
 
-            if ($pidList = $beUSER->getTSConfigVal('options.hideRecords.pages')) {
+            if (method_exists($beUSER, 'getTSConfigVal')) {
+                $hideRecordsPages = $beUSER->getTSConfigVal('options.hideRecords.pages');
+            } else {
+                $hideRecordsPages = $beUSER->getTSConfig()['options.']['hideRecords.']['pages'];
+            }
+
+            if ($pidList = $hideRecordsPages) {
                 $hideList += GeneralUtility::intExplode(',', $pidList, true);
             }
 
@@ -683,7 +705,11 @@ class FrontendEditingInitializationHook
 
         // Populate mounts with domains
         foreach ($mounts as $uid => &$mount) {
-            $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
+            if (method_exists(BackendUtility::class, 'firstDomainRecord')) {
+                $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
+            } else {
+                $mount['domain'] = BackendUtility::getViewDomain($mount);
+            }
         }
 
         return $mounts;
@@ -696,9 +722,20 @@ class FrontendEditingInitializationHook
      */
     protected function getContentItems(): array
     {
-        /** @var NewContentElementController $contentController */
-        $contentController = GeneralUtility::makeInstance(NewContentElementController::class);
-        $wizardItems = $contentController->wizardArray();
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+        if ($typo3VersionNumber > 10000000) {
+            $contentController = GeneralUtility::makeInstance(
+                \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+            );
+            $wizardItems = $contentController->getWizards();
+        } else {
+            $contentController = GeneralUtility::makeInstance(
+                NewContentElementController::class
+            );
+            $wizardItems = $contentController->wizardArray();
+        }
         $this->wizardItemsHook($wizardItems, $contentController);
 
         $contentItems = [];

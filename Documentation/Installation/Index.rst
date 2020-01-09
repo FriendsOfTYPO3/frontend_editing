@@ -29,6 +29,10 @@ The following steps are required to active the frontend editing for a TYPO3 inst
   .. figure:: ../Images/UserActivationOfFeedit.png
      :alt: User activation of frontend editing
 
+.. _optional-settings:
+
+Optional settings
+
 - Optional part is to be able to set the baseUrl for the frontend editing if server path is not a top
   directory. It is done by adding the following part to setup typoscript:
 
