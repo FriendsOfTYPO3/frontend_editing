@@ -26,7 +26,7 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $user = $this->getBackendUser();
-        if ($this->isUserDisallowedAccessBackend($user)) {
+        if (!$user->isAdmin() && $this->isUserDisallowedAccessBackend($user)) {
             return new RedirectResponse($this->buildFrontendUri($request));
         }
 
