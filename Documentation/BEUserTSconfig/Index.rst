@@ -13,7 +13,7 @@ Disable access to BE
 ^^^^^^^^^^^^^^^^^^^^
 
 There might be cases when editors should only be able to use frontend editing to work with a content.
-BE access can be disabled by setting TSconfig for user or entire BE group.
+BE access can be disabled by setting TSconfig for user or entire BE group. This setting is ignored for admin users.
 
 .. code-block:: typoscript
 
