@@ -20,6 +20,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
@@ -40,13 +41,12 @@ class ReceiverController
      * Main entrypoint, dispatches to the appropriate methods
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
-    public function processRequest(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function processRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $this->response = $response;
+        $this->response = new Response();
 
         $table = $request->getParsedBody()['table'];
         $uid = (int)$request->getParsedBody()['uid'];
@@ -103,7 +103,7 @@ class ReceiverController
             default:
                 $this->writeErrorMessage('Invalid action');
         }
-        return $response;
+        return $this->response;
     }
 
     /**
@@ -148,10 +148,14 @@ class ReceiverController
             ]
         ];
 
-        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $dataHandler->start($data, []);
-        $dataHandler->process_datamap();
-
+        try {
+            $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+            $dataHandler->start($data, []);
+            $dataHandler->process_datamap();
+        } catch (\Exception $exception) {
+            // If editing a Site root the DataHandler is loading additional configuration which
+            // may be faulty. So suppress the Exception and continue because the update action is valid
+        }
         $translateKey = sprintf(
             'notifications.update.%s.',
             $table === 'pages' ? 'pages' : 'content'
