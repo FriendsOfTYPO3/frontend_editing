@@ -3,3 +3,6 @@ seoProvider = none
 
 # cat=basic/enable/20; type=string; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.content_editable_wrapper_tag_name
 contentEditableWrapperTagName = div
+
+# cat=features/enable/10; type=bool; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.placeholders
+enablePlaceholders = 0
