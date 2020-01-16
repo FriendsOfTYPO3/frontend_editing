@@ -235,9 +235,19 @@ class ReceiverController
         $dataHandler->process_datamap();
 
         if (empty($dataHandler->errorLog)) {
-            $this->writeSuccessMessage('Content element successfully created.');
+            $this->writeSuccessMessage(
+                LocalizationUtility::translate(
+                    'notifications.new.content.success',
+                    'FrontendEditing'
+                )
+            );
         } else {
-            $this->writeErrorMessage('Content element could not be created');
+            $this->writeErrorMessage(
+                LocalizationUtility::translate(
+                    'notifications.new.content.fail',
+                    'FrontendEditing'
+                )
+            );
         }
     }
 
