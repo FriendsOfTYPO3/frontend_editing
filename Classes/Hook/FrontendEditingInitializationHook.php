@@ -309,7 +309,7 @@ class FrontendEditingInitializationHook
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
-            window.F.setDisableModalOnNewCe(' . GeneralUtility::quoteJSvalue(ExtensionManagerConfigurationService::getSettings()['enablePlaceholders']) . ');
+            window.F.setDisableModalOnNewCe(' . (int) ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'] . ');
             window.FrontendEditingMode = true;
             window.TYPO3.settings = {
                 Textarea: {
