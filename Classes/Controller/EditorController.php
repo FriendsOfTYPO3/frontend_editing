@@ -212,15 +212,17 @@ class EditorController
         // Ensure custom config is empty so nothing additional is loaded
         // Of course this can be overriden by the editor configuration below
         $configuration = [
-            'customConfig' => '',
-            'extraPlugins' => ['confighelper'],
+            'customConfig' => ''
         ];
 
         if (is_array($this->rteConfiguration['config'])) {
             $configuration = array_replace_recursive($configuration, $this->rteConfiguration['config']);
         }
         $configuration['contentsLanguage'] = $this->getLanguageIsoCodeOfContent();
-        $configuration['extraPlugins'] = ['confighelper'];
+
+        if (ExtensionManagerConfigurationService::getSettings()['enablePlaceholders']) {
+            $configuration['extraPlugins'] = ['confighelper'];
+        }
 
         // replace all paths
         $configuration = $this->replaceAbsolutePathsToRelativeResourcesPath($configuration);
