@@ -21,6 +21,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
@@ -56,10 +57,15 @@ class ReceiverController
                 $this->deleteAction($table, $uid);
                 break;
 
-            // modifying existing records
+            // modifying existing or creating new records
             case 'POST':
                 $action = $request->getQueryParams()['action'];
                 switch ($action) {
+                    case 'new':
+                        $data = [];
+                        parse_str($request->getParsedBody()['data'], $data);
+                        $this->newAction($data['edit'], $data['defVals']);
+                        break;
                     case 'hide':
                         $this->hideAction(
                             $table,
@@ -192,6 +198,41 @@ class ReceiverController
             $this->writeSuccessMessage('Content deleted (' . $uid . ')');
         } else {
             $this->writeErrorMessage('Content could not be deleted (' . $uid . ')');
+        }
+    }
+
+    /**
+     * Create a new record.
+     *
+     * Submitted info is based on a query string as described at
+     * https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Examples/EditLinks/Index.html
+     *
+     * @param array $edit A an array as parsed from `tt_content[-1]=new`
+     * @param array $defVals Default content as an array parsed from `tt_content[title]=New`
+     */
+    protected function newAction(array $edit, array $defVals)
+    {
+        /** @var DataHandler $dataHandler */
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $dataHandler->BE_USER = $GLOBALS['BE_USER'];
+
+        $table = array_key_first($edit);
+        $defVals['pid'] = array_key_first($edit[$table]);
+        $uid = 'NEW' . uniqid();
+
+        $data = [
+            $table => [
+                $uid => $defVals
+            ]
+        ];
+
+        $dataHandler->start($data, []);
+        $dataHandler->process_datamap();
+
+        if (empty($dataHandler->errorLog)) {
+            $this->writeSuccessMessage('Content element successfully created.');
+        } else {
+            $this->writeErrorMessage('Content element could not be created');
         }
     }
 

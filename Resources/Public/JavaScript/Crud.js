@@ -35,6 +35,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	// Extend FrontendEditing with the following functions
 	FrontendEditing.prototype.saveAll = saveAll;
 	FrontendEditing.prototype.delete = deleteRecord;
+	FrontendEditing.prototype.newContent = newRecord;
 	FrontendEditing.prototype.hideContent = hideRecord;
 	FrontendEditing.prototype.moveContent = moveRecord;
 	FrontendEditing.prototype.getBESessionId = getBESessionId;
@@ -217,41 +218,70 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 	}
 
 	function moveRecord(uid, table, beforeUid, colPos, defVals) {
-		this.trigger(F.REQUEST_START);
+    this.trigger(F.REQUEST_START);
 
-		var data = {
-			uid: uid,
-			table: table,
-			beforeUid: beforeUid,
-			defVals: defVals
-		};
+    var data = {
+      uid: uid,
+      table: table,
+      beforeUid: beforeUid,
+      defVals: defVals
+    };
 
-		if (typeof colPos !== 'undefined') {
-			data.colPos = colPos;
-		}
+    if (typeof colPos !== 'undefined') {
+      data.colPos = colPos;
+    }
 
-		$.ajax({
-			url: getEndpointUrl('move'),
-			method: 'POST',
-			data: data
-		}).done(function (data) {
-			F.trigger(
-				F.UPDATE_CONTENT_COMPLETE,
-				{
-					message: data.message
-				}
-			);
-		}).fail(function (jqXHR) {
-			F.trigger(
-				F.REQUEST_ERROR,
-				{
-					message: jqXHR.responseText
-				}
-			);
-		}).always(function () {
-			F.trigger(F.REQUEST_COMPLETE);
-		});
-	}
+    $.ajax({
+      url: getEndpointUrl('move'),
+      method: 'POST',
+      data: data
+    }).done(function (data) {
+      F.trigger(
+        F.UPDATE_CONTENT_COMPLETE,
+        {
+          message: data.message
+        }
+      );
+    }).fail(function (jqXHR) {
+      F.trigger(
+        F.REQUEST_ERROR,
+        {
+          message: jqXHR.responseText
+        }
+      );
+    }).always(function () {
+      F.trigger(F.REQUEST_COMPLETE);
+    });
+  }
+
+  function newRecord(defVals) {
+    this.trigger(F.REQUEST_START);
+
+    var data = {data: defVals};
+
+    $.ajax({
+      url: getEndpointUrl('new'),
+      method: 'POST',
+      data: data
+    }).done(function (data) {
+      F.trigger(
+        F.UPDATE_CONTENT_COMPLETE,
+        {
+          message: data.message
+        }
+      );
+    }).fail(function (jqXHR) {
+      F.trigger(
+        F.REQUEST_ERROR,
+        {
+          message: jqXHR.responseText
+        }
+      );
+    }).always(function () {
+      F.trigger(F.REQUEST_COMPLETE);
+      F.refreshIframe();
+    });
+  }
 
 	return FrontendEditing;
 });
