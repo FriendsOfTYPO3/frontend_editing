@@ -64,7 +64,7 @@ class ReceiverController
                     case 'new':
                         $data = [];
                         parse_str($request->getParsedBody()['data'], $data);
-                        $this->newAction($data['edit'], $data['defVals']);
+                        $this->newAction($data['edit'], $data['defVals'], (int) $request->getQueryParams()['page']);
                         break;
                     case 'hide':
                         $this->hideAction(
@@ -208,21 +208,26 @@ class ReceiverController
      * https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Examples/EditLinks/Index.html
      *
      * @param array $edit A an array as parsed from `tt_content[-1]=new`
-     * @param array $defVals Default content as an array parsed from `tt_content[title]=New`
+     * @param array $defVals Default content as an array parsed from `tt_content[title]=title`
+     * @param int $pid Page ID
      */
-    protected function newAction(array $edit, array $defVals)
+    protected function newAction(array $edit, array $defVals, int $pid)
     {
         /** @var DataHandler $dataHandler */
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->BE_USER = $GLOBALS['BE_USER'];
 
         $table = array_key_first($edit);
-        $defVals['pid'] = array_key_first($edit[$table]);
+        if ((int) array_key_first($edit[$table]) < 0) {
+            $defVals[$table]['pid'] = array_key_first($edit[$table]);
+        } else {
+            $defVals[$table]['pid'] = $pid;
+        }
         $uid = 'NEW' . uniqid();
 
         $data = [
             $table => [
-                $uid => $defVals
+                $uid => array_change_key_case($defVals[$table])
             ]
         ];
 
