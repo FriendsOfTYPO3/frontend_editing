@@ -35,7 +35,7 @@ class IsFrontendEditingActiveViewHelper extends AbstractViewHelper
     use CompileWithRenderStatic;
 
     /**
-     * Returns rendered children (or true if children renders empty) if the frontend editor is active
+     * Returns true if the frontend editor is active
      *
      * @return bool|string
      */
