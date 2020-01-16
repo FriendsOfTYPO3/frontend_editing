@@ -91,13 +91,29 @@ class ContentEditableWrapperService
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
+        $placeholderText = $GLOBALS['TSFE']->sL($GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder']);
+
+        if ($placeholderText === '') {
+            $placeholderText = $GLOBALS['TSFE']->sL($GLOBALS['TCA'][$table]['columns'][$field]['label']);
+        }
+
+        if ($placeholderText === '') {
+            $placeholderText = $GLOBALS['TSFE']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.default-label');
+        }
+
+        $placeholderText = sprintf(
+            $GLOBALS['TSFE']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.label-wrap'),
+            $placeholderText
+        );
+
         $content = sprintf(
-            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s" placeholder="Placeholder text">%s</%s>',
+            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s" placeholder="%s">%s</%s>',
             $this->contentEditableWrapperTagName,
             $table,
             $field,
             $uid,
             $this->checkIfContentElementIsHidden($table, (int)$uid),
+            htmlspecialchars($placeholderText),
             $content,
             $this->contentEditableWrapperTagName
         );
