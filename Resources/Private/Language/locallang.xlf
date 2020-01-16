@@ -88,6 +88,19 @@
             <trans-unit id="notifications.update.pages.fail">
                 <source>Page could not be updated (%s)</source>
             </trans-unit>
+	        <trans-unit id="notifications.new.content.success">
+		        <source>The content element was created</source>
+	        </trans-unit>
+	        <trans-unit id="notifications.new.content.fail">
+		        <source>The content element could not be created</source>
+	        </trans-unit>
+
+	        <trans-unit id="placeholder.label-wrap">
+		        <source>Enter %s here</source>
+	        </trans-unit>
+	        <trans-unit id="placeholder.default-label">
+		        <source>some text</source>
+	        </trans-unit>
 
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
