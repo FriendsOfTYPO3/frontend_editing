@@ -20,3 +20,9 @@ $GLOBALS['TYPO3_USER_SETTINGS']['columns']['frontend_editing_overlay'] = [
     'frontend_editing, frontend_editing_overlay',
     'after:edit_RTE'
 );
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'frontend_editing',
+    'Configuration/TypoScript/FluidStyledContent9',
+    'Editable Fluid Styled Content v9'
+);
