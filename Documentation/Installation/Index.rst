@@ -4,14 +4,18 @@
 
 .. _installation:
 
+============
 Installation
-------------
+============
+
+Required steps
+==============
 
 The following steps are required to active the frontend editing for a TYPO3 installation.
 
 - Install and active the extension called *frontend_editing*
 
-- Add the TypoScript called *TYPO3 frontend editing* to the site roots where the features should be activated
+- Add the static TypoScript template *Frontend Editing* to the site roots where the features should be activated
 
   .. figure:: ../Images/AddTypoScript.png
      :alt: TYPO3 frontend editing TyposScript
@@ -31,11 +35,15 @@ The following steps are required to active the frontend editing for a TYPO3 inst
 
 .. _optional-settings:
 
-Optional settings
+Optional steps
+==============
 
-- Optional part is to be able to set the baseUrl for the frontend editing if server path is not a top
-  directory. It is done by adding the following part to setup typoscript:
+- Set the baseUrl for frontend editing if server path is not a top directory. This is done by adding the following part to setup typoscript:
 
   .. code-block:: typoscript
 
      plugin.tx_frontendediting.baseUrl = /
+
+- Include the static template *Editable Fluid Styled Content v9*, to include basic editable templates for Fluid Styled Content in TYPO3 v9.
+
+- Enable the Placeholder feature in the extension configuration. By enabling this feature, empty editable content areas will appear with placeholders. Content elements will also appear directly after you have dropped them on the page, skipping the modal pop-up with a backend form that would otherwise appear. :ref:`_extension-manager-settings`

@@ -14,7 +14,7 @@ Custom Records
 """"""""""""""
 
 With this feature, webmaster is allowed to insert directly record into custom configured zone.
-For example: a webmaster can insert directly news into the news list.
+For example: a webmaster can insert news directly into the news list.
 
 The configuration is done in 2 parts.
 
