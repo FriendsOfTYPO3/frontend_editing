@@ -115,7 +115,14 @@ class ContentEditableWrapperService
         );
 
         $content = sprintf(
-            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s" placeholder="%s">%s</%s>',
+            '<%s '
+            . 'contenteditable="true" '
+            . 'data-table="%s" '
+            . 'data-field="%s" '
+            . 'data-uid="%d" '
+            . 'class="%s" '
+            . 'placeholder="%s"'
+            . '>%s</%s>',
             $this->contentEditableWrapperTagName,
             $table,
             $field,
