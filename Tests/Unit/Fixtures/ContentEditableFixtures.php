@@ -132,14 +132,14 @@ class ContentEditableFixtures
     public function getWrappedExpectedContent()
     {
         $expectedOutput = sprintf(
-            '<%s '
+            '<div '
             . 'contenteditable="true" '
             . 'data-table="%s" '
             . 'data-field="%s" '
             . 'data-uid="%d" '
             . 'class="%s" '
             . 'placeholder="Enter some text here"'
-            . '>%s</%s>',
+            . '>%s</div>',
             $this->table,
             $this->field,
             $this->uid,
