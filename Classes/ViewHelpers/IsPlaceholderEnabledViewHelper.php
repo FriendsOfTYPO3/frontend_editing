@@ -45,6 +45,7 @@ class IsPlaceholderEnabledViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ) {
-        return FrontendEditingUtility::isEnabled() && ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'];
+        return FrontendEditingUtility::isEnabled()
+            && ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'];
     }
 }

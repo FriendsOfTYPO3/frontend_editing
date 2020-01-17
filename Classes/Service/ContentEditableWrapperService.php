@@ -91,18 +91,26 @@ class ContentEditableWrapperService
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
-        $placeholderText = $GLOBALS['TSFE']->sL($GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder']);
+        $placeholderText = $GLOBALS['LANG']->sL(
+            $GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder']
+        );
 
         if ($placeholderText === '') {
-            $placeholderText = $GLOBALS['TSFE']->sL($GLOBALS['TCA'][$table]['columns'][$field]['label']);
+            $placeholderText = $GLOBALS['LANG']->sL(
+                $GLOBALS['TCA'][$table]['columns'][$field]['label']
+            );
         }
 
         if ($placeholderText === '') {
-            $placeholderText = $GLOBALS['TSFE']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.default-label');
+            $placeholderText = $GLOBALS['LANG']->sL(
+                'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.default-label'
+            );
         }
 
         $placeholderText = sprintf(
-            $GLOBALS['TSFE']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.label-wrap'),
+            $GLOBALS['LANG']->sL(
+                'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.label-wrap'
+            ),
             $placeholderText
         );
 

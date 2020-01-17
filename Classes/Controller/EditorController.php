@@ -139,7 +139,8 @@ class EditorController
             ]
         ];
 
-        if (!isset($this->rteConfiguration['externalPlugins']) || !is_array($this->rteConfiguration['externalPlugins'])) {
+        if (!isset($this->rteConfiguration['externalPlugins'])
+            || !is_array($this->rteConfiguration['externalPlugins'])) {
             $this->rteConfiguration['externalPlugins'] = [];
         }
 
@@ -212,7 +213,7 @@ class EditorController
         // Ensure custom config is empty so nothing additional is loaded
         // Of course this can be overriden by the editor configuration below
         $configuration = [
-            'customConfig' => ''
+            'customConfig' => '',
         ];
 
         if (is_array($this->rteConfiguration['config'])) {
