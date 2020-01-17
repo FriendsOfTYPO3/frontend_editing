@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use http\Exception\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -209,16 +210,32 @@ class ReceiverController
      * @param array $edit A an array as parsed from `tt_content[-1]=new`
      * @param array $defVals Default content as an array parsed from `tt_content[title]=title`
      * @param int $pid Page ID
+     *
+     * @throws \InvalidArgumentException
      */
     protected function newAction(array $edit, array $defVals, int $pid)
     {
         /** @var DataHandler $dataHandler */
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $dataHandler->BE_USER = $GLOBALS['BE_USER'];
 
-        $table = array_key_first($edit);
-        if ((int) array_key_first($edit[$table]) < 0) {
-            $defVals[$table]['pid'] = array_key_first($edit[$table]);
+        if (count($edit) === 0) {
+            throw new InvalidArgumentException(
+                'Missing element information (zero items in $edit)',
+                1579267630
+            );
+        }
+
+        $table = array_keys($edit)[0];
+
+        if (count($edit[$table]) === 0) {
+            throw new InvalidArgumentException(
+                'Missing element information (zero items in $edit[' . $table . '])',
+                1579267718
+            );
+        }
+
+        if ((int) array_keys($edit[$table])[0] < 0) {
+            $defVals[$table]['pid'] = array_keys($edit[$table])[0];
         } else {
             $defVals[$table]['pid'] = $pid;
         }

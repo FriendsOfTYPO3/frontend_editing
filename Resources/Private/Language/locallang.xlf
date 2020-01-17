@@ -99,7 +99,7 @@
 		        <source>Enter %s here</source>
 	        </trans-unit>
 	        <trans-unit id="placeholder.default-label">
-		        <source>some text</source>
+		        <source>Enter text here</source>
 	        </trans-unit>
 
             <trans-unit id="right-bar.element-title">
