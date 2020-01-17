@@ -21,14 +21,14 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
- * View helper useful to determine whether or not frontend editing is active
+ * View helper to use in conditions in connection with the placeholder feature.
  *
- * Use in conditions to hide or show content for editors.
+ * Will return true if the placeholder feature is enabled.
  *
  * Example:
  *
- * <f:if condition="{core:isPlaceholderEnabled()}">
- *     Frontend Editing is active and the placeholder feature is enabled.
+ * <f:if condition="{header} || {core:isPlaceholderEnabled()}">
+ *     {header}
  * </f:if>
  */
 class IsPlaceholderEnabledViewHelper extends AbstractViewHelper
