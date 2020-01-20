@@ -138,7 +138,7 @@ class ContentEditableFixtures
             . 'data-field="%s" '
             . 'data-uid="%d" '
             . 'class="%s" '
-            . 'placeholder="Enter some text here"'
+            . 'placeholder="Enter text here"'
             . '>%s</div>',
             $this->table,
             $this->field,
