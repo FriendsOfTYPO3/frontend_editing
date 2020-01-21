@@ -20,6 +20,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -50,8 +51,12 @@ class EditorController
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response)
+    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response = null)
     {
+        if ($response === null) {
+            $response = new Response();
+        }
+
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
         /** @var FormDataCompiler $formDataCompiler */
