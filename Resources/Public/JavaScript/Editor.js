@@ -270,7 +270,7 @@ define([
 					if (elementData.hasCkeditorConfiguration) {
 						$.extend(true, config, defaultEditorConfig, elementData.configuration);
 					} else {
-						$.extend(true, config, defaultEditorConfig, defaultSimpleEditorConfig);
+						$.extend(true, config, defaultEditorConfig, elementData.configuration, defaultSimpleEditorConfig);
 					}
 
 					// Initialize CKEditor now, when finished remember any change
