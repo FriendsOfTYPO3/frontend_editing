@@ -334,8 +334,6 @@ class ContentEditableWrapperService
                 $translatedRecord = array_pop($translatedRecords);
 
                 if ($translatedRecord) {
-
-
                     if ($typo3VersionNumber < 10000000) {
                         // @extensionScannerIgnoreLine
                         $table = BackendUtility::getOriginalTranslationTable($table);
