@@ -762,16 +762,12 @@ class FrontendEditingInitializationHook
         // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
         if (is_array($newContentElement['wizardItemsHook'])) {
             foreach ($newContentElement['wizardItemsHook'] as $classData) {
-                $hookObject = GeneralUtility::getUserObj($classData);
+                $hookObject = GeneralUtility::makeInstance($classData);
                 if (!$hookObject instanceof NewContentElementWizardHookInterface) {
                     throw new \UnexpectedValueException(
                         $classData . ' must implement interface ' . NewContentElementWizardHookInterface::class,
                         1227834741
                     );
-                }
-                // Check if ID is set
-                if (!$contentController->id) {
-                    $contentController->id = $this->typoScriptFrontendController->id;
                 }
 
                 $hookObject->manipulateWizardItems($wizardItems, $contentController);
