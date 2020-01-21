@@ -24,6 +24,8 @@ use TYPO3\CMS\FrontendEditing\ViewHelpers\ContentEditableViewHelper;
 
 /**
  * Test case for TYPO3\CMS\FrontendEditing\ViewHelpers\EditableViewHelper
+ *
+ * @extensionScannerIgnoreFile
  */
 class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
 {

@@ -22,6 +22,8 @@ use TYPO3\CMS\FrontendEditing\ViewHelpers\SvgViewHelper;
 
 /**
  * Test case for TYPO3\CMS\FrontendEditing\ViewHelpers\SvgViewHelper
+ *
+ * @extensionScannerIgnoreFile
  */
 class SvgViewHelperTest extends ViewHelperBaseTestcase
 {

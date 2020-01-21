@@ -16,6 +16,7 @@ namespace TYPO3\CMS\FrontendEditing\Mvc\View;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
@@ -26,9 +27,13 @@ class NotFoundView extends \TYPO3\CMS\Extbase\Mvc\View\NotFoundView
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
      */
     protected $configurationManager;
+
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    {
+        $this->configurationManager = $configurationManager;
+    }
 
     /**
      * Renders the not found view with ContentEditable wrapping
@@ -41,7 +46,7 @@ class NotFoundView extends \TYPO3\CMS\Extbase\Mvc\View\NotFoundView
     {
         $template = parent::render();
 
-        $contentObject = $this->configurationManager->getContentObject();
+        $contentObject = $this->configurationManager->getContentObjectRenderer();
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 

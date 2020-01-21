@@ -21,6 +21,8 @@ use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
  * Fixtures for ContentEditableProperties
+ *
+ * @extensionScannerIgnoreFile
  */
 class ContentEditableFixtures
 {

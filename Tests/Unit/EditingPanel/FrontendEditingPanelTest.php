@@ -29,6 +29,8 @@ use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel.
+ *
+ * @extensionScannerIgnoreFile
  */
 class FrontendEditingPanelTest extends UnitTestCase
 {

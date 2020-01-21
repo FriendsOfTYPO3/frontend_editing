@@ -20,6 +20,8 @@ use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService.
+ *
+ * @extensionScannerIgnoreFile
  */
 class ExtensionManagerConfigurationServiceTest extends UnitTestCase
 {

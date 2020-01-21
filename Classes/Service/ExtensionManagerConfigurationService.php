@@ -40,7 +40,9 @@ class ExtensionManagerConfigurationService
             $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
         } else {
             $settings = [];
+            // @extensionScannerIgnoreLine
             if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing'])) {
+                // @extensionScannerIgnoreLine
                 $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
             }
         }
