@@ -16,6 +16,10 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+
 /**
  * Service class to get the settings from Extension Manager
  */
@@ -28,12 +32,21 @@ class ExtensionManagerConfigurationService
      */
     public static function getSettings(): array
     {
-        $settings = [];
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing'])) {
-            $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
-            if (!is_array($settings)) {
-                $settings = [];
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
+        if ($typo3VersionNumber >= 9000000) {
+            $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
+        } else {
+            $settings = [];
+            if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing'])) {
+                $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
             }
+        }
+
+        if (!is_array($settings)) {
+            $settings = [];
         }
 
         return $settings;
