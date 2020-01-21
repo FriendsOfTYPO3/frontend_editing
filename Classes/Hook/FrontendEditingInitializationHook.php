@@ -722,20 +722,9 @@ class FrontendEditingInitializationHook
      */
     protected function getContentItems(): array
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-        if ($typo3VersionNumber > 10000000) {
-            $contentController = GeneralUtility::makeInstance(
-                \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
-            );
-            $wizardItems = $contentController->getWizards();
-        } else {
-            $contentController = GeneralUtility::makeInstance(
-                NewContentElementController::class
-            );
-            $wizardItems = $contentController->wizardArray();
-        }
+        $contentController = $this->getNewContentElementController();
+
+        $wizardItems = $contentController->getWizards();
         $this->wizardItemsHook($wizardItems, $contentController);
 
         $contentItems = [];
@@ -947,5 +936,52 @@ class FrontendEditingInitializationHook
         $showHiddenItems = ($showHiddenItems === $defaultState) ? 0 : $defaultState;
 
         return $showHiddenItems;
+    }
+
+    /**
+     * Return instance of NewContentElementController
+     * For TYPO3 >= 9 init NewContentElementController with given server request
+     *
+     * @return NewContentElementController|\TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController
+     */
+    protected function getNewContentElementController()
+    {
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+        if ($typo3VersionNumber > 10000000) {
+            $contentController = GeneralUtility::makeInstance(
+                \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+            );
+            $contentController->wizardAction(
+                $this->requestWithSimulatedQueryParams()
+            );
+        } else {
+            $contentController = GeneralUtility::makeInstance(
+                NewContentElementController::class
+            );
+            if ($typo3VersionNumber > 9000000) {
+                $contentController->init(
+                    $this->requestWithSimulatedQueryParams()
+                );
+            }
+        }
+
+        return $contentController;
+    }
+
+    /**
+     * Simulate request with "id" and "sys_language_uid" parameters for NewContentElementController
+     *
+     * @return \Psr\Http\Message\ServerRequestInterface
+     */
+    protected function requestWithSimulatedQueryParams(): \Psr\Http\Message\ServerRequestInterface
+    {
+        $languageUid = GeneralUtility::makeInstance(Context::class)->getAspect('language')->getId();
+
+        return $GLOBALS['TYPO3_REQUEST']->withQueryParams([
+            'id' => (int)$this->typoScriptFrontendController->id,
+            'sys_language_uid' => $languageUid,
+        ]);
     }
 }
