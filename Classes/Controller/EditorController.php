@@ -84,7 +84,10 @@ class EditorController
             $externalPlugins = '';
             foreach ($this->getExtraPlugins() as $pluginName => $config) {
                 $editorConfiguration[$pluginName] = $config['config'];
-                $editorConfiguration['extraPlugins'] .= ',' . $pluginName;
+                if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
+                    $editorConfiguration['extraPlugins'] .= ',';
+                }
+                $editorConfiguration['extraPlugins'] .= $pluginName;
 
                 $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
                 $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
