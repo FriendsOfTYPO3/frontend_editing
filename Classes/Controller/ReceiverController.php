@@ -16,13 +16,11 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use http\Exception\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
@@ -219,7 +217,7 @@ class ReceiverController
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
 
         if (count($edit) === 0) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Missing element information (zero items in $edit)',
                 1579267630
             );
@@ -228,7 +226,7 @@ class ReceiverController
         $table = array_keys($edit)[0];
 
         if (count($edit[$table]) === 0) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Missing element information (zero items in $edit[' . $table . '])',
                 1579267718
             );
