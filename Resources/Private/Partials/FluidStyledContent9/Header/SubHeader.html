@@ -1,0 +1,40 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:if condition="{subheader} || {core:isPlaceholderEnabled()}">
+	<f:switch expression="{layout}">
+		<f:case value="1">
+			<h2 class="{positionClass}">
+				<core:contentEditable table="tt_content" field="subheader" uid="{uid}">{subheader}</core:contentEditable>
+			</h2>
+		</f:case>
+		<f:case value="2">
+			<h3 class="{positionClass}">
+				<core:contentEditable table="tt_content" field="subheader" uid="{uid}">{subheader}</core:contentEditable>
+			</h3>
+		</f:case>
+		<f:case value="3">
+			<h4 class="{positionClass}">
+				<core:contentEditable table="tt_content" field="subheader" uid="{uid}">{subheader}</core:contentEditable>
+			</h4>
+		</f:case>
+		<f:case value="4">
+			<h5 class="{positionClass}">
+				<core:contentEditable table="tt_content" field="subheader" uid="{uid}">{subheader}</core:contentEditable>
+			</h5>
+		</f:case>
+		<f:case value="5">
+			<h6 class="{positionClass}">
+				<core:contentEditable table="tt_content" field="subheader" uid="{uid}">{subheader}</core:contentEditable>
+			</h6>
+		</f:case>
+		<f:defaultCase>
+			<f:if condition="{default}">
+				<f:render partial="Header/SubHeader" arguments="{
+					subheader: subheader,
+					positionClass: positionClass,
+					layout: default,
+					uid: uid}" />
+			</f:if>
+		</f:defaultCase>
+	</f:switch>
+</f:if>
+</html>

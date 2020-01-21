@@ -117,7 +117,7 @@ define([
 								callback: function (currentModal) {
 									var modalIframe = currentModal.find(Modal.types.iframe);
 									modalIframe.attr('name', 'list_frame');
-									
+
 									modalIframe.on('load', function () {
 										$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
 
@@ -270,7 +270,7 @@ define([
 					if (elementData.hasCkeditorConfiguration) {
 						$.extend(true, config, defaultEditorConfig, elementData.configuration);
 					} else {
-						$.extend(true, config, defaultEditorConfig, defaultSimpleEditorConfig);
+						$.extend(true, config, defaultEditorConfig, elementData.configuration, defaultSimpleEditorConfig);
 					}
 
 					// Initialize CKEditor now, when finished remember any change

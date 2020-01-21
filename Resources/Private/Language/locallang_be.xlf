@@ -10,6 +10,9 @@
             <trans-unit id="extension_management.content_editable_wrapper_tag_name">
                 <source>The tag name that will be used for the Content editable wrapper</source>
             </trans-unit>
+	        <trans-unit id="extension_management.placeholders">
+		        <source>Enable placeholders and direct drop-to-edit without modal.</source>
+	        </trans-unit>
         </body>
     </file>
 </xliff>
