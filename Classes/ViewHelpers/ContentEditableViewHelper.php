@@ -107,7 +107,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
                 VersionNumberUtility::getNumericTypo3Version()
             );
 
-            if ($typo3VersionNumber < 9000000) {
+            if ($typo3VersionNumber < 10000000) {
                 // @extensionScannerIgnoreLine
                 $pageRepositoryClassName = DeprecatedPageRepository::class;
             } else {
