@@ -22,6 +22,8 @@ use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService.
+ *
+ * @extensionScannerIgnoreFile
  */
 class ContentEditableWrapperServiceTest extends UnitTestCase
 {

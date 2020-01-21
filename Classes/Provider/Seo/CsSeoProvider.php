@@ -19,6 +19,7 @@ use Clickstorm\CsSeo\Domain\Model\Evaluation;
 use Clickstorm\CsSeo\Domain\Repository\EvaluationRepository;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -38,10 +39,25 @@ class CsSeoProvider extends BaseSeoProvider
         $evalutationRepository =  $objectManager->get(EvaluationRepository::class);
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $backendModuleUrl = $uriBuilder->buildUriFromModule(
-            'web_CsSeoMod1',
-            ['page' => $pageId]
+
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
         );
+
+        $uriParameters = ['page' => $pageId];
+
+        if ($typo3VersionNumber < 9000000) {
+            // @extensionScannerIgnoreLine
+            $backendModuleUrl = $uriBuilder->buildUriFromModule(
+                'web_CsSeoMod1',
+                $uriParameters
+            );
+        } else {
+            $backendModuleUrl = $uriBuilder->buildUriFromRoute(
+                'web_CsSeoMod1',
+                $uriParameters
+            );
+        }
 
         /** @var Evaluation $evaluation */
         $evaluation = $evalutationRepository->findByUidForeignAndTableName(

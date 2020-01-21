@@ -22,6 +22,8 @@ use TYPO3\CMS\FrontendEditing\ViewHelpers\CustomDropZoneViewHelper;
 
 /**
  * Test case for TYPO3\CMS\FrontendEditing\ViewHelpers\CustomDropZoneViewHelper
+ *
+ * @extensionScannerIgnoreFile
  */
 class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
 {

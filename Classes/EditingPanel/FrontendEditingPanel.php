@@ -142,7 +142,7 @@ class FrontendEditingPanel
             $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'];
             if (is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
                 foreach ($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
-                    $hookObject = GeneralUtility::getUserObj($classData);
+                    $hookObject = GeneralUtility::makeInstance($classData);
                     if (!$hookObject instanceof FrontendEditingDropzoneModifier) {
                         throw new \UnexpectedValueException(
                             $classData . ' must implement interface ' . FrontendEditingDropzoneModifier::class,

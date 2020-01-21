@@ -19,6 +19,7 @@ use TYPO3\CMS\Backend\Backend\Avatar\DefaultAvatarProvider;
 use TYPO3\CMS\Backend\Backend\Avatar\Image;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Provide avatar for top panel
@@ -40,7 +41,7 @@ class FrontendEditingAvatarProvider extends DefaultAvatarProvider
         if ($image === null) {
             $image = GeneralUtility::makeInstance(
                 Image::class,
-                ExtensionManagementUtility::siteRelPath('core') .
+                PathUtility::stripPathSitePrefix(ExtensionManagementUtility::extPath('core')) .
                 'Resources/Public/Icons/T3Icons/avatar/avatar-default.svg',
                 $size,
                 $size

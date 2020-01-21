@@ -105,7 +105,9 @@ class FrontendEditingInitializationHook
 
         // If this is TYPO3 9 and site configuration was found
         if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
+            // @extensionScannerIgnoreLine
             && isset($GLOBALS['TYPO3_REQUEST'])
+            // @extensionScannerIgnoreLine
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
             && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
         ) {
@@ -258,11 +260,8 @@ class FrontendEditingInitializationHook
         ) : null;
 
         // Define the window size of the popups within the RTE
-        if (method_exists($GLOBALS['BE_USER'], 'getTSConfigVal')) {
-            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfigVal('options.rte.popupWindowSize');
-        } else {
-            $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
-        }
+        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
+
         if (!empty($rtePopupWindowSize)) {
             list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
         }
@@ -283,13 +282,21 @@ class FrontendEditingInitializationHook
         $this->pageRenderer = new PageRenderer();
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
-        if (method_exists($this->pageRenderer, 'setMetaTag')) {
+
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
+        if ($typo3VersionNumber < 9000000) {
+            // @extensionScannerIgnoreLine
+            $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
+            // @extensionScannerIgnoreLine
+            $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        } else {
             $this->pageRenderer->setMetaTag('name', 'viewport', 'width=device-width, initial-scale=1');
             $this->pageRenderer->setMetaTag('http-equiv', 'X-UA-Compatible', 'IE=edge');
-        } else {
-            $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
-            $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         }
+
         $this->pageRenderer->setHtmlTag('<!DOCTYPE html><html lang="en">');
 
         $resourcePath = 'EXT:frontend_editing/Resources/Public/';
@@ -352,6 +359,7 @@ class FrontendEditingInitializationHook
         $parentObject->content = $this->pageRenderer->render();
         $parentObject->setAbsRefPrefix();
         // Remove any preview info
+        // @extensionScannerIgnoreLine
         unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_previewInfo']);
     }
 
@@ -393,7 +401,12 @@ class FrontendEditingInitializationHook
      */
     protected function loadJavascriptResources()
     {
-        if (method_exists($this->pageRenderer, 'loadJquery')) {
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
+        if ($typo3VersionNumber < 9000000) {
+            // @extensionScannerIgnoreLine
             $this->pageRenderer->loadJquery();
         } else {
             $this->pageRenderer->addJsFile(
@@ -555,6 +568,7 @@ class FrontendEditingInitializationHook
     {
         if ($this->isSiteConfigurationFound) {
             /** @var Site $site */
+            // @extensionScannerIgnoreLine
             $site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
 
             try {
@@ -676,11 +690,7 @@ class FrontendEditingInitializationHook
         } else {
             $allowedMounts = $beUSER->returnWebmounts();
 
-            if (method_exists($beUSER, 'getTSConfigVal')) {
-                $hideRecordsPages = $beUSER->getTSConfigVal('options.hideRecords.pages');
-            } else {
-                $hideRecordsPages = $beUSER->getTSConfig()['options.']['hideRecords.']['pages'];
-            }
+            $hideRecordsPages = $beUSER->getTSConfig()['options.']['hideRecords.']['pages'];
 
             if ($pidList = $hideRecordsPages) {
                 $hideList += GeneralUtility::intExplode(',', $pidList, true);
@@ -708,7 +718,12 @@ class FrontendEditingInitializationHook
 
         // Populate mounts with domains
         foreach ($mounts as $uid => &$mount) {
-            if (method_exists(BackendUtility::class, 'firstDomainRecord')) {
+            $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+                VersionNumberUtility::getNumericTypo3Version()
+            );
+
+            if ($typo3VersionNumber < 9004000) {
+                // @extensionScannerIgnoreLine
                 $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
             } else {
                 $mount['domain'] = BackendUtility::getViewDomain($mount);
@@ -983,6 +998,7 @@ class FrontendEditingInitializationHook
     {
         $languageUid = GeneralUtility::makeInstance(Context::class)->getAspect('language')->getId();
 
+        // @extensionScannerIgnoreLine
         return $GLOBALS['TYPO3_REQUEST']->withQueryParams([
             'id' => (int)$this->typoScriptFrontendController->id,
             'sys_language_uid' => $languageUid,

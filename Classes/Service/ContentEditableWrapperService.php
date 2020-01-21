@@ -18,10 +18,13 @@ namespace TYPO3\CMS\FrontendEditing\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -304,21 +307,37 @@ class ContentEditableWrapperService
      */
     protected function switchToLocalLanguageEquivalent(string &$table, int &$uid)
     {
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
         /** @var TypoScriptFrontendController $frontendController */
         $frontendController = $GLOBALS['TSFE'];
 
-        if ($frontendController->sys_language_uid !== 0) {
+        if ($typo3VersionNumber < 9004000) {
+            // @extensionScannerIgnoreLine
+            $languageId = $frontendController->sys_language_uid;
+        } else {
+            /** @var LanguageAspect $languageAspect */
+            $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+            $languageId = $languageAspect->getId();
+        }
+
+        if ($languageId !== 0) {
             $translatedRecords = BackendUtility::getRecordLocalization(
                 $table,
                 $uid,
-                $frontendController->sys_language_uid
+                $languageId
             );
 
             if (is_array($translatedRecords) && count($translatedRecords) > 0) {
                 $translatedRecord = array_pop($translatedRecords);
 
                 if ($translatedRecord) {
-                    $table = BackendUtility::getOriginalTranslationTable($table);
+                    if ($typo3VersionNumber < 10000000) {
+                        // @extensionScannerIgnoreLine
+                        $table = BackendUtility::getOriginalTranslationTable($table);
+                    }
                     $uid = $translatedRecord['uid'];
                 }
             }
