@@ -724,7 +724,11 @@ class FrontendEditingInitializationHook
     {
         $contentController = $this->getNewContentElementController();
 
-        $wizardItems = $contentController->getWizards();
+        // Compatibility with TYPO3 8
+        $wizardItems = method_exists($contentController, 'wizardArray')
+            ? $contentController->wizardArray()
+            : $contentController->getWizards();
+
         $this->wizardItemsHook($wizardItems, $contentController);
 
         $contentItems = [];
@@ -949,22 +953,23 @@ class FrontendEditingInitializationHook
         $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
             VersionNumberUtility::getNumericTypo3Version()
         );
-        if ($typo3VersionNumber > 10000000) {
+        if ($typo3VersionNumber > 9000000) {
             $contentController = GeneralUtility::makeInstance(
                 \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
             );
-            $contentController->wizardAction(
-                $this->requestWithSimulatedQueryParams()
-            );
-        } else {
-            $contentController = GeneralUtility::makeInstance(
-                NewContentElementController::class
-            );
-            if ($typo3VersionNumber > 9000000) {
+            if ($typo3VersionNumber > 10000000) {
+                $contentController->wizardAction(
+                    $this->requestWithSimulatedQueryParams()
+                );
+            } else {
                 $contentController->init(
                     $this->requestWithSimulatedQueryParams()
                 );
             }
+        } else {
+            $contentController = GeneralUtility::makeInstance(
+                NewContentElementController::class
+            );
         }
 
         return $contentController;
