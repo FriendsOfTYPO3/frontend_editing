@@ -20,7 +20,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -48,9 +47,10 @@ class EditorController
      * kicks FormEngine in since this is used to resolve the proper record type
      *
      * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function getConfigurationAction(ServerRequestInterface $request): ResponseInterface
+    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response)
     {
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
@@ -113,7 +113,6 @@ class EditorController
             $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
         }
 
-        $response = new Response();
         $response->getBody()->write(json_encode([
             'elementToConfiguration' => $elements,
             'configurations' => $configurations,
@@ -221,22 +220,18 @@ class EditorController
         }
         $configuration['contentsLanguage'] = $this->getLanguageIsoCodeOfContent();
 
-        if (ExtensionManagerConfigurationService::getSettings()['enablePlaceholders']) {
-            $configuration['extraPlugins'] = ['confighelper'];
-        }
-
         // replace all paths
         $configuration = $this->replaceAbsolutePathsToRelativeResourcesPath($configuration);
 
         // there are some places where we define an array, but it needs to be a list in order to work
         if (is_array($configuration['extraPlugins'])) {
-            $configuration['extraPlugins'] = implode(',', $configuration['extraPlugins']);
+            $configuration['extraPlugins'] = implode(',', array_filter($configuration['extraPlugins']));
         }
         if (is_array($configuration['removePlugins'])) {
-            $configuration['removePlugins'] = implode(',', $configuration['removePlugins']);
+            $configuration['removePlugins'] = implode(',', array_filter($configuration['removePlugins']));
         }
         if (is_array($configuration['removeButtons'])) {
-            $configuration['removeButtons'] = implode(',', $configuration['removeButtons']);
+            $configuration['removeButtons'] = implode(',', array_filter($configuration['removeButtons']));
         }
 
         return $configuration;
