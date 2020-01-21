@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 
 /**
  * Class for fetching the proper RTE configuration of a given field
@@ -47,10 +48,15 @@ class EditorController
      * kicks FormEngine in since this is used to resolve the proper record type
      *
      * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function getConfigurationAction(ServerRequestInterface $request): ResponseInterface
+    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response = null)
     {
+        if ($response === null) {
+            $response = new Response();
+        }
+
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
         /** @var FormDataCompiler $formDataCompiler */
@@ -76,13 +82,17 @@ class EditorController
             $this->formData = $formDataCompiler->compile($formDataCompilerInput);
             $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
             $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
+            $hasCkeditorConfiguration = $this->rteConfiguration !== null;
 
             $editorConfiguration = $this->prepareConfigurationForEditor();
 
             $externalPlugins = '';
             foreach ($this->getExtraPlugins() as $pluginName => $config) {
                 $editorConfiguration[$pluginName] = $config['config'];
-                $editorConfiguration['extraPlugins'] .= ',' . $pluginName;
+                if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
+                    $editorConfiguration['extraPlugins'] .= ',';
+                }
+                $editorConfiguration['extraPlugins'] .= $pluginName;
 
                 $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
                 $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
@@ -92,7 +102,7 @@ class EditorController
 
             $configuration = [
                 'configuration' => $editorConfiguration,
-                'hasCkeditorConfiguration' => $this->rteConfiguration !== null,
+                'hasCkeditorConfiguration' => $hasCkeditorConfiguration,
                 'externalPlugins' => $externalPlugins,
             ];
 
@@ -112,7 +122,6 @@ class EditorController
             $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
         }
 
-        $response = new Response();
         $response->getBody()->write(json_encode([
             'elementToConfiguration' => $elements,
             'configurations' => $configurations,
@@ -138,25 +147,36 @@ class EditorController
             ]
         ];
 
-        $pluginConfiguration = [];
-        if (isset($this->rteConfiguration['externalPlugins']) && is_array($this->rteConfiguration['externalPlugins'])) {
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            foreach ($this->rteConfiguration['externalPlugins'] as $pluginName => $configuration) {
-                $pluginConfiguration[$pluginName] = [
-                    'resource' => $this->resolveUrlPath($configuration['resource'])
-                ];
-                unset($configuration['resource']);
-
-                if ($configuration['route']) {
-                    $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
-                        $configuration['route'],
-                        $urlParameters
-                    );
-                }
-
-                $pluginConfiguration[$pluginName]['config'] = $configuration;
-            }
+        if (!isset($this->rteConfiguration['externalPlugins'])
+            || !is_array($this->rteConfiguration['externalPlugins'])) {
+            $this->rteConfiguration['externalPlugins'] = [];
         }
+
+        if (ExtensionManagerConfigurationService::getSettings()['enablePlaceholders']) {
+            $this->rteConfiguration['externalPlugins']['confighelper'] = [
+                'resource' => 'EXT:frontend_editing/Resources/Public/JavaScript/Plugins/confighelper/plugin.js'
+            ];
+        }
+
+        $pluginConfiguration = [];
+
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        foreach ($this->rteConfiguration['externalPlugins'] as $pluginName => $configuration) {
+            $pluginConfiguration[$pluginName] = [
+                'resource' => $this->resolveUrlPath($configuration['resource'])
+            ];
+            unset($configuration['resource']);
+
+            if ($configuration['route']) {
+                $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
+                    $configuration['route'],
+                    $urlParameters
+                );
+            }
+
+            $pluginConfiguration[$pluginName]['config'] = $configuration;
+        }
+
         return $pluginConfiguration;
     }
 
@@ -214,13 +234,13 @@ class EditorController
 
         // there are some places where we define an array, but it needs to be a list in order to work
         if (is_array($configuration['extraPlugins'])) {
-            $configuration['extraPlugins'] = implode(',', $configuration['extraPlugins']);
+            $configuration['extraPlugins'] = implode(',', array_filter($configuration['extraPlugins']));
         }
         if (is_array($configuration['removePlugins'])) {
-            $configuration['removePlugins'] = implode(',', $configuration['removePlugins']);
+            $configuration['removePlugins'] = implode(',', array_filter($configuration['removePlugins']));
         }
         if (is_array($configuration['removeButtons'])) {
-            $configuration['removeButtons'] = implode(',', $configuration['removeButtons']);
+            $configuration['removeButtons'] = implode(',', array_filter($configuration['removeButtons']));
         }
 
         return $configuration;

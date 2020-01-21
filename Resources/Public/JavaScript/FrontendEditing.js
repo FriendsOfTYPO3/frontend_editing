@@ -26,6 +26,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 	// JSON object holding key => label for labels
 	var translationLabels = {};
 
+	// Disable the modal pop-up when a new content element is created
+	var disableModalOnNewCe = false;
+
 	// Default for event-listening and triggering
 	var events = {
 		CONTENT_CHANGE: 'CONTENT_CHANGE'
@@ -163,7 +166,6 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 					callback: function(currentModal) {
 						var modalIframe = currentModal.find(Modal.types.iframe);
 						modalIframe.attr('name', 'list_frame');
-						
 						modalIframe.on('load', function () {
 							$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
 						});
@@ -179,6 +181,10 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		setTranslationLabels: function (labels) {
 			translationLabels = labels;
 		},
+
+    setDisableModalOnNewCe: function (disable) {
+      disableModalOnNewCe = disable;
+    },
 
 		translate: function (key) {
 			if (translationLabels[key]) {
@@ -279,8 +285,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var paramsObj = F.parseQuery(ev.dataTransfer.getData('params').substr(1));
 			var fullUrlObj = {};
 			$.extend(true, fullUrlObj, paramsObj, newUrlQueryStringObj);
-			var fullUrlQueryString = F.serializeObj(fullUrlObj);
-			F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
+      var fullUrlQueryString = F.serializeObj(fullUrlObj);
+			if (disableModalOnNewCe) {
+			  F.newContent(fullUrlQueryString);
+      } else {
+        F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
+      }
 		},
 
 		indicateCeStart: function (ev) {

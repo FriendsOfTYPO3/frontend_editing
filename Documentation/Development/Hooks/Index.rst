@@ -2,9 +2,11 @@
 
 .. highlight:: rst
 
-========
+.. _hooks:
+
+=====
 Hooks
-========
+=====
 
 Next hooks are available in Frontend editing
 

@@ -91,13 +91,23 @@ class ContentEditableWrapperService
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
+        $placeholderText = $this->getPlaceholderText($table, $field);
+
         $content = sprintf(
-            '<%s contenteditable="true" data-table="%s" data-field="%s" data-uid="%d" class="%s">%s</%s>',
+            '<%s '
+            . 'contenteditable="true" '
+            . 'data-table="%s" '
+            . 'data-field="%s" '
+            . 'data-uid="%d" '
+            . 'class="%s" '
+            . 'placeholder="%s"'
+            . '>%s</%s>',
             $this->contentEditableWrapperTagName,
             $table,
             $field,
             $uid,
             $this->checkIfContentElementIsHidden($table, (int)$uid),
+            htmlspecialchars($placeholderText),
             $content,
             $this->contentEditableWrapperTagName
         );
@@ -463,5 +473,40 @@ class ContentEditableWrapperService
             $table,
             $rawRecord
         );
+    }
+
+    /**
+     * Returns a localized placeholder text based on label. If empty, a default text is returned.
+     *
+     * @param string $table
+     * @param string $field
+     * @return string
+     */
+    protected function getPlaceholderText(string $table, string $field): string
+    {
+        $placeholderText = $GLOBALS['LANG']->sL(
+            $GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder']
+        );
+
+        if ($placeholderText === '') {
+            $placeholderText = $GLOBALS['LANG']->sL(
+                $GLOBALS['TCA'][$table]['columns'][$field]['label']
+            );
+        }
+
+        if ($placeholderText === '') {
+            $placeholderText = $GLOBALS['LANG']->sL(
+                'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.default-label'
+            );
+        } else {
+            $placeholderText = sprintf(
+                $GLOBALS['LANG']->sL(
+                    'LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:placeholder.label-wrap'
+                ),
+                $placeholderText
+            );
+        }
+
+        return $placeholderText;
     }
 }

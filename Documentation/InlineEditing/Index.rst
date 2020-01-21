@@ -4,10 +4,11 @@
 
 .. _inline-editing:
 
+==============
 Inline Editing
-------------
+==============
 
-After the frontend editing have been activated from within TYPO3´s backend
+After the frontend editing have been activated from within the TYPO3 backend
 there are one scenario that needs to been taking into account. It is what
 kind of templating engine are used for the frontend template for the websites
 that you are using.
@@ -15,7 +16,7 @@ that you are using.
 .. _css-styled-content:
 
 CSS Styled Content
-""""""""""""""""""
+==================
 
 If the installation are using the well known (and old) extension which is called
 css_styled_content are being used. The functionality comes straight out of the
@@ -24,7 +25,9 @@ box and the editing can start directly.
 .. _fluid-styled-content:
 
 Fluid Styled Content
-""""""""""""""""""""
+====================
+
+Basic Fluid Styled Content override templates with frontend editing enabled are included. To use them, include the static TypoScript template "Editable Fluid Styled Content v9". The templates are based on Fluid Styled Content for TYPO3 v9. Templates for other versions may be included in the future.
 
 Note:
 
@@ -46,10 +49,10 @@ a view helper that needs to be included and configured.
 Namespace:
 
 .. code-block:: html
-	
+
 	<html xmlns:core="http://typo3.org/ns/TYPO3/CMS/FrontendEditing/ViewHelpers"
 	      data-namespace-typo3-fluid="true">
-		
+
 	</html>
 
 First, find the content that you want editable and wrap it with the view
@@ -133,3 +136,79 @@ This example lists editable the frontend user names and emails:
 .. _tip::
 
 	Are you using :typoscript:`editIcons.beforeLastTag = 1` or :typoscript:`editIcons.beforeLastTag = 0`? Used wrong, you may set the entire content element as editable, resulting in problems correctly saving the data and content from other fields appearing elsewhere after saving.
+
+
+.. _viewhelpers:
+
+View Helpers
+============
+
+
+.. _viewhelpers-contenteditable:
+
+`contentEditable`
+-----------------
+
+Enable frontend editing for records in fluid.
+
+Example:
+
+.. code-block:: html+handlebars
+
+   <core:contentEditable table="tt_content" field="bodytext" uid="{item.uid}">
+       {item.bodytext}
+   </core:contentEditable>
+
+Output:
+
+.. code-block:: html
+
+   <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
+       This is the content text to edit
+   </div>
+
+
+.. _viewhelpers-customdropzone:
+
+`customDropZone`
+----------------
+
+Inserts a custom drop zone. Read more: :ref:`_custom-records-dropzone`
+
+
+.. _viewhelpers-isfrontendeditingactive:
+
+`isFrontendEditingActive`
+-----------------
+
+Useful to determine whether or not frontend editing is active. Use in conditions to hide or show content for editors.
+
+Example:
+
+.. code-block:: html+handlebars
+
+   <f:if condition="{core:isFrontendEditingActive()}">
+      <p>You're using Frontend Editing. Congratulations!</p>
+   </f:if>
+
+No output if Frontend editing is disabled. Output if Frontend Editing is enabled:
+
+.. code-block:: html
+
+   <p>You're using Frontend Editing. Congratulations!</p>
+
+
+.. _viewhelpers-isplaceholderenabled:
+
+`isPlaceholderEnabled`
+-----------------
+
+Use this view helper in conditions to show empty fields when the :ref:`placeholder feature <_extension-manager-settings-features>` is enabled.
+
+Example:
+
+.. code-block:: html+handlebars
+
+     <f:if condition="{header} || {core:isPlaceholderEnabled()}">
+       {header}
+     </f:if>

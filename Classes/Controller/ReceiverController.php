@@ -56,10 +56,15 @@ class ReceiverController
                 $this->deleteAction($table, $uid);
                 break;
 
-            // modifying existing records
+            // modifying existing or creating new records
             case 'POST':
                 $action = $request->getQueryParams()['action'];
                 switch ($action) {
+                    case 'new':
+                        $data = [];
+                        parse_str($request->getParsedBody()['data'], $data);
+                        $this->newAction($data['edit'], $data['defVals'], (int) $request->getQueryParams()['page']);
+                        break;
                     case 'hide':
                         $this->hideAction(
                             $table,
@@ -185,13 +190,78 @@ class ReceiverController
     protected function deleteAction(string $table, int $uid)
     {
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $dataHandler->BE_USER = $GLOBALS['BE_USER'];
         // Delete the record
         $dataHandler->deleteAction($table, $uid);
         if (empty($dataHandler->errorLog)) {
             $this->writeSuccessMessage('Content deleted (' . $uid . ')');
         } else {
             $this->writeErrorMessage('Content could not be deleted (' . $uid . ')');
+        }
+    }
+
+    /**
+     * Create a new record.
+     *
+     * Submitted info is based on a query string as described at
+     * https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Examples/EditLinks/Index.html
+     *
+     * @param array $edit A an array as parsed from `tt_content[-1]=new`
+     * @param array $defVals Default content as an array parsed from `tt_content[title]=title`
+     * @param int $pid Page ID
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function newAction(array $edit, array $defVals, int $pid)
+    {
+        /** @var DataHandler $dataHandler */
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+
+        if (count($edit) === 0) {
+            throw new \InvalidArgumentException(
+                'Missing element information (zero items in $edit)',
+                1579267630
+            );
+        }
+
+        $table = array_keys($edit)[0];
+
+        if (count($edit[$table]) === 0) {
+            throw new \InvalidArgumentException(
+                'Missing element information (zero items in $edit[' . $table . '])',
+                1579267718
+            );
+        }
+
+        if ((int) array_keys($edit[$table])[0] < 0) {
+            $defVals[$table]['pid'] = array_keys($edit[$table])[0];
+        } else {
+            $defVals[$table]['pid'] = $pid;
+        }
+        $uid = 'NEW' . uniqid();
+
+        $data = [
+            $table => [
+                $uid => $defVals[$table]
+            ]
+        ];
+
+        $dataHandler->start($data, []);
+        $dataHandler->process_datamap();
+
+        if (empty($dataHandler->errorLog)) {
+            $this->writeSuccessMessage(
+                LocalizationUtility::translate(
+                    'notifications.new.content.success',
+                    'FrontendEditing'
+                )
+            );
+        } else {
+            $this->writeErrorMessage(
+                LocalizationUtility::translate(
+                    'notifications.new.content.fail',
+                    'FrontendEditing'
+                )
+            );
         }
     }
 
