@@ -146,8 +146,8 @@ View Helpers
 
 .. _viewhelpers-contenteditable:
 
-`contentEditable`
-~~~~~~~~~~~~~~~~~
+contentEditable
+~~~~~~~~~~~~~~~
 
 Enable frontend editing for records in fluid.
 
@@ -170,16 +170,16 @@ Output:
 
 .. _viewhelpers-customdropzone:
 
-`customDropZone`
-~~~~~~~~~~~~~~~~
+customDropZone
+~~~~~~~~~~~~~~
 
 Inserts a custom drop zone. Read more: :ref:`custom-records-dropzone`
 
 
 .. _viewhelpers-isfrontendeditingactive:
 
-`isFrontendEditingActive`
-~~~~~~~~~~~~~~~~~~~~~~~~~
+isFrontendEditingActive
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Useful to determine whether or not frontend editing is active. Use in conditions to hide or show content for editors.
 
@@ -200,8 +200,8 @@ No output if Frontend editing is disabled. Output if Frontend Editing is enabled
 
 .. _viewhelpers-isplaceholderenabled:
 
-`isPlaceholderEnabled`
-~~~~~~~~~~~~~~~~~~~~~~
+isPlaceholderEnabled
+~~~~~~~~~~~~~~~~~~~~
 
 Use this view helper in conditions to show empty fields when the :ref:`placeholder feature <extension-manager-settings-features>` is enabled.
 
