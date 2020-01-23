@@ -190,6 +190,7 @@ class ReceiverController
     protected function deleteAction(string $table, int $uid)
     {
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+        $dataHandler->BE_USER = $GLOBALS['BE_USER'];
         // Delete the record
         $dataHandler->deleteAction($table, $uid);
         if (empty($dataHandler->errorLog)) {
