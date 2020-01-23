@@ -40,4 +40,4 @@ Enable placeholders and direct drop-to-edit without modal
 
 By enabling this feature, empty editable content areas will appear with placeholders. Content elements will also appear directly after you have dropped them on the page, skipping the modal pop-up with a backend form that would otherwise appear.
 
-When using this feature, you should adapt your templates to show empty fields using the :ref:`_viewhelpers-isplaceholderenabled` view helper.
+When using this feature, you should adapt your templates to show empty fields using the :ref:`viewhelpers-isplaceholderenabled` view helper.

@@ -2,7 +2,7 @@
 
 .. highlight:: rst
 
-============
+
 Dependencies
 ============
 
