@@ -46,4 +46,4 @@ Optional steps
 
 - Include the static template *Editable Fluid Styled Content v9*, to include basic editable templates for Fluid Styled Content in TYPO3 v9.
 
-- Enable the Placeholder feature in the extension configuration. By enabling this feature, empty editable content areas will appear with placeholders. Content elements will also appear directly after you have dropped them on the page, skipping the modal pop-up with a backend form that would otherwise appear. :ref:`_extension-manager-settings`
+- Enable the Placeholder feature in the extension configuration. By enabling this feature, empty editable content areas will appear with placeholders. Content elements will also appear directly after you have dropped them on the page, skipping the modal pop-up with a backend form that would otherwise appear. :ref:`extension-manager-settings`

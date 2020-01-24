@@ -4,7 +4,6 @@
 
 .. _inline-editing:
 
-==============
 Inline Editing
 ==============
 
@@ -16,7 +15,7 @@ that you are using.
 .. _css-styled-content:
 
 CSS Styled Content
-==================
+------------------
 
 If the installation are using the well known (and old) extension which is called
 css_styled_content are being used. The functionality comes straight out of the
@@ -25,7 +24,7 @@ box and the editing can start directly.
 .. _fluid-styled-content:
 
 Fluid Styled Content
-====================
+--------------------
 
 Basic Fluid Styled Content override templates with frontend editing enabled are included. To use them, include the static TypoScript template "Editable Fluid Styled Content v9". The templates are based on Fluid Styled Content for TYPO3 v9. Templates for other versions may be included in the future.
 
@@ -103,9 +102,10 @@ It is done by skipping the *field* option in the view helper:
 .. _typoscript:
 
 TypoScript
-""""""""""
+~~~~~~~~~~
 
-If you are listing elements with TypoScript only, you can still include the editing icons using the included hook into TYPO3 rendering process.
+If you are listing elements with TypoScript only, you can still include the
+editing icons using the included hook into TYPO3 rendering process.
 This example lists editable the frontend user names and emails:
 
 .. code-block:: typoscript
@@ -141,19 +141,19 @@ This example lists editable the frontend user names and emails:
 .. _viewhelpers:
 
 View Helpers
-============
+------------
 
 
 .. _viewhelpers-contenteditable:
 
-`contentEditable`
------------------
+contentEditable
+~~~~~~~~~~~~~~~
 
 Enable frontend editing for records in fluid.
 
 Example:
 
-.. code-block:: html+handlebars
+.. code-block:: html
 
    <core:contentEditable table="tt_content" field="bodytext" uid="{item.uid}">
        {item.bodytext}
@@ -170,22 +170,22 @@ Output:
 
 .. _viewhelpers-customdropzone:
 
-`customDropZone`
-----------------
+customDropZone
+~~~~~~~~~~~~~~
 
-Inserts a custom drop zone. Read more: :ref:`_custom-records-dropzone`
+Inserts a custom drop zone. Read more: :ref:`custom-records-dropzone`
 
 
 .. _viewhelpers-isfrontendeditingactive:
 
-`isFrontendEditingActive`
------------------
+isFrontendEditingActive
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Useful to determine whether or not frontend editing is active. Use in conditions to hide or show content for editors.
 
 Example:
 
-.. code-block:: html+handlebars
+.. code-block:: html
 
    <f:if condition="{core:isFrontendEditingActive()}">
       <p>You're using Frontend Editing. Congratulations!</p>
@@ -200,14 +200,14 @@ No output if Frontend editing is disabled. Output if Frontend Editing is enabled
 
 .. _viewhelpers-isplaceholderenabled:
 
-`isPlaceholderEnabled`
------------------
+isPlaceholderEnabled
+~~~~~~~~~~~~~~~~~~~~
 
-Use this view helper in conditions to show empty fields when the :ref:`placeholder feature <_extension-manager-settings-features>` is enabled.
+Use this view helper in conditions to show empty fields when the :ref:`placeholder feature <extension-manager-settings-features>` is enabled.
 
 Example:
 
-.. code-block:: html+handlebars
+.. code-block:: html
 
      <f:if condition="{header} || {core:isPlaceholderEnabled()}">
        {header}
