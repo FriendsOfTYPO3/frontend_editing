@@ -743,7 +743,11 @@ class FrontendEditingInitializationHook
         $contentController = $this->getNewContentElementController();
 
         // Compatibility with TYPO3 8
-        $wizardItems = method_exists($contentController, 'wizardArray')
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
+        $wizardItems = ($typo3VersionNumber < 9002000)
             ? $contentController->wizardArray()
             : $contentController->getWizards();
 
