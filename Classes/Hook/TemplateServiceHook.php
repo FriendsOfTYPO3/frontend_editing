@@ -18,7 +18,6 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Implements hooks in TemplateService
  */
@@ -49,5 +48,4 @@ class TemplateServiceHook
             }
         }
     }
-
 }
