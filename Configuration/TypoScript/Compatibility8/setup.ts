@@ -1,4 +1,4 @@
-[backend.user.isLoggedIn]
+[globalVar = TSFE : beUserLogin > 0]
 
 lib.fluidContent {
     stdWrap {
