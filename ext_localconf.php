@@ -37,6 +37,14 @@ if (TYPO3_MODE === 'FE' &&
     }
 }
 
+if (TYPO3_MODE === 'FE' &&
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.4')
+) {
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tstemplate.php']['includeStaticTypoScriptSources'] =
+        '';
+}
+
 /**
  * Hooks
  */
