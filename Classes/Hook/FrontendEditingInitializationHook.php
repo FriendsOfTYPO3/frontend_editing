@@ -474,7 +474,7 @@ class FrontendEditingInitializationHook
         $entryPoints = $this->getAllEntryPointPageTrees();
 
         foreach ($entryPoints as $entryPoint) {
-            if ($entryPoint['uid'] == 0) {
+            if ($entryPoint['uid'] === 0) {
                 $children = $this->getStructureForSinglePageTree($this->typoScriptFrontendController->rootLine[0]['uid']);
             } else {
                 $children[] = $this->getStructureForSinglePageTree($entryPoint['uid'])[0];
@@ -517,8 +517,8 @@ class FrontendEditingInitializationHook
             $entryPoints = array_map('intval', $backendUser->returnWebmounts());
             $entryPoints = array_unique($entryPoints);
             if (empty($entryPoints)) {
-                // use a virtual root
-                // the real mount points will be fetched in getNodes() then
+                // Use a virtual root
+                // The real mount points will be fetched in getNodes() then
                 // since those will be the "sub pages" of the virtual root
                 $entryPoints = [0];
             }
@@ -550,7 +550,7 @@ class FrontendEditingInitializationHook
             }
 
             $entryPoint = $repository->getTree($entryPoint, function ($page) use ($backendUser) {
-                // check each page if the user has permission to access it
+                // Check each page if the user has permission to access it
                 return $backendUser->doesUserHaveAccess($page, Permission::PAGE_SHOW);
             });
             if (!is_array($entryPoint)) {
