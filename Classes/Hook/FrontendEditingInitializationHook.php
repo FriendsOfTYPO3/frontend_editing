@@ -527,13 +527,12 @@ class FrontendEditingInitializationHook
             return [];
         }
 
+        $hiddenRecords = GeneralUtility::intExplode(',', $userTsConfig['options.']['hideRecords.']['pages'] ?? '', true);
         foreach ($entryPoints as $k => &$entryPoint) {
-            /*
-            if (in_array($entryPoint, $this->hiddenRecords, true)) {
+            if (in_array($entryPoint, $hiddenRecords, true)) {
                 unset($entryPoints[$k]);
                 continue;
             }
-            */
 
             if (!empty($this->backgroundColors) && is_array($this->backgroundColors)) {
                 try {
