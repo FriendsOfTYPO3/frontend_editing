@@ -427,7 +427,21 @@ define([
 		$iframe.on('load', deferred.resolve);
 
 		deferred.done(function () {
-			document.title = $iframe[0].contentDocument.title;
+      // Avoid inception issue for example when link clicked redirects to a new URL without frontend_editing=true
+      var iframeDocumentLocation = $iframe[0].contentDocument.location;
+      if (!iframeDocumentLocation.search.includes('frontend_editing=true')) {
+        var url = iframeDocumentLocation.href;
+        if (!url.includes('?')) {
+          url = url + '?';
+        } else if (url.slice(url.length - 1) !== '&') {
+          url = url + '&';
+        }
+        loadPageIntoIframe(url + 'frontend_editing=true', editorConfigurationUrl);
+        hideLoadingScreen();
+        return;
+      }
+
+      document.title = $iframe[0].contentDocument.title;
 			history.replaceState(history.state, document.title, window.location.href)
 
 			// check if LocalStorage contains any changes prior to iframe reload
