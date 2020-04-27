@@ -247,6 +247,7 @@ define([
 		});
 
 		if (requestData.length > 0) {
+			F.showLoadingScreen();
 			$.ajax({
 				url: configurationUrl,
 				method: 'POST',
@@ -294,6 +295,7 @@ define([
 						});
 					});
 				});
+				F.hideLoadingScreen();
 			});
 		}
 	}
