@@ -19,6 +19,7 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Tree\Repository\PageTreeRepository;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
@@ -27,6 +28,8 @@ use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\DocumentTypeExclusionRestriction;
+use TYPO3\CMS\Core\Exception\Page\RootLineException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
@@ -35,11 +38,13 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -466,13 +471,93 @@ class FrontendEditingInitializationHook
      */
     protected function getPageTreeStructure(): array
     {
+        $entryPoints = $this->getAllEntryPointPageTrees();
+
+        foreach ($entryPoints as $entryPoint) {
+            if ($entryPoint['uid'] === 0) {
+                $children = $this->getStructureForSinglePageTree($this->typoScriptFrontendController->rootLine[0]['uid']);
+            } else {
+                $children[] = $this->getStructureForSinglePageTree($entryPoint['uid'])[0];
+            }
+        }
+
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
             'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
-            'children' => $this->getStructureForSinglePageTree(
-                $this->typoScriptFrontendController->rootLine[0]['uid']
-            )
+            'children' => $children
         ];
+    }
+
+    /**
+     * Fetches all entry points for the page tree that the user is allowed to see
+     * This was taken from class TreeController (namespace TYPO3\CMS\Backend\Controller\Page);
+     *
+     * @return array
+     */
+    protected function getAllEntryPointPageTrees(): array
+    {
+        $backendUser = $GLOBALS['BE_USER'];
+
+        $userTsConfig = $GLOBALS['BE_USER']->getTSConfig();
+        $excludedDocumentTypes = GeneralUtility::intExplode(',', $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '', true);
+
+        $additionalPageTreeQueryRestrictions = [];
+        if (!empty($excludedDocumentTypes)) {
+            foreach ($excludedDocumentTypes as $excludedDocumentType) {
+                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction((int)$excludedDocumentType);
+            }
+        }
+
+        $repository = GeneralUtility::makeInstance(PageTreeRepository::class, (int)$backendUser->workspace, [], $additionalPageTreeQueryRestrictions);
+
+        $entryPoints = (int)($backendUser->uc['pageTree_temporaryMountPoint'] ?? 0);
+        if ($entryPoints > 0) {
+            $entryPoints = [$entryPoints];
+        } else {
+            $entryPoints = array_map('intval', $backendUser->returnWebmounts());
+            $entryPoints = array_unique($entryPoints);
+            if (empty($entryPoints)) {
+                // Use a virtual root
+                // The real mount points will be fetched in getNodes() then
+                // since those will be the "sub pages" of the virtual root
+                $entryPoints = [0];
+            }
+        }
+        if (empty($entryPoints)) {
+            return [];
+        }
+
+        $hiddenRecords = GeneralUtility::intExplode(',', $userTsConfig['options.']['hideRecords.']['pages'] ?? '', true);
+        foreach ($entryPoints as $k => &$entryPoint) {
+            if (in_array($entryPoint, $hiddenRecords, true)) {
+                unset($entryPoints[$k]);
+                continue;
+            }
+
+            if (!empty($this->backgroundColors) && is_array($this->backgroundColors)) {
+                try {
+                    $entryPointRootLine = GeneralUtility::makeInstance(RootlineUtility::class, $entryPoint)->get();
+                } catch (RootLineException $e) {
+                    $entryPointRootLine = [];
+                }
+                foreach ($entryPointRootLine as $rootLineEntry) {
+                    $parentUid = $rootLineEntry['uid'];
+                    if (!empty($this->backgroundColors[$parentUid]) && empty($this->backgroundColors[$entryPoint])) {
+                        $this->backgroundColors[$entryPoint] = $this->backgroundColors[$parentUid];
+                    }
+                }
+            }
+
+            $entryPoint = $repository->getTree($entryPoint, function ($page) use ($backendUser) {
+                // Check each page if the user has permission to access it
+                return $backendUser->doesUserHaveAccess($page, Permission::PAGE_SHOW);
+            });
+            if (!is_array($entryPoint)) {
+                unset($entryPoints[$k]);
+            }
+        }
+
+        return $entryPoints;
     }
 
     /**
