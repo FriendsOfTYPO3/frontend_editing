@@ -76,6 +76,7 @@ define([
 	var $itemCounter;
 	var $iframe;
 	var $loadingScreen;
+	var loadingScreenLevel = 0;
 	var $saveButton;
 	var $discardButton;
 	var iframeUrl;
@@ -498,15 +499,23 @@ define([
 	}
 
 	function showLoadingScreen() {
-		$loadingScreen.fadeIn('fast', function () {
-			$loadingScreen.removeClass(CLASS_HIDDEN);
-		});
+		if (loadingScreenLevel === 0) {
+			$loadingScreen.fadeIn('fast', function () {
+				$loadingScreen.removeClass(CLASS_HIDDEN);
+			});
+		}
+
+		loadingScreenLevel++;
 	}
 
 	function hideLoadingScreen() {
-		$loadingScreen.fadeOut('slow', function () {
-			$loadingScreen.addClass(CLASS_HIDDEN);
-		});
+		loadingScreenLevel--;
+
+		if (loadingScreenLevel === 0) {
+			$loadingScreen.fadeOut('slow', function () {
+				$loadingScreen.addClass(CLASS_HIDDEN);
+			});
+		}
 	}
 
 	function getIframe() {
