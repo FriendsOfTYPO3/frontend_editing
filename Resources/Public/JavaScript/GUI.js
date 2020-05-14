@@ -103,9 +103,7 @@ define([
 	}
 
 	function initListeners() {
-		F.on(F.REQUEST_START, function () {
-			showLoadingScreen();
-		});
+		F.on(F.REQUEST_START, function () {});
 
 		F.on(F.UPDATE_CONTENT_COMPLETE, function (data) {
 			showSuccess(
