@@ -305,7 +305,6 @@ define([
 						)
 					}
 				);
-				console.log(response);
 			}).always(function () {
 				F.hideLoadingScreen();
 			});
