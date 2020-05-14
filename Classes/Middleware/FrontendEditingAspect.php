@@ -45,7 +45,7 @@ class FrontendEditingAspect implements MiddlewareInterface
             $context = GeneralUtility::makeInstance(Context::class);
             $context->setAspect(
                 'visibility',
-                GeneralUtility::makeInstance(VisibilityAspect::class, $showHiddenItems, $showHiddenItems)
+                GeneralUtility::makeInstance(VisibilityAspect::class, true, $showHiddenItems)
             );
         }
         return $handler->handle($request);
