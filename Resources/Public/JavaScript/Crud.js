@@ -72,6 +72,8 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 
 		numberOfRequestsLeft = items.count();
 		items.forEach(function (item) {
+			F.showLoadingScreen();
+
 			// Check if a record is locked
 			$.when(checkIfRecordIsLocked(item)).done(function(data) {
 				// If user prompted yes or there was no locked record found
@@ -121,11 +123,15 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 							F.trigger(F.REQUEST_COMPLETE);
 							F.trigger(F.CONTENT_CHANGE);
 						}
+
+						F.hideLoadingScreen();
 					});
 				} else {
 					storage.clear();
 					F.trigger(F.REQUEST_COMPLETE);
 					F.trigger(F.CONTENT_CHANGE);
+
+					F.hideLoadingScreen();
 				}
 			});
 		});
