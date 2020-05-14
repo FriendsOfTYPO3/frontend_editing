@@ -295,6 +295,17 @@ define([
 						});
 					});
 				});
+			}).fail(function (response) {
+				F.trigger(
+					F.REQUEST_ERROR,
+					{
+						message: F.translate('notifications.request.configuration.fail',
+							response.status,
+							response.statusText
+						)
+					}
+				);
+			}).always(function () {
 				F.hideLoadingScreen();
 			});
 		}
