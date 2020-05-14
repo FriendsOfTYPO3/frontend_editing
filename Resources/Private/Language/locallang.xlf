@@ -94,6 +94,9 @@
 	        <trans-unit id="notifications.new.content.fail">
 		        <source>The content element could not be created</source>
 	        </trans-unit>
+            <trans-unit id="notifications.request.configuration.fail">
+                <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
+            </trans-unit>
 
 	        <trans-unit id="placeholder.label-wrap">
 		        <source>Enter %s here</source>

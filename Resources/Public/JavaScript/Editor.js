@@ -295,6 +295,18 @@ define([
 						});
 					});
 				});
+			}).fail(function (response) {
+				F.trigger(
+					F.REQUEST_ERROR,
+					{
+						message: F.translate('notifications.request.configuration.fail',
+							response.status,
+							response.statusText
+						)
+					}
+				);
+				console.log(response);
+			}).always(function () {
 				F.hideLoadingScreen();
 			});
 		}

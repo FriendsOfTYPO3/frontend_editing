@@ -188,7 +188,16 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 
 		translate: function (key) {
 			if (translationLabels[key]) {
-				return translationLabels[key];
+				var s = translationLabels[key];
+
+				if (arguments.length > 1) {
+					for (var i = 0; i < arguments.length - 1; i++) {
+						var reg = new RegExp("\\{" + i + "\\}", "gm");
+						s = s.replace(reg, arguments[i + 1]);
+					}
+				}
+
+				return s;
 			} else {
 				F.error('Invalid translation key: ' + key);
 			}
