@@ -146,7 +146,6 @@ define([
 
 		getIframe().on('load', function () {
 			initEditorInIframe(editorConfigurationUrl);
-			hideLoadingScreen();
 		});
 	}
 
@@ -513,6 +512,8 @@ define([
 			$loadingScreen.fadeOut('slow', function () {
 				$loadingScreen.addClass(CLASS_HIDDEN);
 			});
+		} else if (loadingScreenLevel < 0) {
+			loadingScreenLevel = 0;
 		}
 	}
 
