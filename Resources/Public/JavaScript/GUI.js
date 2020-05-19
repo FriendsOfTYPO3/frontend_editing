@@ -422,7 +422,6 @@ define([
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
 		showLoadingScreen();
-		var deferred = $.Deferred();
 
 		$iframe.attr({
 			'src': url
