@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Exception\Page\RootLineException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
@@ -54,7 +55,7 @@ use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -221,9 +222,18 @@ class FrontendEditingInitializationHook
         }
         $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
 
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
-            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            if ($typo3VersionNumber < 9000000) {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceTypo38::class);
+            } else {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            }
+
             $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
@@ -287,10 +297,6 @@ class FrontendEditingInitializationHook
         $this->pageRenderer = new PageRenderer();
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
-
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
 
         if ($typo3VersionNumber < 9000000) {
             // @extensionScannerIgnoreLine
