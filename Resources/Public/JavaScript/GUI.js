@@ -422,8 +422,6 @@ define([
 	}
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
-		showLoadingScreen();
-
 		$iframe.attr({
 			'src': url
 		});
