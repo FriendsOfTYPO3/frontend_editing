@@ -15,6 +15,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -72,9 +73,14 @@ class AccessService implements SingletonInterface
      */
     public function isPageEditAllowed($page = []): bool
     {
+        if (!($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)) {
+            return false;
+        }
+
         if (!$page) {
             $page = $GLOBALS['TSFE']->page;
         }
+
         return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::PAGE_EDIT);
     }
 
@@ -85,6 +91,10 @@ class AccessService implements SingletonInterface
      */
     public function isPageCreateAllowed(): bool
     {
+        if (!($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)) {
+            return false;
+        }
+
         return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_NEW);
     }
 
