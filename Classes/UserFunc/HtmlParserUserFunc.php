@@ -60,15 +60,17 @@ class HtmlParserUserFunc
     {
         $parsedUrl = parse_url($url);
 
+        $queryArguments = [];
+
         if ($parsedUrl['query'] !== null) {
             $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
-
-            $queryArguments['frontend_editing'] = 'true';
-
-            $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
-
-            $url = HttpUtility::buildUrl($parsedUrl);
         }
+
+        $queryArguments['frontend_editing'] = 'true';
+
+        $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
+
+        $url = HttpUtility::buildUrl($parsedUrl);
 
         return $url;
     }
