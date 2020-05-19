@@ -42,3 +42,30 @@ config.tx_extbase{
 lib.parseFunc_RTE.tags.a >
 
 [global]
+
+[backend.user.isLoggedIn]
+
+    config.tx_frontendediting {
+        # These transformations are applied to the page being edited to ensure features work as expected and inceptions
+        # are avoided.
+        pageContentTransformations.HTMLparser = 1
+        pageContentTransformations.HTMLparser {
+            keepNonMatchedTags = 1
+
+            tags {
+                a.fixAttrib {
+                    href.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->removeFrontendEditingInUrl
+
+                    target.list = _self
+                }
+
+                form.fixAttrib {
+                    action.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
+
+                    target.list = _self
+                }
+            }
+        }
+    }
+
+[global]

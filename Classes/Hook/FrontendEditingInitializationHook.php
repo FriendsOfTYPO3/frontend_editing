@@ -43,7 +43,6 @@ use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
@@ -174,32 +173,12 @@ class FrontendEditingInitializationHook
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
         if (!$this->isFrontendEditingEnabled($parentObject)) {
-            $dom = new \DOMDocument();
-            $dom->loadHTML($parentObject->content, LIBXML_NOWARNING | LIBXML_NOERROR);
-
-            $domWasModified = false;
-
-            /** @var \DOMElement $element */
-            foreach ($dom->getElementsByTagName('a') as $element) {
-                $parsedUrl = parse_url($element->getAttribute('href'));
-
-                if ($parsedUrl['query'] !== null) {
-                    $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
-
-                    if (isset($queryArguments['frontend_editing'])) {
-                        unset($queryArguments['frontend_editing']);
-
-                        $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
-
-                        $element->setAttribute('href', HttpUtility::buildUrl($parsedUrl));
-                        $domWasModified = true;
-                    }
-                }
-            }
-
-            if ($domWasModified) {
-                $parentObject->content = $dom->saveHTML();
-            }
+            /** @var ContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+            $parentObject->content = $contentObjectRenderer->stdWrap(
+                $parentObject->content,
+                $parentObject->config['config']['tx_frontendediting.']['pageContentTransformations.']
+            );
 
             return;
         }
