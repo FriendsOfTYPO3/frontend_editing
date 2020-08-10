@@ -40,24 +40,12 @@ class CsSeoProvider extends BaseSeoProvider
 
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
         $uriParameters = ['page' => $pageId];
 
-        if ($typo3VersionNumber < 9000000) {
-            // @extensionScannerIgnoreLine
-            $backendModuleUrl = $uriBuilder->buildUriFromModule(
-                'web_CsSeoMod1',
-                $uriParameters
-            );
-        } else {
-            $backendModuleUrl = $uriBuilder->buildUriFromRoute(
-                'web_CsSeoMod1',
-                $uriParameters
-            );
-        }
+        $backendModuleUrl = $uriBuilder->buildUriFromRoute(
+            'web_CsSeoMod1',
+            $uriParameters
+        );
 
         /** @var Evaluation $evaluation */
         $evaluation = $evalutationRepository->findByUidForeignAndTableName(
