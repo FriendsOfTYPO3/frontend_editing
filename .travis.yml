@@ -27,10 +27,10 @@ before_install:
 
 script:
   # Run full test suite and linting of the code base
-  - >
-    echo;
-    echo "Building assets";
-    npm run build:suite
+#  - >
+#    echo;
+#    echo "Building assets";
+#    npm run build:suite
 #  - >
 #    echo;
 #    echo "Running unit tests";
