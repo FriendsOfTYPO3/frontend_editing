@@ -288,19 +288,8 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
 
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
-        if ($typo3VersionNumber < 9000000) {
-            // @extensionScannerIgnoreLine
-            $this->pageRenderer->addMetaTag('<meta name="viewport" content="width=device-width, initial-scale=1">');
-            // @extensionScannerIgnoreLine
-            $this->pageRenderer->addMetaTag('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
-        } else {
-            $this->pageRenderer->setMetaTag('name', 'viewport', 'width=device-width, initial-scale=1');
-            $this->pageRenderer->setMetaTag('http-equiv', 'X-UA-Compatible', 'IE=edge');
-        }
+        $this->pageRenderer->setMetaTag('name', 'viewport', 'width=device-width, initial-scale=1');
+        $this->pageRenderer->setMetaTag('http-equiv', 'X-UA-Compatible', 'IE=edge');
 
         $this->pageRenderer->setHtmlTag('<!DOCTYPE html><html lang="en">');
 
@@ -406,18 +395,10 @@ class FrontendEditingInitializationHook
      */
     protected function loadJavascriptResources()
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
+        $this->pageRenderer->addJsFile(
+            'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
         );
 
-        if ($typo3VersionNumber < 9000000) {
-            // @extensionScannerIgnoreLine
-            $this->pageRenderer->loadJquery();
-        } else {
-            $this->pageRenderer->addJsFile(
-                'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
-            );
-        }
         $this->pageRenderer->loadRequireJs();
 
         $this->pageRenderer->addRequireJsConfiguration(
@@ -803,16 +784,7 @@ class FrontendEditingInitializationHook
 
         // Populate mounts with domains
         foreach ($mounts as $uid => &$mount) {
-            $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-                VersionNumberUtility::getNumericTypo3Version()
-            );
-
-            if ($typo3VersionNumber < 9004000) {
-                // @extensionScannerIgnoreLine
-                $mount['domain'] = BackendUtility::firstDomainRecord([$mount]);
-            } else {
-                $mount['domain'] = BackendUtility::getViewDomain($mount);
-            }
+            $mount['domain'] = BackendUtility::getViewDomain($mount);
         }
 
         return $mounts;
@@ -827,14 +799,7 @@ class FrontendEditingInitializationHook
     {
         $contentController = $this->getNewContentElementController();
 
-        // Compatibility with TYPO3 8
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
-        $wizardItems = ($typo3VersionNumber < 9002000)
-            ? $contentController->wizardArray()
-            : $contentController->getWizards();
+        $wizardItems = $contentController->getWizards();
 
         $this->wizardItemsHook($wizardItems, $contentController);
 
@@ -1056,22 +1021,17 @@ class FrontendEditingInitializationHook
         $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
             VersionNumberUtility::getNumericTypo3Version()
         );
-        if ($typo3VersionNumber > 9000000) {
-            $contentController = GeneralUtility::makeInstance(
-                \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+
+        $contentController = GeneralUtility::makeInstance(
+            \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+        );
+        if ($typo3VersionNumber > 10000000) {
+            $contentController->wizardAction(
+                $this->requestWithSimulatedQueryParams()
             );
-            if ($typo3VersionNumber > 10000000) {
-                $contentController->wizardAction(
-                    $this->requestWithSimulatedQueryParams()
-                );
-            } else {
-                $contentController->init(
-                    $this->requestWithSimulatedQueryParams()
-                );
-            }
         } else {
-            $contentController = GeneralUtility::makeInstance(
-                NewContentElementController::class
+            $contentController->init(
+                $this->requestWithSimulatedQueryParams()
             );
         }
 

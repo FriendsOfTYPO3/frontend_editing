@@ -314,14 +314,9 @@ class ContentEditableWrapperService
         /** @var TypoScriptFrontendController $frontendController */
         $frontendController = $GLOBALS['TSFE'];
 
-        if ($typo3VersionNumber < 9004000) {
-            // @extensionScannerIgnoreLine
-            $languageId = $frontendController->sys_language_uid;
-        } else {
-            /** @var LanguageAspect $languageAspect */
-            $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
-            $languageId = $languageAspect->getId();
-        }
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        $languageId = $languageAspect->getId();
 
         if ($languageId !== 0) {
             $translatedRecords = BackendUtility::getRecordLocalization(

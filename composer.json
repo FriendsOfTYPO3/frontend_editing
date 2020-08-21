@@ -5,17 +5,14 @@
 	"license": ["GPL-2.0-or-later"],
 	"keywords": ["TYPO3 CMS", "Frontend Editing"],
 	"require": {
-		"php": "^7.0",
-		"typo3/cms-core": "^8.7|| ^9.1 || ^10.0"
+		"php": "^7.2",
+		"typo3/cms-core": "^9.4 || ^10.0"
 	},
 	"require-dev": {
 		"nimut/testing-framework": "^2.0",
 		"squizlabs/php_codesniffer": "2.*",
 		"phpunit/phpunit": "^5.4",
 		"friendsofphp/php-cs-fixer": "^2.15"
-	},
-	"suggest": {
-		"clickstorm/cs_seo": "~2.1.0"
 	},
 	"conflict": {
 		"typo3/cms-feedit": "*"

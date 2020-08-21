@@ -4,47 +4,6 @@ defined('TYPO3_MODE') or die();
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
 
-
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
-) {
-    // Disable cHash check when browsing the frontend in frontend editing
-    if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFoundOnCHashError'] = false;
-
-        $showHiddenItems = TYPO3\CMS\Core\Utility\GeneralUtility::_GET('show_hidden_items');
-
-        // Add userTsConfig for displaying certain options
-        // when browsing as 'frontend_editing'
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
-            # Activate admin panel
-            admPanel {
-                enable.edit = 1
-                enable.preview = 1
-                enable.cache = 0
-                override.edit = 1
-                override.edit.displayFieldIcons = 1
-                override.edit.displayIcons = 0
-                override.preview = 1
-                override.preview.simulateDate = 0
-                override.preview.simulateUserGroup = 0
-                override.preview.showHiddenPages = ' . $showHiddenItems . '
-                override.preview.showHiddenRecords = ' . $showHiddenItems . '
-                hide = 1
-            }
-        ');
-    }
-}
-
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.4')
-) {
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tstemplate.php']['includeStaticTypoScriptSources'] =
-        '';
-}
-
 /**
  * Hooks
  */

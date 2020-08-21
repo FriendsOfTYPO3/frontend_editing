@@ -36,16 +36,7 @@ class ExtensionManagerConfigurationService
             VersionNumberUtility::getNumericTypo3Version()
         );
 
-        if ($typo3VersionNumber >= 9000000) {
-            $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
-        } else {
-            $settings = [];
-            // @extensionScannerIgnoreLine
-            if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing'])) {
-                // @extensionScannerIgnoreLine
-                $settings = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['frontend_editing']);
-            }
-        }
+        $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
 
         if (!is_array($settings)) {
             $settings = [];
