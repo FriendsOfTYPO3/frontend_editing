@@ -17,34 +17,22 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  */
 
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
-use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Backend\Tree\Repository\PageTreeRepository;
-use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\DocumentTypeExclusionRestriction;
-use TYPO3\CMS\Core\Exception\Page\RootLineException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
-use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -247,22 +235,6 @@ class FrontendEditingInitializationHook
                 'EXT:frontend_editing/Resources/Public/Templates/Close.html'
             ) . '?'
         );
-        $pageEditUrl = $this->accessService->isPageEditAllowed() ? $uriBuilder->buildUriFromRoute(
-            'record_edit',
-            [
-                'edit[pages][' . $this->typoScriptFrontendController->id . ']' => 'edit',
-                'returnUrl' => $returnUrl,
-                'feEdit' => 1
-            ]
-        ) : null;
-        $pageNewUrl = $this->accessService->isPageCreateAllowed() ? $uriBuilder->buildUriFromRoute(
-            'db_new',
-            [
-                'id' => $this->typoScriptFrontendController->id,
-                'pagesOnly' => 1,
-                'returnUrl' => $returnUrl
-            ]
-        ) : null;
 
         // Define the window size of the popups within the RTE
         $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
@@ -302,7 +274,6 @@ class FrontendEditingInitializationHook
             window.F = new FrontendEditing();
             window.F.initGUI({
                 content: ' . GeneralUtility::quoteJSvalue($this->typoScriptFrontendController->content) . ',
-                pageTree:' . json_encode($this->getPageTreeStructure()) . ',
                 resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath($resourcePath)) . ',
                 iframeUrl: ' . GeneralUtility::quoteJSvalue($requestUrl) . ',
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
@@ -340,10 +311,7 @@ class FrontendEditingInitializationHook
             'customRecords' => $this->getCustomRecords(),
             'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
             'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
-            'pageEditUrl' => $pageEditUrl,
-            'pageNewUrl' => $pageNewUrl,
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
-            'mounts' => $this->getBEUserMounts(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
             'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)
         ]);
@@ -442,352 +410,6 @@ class FrontendEditingInitializationHook
     protected function getAbsolutePath(string $path): string
     {
         return PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName($path));
-    }
-
-    /**
-     * Get the page tree structure of the current tree
-     *
-     * @return array
-     * @throws \Exception
-     */
-    protected function getPageTreeStructure(): array
-    {
-        $entryPoints = $this->getAllEntryPointPageTrees();
-
-        foreach ($entryPoints as $entryPoint) {
-            if ($entryPoint['uid'] === 0) {
-                $children = $this->getStructureForSinglePageTree($this->typoScriptFrontendController->rootLine[0]['uid']);
-            } else {
-                $children[] = $this->getStructureForSinglePageTree($entryPoint['uid'])[0];
-            }
-        }
-
-        return [
-            'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
-            'children' => $children
-        ];
-    }
-
-    /**
-     * Fetches all entry points for the page tree that the user is allowed to see
-     * This was taken from class TreeController (namespace TYPO3\CMS\Backend\Controller\Page);
-     *
-     * @return array
-     */
-    protected function getAllEntryPointPageTrees(): array
-    {
-        $backendUser = $GLOBALS['BE_USER'];
-
-        $userTsConfig = $GLOBALS['BE_USER']->getTSConfig();
-        $excludedDocumentTypes = GeneralUtility::intExplode(',', $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '', true);
-
-        $additionalPageTreeQueryRestrictions = [];
-        if (!empty($excludedDocumentTypes)) {
-            foreach ($excludedDocumentTypes as $excludedDocumentType) {
-                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction((int)$excludedDocumentType);
-            }
-        }
-
-        $repository = GeneralUtility::makeInstance(PageTreeRepository::class, (int)$backendUser->workspace, [], $additionalPageTreeQueryRestrictions);
-
-        $entryPoints = (int)($backendUser->uc['pageTree_temporaryMountPoint'] ?? 0);
-        if ($entryPoints > 0) {
-            $entryPoints = [$entryPoints];
-        } else {
-            $entryPoints = array_map('intval', $backendUser->returnWebmounts());
-            $entryPoints = array_unique($entryPoints);
-            if (empty($entryPoints)) {
-                // Use a virtual root
-                // The real mount points will be fetched in getNodes() then
-                // since those will be the "sub pages" of the virtual root
-                $entryPoints = [0];
-            }
-        }
-        if (empty($entryPoints)) {
-            return [];
-        }
-
-        $hiddenRecords = GeneralUtility::intExplode(',', $userTsConfig['options.']['hideRecords.']['pages'] ?? '', true);
-        foreach ($entryPoints as $k => &$entryPoint) {
-            if (in_array($entryPoint, $hiddenRecords, true)) {
-                unset($entryPoints[$k]);
-                continue;
-            }
-
-            if (!empty($this->backgroundColors) && is_array($this->backgroundColors)) {
-                try {
-                    $entryPointRootLine = GeneralUtility::makeInstance(RootlineUtility::class, $entryPoint)->get();
-                } catch (RootLineException $e) {
-                    $entryPointRootLine = [];
-                }
-                foreach ($entryPointRootLine as $rootLineEntry) {
-                    $parentUid = $rootLineEntry['uid'];
-                    if (!empty($this->backgroundColors[$parentUid]) && empty($this->backgroundColors[$entryPoint])) {
-                        $this->backgroundColors[$entryPoint] = $this->backgroundColors[$parentUid];
-                    }
-                }
-            }
-
-            $entryPoint = $repository->getTree($entryPoint, function ($page) use ($backendUser) {
-                // Check each page if the user has permission to access it
-                return $backendUser->doesUserHaveAccess($page, Permission::PAGE_SHOW);
-            });
-            if (!is_array($entryPoint)) {
-                unset($entryPoints[$k]);
-            }
-        }
-
-        return $entryPoints;
-    }
-
-    /**
-     * Get the page tree structure of page
-     *
-     * @param int $startingPoint
-     * @return array
-     * @throws \Exception
-     */
-    protected function getStructureForSinglePageTree(int $startingPoint): array
-    {
-        // Get page record for tree starting point
-        // from where we currently are navigated
-        $pageRecord = BackendUtility::getRecord('pages', $startingPoint);
-
-        // Creating the icon for the current page and add it to the tree
-        $html = $this->iconFactory->getIconForRecord(
-            'pages',
-            $pageRecord,
-            Icon::SIZE_SMALL
-        );
-
-        // Create and initialize the tree object
-        /** @var PageTreeView $tree */
-        $tree = GeneralUtility::makeInstance(PageTreeView::class);
-        $tree->init(' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1));
-        $tree->makeHTML = 0;
-        $tree->tree[] = [
-            'row' => $pageRecord,
-            'HTML' => $html
-        ];
-
-        // Create the page tree, from the starting point, infinite levels down
-        $tree->getTree($startingPoint);
-
-        $tree->tree[0] += [
-            'uid' => $pageRecord['uid'],
-            'invertedDepth' => 1000,
-            'hasSub' => count($tree->tree) > 1
-        ];
-
-        return $this->generateTreeData($tree->tree);
-    }
-
-    /**
-     * Build array of page tree with children
-     *
-     * @param array $tree
-     * @param int $depth
-     * @return array
-     * @throws \Exception
-     */
-    protected function generateTreeData(array $tree, int $depth = 1000): array
-    {
-        $index = 0;
-        $treeData = [];
-
-        foreach ($tree as $item) {
-            $index++;
-            if ($item['invertedDepth'] === $depth) {
-                $treeItem = [
-                    'uid' => $item['row']['uid'],
-                    'name' => $item['row']['title'],
-                    'doktype' => $item['row']['doktype'],
-                    'link' => $this->getTreeItemLink($item),
-                    'icon' => $this->getTreeItemIconPath($item['row']),
-                    'iconOverlay' => $this->getTreeItemIconOverlayPath($item['row']),
-                    'isActive' => $this->typoScriptFrontendController->id === $item['row']['uid']
-                ];
-
-                if ($item['hasSub']) {
-                    $treeItem['children'] = $this->generateTreeData(array_slice($tree, $index), $depth - 1);
-                }
-
-                $treeData[] = $treeItem;
-
-                if ($item['isLast']) {
-                    break;
-                }
-            }
-        }
-
-        return $treeData;
-    }
-
-    /**
-     * Generate url for single tree item
-     *
-     * @param array $item
-     * @return string
-     */
-    protected function getTreeItemLink(array $item): string
-    {
-        if ($this->isSiteConfigurationFound) {
-            /** @var Site $site */
-            // @extensionScannerIgnoreLine
-            $site = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
-
-            try {
-                return (string)$site->getRouter()->generateUri(
-                    (int)$item['row']['uid'],
-                    [],
-                    '',
-                    RouterInterface::ABSOLUTE_URL
-                );
-            } catch (InvalidRouteArgumentsException $exception) {
-                // Just fallback to old format links
-            }
-        }
-
-        return $this->fallbackTreeItemLinkFormat($item);
-    }
-
-    /**
-     * Create "/index.php?id=" page url
-     *
-     * @param array $item
-     * @return string
-     */
-    protected function fallbackTreeItemLinkFormat(array $item): string
-    {
-        return sprintf(
-            '%sindex.php?id=%d',
-            $this->typoScriptFrontendController->absRefPrefix ?: '/',
-            $item['row']['uid']
-        );
-    }
-
-    /**
-     * Get path to page tree item icon
-     *
-     * @param array $row
-     * @return string
-     * @throws \Exception
-     */
-    protected function getTreeItemIconPath(array $row): string
-    {
-        $iconIdentifier = $this->iconFactory->mapRecordTypeToIconIdentifier('pages', $row);
-
-        if (!$iconIdentifier || !$this->iconRegistry->isRegistered($iconIdentifier)) {
-            $iconIdentifier = $this->iconRegistry->getDefaultIconIdentifier();
-        }
-        $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier($iconIdentifier);
-
-        $source = $iconConfiguration['options']['source'];
-
-        if (strpos($source, 'EXT:') === 0 || strpos($source, '/') !== 0) {
-            $source = GeneralUtility::getFileAbsFileName($source);
-        }
-
-        return PathUtility::getAbsoluteWebPath($source);
-    }
-
-    /**
-     * Get path to page tree item icon
-     *
-     * @param array $row
-     * @return string
-     * @throws \Exception
-     */
-    protected function getTreeItemIconOverlayPath(array $row): string
-    {
-        $overlayIdentifier = $this->iconFactory->getIconForRecord('pages', $row)->getOverlayIcon();
-        $overlayPath = '';
-
-        if ($overlayIdentifier) {
-            $iconConfiguration = $this->iconRegistry->getIconConfigurationByIdentifier(
-                $overlayIdentifier->getIdentifier()
-            );
-            $source = $iconConfiguration['options']['source'];
-
-            if (strpos($source, 'EXT:') === 0 || strpos($source, '/') !== 0) {
-                $source = GeneralUtility::getFileAbsFileName($source);
-            }
-
-            $overlayPath = PathUtility::getAbsoluteWebPath($source);
-        }
-        return $overlayPath;
-    }
-
-    /**
-     * Get array of mount points
-     * For admins only to get all root pages
-     *
-     * @return array
-     */
-    protected function getBEUserMounts(): array
-    {
-        /** @var FrontendBackendUserAuthentication $beUSER */
-        $beUSER = $GLOBALS['BE_USER'];
-        // Remove mountpoint if explicitly set in options.hideRecords.pages or is active
-        $hideList = [$this->typoScriptFrontendController->rootLine[0]['uid']];
-        $mounts = [];
-
-        // If it's admin, return all root pages
-        if ($beUSER->isAdmin()) {
-            /** @var QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            $mounts = $queryBuilder
-                ->select('uid', 'title')
-                ->from('pages')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'is_siteroot',
-                        $queryBuilder->createNamedParameter(true, \PDO::PARAM_BOOL)
-                    ),
-                    $queryBuilder->expr()->notIn(
-                        'uid',
-                        $queryBuilder->createNamedParameter($hideList, Connection::PARAM_INT_ARRAY)
-                    )
-                )
-                ->orderBy('sorting')
-                ->execute()
-                ->fetchAll();
-        } else {
-            $allowedMounts = $beUSER->returnWebmounts();
-
-            $hideRecordsPages = $beUSER->getTSConfig()['options.']['hideRecords.']['pages'];
-
-            if ($pidList = $hideRecordsPages) {
-                $hideList += GeneralUtility::intExplode(',', $pidList, true);
-            }
-
-            $allowedMounts = array_diff($allowedMounts, $hideList);
-
-            if (!empty($allowedMounts)) {
-                /** @var QueryBuilder $queryBuilder */
-                $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-                $mounts = $queryBuilder
-                    ->select('uid', 'title')
-                    ->from('pages')
-                    ->where(
-                        $queryBuilder->expr()->in(
-                            'uid',
-                            $queryBuilder->createNamedParameter($allowedMounts, Connection::PARAM_INT_ARRAY)
-                        )
-                    )
-                    ->orderBy('sorting')
-                    ->execute()
-                    ->fetchAll();
-            }
-        }
-
-        // Populate mounts with domains
-        foreach ($mounts as $uid => &$mount) {
-            $mount['domain'] = BackendUtility::getViewDomain($mount);
-        }
-
-        return $mounts;
     }
 
     /**
