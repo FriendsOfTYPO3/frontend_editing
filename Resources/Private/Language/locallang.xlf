@@ -129,6 +129,12 @@
             <trans-unit id="left-bar.search-bar.search_placeholder">
                 <source>enter search term...</source>
             </trans-unit>
+            <trans-unit id="noValidPageSelected" resname="noValidPageSelected">
+                <source>Please select a page with a valid page type in the page tree on the left to preview the selected page.</source>
+            </trans-unit>
+            <trans-unit id="noSiteConfiguration" resname="noSiteConfiguration">
+                <source>The requested page is missing a valid site configuration.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
