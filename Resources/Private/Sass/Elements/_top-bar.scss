@@ -23,18 +23,10 @@
     text-transform: uppercase;
 }
 
-.t3-frontend-editing__top-bar-left {
-    transition: left $push-duration $push-timing;
-    position: relative;
-    left: 0;
-    width: 30%;
-    float: left;
-}
-
 .t3-frontend-editing__top-bar-right {
     transition: right $push-duration $push-timing;
-    width: 70%;
-    float: right;
+    width: 100%;
+    float: left;
     text-align: right;
     right: 0;
     position: relative;
@@ -44,7 +36,7 @@
     }
 
     .top-bar-action-buttons {
-        float: right;
+        float: left;
         margin: 0;
         min-width: $right-bar-width - $top-bar-height;
         padding: 5px $top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
