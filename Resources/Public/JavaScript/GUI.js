@@ -215,7 +215,7 @@ define([
 			}
 		});
 
-		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new, .t3-frontend-editing__page-seo_module').click(function () {
+		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
 			var url = $(this).data('url');
 			F.loadInModal(url);
 		});

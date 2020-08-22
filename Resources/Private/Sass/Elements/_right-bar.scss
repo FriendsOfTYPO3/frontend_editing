@@ -20,16 +20,6 @@
     }
 
     .top-right-bar-wrapper {
-        &.seo-provider {
-            .top-right-relative {
-                height: $top-bar-height * 3 + $twenty;
-            }
-
-            .elements-wrapper {
-                height: calc(100vh - #{$top-bar-height * 4 + $twenty});
-            }
-        }
-
         .top-right-relative {
             position: relative;
             height: $top-bar-height * 2;
@@ -112,29 +102,6 @@
             .right-bar-button {
                 left: 0;
             }
-        }
-    }
-
-    .page-seo {
-        height: $top-bar-height + $twenty;
-        background: $transparent-opacity;
-        border-bottom: 1px solid $gray;
-        text-align: center;
-        padding: 10px;
-
-        .page-seo-score {
-            border: 4px solid $color-t3-primary;
-            font-size: 20px;
-            border-radius: 50%;
-            display: inline-block;
-            margin: 0 7px;
-            position: relative;
-            top: 4px;
-            width: 45px;
-            height: 45px;
-            color: $white;
-            line-height: 37px;
-            text-align: center;
         }
     }
 

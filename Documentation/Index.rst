@@ -57,7 +57,6 @@ a GNU/GPL CMS/Framework available from `www.typo3.org
    UserSettings/Index
    BEUserTSconfig/Index
    ExtensionManagerSettings/Index
-   SeoProviders/Index
    Development/Index
    KnownIssues/Index
 
