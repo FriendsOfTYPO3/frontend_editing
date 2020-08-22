@@ -113,7 +113,10 @@ class FrontendEditingModuleController
             return $this->renderFlashMessage($flashMessage);
         }
 
-        $languageId = $this->getCurrentLanguage($pageId, $request->getParsedBody()['language'] ?? $request->getQueryParams()['language'] ?? null);
+        $languageId = $this->getCurrentLanguage(
+            $pageId,
+            $request->getParsedBody()['language'] ?? $request->getQueryParams()['language'] ?? null
+        );
         try {
             $targetUrl = BackendUtility::getPreviewUrl(
                 $pageId,
@@ -188,7 +191,10 @@ class FrontendEditingModuleController
 
             foreach ($siteLanguages as $siteLanguage) {
                 $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
-                $page = $pageRepository->getPageOverlay($pageRepository->getPage($pageId), $siteLanguage->getLanguageId());
+                $page = $pageRepository->getPageOverlay(
+                    $pageRepository->getPage($pageId),
+                    $siteLanguage->getLanguageId()
+                );
 
                 if ($pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
                     $languages[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();

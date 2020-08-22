@@ -25,15 +25,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObj
     \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
 ];
 
-// Hook to initialize BE user
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/index_ts.php']['postBeUser']['frontend_editing'] =
-    \TYPO3\CMS\FrontendEditing\Hook\PostInitializationBEUserHook::class . '->initializeBackendUser';
-
-// Hook for the rendering for TCA save buttons
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Template\Components\Buttons\SplitButton::class] = [
-    'className' => \TYPO3\CMS\FrontendEditing\Xclass\TcaButtons::class
-];
-
 /**
  * Pre processors
  */

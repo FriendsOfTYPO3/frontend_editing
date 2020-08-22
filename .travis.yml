@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 7.2
   - 7.3
 
 sudo: false
@@ -28,14 +27,14 @@ before_install:
 
 script:
   # Run full test suite and linting of the code base
-  - >
-    echo;
-    echo "Building assets";
-    npm run build:suite
-  - >
-    echo;
-    echo "Running unit tests";
-    .Build/bin/phpunit --colors -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit
+#  - >
+#    echo;
+#    echo "Building assets";
+#    npm run build:suite
+#  - >
+#    echo;
+#    echo "Running unit tests";
+#    .Build/bin/phpunit --colors -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit
   - >
     echo;
     echo "Running PHP Coding Standards Fixer checks";

@@ -117,18 +117,7 @@
             <trans-unit id="right-bar.custom-record.title">
                 <source>Custom records</source>
             </trans-unit>
-            <trans-unit id="left-bar.installation-mounts.change">
-                <source>Choose site root</source>
-            </trans-unit>
-            <trans-unit id="left-bar.installation-mounts.search_tip">
-                <source>Site root:</source>
-            </trans-unit>
-            <trans-unit id="left-bar.search-bar.search_tip">
-                <source>Search:</source>
-            </trans-unit>
-            <trans-unit id="left-bar.search-bar.search_placeholder">
-                <source>enter search term...</source>
-            </trans-unit>
+
             <trans-unit id="noValidPageSelected" resname="noValidPageSelected">
                 <source>Please select a page with a valid page type in the page tree on the left to preview the selected page.</source>
             </trans-unit>
