@@ -16,9 +16,6 @@
             <trans-unit id="top-bar.discard-all">
                 <source>Discard</source>
             </trans-unit>
-            <trans-unit id="top-bar.logout">
-                <source>Logout</source>
-            </trans-unit>
             <trans-unit id="left-bar.site-tree">
                 <source>Site Tree</source>
             </trans-unit>

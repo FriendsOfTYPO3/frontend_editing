@@ -247,11 +247,6 @@ define([
 			updateRightPanelState();
 		});
 
-		$('.top-bar-items .dropdown-toggle').on('click', function () {
-			$(this).toggleClass('active');
-			$(this).next('.dropdown-menu').toggle();
-		});
-
 		$('.accordion .list-view').on('click', function () {
 			$(this).closest('.accordion-container')
 				.removeClass('accordion-grid')

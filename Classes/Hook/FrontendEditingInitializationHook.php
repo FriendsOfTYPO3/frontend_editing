@@ -303,13 +303,11 @@ class FrontendEditingInitializationHook
         $view = $this->initializeView();
         $view->assignMultiple([
             'overlayOption' => $GLOBALS['BE_USER']->uc['frontend_editing_overlay'],
-            'currentUser' => $GLOBALS['BE_USER']->user,
             'currentTime' => $GLOBALS['EXEC_TIME'],
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
-            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
             'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)
