@@ -37,8 +37,10 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\UnableToLinkToPageException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\Page\PageRepository as DeprecatedPageRepository;
 
 /**
  * Controller for FrontendEditing in the backend as a module
@@ -61,6 +63,11 @@ class FrontendEditingModuleController
     protected $view;
 
     /**
+     * Page Repository
+     */
+    protected $pageRepository;
+
+    /**
      * Initialize module template and language service
      */
     public function __construct()
@@ -69,6 +76,17 @@ class FrontendEditingModuleController
         $this->getLanguageService()->includeLLFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addInlineLanguageLabelFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
+
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+        if ($typo3VersionNumber < 10000000) {
+            // @extensionScannerIgnoreLine
+            $pageRepositoryClassName = DeprecatedPageRepository::class;
+        } else {
+            $pageRepositoryClassName = PageRepository::class;
+        }
+        $this->pageRepository = GeneralUtility::makeInstance($pageRepositoryClassName);
     }
 
     /**
@@ -185,18 +203,17 @@ class FrontendEditingModuleController
         }
 
         try {
-            $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
             $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
             $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $pageId);
 
             foreach ($siteLanguages as $siteLanguage) {
                 $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
-                $page = $pageRepository->getPageOverlay(
-                    $pageRepository->getPage($pageId),
+                $page = $this->pageRepository->getPageOverlay(
+                    $this->pageRepository->getPage($pageId),
                     $siteLanguage->getLanguageId()
                 );
 
-                if ($pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
+                if ($this->pageRepository->isPageSuitableForLanguage($page, $languageAspectToTest)) {
                     $languages[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
                 }
             }
@@ -246,9 +263,9 @@ class FrontendEditingModuleController
 
         return $pageType !== 0
             && !in_array($pageType, [
-                PageRepository::DOKTYPE_SPACER,
-                PageRepository::DOKTYPE_SYSFOLDER,
-                PageRepository::DOKTYPE_RECYCLER
+                $this->pageRepository::DOKTYPE_SPACER,
+                $this->pageRepository::DOKTYPE_SYSFOLDER,
+                $this->pageRepository::DOKTYPE_RECYCLER
             ], true);
     }
 
