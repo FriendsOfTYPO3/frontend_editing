@@ -80,7 +80,6 @@ class FrontendEditingModuleController
     {
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->view->getRequest()->setControllerExtensionName('FrontendEditing');
-        $this->view->assign('docHeader', '');
         $this->view->setTemplate($templateName);
         $this->view->setTemplateRootPaths(['EXT:frontend_editing/Resources/Private/Templates/FrontendEditingModule']);
         $this->view->setPartialRootPaths(['EXT:frontend_editing/Resources/Private/Partials/']);

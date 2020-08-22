@@ -125,6 +125,12 @@
                 <source>The requested page is missing a valid site configuration.</source>
             </trans-unit>
 
+            <trans-unit id="maximized" resname="maximized">
+                <source>Maximized</source>
+            </trans-unit>
+            <trans-unit id="custom" resname="custom">
+                <source>Custom</source>
+            </trans-unit>
             <trans-unit id="refreshPage" resname="refreshPage">
                 <source>Refresh page</source>
             </trans-unit>
