@@ -105,7 +105,7 @@ class FrontendEditingModuleController
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             foreach ($languages as $value => $label) {
                 $href = (string)$uriBuilder->buildUriFromRoute(
-                    'web_ViewpageView',
+                    'web_FrontendEditing',
                     [
                         'id' => $pageId,
                         'language' => (int)$value
@@ -131,8 +131,8 @@ class FrontendEditingModuleController
         $buttonBar->addButton($showButton);
 
         $refreshButton = $buttonBar->makeLinkButton()
-            ->setHref('javascript:document.getElementById(\'tx_viewpage_iframe\').contentWindow.location.reload(true);')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:refreshPage'))
+            ->setHref('javascript:document.getElementById(\'tx_frontendediting_iframe\').contentWindow.location.reload(true);')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:refreshPage'))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-refresh', Icon::SIZE_SMALL));
         $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
 
@@ -142,7 +142,7 @@ class FrontendEditingModuleController
             $getVars = ['id', 'route'];
 
             $shortcutButton = $buttonBar->makeShortcutButton()
-                ->setModuleName('web_ViewpageView')
+                ->setModuleName('web_FrontendEditing')
                 ->setGetVariables($getVars);
             $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
         }

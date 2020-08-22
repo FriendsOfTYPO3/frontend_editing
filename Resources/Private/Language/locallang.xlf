@@ -88,22 +88,22 @@
             <trans-unit id="notifications.update.pages.fail">
                 <source>Page could not be updated (%s)</source>
             </trans-unit>
-	        <trans-unit id="notifications.new.content.success">
-		        <source>The content element was created</source>
-	        </trans-unit>
-	        <trans-unit id="notifications.new.content.fail">
-		        <source>The content element could not be created</source>
-	        </trans-unit>
+            <trans-unit id="notifications.new.content.success">
+                <source>The content element was created</source>
+            </trans-unit>
+            <trans-unit id="notifications.new.content.fail">
+                <source>The content element could not be created</source>
+            </trans-unit>
             <trans-unit id="notifications.request.configuration.fail">
                 <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
             </trans-unit>
 
-	        <trans-unit id="placeholder.label-wrap">
-		        <source>Enter %s here</source>
-	        </trans-unit>
-	        <trans-unit id="placeholder.default-label">
-		        <source>Enter text here</source>
-	        </trans-unit>
+            <trans-unit id="placeholder.label-wrap">
+                <source>Enter %s here</source>
+            </trans-unit>
+            <trans-unit id="placeholder.default-label">
+                <source>Enter text here</source>
+            </trans-unit>
 
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
@@ -123,6 +123,10 @@
             </trans-unit>
             <trans-unit id="noSiteConfiguration" resname="noSiteConfiguration">
                 <source>The requested page is missing a valid site configuration.</source>
+            </trans-unit>
+
+            <trans-unit id="refreshPage" resname="refreshPage">
+                <source>Refresh page</source>
             </trans-unit>
         </body>
     </file>
