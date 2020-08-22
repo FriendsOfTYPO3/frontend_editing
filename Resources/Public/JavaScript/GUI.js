@@ -234,14 +234,6 @@ define([
 			$('.t3-frontend-editing__show-hidden-items').toggleClass('active');
 		});
 
-		$('.media-devices span').on('click', function () {
-			$('.media-devices').find('span').removeClass('active');
-			$(this).addClass('active');
-			$('.t3-frontend-editing__iframe-wrapper iframe').animate({
-				'width': $(this).data('width')
-			});
-		});
-
 		$('.accordion .trigger, .accordion .element-title').on('click', function () {
 			$(this).toggleClass('active');
 			$(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);

@@ -146,52 +146,6 @@
         line-height: 1em;
         font-size: 1em;
 
-        .media-devices-wrapper {
-            display: inline-block;
-
-            .btn-default {
-                margin-bottom: 8px;
-            }
-
-            .media-devices {
-                display: table;
-                margin: 0 auto;
-                height: 100%;
-                line-height: 1em;
-                font-size: 1em;
-
-                .media-device-lg-desktop,
-                .media-device-desktop,
-                .media-device-tablet,
-                .media-device-phone {
-                    font-size: 48px;
-                    line-height: $top-bar-height;
-                    display: table-cell;
-                    vertical-align: middle;
-                    padding-right: 5px;
-                    color: $gray-light;
-
-                    &.active {
-                        color: $white;
-                    }
-
-                    &:hover {
-                        cursor: pointer;
-                        color: $white;
-                    }
-                }
-
-                .media-device-tablet {
-                    font-size: 34px;
-                }
-
-                .media-device-phone {
-                    font-size: 26px;
-                    top: 3px;
-                }
-            }
-        }
-
         .hidden-elements-toggle-wrapper {
             float: right;
             width: $top-bar-height;
