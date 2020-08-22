@@ -310,7 +310,6 @@ class FrontendEditingInitializationHook
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
             'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
-            'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
             'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)

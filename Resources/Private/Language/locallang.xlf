@@ -10,9 +10,6 @@
             <trans-unit id="settings.field.frontend_editing_overlay">
                 <source>Frontend Editing: Enable right overlay bar</source>
             </trans-unit>
-            <trans-unit id="top-bar.to-backend">
-                <source>To backend</source>
-            </trans-unit>
             <trans-unit id="top-bar.save-all">
                 <source>Save All</source>
             </trans-unit>

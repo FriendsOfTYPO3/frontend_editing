@@ -21,28 +21,6 @@
     font-weight: 300;
     font-size: $font-size-regular;
     text-transform: uppercase;
-
-    .btn-backend {
-        height: $top-bar-height !important;
-        border: 0;
-        border-right: 1px solid darken($color-t3-gray-dark, 10%);
-
-        &:hover {
-            background-color: lighten($gray-dark, 20%);
-        }
-
-        span {
-            display: inline-block;
-            position: relative;
-            top: $top-bar-height / 5;
-            vertical-align: middle;
-        }
-
-        .icon-icons-back {
-            font-size: 24px;
-            color: $color-t3-primary;
-        }
-    }
 }
 
 .t3-frontend-editing__top-bar-left {
