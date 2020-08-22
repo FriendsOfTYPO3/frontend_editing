@@ -215,7 +215,7 @@ define([
 			}
 		});
 
-		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new, .t3-frontend-editing__page-seo_module').click(function () {
+		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
 			var url = $(this).data('url');
 			F.loadInModal(url);
 		});
@@ -245,11 +245,6 @@ define([
 				.removeClass('accordion-list')
 				.addClass('accordion-grid');
 			updateRightPanelState();
-		});
-
-		$('.top-bar-items .dropdown-toggle').on('click', function () {
-			$(this).toggleClass('active');
-			$(this).next('.dropdown-menu').toggle();
 		});
 
 		$('.accordion .list-view').on('click', function () {

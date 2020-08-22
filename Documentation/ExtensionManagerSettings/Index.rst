@@ -10,16 +10,6 @@ Available extension configurations
 
 These configurations can be found in the Extension Manager in TYPO3 v7 and v8 and in the Settings (Admin Tools) in TYPO3 v9 and up.
 
-.. _extension-manager-settings-providers:
-
-Providers
-=========
-
-SEO provider
-------------
-
-Experimental connection to SEO provides.
-
 .. _extension-manager-settings-basic:
 
 Basic

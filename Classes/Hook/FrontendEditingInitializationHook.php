@@ -38,7 +38,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
@@ -303,17 +302,13 @@ class FrontendEditingInitializationHook
         $view = $this->initializeView();
         $view->assignMultiple([
             'overlayOption' => $GLOBALS['BE_USER']->uc['frontend_editing_overlay'],
-            'currentUser' => $GLOBALS['BE_USER']->user,
             'currentTime' => $GLOBALS['EXEC_TIME'],
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
-            'logoutUrl' => $uriBuilder->buildUriFromRoute('logout'),
-            'backendUrl' => $uriBuilder->buildUriFromRoute('main'),
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
-            'seoProviderData' => $this->getSeoProviderData((int)$this->typoScriptFrontendController->id)
         ]);
 
         // Assign the content
@@ -564,30 +559,6 @@ class FrontendEditingInitializationHook
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']
             )
         );
-    }
-
-    /**
-     * Get the SEO data based on chosen Provider from
-     * Extension Manager settings
-     *
-     * @param int $pageId
-     * @return array
-     */
-    protected function getSeoProviderData(int $pageId): array
-    {
-        $providerData = [];
-        $settings = ExtensionManagerConfigurationService::getSettings();
-        if (isset($settings['seoProvider']) && $settings['seoProvider'] !== 'none') {
-            $extensionIsLoaded = ExtensionManagementUtility::isLoaded($settings['seoProvider']);
-            if ($extensionIsLoaded === true) {
-                if ($settings['seoProvider'] === 'cs_seo') {
-                    $seoProvider = GeneralUtility::makeInstance(CsSeoProvider::class);
-                    $providerData = $seoProvider->getSeoScores($pageId);
-                }
-            }
-        }
-
-        return $providerData;
     }
 
     /**

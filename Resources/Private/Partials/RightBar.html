@@ -1,7 +1,7 @@
 {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
 
 <div class="t3-frontend-editing__right-bar {f:if(condition:overlayOption, then: 't3-frontend-editing__right-overlay')}">
-	<div class="top-right-bar-wrapper {f:if(condition: seoProviderData, then: 'seo-provider')}">
+	<div class="top-right-bar-wrapper">
 		<div class="top-right-relative">
 			<div class="top-right-title">
 				<span class="right-bar-button icons icon-icons-tools-settings" title="{f:translate(key: 'right-bar.tools-properties', extensionName: 'FrontendEditing')}"></span>
@@ -10,14 +10,6 @@
 				</span>
 				<span class="title-icon-right icons icon-icons-tools-settings"></span>
 			</div>
-			<f:if condition="{seoProviderData}">
-				<div class="page-seo">
-					<span class="title-default">
-						<f:translate key="right-bar.page-seo-score" extensionName="FrontendEditing" />
-					</span>
-					<span class="page-seo-score">{seoProviderData.pageScore}</span>
-				</div>
-			</f:if>
 			<div class="devices hidden-elements">
 				<div class="hidden-elements-toggle-wrapper">
 					<button class="hidden-elements-toggle-button t3-frontend-editing__show-hidden-items" title="Hidden elements" data-url="{showHiddenItemsUrl}">
