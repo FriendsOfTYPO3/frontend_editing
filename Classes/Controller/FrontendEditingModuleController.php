@@ -88,6 +88,67 @@ class FrontendEditingModuleController
     }
 
     /**
+     * Registers the docheader
+     *
+     * @param int $pageId
+     * @param int $languageId
+     * @param string $targetUrl
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     */
+    protected function registerDocHeader(int $pageId, int $languageId, string $targetUrl)
+    {
+        $languages = $this->getPreviewLanguages($pageId);
+        if (count($languages) > 1) {
+            $languageMenu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+            $languageMenu->setIdentifier('_langSelector');
+            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            foreach ($languages as $value => $label) {
+                $href = (string)$uriBuilder->buildUriFromRoute(
+                    'web_ViewpageView',
+                    [
+                        'id' => $pageId,
+                        'language' => (int)$value
+                    ]
+                );
+                $menuItem = $languageMenu->makeMenuItem()
+                    ->setTitle($label)
+                    ->setHref($href);
+                if ($languageId === (int)$value) {
+                    $menuItem->setActive(true);
+                }
+                $languageMenu->addMenuItem($menuItem);
+            }
+            $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
+        }
+
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $showButton = $buttonBar->makeLinkButton()
+            ->setHref($targetUrl)
+            ->setOnClick('window.open(this.href, \'newTYPO3frontendWindow\').focus();return false;')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.showPage'))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-view-page', Icon::SIZE_SMALL));
+        $buttonBar->addButton($showButton);
+
+        $refreshButton = $buttonBar->makeLinkButton()
+            ->setHref('javascript:document.getElementById(\'tx_viewpage_iframe\').contentWindow.location.reload(true);')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:refreshPage'))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-refresh', Icon::SIZE_SMALL));
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
+
+        // Shortcut
+        $mayMakeShortcut = $this->getBackendUser()->mayMakeShortcut();
+        if ($mayMakeShortcut) {
+            $getVars = ['id', 'route'];
+
+            $shortcutButton = $buttonBar->makeShortcutButton()
+                ->setModuleName('web_ViewpageView')
+                ->setGetVariables($getVars);
+            $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+        }
+    }
+
+    /**
      * Show selected page from pagetree in iframe
      *
      * @param ServerRequestInterface $request
@@ -136,6 +197,9 @@ class FrontendEditingModuleController
             return $this->renderFlashMessage($flashMessage);
         }
 
+        $this->registerDocHeader($pageId, $languageId, $targetUrl);
+
+        // Assign variables to template
         $this->view->assign('url', $targetUrl);
 
         $this->moduleTemplate->setContent($this->view->render());
