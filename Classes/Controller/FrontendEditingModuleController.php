@@ -98,11 +98,71 @@ class FrontendEditingModuleController
     {
         $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->view->getRequest()->setControllerExtensionName('FrontendEditing');
-        $this->view->assign('docHeader', '');
         $this->view->setTemplate($templateName);
         $this->view->setTemplateRootPaths(['EXT:frontend_editing/Resources/Private/Templates/FrontendEditingModule']);
         $this->view->setPartialRootPaths(['EXT:frontend_editing/Resources/Private/Partials/']);
         $this->view->setLayoutRootPaths(['EXT:frontend_editing/Resources/Private/Layouts/']);
+    }
+
+    /**
+     * Registers the docheader
+     *
+     * @param int $pageId
+     * @param int $languageId
+     * @param string $targetUrl
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     */
+    protected function registerDocHeader(int $pageId, int $languageId, string $targetUrl)
+    {
+        $languages = $this->getPreviewLanguages($pageId);
+        if (count($languages) > 1) {
+            $languageMenu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+            $languageMenu->setIdentifier('_langSelector');
+            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            foreach ($languages as $value => $label) {
+                $href = (string)$uriBuilder->buildUriFromRoute(
+                    'web_FrontendEditing',
+                    [
+                        'id' => $pageId,
+                        'language' => (int)$value
+                    ]
+                );
+                $menuItem = $languageMenu->makeMenuItem()
+                    ->setTitle($label)
+                    ->setHref($href);
+                if ($languageId === (int)$value) {
+                    $menuItem->setActive(true);
+                }
+                $languageMenu->addMenuItem($menuItem);
+            }
+            $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($languageMenu);
+        }
+
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $showButton = $buttonBar->makeLinkButton()
+            ->setHref($targetUrl)
+            ->setOnClick('window.open(this.href, \'newTYPO3frontendWindow\').focus();return false;')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.showPage'))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-view-page', Icon::SIZE_SMALL));
+        $buttonBar->addButton($showButton);
+
+        $refreshButton = $buttonBar->makeLinkButton()
+            ->setHref('javascript:document.getElementById(\'tx_frontendediting_iframe\').contentWindow.location.reload(true);')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:refreshPage'))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-refresh', Icon::SIZE_SMALL));
+        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
+
+        // Shortcut
+        $mayMakeShortcut = $this->getBackendUser()->mayMakeShortcut();
+        if ($mayMakeShortcut) {
+            $getVars = ['id', 'route'];
+
+            $shortcutButton = $buttonBar->makeShortcutButton()
+                ->setModuleName('web_FrontendEditing')
+                ->setGetVariables($getVars);
+            $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+        }
     }
 
     /**
@@ -154,6 +214,32 @@ class FrontendEditingModuleController
             return $this->renderFlashMessage($flashMessage);
         }
 
+        $this->registerDocHeader($pageId, $languageId, $targetUrl);
+
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $icons = [];
+        $icons['orientation'] = $iconFactory->getIcon('actions-device-orientation-change', Icon::SIZE_SMALL)->render('inline');
+        $icons['fullscreen'] = $iconFactory->getIcon('actions-fullscreen', Icon::SIZE_SMALL)->render('inline');
+        $icons['expand'] = $iconFactory->getIcon('actions-expand', Icon::SIZE_SMALL)->render('inline');
+        $icons['desktop'] = $iconFactory->getIcon('actions-device-desktop', Icon::SIZE_SMALL)->render('inline');
+        $icons['tablet'] = $iconFactory->getIcon('actions-device-tablet', Icon::SIZE_SMALL)->render('inline');
+        $icons['mobile'] = $iconFactory->getIcon('actions-device-mobile', Icon::SIZE_SMALL)->render('inline');
+        $icons['unidentified'] = $iconFactory->getIcon('actions-device-unidentified', Icon::SIZE_SMALL)->render('inline');
+
+        $current = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?: []);
+        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:custom'));
+        $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
+        $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : 480);
+
+        $custom = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?: []);
+        $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
+        $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
+
+        // Assign variables to template
+        $this->view->assign('icons', $icons);
+        $this->view->assign('current', $current);
+        $this->view->assign('custom', $custom);
+        $this->view->assign('presetGroups', $this->getPreviewPresets($pageId));
         $this->view->assign('url', $targetUrl);
 
         $this->moduleTemplate->setContent($this->view->render());
@@ -186,6 +272,49 @@ class FrontendEditingModuleController
             $typeParameter = '&type=' . $typeId;
         }
         return $typeParameter;
+    }
+
+    /**
+     * Get available presets for page id
+     *
+     * @param int $pageId
+     * @return array
+     */
+    protected function getPreviewPresets(int $pageId): array
+    {
+        $presetGroups = [
+            'desktop' => [],
+            'tablet' => [],
+            'mobile' => [],
+            'unidentified' => []
+        ];
+        $previewFrameWidthConfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['web_view.']['previewFrameWidths.'] ?? [];
+        foreach ($previewFrameWidthConfig as $item => $conf) {
+            $data = [
+                'key' => substr($item, 0, -1),
+                'label' => $conf['label'] ?? null,
+                'type' => $conf['type'] ?? 'unknown',
+                'width' => (isset($conf['width']) && (int)$conf['width'] > 0 && strpos($conf['width'], '%') === false) ? (int)$conf['width'] : null,
+                'height' => (isset($conf['height']) && (int)$conf['height'] > 0 && strpos($conf['height'], '%') === false) ? (int)$conf['height'] : null,
+            ];
+            $width = (int)substr($item, 0, -1);
+            if (!isset($data['width']) && $width > 0) {
+                $data['width'] = $width;
+            }
+            if (!isset($data['label'])) {
+                $data['label'] = $data['key'];
+            } elseif (strpos($data['label'], 'LLL:') === 0) {
+                $data['label'] = $this->getLanguageService()->sL(trim($data['label']));
+            }
+
+            if (array_key_exists($data['type'], $presetGroups)) {
+                $presetGroups[$data['type']][$data['key']] = $data;
+            } else {
+                $presetGroups['unidentified'][$data['key']] = $data;
+            }
+        }
+
+        return $presetGroups;
     }
 
     /**
@@ -234,13 +363,13 @@ class FrontendEditingModuleController
     {
         $languageId = (int)$languageParam;
         if ($languageParam === null) {
-            $states = $this->getBackendUser()->uc['moduleData']['web_view']['States'];
+            $states = $this->getBackendUser()->uc['moduleData']['web_frontendediting']['States'];
             $languages = $this->getPreviewLanguages($pageId);
             if (isset($states['languageSelectorValue']) && isset($languages[$states['languageSelectorValue']])) {
                 $languageId = (int)$states['languageSelectorValue'];
             }
         } else {
-            $this->getBackendUser()->uc['moduleData']['web_view']['States']['languageSelectorValue'] = $languageId;
+            $this->getBackendUser()->uc['moduleData']['web_frontendediting']['States']['languageSelectorValue'] = $languageId;
             $this->getBackendUser()->writeUC($this->getBackendUser()->uc);
         }
         return $languageId;
