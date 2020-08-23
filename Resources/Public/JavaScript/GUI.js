@@ -458,7 +458,7 @@ define([
 
 		// Confirm dialog
 		if (message === F.translate('notifications.unsaved-changes')) {
-			TYPO3.Modal.confirm(
+			Modal.confirm(
 				'Navigate',
 				message,
 				Severity.warning,
@@ -466,10 +466,10 @@ define([
 					{
 						text: 'Cancel',
 						trigger: function () {
-							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.no === 'function') {
 								callbacks.no();
 							}
+							Modal.dismiss();
 						},
 						active: true,
 						btnClass: 'btn-default'
@@ -477,11 +477,11 @@ define([
 					{
 						text: 'Save All',
 						trigger: function () {
-							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.yes === 'function') {
 								save();
 								callbacks.yes();
 							}
+							Modal.dismiss();
 						},
 						active: false,
 						btnClass: 'btn-warning'
@@ -489,13 +489,13 @@ define([
 					{
 						text: 'Discard and Navigate',
 						trigger: function () {
-							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.yes === 'function') {
 								storage.clear();
 								F.refreshIframe();
 								F.trigger(F.CONTENT_CHANGE);
 								callbacks.yes();
 							}
+							Modal.dismiss();
 						},
 						active: false,
 						btnClass: 'btn-danger'
@@ -503,7 +503,7 @@ define([
 				]
 			);
 		} else {
-			TYPO3.Modal.confirm(
+			Modal.confirm(
 				message,
 				message,
 				Severity.warning,
@@ -511,10 +511,10 @@ define([
 					{
 						text: 'Cancel',
 						trigger: function () {
-							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.no === 'function') {
 								callbacks.no();
 							}
+							Modal.dismiss();
 						},
 						active: true,
 						btnClass: 'btn-default'
@@ -522,10 +522,10 @@ define([
 					{
 						text: 'OK',
 						trigger: function () {
-							$(this).trigger('modal-dismiss');
 							if (typeof callbacks.yes === 'function') {
 								callbacks.yes();
 							}
+							Modal.dismiss();
 						},
 						active: false,
 						btnClass: 'btn-warning'
