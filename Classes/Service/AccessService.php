@@ -37,7 +37,7 @@ class AccessService implements SingletonInterface
     public function __construct()
     {
         // Frontend editing needs to be enabled also by admins
-        if (isset($GLOBALS['BE_USER']) && $GLOBALS['TSFE']->config['config']['frontend_editing'] == 1) {
+        if (isset($GLOBALS['BE_USER'])) {
             $this->isEnabled = (bool)$GLOBALS['BE_USER']->uc['frontend_editing'] === true;
         }
         // Determine if page is loaded from the TYPO3 BE
