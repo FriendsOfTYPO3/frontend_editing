@@ -38,8 +38,12 @@ class AccessService implements SingletonInterface
     {
         // Frontend editing needs to be enabled also by admins
         if (isset($GLOBALS['BE_USER'])) {
-            $this->isEnabled = (bool)$GLOBALS['BE_USER']->uc['frontend_editing'] === true;
+            $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing_enabled');
+            if (isset($isFrontendEditingEnabled) && (bool)$isFrontendEditingEnabled === true) {
+                $this->isEnabled = true;
+            }
         }
+
         // Determine if page is loaded from the TYPO3 BE
         if ($this->isEnabled && !empty(GeneralUtility::getIndpEnv('HTTP_REFERER'))) {
             $parsedReferer = parse_url(GeneralUtility::getIndpEnv('HTTP_REFERER'));

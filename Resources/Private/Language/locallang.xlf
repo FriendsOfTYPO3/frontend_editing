@@ -4,9 +4,6 @@
           product-name="frontend_editing">
         <header/>
         <body>
-            <trans-unit id="settings.field.frontend_editing">
-                <source>Enable Frontend Editing</source>
-            </trans-unit>
             <trans-unit id="settings.field.frontend_editing_overlay">
                 <source>Frontend Editing: Enable right overlay bar</source>
             </trans-unit>

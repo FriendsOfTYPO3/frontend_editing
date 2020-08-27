@@ -20,12 +20,6 @@ The following steps are required to active the frontend editing for a TYPO3 inst
   .. figure:: ../Images/AddTypoScript.png
      :alt: TYPO3 frontend editing TyposScript
 
-- The last thing to do is for the individual users to activate the frontend editing for themselves.
-  This is done in the "User settings" in TYPO3:s backend.
-
-  .. figure:: ../Images/UserActivationOfFeedit.png
-     :alt: User activation of frontend editing
-
 .. _optional-settings:
 
 Optional steps
