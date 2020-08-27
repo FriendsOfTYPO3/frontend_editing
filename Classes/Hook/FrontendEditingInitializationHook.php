@@ -301,7 +301,6 @@ class FrontendEditingInitializationHook
 
         $view = $this->initializeView();
         $view->assignMultiple([
-            'overlayOption' => $GLOBALS['BE_USER']->uc['frontend_editing_overlay'],
             'currentTime' => $GLOBALS['EXEC_TIME'],
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,

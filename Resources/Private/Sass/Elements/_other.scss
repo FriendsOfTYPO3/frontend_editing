@@ -5,12 +5,6 @@
     position: relative;
     width: 100%;
 
-    &.t3-frontend-editing__iframe-overlay {
-        &.push-toleft-iframe {
-            width: 100%;
-        }
-    }
-
     &.push-toleft-iframe {
         transition: width $push-duration $push-timing;
         width: calc(100% - #{$right-bar-width});
