@@ -4,12 +4,6 @@
           product-name="frontend_editing">
         <header/>
         <body>
-            <trans-unit id="settings.field.frontend_editing">
-                <source>Enable Frontend Editing</source>
-            </trans-unit>
-            <trans-unit id="settings.field.frontend_editing_overlay">
-                <source>Frontend Editing: Enable right overlay bar</source>
-            </trans-unit>
             <trans-unit id="top-bar.save-all">
                 <source>Save All</source>
             </trans-unit>
@@ -21,12 +15,6 @@
             </trans-unit>
             <trans-unit id="right-bar.tools-properties">
                 <source>TOOLS &amp; PROPERTIES</source>
-            </trans-unit>
-            <trans-unit id="right-bar.page-seo-score">
-                <source>Page SEO Score</source>
-            </trans-unit>
-            <trans-unit id="right-bar.seo-guide">
-                <source>SEO Guide</source>
             </trans-unit>
             <trans-unit id="right-bar.page-edit">
                 <source>Edit page properties</source>
