@@ -48,7 +48,7 @@ lib.parseFunc_RTE.tags.a >
     config.tx_frontendediting {
         # These transformations are applied to the page being edited to ensure features work as expected and inceptions
         # are avoided.
-        pageContentTransformations {
+        pageContentPreProcessing {
             parseFunc {
                 tags {
                     form = TEXT
