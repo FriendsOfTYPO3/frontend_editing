@@ -50,7 +50,7 @@ class HtmlParserUserFunc
     }
 
     /**
-     * Removes the URL parameter "frontend_editing" (e.g. "?frontend_editing=true") from the supplied url.
+     * Adds the URL parameter "frontend_editing" (e.g. "?frontend_editing=true") from the supplied url.
      *
      * @param $url
      * @param HtmlParser $htmlParser
