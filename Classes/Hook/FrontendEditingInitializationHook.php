@@ -460,7 +460,9 @@ class FrontendEditingInitializationHook
 
         foreach ($entryPoints as $entryPoint) {
             if ($entryPoint['uid'] === 0) {
-                $children = $this->getStructureForSinglePageTree($this->typoScriptFrontendController->rootLine[0]['uid']);
+                $children = $this->getStructureForSinglePageTree(
+                    $this->typoScriptFrontendController->rootLine[0]['uid']
+                );
             } else {
                 $children[] = $this->getStructureForSinglePageTree($entryPoint['uid'])[0];
             }
@@ -484,16 +486,27 @@ class FrontendEditingInitializationHook
         $backendUser = $GLOBALS['BE_USER'];
 
         $userTsConfig = $GLOBALS['BE_USER']->getTSConfig();
-        $excludedDocumentTypes = GeneralUtility::intExplode(',', $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '', true);
+        $excludedDocumentTypes = GeneralUtility::intExplode(
+            ',',
+            $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '',
+            true
+        );
 
         $additionalPageTreeQueryRestrictions = [];
         if (!empty($excludedDocumentTypes)) {
             foreach ($excludedDocumentTypes as $excludedDocumentType) {
-                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction((int)$excludedDocumentType);
+                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction(
+                    (int)$excludedDocumentType
+                );
             }
         }
 
-        $repository = GeneralUtility::makeInstance(PageTreeRepository::class, (int)$backendUser->workspace, [], $additionalPageTreeQueryRestrictions);
+        $repository = GeneralUtility::makeInstance(
+            PageTreeRepository::class,
+            (int)$backendUser->workspace,
+            [],
+            $additionalPageTreeQueryRestrictions
+        );
 
         $entryPoints = (int)($backendUser->uc['pageTree_temporaryMountPoint'] ?? 0);
         if ($entryPoints > 0) {
@@ -512,7 +525,11 @@ class FrontendEditingInitializationHook
             return [];
         }
 
-        $hiddenRecords = GeneralUtility::intExplode(',', $userTsConfig['options.']['hideRecords.']['pages'] ?? '', true);
+        $hiddenRecords = GeneralUtility::intExplode(
+            ',',
+            $userTsConfig['options.']['hideRecords.']['pages'] ?? '',
+            true
+        );
         foreach ($entryPoints as $k => &$entryPoint) {
             if (in_array($entryPoint, $hiddenRecords, true)) {
                 unset($entryPoints[$k]);
