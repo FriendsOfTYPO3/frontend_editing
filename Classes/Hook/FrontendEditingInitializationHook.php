@@ -25,13 +25,13 @@ use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -41,7 +41,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -160,32 +160,12 @@ class FrontendEditingInitializationHook
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
         if (!$this->isFrontendEditingEnabled($parentObject)) {
-            $dom = new \DOMDocument();
-            $dom->loadHTML($parentObject->content, LIBXML_NOWARNING | LIBXML_NOERROR);
-
-            $domWasModified = false;
-
-            /** @var \DOMElement $element */
-            foreach ($dom->getElementsByTagName('a') as $element) {
-                $parsedUrl = parse_url($element->getAttribute('href'));
-
-                if ($parsedUrl['query'] !== null) {
-                    $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
-
-                    if (isset($queryArguments['frontend_editing'])) {
-                        unset($queryArguments['frontend_editing']);
-
-                        $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
-
-                        $element->setAttribute('href', HttpUtility::buildUrl($parsedUrl));
-                        $domWasModified = true;
-                    }
-                }
-            }
-
-            if ($domWasModified) {
-                $parentObject->content = $dom->saveHTML();
-            }
+            /** @var ContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+            $parentObject->content = $contentObjectRenderer->stdWrap(
+                $parentObject->content,
+                $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.']
+            );
 
             return;
         }
@@ -208,9 +188,18 @@ class FrontendEditingInitializationHook
         }
         $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
 
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
-            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            if ($typo3VersionNumber < 9000000) {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceTypo38::class);
+            } else {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            }
+
             $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
