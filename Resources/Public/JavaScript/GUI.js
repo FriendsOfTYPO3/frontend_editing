@@ -15,22 +15,22 @@
  * FrontendEditing.GUI: Functionality related to the GUI and events listeners
  */
 define([
-		'jquery',
-		'TYPO3/CMS/FrontendEditing/Crud',
-		'TYPO3/CMS/FrontendEditing/D3IndentedTree',
-		'TYPO3/CMS/FrontendEditing/Editor',
-		'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-		'TYPO3/CMS/Backend/Modal',
-		'TYPO3/CMS/Backend/Severity'
-	], function (
-		$,
-		FrontendEditing,
-		D3IndentedTree,
-		Editor,
-		toastr,
-		Modal,
-		Severity
-	) {
+	'jquery',
+	'TYPO3/CMS/FrontendEditing/Crud',
+	'TYPO3/CMS/FrontendEditing/D3IndentedTree',
+	'TYPO3/CMS/FrontendEditing/Editor',
+	'TYPO3/CMS/FrontendEditing/Contrib/toastr',
+	'TYPO3/CMS/Backend/Modal',
+	'TYPO3/CMS/Backend/Severity'
+], function (
+	$,
+	FrontendEditing,
+	D3IndentedTree,
+	Editor,
+	toastr,
+	Modal,
+	Severity
+) {
 	'use strict';
 
 	// Extend FrontendEditing with additional events
@@ -103,7 +103,8 @@ define([
 	}
 
 	function initListeners() {
-		F.on(F.REQUEST_START, function () {});
+		F.on(F.REQUEST_START, function () {
+		});
 
 		F.on(F.UPDATE_CONTENT_COMPLETE, function (data) {
 			showSuccess(
@@ -142,6 +143,12 @@ define([
 				$itemCounter.html('');
 			}
 		});
+
+		getIframe().on('load', function () {
+			initEditorInIframe(editorConfigurationUrl);
+
+			iframeUrl = getIframe().src;
+		});
 	}
 
 	function save() {
@@ -177,10 +184,10 @@ define([
 		var u = 1;
 
 		// Add check for page tree navigation
-		$('.site-root-button').click(function() {
+		$('.site-root-button').click(function () {
 			$('.t3-frontend-editing__page-site-root-wrapper').toggle();
 		});
-		$('.search-button').click(function() {
+		$('.search-button').click(function () {
 			$('.t3-frontend-editing__page-tree-filter-wrapper').toggle();
 		});
 
@@ -207,8 +214,7 @@ define([
 			} else if (!$('.t3-frontend-editing__right-bar').hasClass('open') && $('.t3-frontend-editing__left-bar').hasClass('open')) {
 				$('.t3-frontend-editing__left-bar').stop().animate({left: y ? 0 : -280}, pushDuration, pushEasing);
 				$('.t3-frontend-editing__right-bar').toggleClass('closed');
-			}
-			else {
+			} else {
 				$('.t3-frontend-editing__right-bar').toggleClass('closed');
 				$('.t3-frontend-editing__left-bar').toggleClass('closed');
 			}
@@ -263,9 +269,9 @@ define([
 				}
 			);
 		});
-		$( document ).ready(function() {
-			if (!$('.t3-frontend-editing__right-bar').hasClass('open') ||  !$('.t3-frontend-editing__left-bar').hasClass('open')
-				|| $('.t3-frontend-editing__right-bar').hasClass('open') ||  $('.t3-frontend-editing__left-bar').hasClass('open')) {
+		$(document).ready(function () {
+			if (!$('.t3-frontend-editing__right-bar').hasClass('open') || !$('.t3-frontend-editing__left-bar').hasClass('open')
+				|| $('.t3-frontend-editing__right-bar').hasClass('open') || $('.t3-frontend-editing__left-bar').hasClass('open')) {
 
 				if (!$('.t3-frontend-editing__left-bar').hasClass('open')) {
 					$('.t3-frontend-editing__ckeditor-bar').addClass('left-closed');
@@ -349,8 +355,8 @@ define([
 		});
 
 		// Allow external scripts to iframeUrl when main window url is updated by script (history.pushState)
-		$iframe.on('update-url', function(e, url){
-			if(url.indexOf('frontend_editing') === -1){
+		$iframe.on('update-url', function (e, url) {
+			if (url.indexOf('frontend_editing') === -1) {
 				url += (url.indexOf('?') === -1 ? '?' : '&') + 'frontend_editing=true';
 			}
 			iframeUrl = url;
@@ -386,7 +392,7 @@ define([
 		}
 
 		if (typeof states.fullScreenState !== 'undefined') {
-			if(states.fullScreenState.isActive) {
+			if (states.fullScreenState.isActive) {
 				$('.t3-frontend-editing__full-view').trigger('click');
 			}
 		}
@@ -416,74 +422,77 @@ define([
 	}
 
 	function loadPageIntoIframe(url, editorConfigurationUrl) {
-		showLoadingScreen();
-		var deferred = $.Deferred();
-
 		$iframe.attr({
 			'src': url
 		});
 
-		$iframe.on('load', deferred.resolve);
-
-		deferred.done(function () {
-      // Avoid inception issue for example when link clicked redirects to a new URL without frontend_editing=true
-      var iframeDocumentLocation = $iframe[0].contentDocument.location;
-      if (!iframeDocumentLocation.search.includes('frontend_editing=true')) {
-        var url = iframeDocumentLocation.href;
-
-        history.replaceState(history.state, document.title, url);
-
-        if (!url.includes('?')) {
-          url = url + '?';
-        } else if (url.slice(url.length - 1) !== '&') {
-          url = url + '&';
-        }
-
-        loadPageIntoIframe(url + 'frontend_editing=true', editorConfigurationUrl);
-        hideLoadingScreen();
-        return;
-      }
-
-      document.title = $iframe[0].contentDocument.title;
-			history.replaceState(history.state, document.title, window.location.href);
-
-			// check if LocalStorage contains any changes prior to iframe reload
-			var items = storage.getSaveItems();
-
-			if (items.count()) {
-				items.forEach(function (item) {
-					var content;
-					var isInlineElement = item.inlineElement || false;
-
-					if (isInlineElement) {
-						content = item.text;
-					} else if (item.hasCkeditorConfiguration) {
-						content = CKEDITOR.instances[item.editorInstance].getData();
-					} else {
-						content = CKEDITOR.instances[item.editorInstance].editable().getText();
-					}
-
-					// if match is found, replace content in iframe with LocalStorage
-					$iframe.contents().find('[contenteditable=\'true\']').each(function () {
-						var dataSet = $(this).data();
-						if ((dataSet.uid == item.uid) && (dataSet.field == item.field) && (dataSet.table == item.table)) {
-							$(this).html(content);
-						}
-					});
-				});
-			}
-
-			Editor.init($iframe, editorConfigurationUrl, resourcePath);
-
-			if (sessionStorage.scrollTop !== 'undefined') {
-				$iframe.contents().scrollTop(sessionStorage.scrollTop);
-				sessionStorage.removeItem('scrollTop');
-			}
-
-			hideLoadingScreen();
-		});
-
 		iframeUrl = url;
+	}
+
+	function initEditorInIframe(editorConfigurationUrl) {
+		// Avoid inception issue for example when link clicked redirects to a new URL without frontend_editing=true
+		var iframeDocumentLocation = $iframe[0].contentDocument.location;
+		var url = iframeDocumentLocation.href;
+
+		document.title = $iframe[0].contentDocument.title;
+
+		if (!iframeDocumentLocation.search.includes('frontend_editing=true')) {
+			history.replaceState(history.state, document.title, url);
+
+			if (!url.includes('?')) {
+				url = url + '?';
+			} else if (url.slice(url.length - 1) !== '&') {
+				url = url + '&';
+			}
+
+			loadPageIntoIframe(url + 'frontend_editing=true', editorConfigurationUrl);
+			hideLoadingScreen();
+			return;
+		} else {
+			url = url.replace('&frontend_editing=true', '').replace('frontend_editing=true', '');
+			url = url.replace('&no_cache=1', '').replace('no_cache=1', '');
+
+			if (url.slice(url.length - 1) === '?') {
+				url = url.slice(0, -1);
+			}
+		}
+
+		history.replaceState(history.state, document.title, url);
+
+		// check if LocalStorage contains any changes prior to iframe reload
+		var items = storage.getSaveItems();
+
+		if (items.count()) {
+			items.forEach(function (item) {
+				var content;
+				var isInlineElement = item.inlineElement || false;
+
+				if (isInlineElement) {
+					content = item.text;
+				} else if (item.hasCkeditorConfiguration) {
+					content = CKEDITOR.instances[item.editorInstance].getData();
+				} else {
+					content = CKEDITOR.instances[item.editorInstance].editable().getText();
+				}
+
+				// if match is found, replace content in iframe with LocalStorage
+				$iframe.contents().find('[contenteditable=\'true\']').each(function () {
+					var dataSet = $(this).data();
+					if ((dataSet.uid == item.uid) && (dataSet.field == item.field) && (dataSet.table == item.table)) {
+						$(this).html(content);
+					}
+				});
+			});
+		}
+
+		Editor.init($iframe, editorConfigurationUrl, resourcePath);
+
+		if (sessionStorage.scrollTop !== 'undefined') {
+			$iframe.contents().scrollTop(sessionStorage.scrollTop);
+			sessionStorage.removeItem('scrollTop');
+		}
+
+		hideLoadingScreen();
 	}
 
 	function initCustomLoadedContent(customElement) {
@@ -513,6 +522,8 @@ define([
 			$loadingScreen.fadeOut('slow', function () {
 				$loadingScreen.addClass(CLASS_HIDDEN);
 			});
+		} else if (loadingScreenLevel < 0) {
+			loadingScreenLevel = 0;
 		}
 	}
 
