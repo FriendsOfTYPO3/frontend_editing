@@ -222,11 +222,6 @@ define([
 			}
 		});
 
-		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
-			var url = $(this).data('url');
-			F.loadInModal(url);
-		});
-
 		$('.t3-frontend-editing__show-hidden-items').click(function () {
 			var url = $(this).data('url');
 			loadPageIntoIframe(url, editorConfigurationUrl);
