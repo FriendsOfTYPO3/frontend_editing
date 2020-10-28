@@ -143,7 +143,7 @@ define([
 		getIframe().on('load', function () {
 			initEditorInIframe(editorConfigurationUrl);
 
-			iframeUrl = getIframe().src;
+			iframeUrl = getIframe().contents().get(0).location.href;
 		});
 	}
 
