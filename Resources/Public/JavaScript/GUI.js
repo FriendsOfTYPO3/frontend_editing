@@ -143,7 +143,7 @@ define([
 		getIframe().on('load', function () {
 			initEditorInIframe(editorConfigurationUrl);
 
-			iframeUrl = getIframe().src;
+			iframeUrl = getIframe().contents().get(0).location.href;
 		});
 	}
 
@@ -220,11 +220,6 @@ define([
 			if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
 				$('.t3-frontend-editing__ckeditor-bar').addClass('right-closed');
 			}
-		});
-
-		$('.t3-frontend-editing__page-edit, .t3-frontend-editing__page-new').click(function () {
-			var url = $(this).data('url');
-			F.loadInModal(url);
 		});
 
 		$('.t3-frontend-editing__show-hidden-items').click(function () {

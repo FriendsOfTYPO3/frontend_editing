@@ -120,18 +120,9 @@ define([
 
 									modalIframe.on('load', function () {
 										$.extend(window.TYPO3, modalIframe[0].contentWindow.TYPO3 || {});
-
-										// Simulate BE environment with correct CKEditor instance for RteLinkBrowser
-										top.TYPO3.Backend = top.TYPO3.Backend || {};
-										top.TYPO3.Backend.ContentContainer = {
-											get: function () {
-												return modalIframe[0].contentWindow;
-											}
-										};
 									});
 
 									currentModal.on('hidden.bs.modal', function (e) {
-										delete top.TYPO3.Backend.ContentContainer;
 										F.refreshIframe();
 									});
 								}
