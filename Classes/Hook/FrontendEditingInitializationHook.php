@@ -468,7 +468,7 @@ class FrontendEditingInitializationHook
             }
         }
 
-        $appsPagetreeRootIcon = GeneralUtility::makeInstance(IconRegistry::class)->getIconConfigurationByIdentifier('apps-pagetree-root');
+        $appsPagetreeRootIcon = $this->iconRegistry->getIconConfigurationByIdentifier('apps-pagetree-root');
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
             'icon' => $this->getAbsolutePath($appsPagetreeRootIcon['options']['source']),
