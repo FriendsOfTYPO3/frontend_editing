@@ -468,9 +468,10 @@ class FrontendEditingInitializationHook
             }
         }
 
+        $appsPagetreeRootIcon = $this->iconRegistry->getIconConfigurationByIdentifier('apps-pagetree-root');
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
+            'icon' => $this->getAbsolutePath($appsPagetreeRootIcon['options']['source']),
             'children' => $children
         ];
     }

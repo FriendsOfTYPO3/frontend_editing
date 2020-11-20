@@ -13,33 +13,33 @@
 			<f:if condition="{pageNewUrl}">
 				<li>
 					<button type="#" class="btn t3-frontend-editing__page-new" data-url="{pageNewUrl}">
-						<fe:svg source="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-page-new.svg"/>
+						<core:icon identifier="actions-page-new"/>
 					</button>
 				</li>
 			</f:if>
 			<f:if condition="{pageEditUrl}">
 				<li>
 					<button type="#" class="btn t3-frontend-editing__page-edit" data-url="{pageEditUrl}">
-						<fe:svg source="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-page-open.svg"/>
+						<core:icon identifier="actions-page-open"/>
 					</button>
 				</li>
 			</f:if>
 			<li>
 				<button type="button" class="btn search-button">
-					<fe:svg source="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-filter.svg"/>
+					<core:icon identifier="actions-filter"/>
 				</button>
 			</li>
 
 			<f:if condition="{mounts}">
 				<li>
 					<button type="button" class="btn site-root-button">
-						<fe:svg source="EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-page-domain.svg"/>
+						<core:icon identifier="apps-pagetree-page-domain"/>
 					</button>
 				</li>
 			</f:if>
 			<li>
 				<button type="button" class="btn t3-frontend-editing__page-tree-refresh">
-					<fe:svg source="EXT:core/Resources/Public/Icons/T3Icons/actions/actions-refresh.svg"/>
+					<core:icon identifier="actions-refresh"/>
 				</button>
 			</li>
 		</ul>
