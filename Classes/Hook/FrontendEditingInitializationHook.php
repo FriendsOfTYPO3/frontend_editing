@@ -428,12 +428,16 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->addJsFooterFile(
             'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
         );
- 
+
         // Fixes issue #377, where CKEditor dependencies fail to load if the version number is added to the file name
         if ($GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] === 'embed') {
             $this->pageRenderer->addJsInlineCode(
                 'ckeditor-basepath-config',
-                'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue('/typo3/sysext/rte_ckeditor/Resources/Public/JavaScript/Contrib/') .';',
+                'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue(PathUtility::getRelativePathTo(
+                    GeneralUtility::getFileAbsFileName(
+                        'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
+                    )
+                )) .';',
                 true,
                 true
             );
