@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Exception\Page\RootLineException;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
@@ -42,7 +43,6 @@ use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
@@ -54,7 +54,7 @@ use TYPO3\CMS\FrontendEditing\Provider\Seo\CsSeoProvider;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -173,32 +173,12 @@ class FrontendEditingInitializationHook
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
         if (!$this->isFrontendEditingEnabled($parentObject)) {
-            $dom = new \DOMDocument();
-            $dom->loadHTML($parentObject->content, LIBXML_NOWARNING | LIBXML_NOERROR);
-
-            $domWasModified = false;
-
-            /** @var \DOMElement $element */
-            foreach ($dom->getElementsByTagName('a') as $element) {
-                $parsedUrl = parse_url($element->getAttribute('href'));
-
-                if ($parsedUrl['query'] !== null) {
-                    $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
-
-                    if (isset($queryArguments['frontend_editing'])) {
-                        unset($queryArguments['frontend_editing']);
-
-                        $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
-
-                        $element->setAttribute('href', HttpUtility::buildUrl($parsedUrl));
-                        $domWasModified = true;
-                    }
-                }
-            }
-
-            if ($domWasModified) {
-                $parentObject->content = $dom->saveHTML();
-            }
+            /** @var ContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+            $parentObject->content = $contentObjectRenderer->stdWrap(
+                $parentObject->content,
+                $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.']
+            );
 
             return;
         }
@@ -221,9 +201,18 @@ class FrontendEditingInitializationHook
         }
         $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
 
+        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        );
+
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
-            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            if ($typo3VersionNumber < 9000000) {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceTypo38::class);
+            } else {
+                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+            }
+
             $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
@@ -287,10 +276,6 @@ class FrontendEditingInitializationHook
         $this->pageRenderer = new PageRenderer();
         $this->pageRenderer->setBaseUrl($baseUrl);
         $this->pageRenderer->setCharset('utf-8');
-
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
 
         if ($typo3VersionNumber < 9000000) {
             // @extensionScannerIgnoreLine
@@ -439,10 +424,24 @@ class FrontendEditingInitializationHook
             'EXT:backend/Resources/Public/JavaScript/backend.js'
         );
         // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
-        $this->pageRenderer->addJsFile('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js');
-        $this->pageRenderer->addJsFile(
+        $this->pageRenderer->addJsFooterFile('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js');
+        $this->pageRenderer->addJsFooterFile(
             'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
         );
+
+        // Fixes issue #377, where CKEditor dependencies fail to load if the version number is added to the file name
+        if ($GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] === 'embed') {
+            $this->pageRenderer->addJsInlineCode(
+                'ckeditor-basepath-config',
+                'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue(PathUtility::getRelativePathTo(
+                    GeneralUtility::getFileAbsFileName(
+                        'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
+                    )
+                )) .';',
+                true,
+                true
+            );
+        }
 
         $configuration = $this->getPluginConfiguration();
         if (is_array($configuration['includeJS'])) {
@@ -475,15 +474,18 @@ class FrontendEditingInitializationHook
 
         foreach ($entryPoints as $entryPoint) {
             if ($entryPoint['uid'] === 0) {
-                $children = $this->getStructureForSinglePageTree($this->typoScriptFrontendController->rootLine[0]['uid']);
+                $children = $this->getStructureForSinglePageTree(
+                    $this->typoScriptFrontendController->rootLine[0]['uid']
+                );
             } else {
                 $children[] = $this->getStructureForSinglePageTree($entryPoint['uid'])[0];
             }
         }
 
+        $appsPagetreeRootIcon = $this->iconRegistry->getIconConfigurationByIdentifier('apps-pagetree-root');
         return [
             'name' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'icon' => $this->getAbsolutePath('EXT:core/Resources/Public/Icons/T3Icons/apps/apps-pagetree-root.svg'),
+            'icon' => $this->getAbsolutePath($appsPagetreeRootIcon['options']['source']),
             'children' => $children
         ];
     }
@@ -499,16 +501,27 @@ class FrontendEditingInitializationHook
         $backendUser = $GLOBALS['BE_USER'];
 
         $userTsConfig = $GLOBALS['BE_USER']->getTSConfig();
-        $excludedDocumentTypes = GeneralUtility::intExplode(',', $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '', true);
+        $excludedDocumentTypes = GeneralUtility::intExplode(
+            ',',
+            $userTsConfig['options.']['pageTree.']['excludeDoktypes'] ?? '',
+            true
+        );
 
         $additionalPageTreeQueryRestrictions = [];
         if (!empty($excludedDocumentTypes)) {
             foreach ($excludedDocumentTypes as $excludedDocumentType) {
-                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction((int)$excludedDocumentType);
+                $additionalPageTreeQueryRestrictions[] = new DocumentTypeExclusionRestriction(
+                    (int)$excludedDocumentType
+                );
             }
         }
 
-        $repository = GeneralUtility::makeInstance(PageTreeRepository::class, (int)$backendUser->workspace, [], $additionalPageTreeQueryRestrictions);
+        $repository = GeneralUtility::makeInstance(
+            PageTreeRepository::class,
+            (int)$backendUser->workspace,
+            [],
+            $additionalPageTreeQueryRestrictions
+        );
 
         $entryPoints = (int)($backendUser->uc['pageTree_temporaryMountPoint'] ?? 0);
         if ($entryPoints > 0) {
@@ -527,7 +540,11 @@ class FrontendEditingInitializationHook
             return [];
         }
 
-        $hiddenRecords = GeneralUtility::intExplode(',', $userTsConfig['options.']['hideRecords.']['pages'] ?? '', true);
+        $hiddenRecords = GeneralUtility::intExplode(
+            ',',
+            $userTsConfig['options.']['hideRecords.']['pages'] ?? '',
+            true
+        );
         foreach ($entryPoints as $k => &$entryPoint) {
             if (in_array($entryPoint, $hiddenRecords, true)) {
                 unset($entryPoints[$k]);
