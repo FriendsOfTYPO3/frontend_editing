@@ -1,0 +1,172 @@
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+
+name: CI
+
+jobs:
+  php-lint:
+    name: PHP linter
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 7.2
+          - 7.3
+          - 7.4
+
+    steps:
+      - name: Configure PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run PHP lint
+        run: |
+          echo "${{ matrix.exclude-pattern }}"
+          find *.php Classes/ Configuration/ Tests/ -name '*.php' ${{ matrix.exclude-pattern }}
+          find *.php Classes/ Configuration/ Tests/ -name '*.php' ${{ matrix.exclude-pattern }} -print0 | xargs -0 -n 1 -P 4 php -l
+
+  typoscript-lint:
+    name: TypoScript linter
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: "Cache dependencies installed with composer"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php${{ matrix.php-version }}-composer-
+      - name: Install Composer dependencies
+        run: composer install --no-progress
+
+      - name: Run TypoScript lint
+        run: composer ci:ts:lint
+
+  php-code-sniffer:
+    name: PHP Code Sniffer
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: "Cache dependencies installed with composer"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php${{ matrix.php-version }}-composer-
+      - name: Install Composer dependencies
+        run: composer install --no-progress
+
+      - name: Run PHP Code Sniffer
+        run: composer ci:php:sniff
+
+  unit-tests:
+    name: Unit tests
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        composer-version:
+          - v1
+          - v2
+        typo3-version:
+          - "^9.5"
+          - "^10.4"
+        composer-dependencies:
+          - highest
+          - lowest
+        php-version:
+          - 7.2
+          - 7.3
+          - 7.4
+        include:
+          - typo3-version: "^9.5"
+            database-image: mariadb:latest
+          - typo3-version: "^10.4"
+            database-image: mariadb:latest
+
+    services:
+      mysql:
+        image: ${{ matrix.database-image }}
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_DATABASE: typo3
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: user
+        ports:
+          - 3306
+
+    steps:
+      - name: Configure PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, openssl, pcre, session, SPL, xml, zip, zlib
+          coverage: none
+          tools: composer:${{ matrix.composer-version }}
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: "Cache dependencies installed with composer"
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache
+          key: php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php${{ matrix.php-version }}-composer-
+
+      - name: Install TYPO3 Core
+        env:
+          TYPO3: ${{ matrix.typo3-version }}
+        run: |
+          composer --version
+          composer require typo3/minimal:"${{ matrix.typo3-version }}"
+          composer show
+
+      - name: Install lowest dependencies with composer
+        if: matrix.composer-dependencies == 'lowest'
+        run: |
+          composer update --no-ansi --no-interaction --no-progress --no-suggest --prefer-lowest
+          composer show
+
+      - name: Install highest dependencies with composer
+        if: matrix.composer-dependencies == 'highest'
+        run: |
+          composer update --no-ansi --no-interaction --no-progress --no-suggest
+          composer show
+
+      - name: Run unit tests
+        # Environment variable can be removed when TYPO3 v7 support ends
+        env:
+          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/pxa_siteimprove/.Build/public
+        run: composer ci:tests:unit
+
+      - name: Run functional tests
+        env:
+          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/pxa_siteimprove/.Build/public
+          typo3DatabaseHost: 127.0.0.1
+          typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
+          typo3DatabaseName: typo3
+          typo3DatabaseUsername: root
+          typo3DatabasePassword: password
+        run: composer ci:tests:functional
