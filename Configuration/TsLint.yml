@@ -1,0 +1,4 @@
+sniffs:
+  - class: Indentation
+    parameters:
+      indentConditions: true
