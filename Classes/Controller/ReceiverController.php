@@ -63,7 +63,7 @@ class ReceiverController
                     case 'new':
                         $data = [];
                         parse_str($request->getParsedBody()['data'], $data);
-                        $this->newAction($data['edit'], $data['defVals'], (int) $request->getQueryParams()['page']);
+                        $this->newAction($data['edit'], $data['defVals'], (int)$request->getQueryParams()['page']);
                         break;
                     case 'hide':
                         $this->hideAction(
@@ -233,7 +233,7 @@ class ReceiverController
             );
         }
 
-        if ((int) array_keys($edit[$table])[0] < 0) {
+        if ((int)array_keys($edit[$table])[0] < 0) {
             $defVals[$table]['pid'] = array_keys($edit[$table])[0];
         } else {
             $defVals[$table]['pid'] = $pid;

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
@@ -13,8 +13,6 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 
 /**
  * Middleware check if backend user allowed to access BE
- *
- * @package TYPO3\CMS\FrontendEditing\Middleware
  */
 class BackendUserRedirectToFrontend implements MiddlewareInterface
 {

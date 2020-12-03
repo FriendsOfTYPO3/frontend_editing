@@ -30,7 +30,6 @@ use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
@@ -384,7 +383,7 @@ class FrontendEditingInitializationHook
                     GeneralUtility::getFileAbsFileName(
                         'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
                     )
-                )) .';',
+                )) . ';',
                 true,
                 true
             );
