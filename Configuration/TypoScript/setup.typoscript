@@ -32,7 +32,7 @@ tt_content.textpic.stdWrap < lib.fluidContent.stdWrap
 tt_content.uploads.stdWrap < lib.fluidContent.stdWrap
 tt_content.mailform.stdWrap < lib.fluidContent.stdWrap
 
-config.tx_extbase{
+config.tx_extbase {
     objects {
         TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
     }
