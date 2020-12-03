@@ -41,9 +41,38 @@
 		}
 	},
 	"scripts": {
+		"ci:php:lint": "find *.php Classes/ Configuration/ Tests/ -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
+		"ci:php:sniff": "phpcs Classes Tests",
+		"cs:php:fix": "phpcbf Classes Tests",
+		"ci:ts:lint": "typoscript-lint -c Configuration/TsLint.yml --ansi -n --fail-on-warnings -vvv Configuration/TypoScript/",
+		"ci:tests:unit": "find 'Tests/Unit' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running unit test suite {}\"; .Build/bin/phpunit --verbose --bootstrap .Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php {}'",
+		"ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; .Build/bin/phpunit --verbose --bootstrap .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTestsBootstrap.php {}'",
+		"ci:tests": [
+			"@ci:tests:unit",
+			"@ci:tests:functional"
+		],
+		"ci:dynamic": [
+			"@ci:tests"
+		],
+		"ci:static": [
+			"@ci:php:lint",
+			"@ci:php:sniff",
+			"@ci:ts:lint"
+		],
+		"ci": [
+			"@ci:static"
+		],
+		"link-extension": [
+			"@php -r 'is_dir($extFolder=__DIR__.\"/.Build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
+			"@php -r 'file_exists($extFolder=__DIR__.\"/.Build/public/typo3conf/ext/frontend_editing\") || symlink(__DIR__,$extFolder);'"
+		],
+		"fix:php-cs": "php-cs-fixer fix",
+		"fix:php-sniff": "phpcbf Classes Tests",
 		"post-autoload-dump": [
-			"mkdir -p .Build/Web/typo3conf/ext/",
-			"[ -L .Build/Web/typo3conf/ext/frontend_editing ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/frontend_editing"
+			"@link-extension"
+		],
+		"docs:generate": [
+			"docker run --rm t3docs/render-documentation show-shell-commands > tempfile.sh; echo 'dockrun_t3rd makehtml' >> tempfile.sh; bash tempfile.sh; rm tempfile.sh"
 		]
 	},
 	"extra": {
