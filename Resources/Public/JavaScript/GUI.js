@@ -417,12 +417,11 @@ define([
 	function hideLoadingScreen() {
 		loadingScreenLevel--;
 
-		if (loadingScreenLevel === 0) {
+		if (loadingScreenLevel <= 0) {
+			loadingScreenLevel = 0;
 			$loadingScreen.fadeOut('slow', function () {
 				$loadingScreen.addClass(CLASS_HIDDEN);
 			});
-		} else if (loadingScreenLevel < 0) {
-			loadingScreenLevel = 0;
 		}
 	}
 
