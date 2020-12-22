@@ -1,4 +1,4 @@
-[globalVar = TSFE : beUserLogin > 0]
+[globalVar = TSFE : beUserLogin > 0][globalVar = GP:frontend_editing = true]
 
 lib.fluidContent {
     stdWrap {
@@ -40,5 +40,8 @@ config.tx_extbase{
 
 # Prevent links from being parsed to FE url
 lib.parseFunc_RTE.tags.a >
+
+# Disable spam protection
+config.spamProtectEmailAddresses = 0
 
 [global]
