@@ -52,33 +52,77 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		FrontendEditing.events[key] = value;
 	};
 
-	// Scroll function when draging content elements to top or bottom of window
-	var stop = true;
-	var scroll = function(step) {
-		var scrollY = $('iframe').contents().scrollTop();
-		$('iframe').contents().scrollTop(scrollY + step);
-		if (!stop) {
-			setTimeout(function() {
-				scroll(step);
-			}, 20);
-		}
-	};
+    // Scroll function when dragging content elements to top or bottom of window
+    var $iframe = $('iframe');
+    var stop = true;
 
-	$('[draggable]').on('drag', function(event) {
-		stop = true;
-		if (event.clientY > 0 && event.clientY < 150) {
-			stop = false;
-			scroll(-1);
-		}
-		if (event.originalEvent.clientY > ($('iframe').height() - 100)) {
-			stop = false;
-			scroll(1);
-		}
-	});
+    var dragging = false;
+    var $scrollAreaTop = $('<div style="position: absolute; left: 0; top: 0; right: 0; background: rgba(0,0,0,0.2)"/>')
+        .height(150)
+        .hide()
+        .insertAfter($iframe)
+        .on('dragenter', function() {
+            if(dragging){
+                stop = false;
+                scroll(-4);
+            }
+        }).on('dragleave', function(e) {
+            stop = true;
+        });
+    var $scrollAreaBottom = $('<div style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2)"/>')
+        .height(100)
+        .hide()
+        .insertAfter($iframe)
+        .on('dragenter', function() {
+            if(dragging){
+                stop = false;
+                scroll(4);
+            }
+        }).on('dragleave', function(e) {
+            stop = true;
+        });
 
-	$('[draggable]').on('dragend', function(e) {
-		stop = true;
-	});
+    function scroll(step) {
+        var $contents = $iframe.contents();
+        var scrollY = $contents.scrollTop() + step;
+        if(scrollY < 0){
+            $scrollAreaTop.hide();
+            scrollY = 0;
+            stop = true;
+        } else {
+            $scrollAreaTop.show();
+            if(step>0){
+                var maxScroll = $contents.height() - $iframe.height();
+                if(scrollY > maxScroll){
+                    $scrollAreaBottom.hide();
+                    scrollY = maxScroll;
+                    stop = true;
+                } else {
+                    $scrollAreaBottom.show();
+                }
+            } else {
+                $scrollAreaBottom.show();
+            }
+        }
+        $contents.scrollTop(scrollY);
+        if (!stop) {
+            setTimeout(function() {
+                scroll(step);
+            }, 20);
+        }
+    }
+
+    $('[draggable]').on('dragstart', function(e) {
+        stop = true;
+        dragging=true;
+        $scrollAreaBottom.show();
+        $scrollAreaTop.show();
+    }).on('dragend', function(e) {
+        stop = true;
+        dragging=false;
+        $scrollAreaBottom.hide();
+        $scrollAreaTop.hide();
+    });
 
 	// Public API
 	FrontendEditing.prototype = {
@@ -182,9 +226,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			translationLabels = labels;
 		},
 
-    setDisableModalOnNewCe: function (disable) {
-      disableModalOnNewCe = disable;
-    },
+		setDisableModalOnNewCe: function (disable) {
+		  disableModalOnNewCe = disable;
+		},
 
 		translate: function (key) {
 			if (translationLabels[key]) {
@@ -294,12 +338,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var paramsObj = F.parseQuery(ev.dataTransfer.getData('params').substr(1));
 			var fullUrlObj = {};
 			$.extend(true, fullUrlObj, paramsObj, newUrlQueryStringObj);
-      var fullUrlQueryString = F.serializeObj(fullUrlObj);
+			var fullUrlQueryString = F.serializeObj(fullUrlObj);
 			if (disableModalOnNewCe) {
-			  F.newContent(fullUrlQueryString);
-      } else {
-        F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
-      }
+				F.newContent(fullUrlQueryString);
+      		} else {
+        		F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
+      		}
 		},
 
 		indicateCeStart: function (ev) {
