@@ -14,7 +14,7 @@
 /**
  * FrontendEditing: The foundation for the frontend editing interactions
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage', 'TYPO3/CMS/FrontendEditing/Scroller'], function ($, Storage, Scroller) {
 	'use strict';
 
 	// Hold event listeners and the callbacks
@@ -54,75 +54,29 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 
     // Scroll function when dragging content elements to top or bottom of window
     var $iframe = $('iframe');
-    var stop = true;
-
-    var dragging = false;
     var $scrollAreaTop = $('<div style="position: absolute; left: 0; top: 0; right: 0; background: rgba(0,0,0,0.2)"/>')
         .height(150)
         .hide()
-        .insertAfter($iframe)
-        .on('dragenter', function() {
-            if(dragging){
-                stop = false;
-                scroll(-4);
-            }
-        }).on('dragleave', function(e) {
-            stop = true;
-        });
+        .insertAfter($iframe);
     var $scrollAreaBottom = $('<div style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2)"/>')
         .height(100)
         .hide()
-        .insertAfter($iframe)
-        .on('dragenter', function() {
-            if(dragging){
-                stop = false;
-                scroll(4);
-            }
-        }).on('dragleave', function(e) {
-            stop = true;
-        });
+        .insertAfter($iframe);
 
-    function scroll(step) {
-        var $contents = $iframe.contents();
-        var scrollY = $contents.scrollTop() + step;
-        if(scrollY < 0){
-            $scrollAreaTop.hide();
-            scrollY = 0;
-            stop = true;
-        } else {
-            $scrollAreaTop.show();
-            if(step>0){
-                var maxScroll = $contents.height() - $iframe.height();
-                if(scrollY > maxScroll){
-                    $scrollAreaBottom.hide();
-                    scrollY = maxScroll;
-                    stop = true;
-                } else {
-                    $scrollAreaBottom.show();
-                }
-            } else {
-                $scrollAreaBottom.show();
-            }
-        }
-        $contents.scrollTop(scrollY);
-        if (!stop) {
-            setTimeout(function() {
-                scroll(step);
-            }, 20);
-        }
-    }
+    var scroller = Scroller($iframe, $iframe.contents(), $scrollAreaTop, $scrollAreaBottom);
 
-    $('[draggable]').on('dragstart', function(e) {
-        stop = true;
-        dragging=true;
-        $scrollAreaBottom.show();
-        $scrollAreaTop.show();
-    }).on('dragend', function(e) {
-        stop = true;
-        dragging=false;
-        $scrollAreaBottom.hide();
-        $scrollAreaTop.hide();
-    });
+    $scrollAreaTop.on('dragleave', scroller.stopScrolling)
+		.on('dragenter', function() {
+			scroller.startScrolling(-4);
+		});
+    $scrollAreaBottom.on('dragleave', scroller.stopScrolling)
+		.on('dragenter', function() {
+			scroller.startScrolling(4);
+		});
+
+    $('[draggable]')
+		.on('dragstart', scroller.enable)
+		.on('dragend', scroller.disable);
 
 	// Public API
 	FrontendEditing.prototype = {
