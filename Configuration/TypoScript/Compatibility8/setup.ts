@@ -1,4 +1,4 @@
-[globalVar = TSFE : beUserLogin > 0][globalVar = GP:frontend_editing = true]
+[globalVar = TSFE : beUserLogin > 0] && [globalVar = GP:frontend_editing = true]
 
 lib.fluidContent {
     stdWrap {

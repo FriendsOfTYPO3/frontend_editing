@@ -1,4 +1,4 @@
-[backend.user.isLoggedIn][request.getQueryParams()['frontend_editing'] == true]
+[backend.user.isLoggedIn && request.getQueryParams()['frontend_editing'] == true]
 
 lib.fluidContent {
     stdWrap {
