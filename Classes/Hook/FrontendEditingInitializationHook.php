@@ -371,7 +371,6 @@ class FrontendEditingInitializationHook
             'EXT:backend/Resources/Public/JavaScript/backend.js'
         );
         // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
-        // ckeditor.js should be added to DOM after fix for #377 in order to get things working
         $this->pageRenderer->addJsFooterFile('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js');
         $this->pageRenderer->addJsFooterFile(
             'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
