@@ -113,6 +113,11 @@ jobs:
             database-image: mariadb:latest
           - typo3-version: "^10.4"
             database-image: mariadb:latest
+        exlclude:
+          - typo3-version: "^10.4"
+            php-version:
+              - 7.2
+              - 7.3
 
     services:
       mysql:
