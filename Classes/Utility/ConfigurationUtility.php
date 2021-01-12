@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace TYPO3\CMS\FrontendEditing\Service;
-
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,28 +15,30 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+namespace TYPO3\CMS\FrontendEditing\Utility;
+
+
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
- * Service class to get the settings from Extension Manager
+ * Convenience methods related to configuration
  */
-class ExtensionManagerConfigurationService
+class ConfigurationUtility
 {
     /**
-     * Parse settings and return it as an array
+     * Returns the Extension Manager configuration array
      *
-     * @return array unserialized extconf settings
+     * @return array
      */
-    public static function getSettings(): array
+    public static function getExtensionConfiguration(): array
     {
-        $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
+        $configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
 
-        if (!is_array($settings)) {
-            $settings = [];
+        if (is_array($configuration)) {
+            return $configuration;
         }
 
-        return $settings;
+        return [];
     }
 }
