@@ -14,9 +14,14 @@
 /**
  * FrontendEditing.Scroller: Controller for basic scrolling
  */
-define(['jquery'], function ($) {
+define(['jquery'], function ScrollerModule ($) {
     'use strict';
-    return function Scroller(target, scrollAreaTop, scrollAreaBottom){
+
+    var framesPerSecond = 50;
+    /*eslint-disable-next-line no-magic-numbers*/
+    var updateRate = 1000 / framesPerSecond;
+
+    return function Scroller (target, scrollAreaTop, scrollAreaBottom) {
         var $target = $(target);
         var $scrollAreaTop = $(scrollAreaTop);
         var $scrollAreaBottom = $(scrollAreaBottom);
@@ -28,32 +33,33 @@ define(['jquery'], function ($) {
         var timeoutId = -1;
         var speed = 0;
 
-        function stopScrolling() {
+        function stopScrolling () {
             scrolling = false;
-            if(timeoutId>=0){
+            if (timeoutId >= 0) {
                 window.clearTimeout(timeoutId);
             }
         }
 
-        function startScrolling(newSpeed) {
-            if(!enabled){
+        function startScrolling (newSpeed) {
+            if (!enabled) {
                 return;
             }
             stopScrolling();
             speed = newSpeed;
 
-            if(speed!==0){
+            if (speed !== 0) {
                 var checkFnc;
-                var scrollY = $target.contents().scrollTop();
-                if(speed<0){
+                var contents = $target.contents();
+                var scrollY = contents.scrollTop();
+                if (speed < 0) {
                     checkFnc = checkScrollUpBound;
-                    checkScrollDownBound(scrollY+speed, true);
+                    checkScrollDownBound(scrollY + speed, true);
                 } else {
                     checkFnc = checkScrollDownBound;
-                    checkScrollUpBound(scrollY+speed, true);
+                    checkScrollUpBound(scrollY + speed, true);
                 }
 
-                scrolling=true;
+                scrolling = true;
                 //share checkFnc variable
                 var scroll = function () {
                     if (scrolling) {
@@ -62,7 +68,7 @@ define(['jquery'], function ($) {
                         scrollY = checkFnc(scrollY);
                         if (scrolling) {
                             $contents.scrollTop(scrollY);
-                            timeoutId = setTimeout(scroll, 20);
+                            timeoutId = setTimeout(scroll, updateRate);
                         }
                     }
                 };
@@ -71,8 +77,8 @@ define(['jquery'], function ($) {
             }
         }
 
-        function checkScrollUpBound(scrollY){
-            if(scrollY <= 0){
+        function checkScrollUpBound (scrollY) {
+            if (scrollY <= 0) {
                 $scrollAreaTop.hide();
                 scrollY = 0;
                 scrolling = false;
@@ -82,9 +88,10 @@ define(['jquery'], function ($) {
             return scrollY;
         }
 
-        function checkScrollDownBound(scrollY){
-            var maxScroll = $target.contents().height() - $target.height();
-            if(scrollY >= maxScroll){
+        function checkScrollDownBound (scrollY) {
+            var $contents = $target.contents();
+            var maxScroll = $contents.height() - $target.height();
+            if (scrollY >= maxScroll) {
                 $scrollAreaBottom.hide();
                 scrollY = maxScroll;
                 scrolling = false;
@@ -94,16 +101,17 @@ define(['jquery'], function ($) {
             return scrollY;
         }
 
-        function enable() {
-            enabled=true;
-            scrolling=false;
-            var scrollY = $target.contents().scrollTop();
+        function enable () {
+            enabled = true;
+            scrolling = false;
+            var $contents = $target.contents();
+            var scrollY = $contents.scrollTop();
             checkScrollUpBound(scrollY);
             checkScrollDownBound(scrollY);
         }
 
-        function disable() {
-            enabled=false;
+        function disable () {
+            enabled = false;
             stopScrolling();
             $scrollAreaBottom.hide();
             $scrollAreaTop.hide();
@@ -114,6 +122,6 @@ define(['jquery'], function ($) {
             disable: disable,
             startScrolling: startScrolling,
             stopScrolling: stopScrolling
-        }
-    }
+        };
+    };
 });

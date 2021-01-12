@@ -65,11 +65,13 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage', 'TYPO3/CMS/FrontendEditin
 
     var scroller = Scroller($iframe, $iframe.contents(), $scrollAreaTop, $scrollAreaBottom);
 
-    $scrollAreaTop.on('dragleave', scroller.stopScrolling)
+    $scrollAreaTop
+        .on('dragleave', scroller.stopScrolling)
 		.on('dragenter', function() {
 			scroller.startScrolling(-4);
 		});
-    $scrollAreaBottom.on('dragleave', scroller.stopScrolling)
+    $scrollAreaBottom
+        .on('dragleave', scroller.stopScrolling)
 		.on('dragenter', function() {
 			scroller.startScrolling(4);
 		});
