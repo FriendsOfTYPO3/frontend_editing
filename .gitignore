@@ -18,3 +18,5 @@ package-lock.json
 
 # PHP CS fix caches
 .php_cs.cache
+
+/var
