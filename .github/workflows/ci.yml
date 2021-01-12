@@ -168,12 +168,12 @@ jobs:
       - name: Run unit tests
         # Environment variable can be removed when TYPO3 v7 support ends
         env:
-          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/pxa_siteimprove/.Build/public
+          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/frontend_editing/.Build/public
         run: composer ci:tests:unit
 
       - name: Run functional tests
         env:
-          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/pxa_siteimprove/.Build/public
+          TYPO3_PATH_ROOT: /home/runner/work/pxa_siteimprove/frontend_editing/.Build/public
           typo3DatabaseHost: 127.0.0.1
           typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
           typo3DatabaseName: typo3
