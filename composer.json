@@ -45,7 +45,7 @@
 		"ci:php:sniff": "php-cs-fixer fix --config=.php_cs -v --dry-run --using-cache=no --diff",
 		"cs:php:fix": "php-cs-fixer fix --config=.php_cs -v --using-cache=no",
 		"ci:ts:lint": "typoscript-lint -c Configuration/TsLint.yml --ansi -n --fail-on-warnings -vvv Configuration/TypoScript/",
-		"ci:tests:unit": "find 'Tests/Unit' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running unit test suite {}\"; .Build/bin/phpunit --verbose --bootstrap .Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php {}'",
+		"ci:tests:unit": "phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
 		"ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; .Build/bin/phpunit --verbose --bootstrap .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTestsBootstrap.php {}'",
 		"ci:tests": [
 			"@ci:tests:unit",
@@ -80,7 +80,7 @@
 		"typo3/cms": {
 			"extension-key": "frontend_editing",
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
-			"web-dir": ".Build/Web"
+			"web-dir": ".Build/public"
 		}
 	}
 }
