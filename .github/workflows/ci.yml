@@ -97,7 +97,7 @@ jobs:
       matrix:
         composer-version:
           - v1
-          - v2
+          #- v2
         typo3-version:
           - "^9.5"
           - "^10.4"
