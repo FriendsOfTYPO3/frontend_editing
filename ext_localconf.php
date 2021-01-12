@@ -1,4 +1,5 @@
 <?php
+
 defined('TYPO3_MODE') or die();
 
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing

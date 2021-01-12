@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
@@ -56,7 +57,7 @@ class FrontendEditingInitializationHook
     /**
      * @var TypoScriptFrontendController
      */
-    protected $typoScriptFrontendController = null;
+    protected $typoScriptFrontendController;
 
     /**
      * @var IconFactory

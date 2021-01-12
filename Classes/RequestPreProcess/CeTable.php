@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\RequestPreProcess;
 
 /*
@@ -78,7 +79,7 @@ class CeTable implements RequestPreProcessInterface
                     $captionValue = trim($c->nodeValue);
                 }
 
-                $doc = new \DOMDOcument;
+                $doc = new \DOMDOcument();
                 $doc->loadxml($record['pi_flexform']);
 
                 $replacement = $doc->createDocumentFragment();

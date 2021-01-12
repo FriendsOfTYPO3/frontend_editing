@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;

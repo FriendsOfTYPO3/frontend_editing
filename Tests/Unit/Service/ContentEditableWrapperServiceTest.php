@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 
 /*
@@ -30,12 +31,12 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
     /**
      * @var ContentEditableWrapperService
      */
-    protected $subject = null;
+    protected $subject;
 
     /**
      * @var ContentEditableFixtures
      */
-    protected $fixtures = null;
+    protected $fixtures;
 
     /**
      * Set up for the
@@ -47,8 +48,6 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
         $this->fixtures = new ContentEditableFixtures();
     }
 
-    /**
-     */
     protected function tearDown()
     {
         unset($this->subject);
@@ -66,7 +65,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->fixtures->getContent()
         );
 
-        $this->assertSame(
+        self::assertSame(
             $wrappedContent,
             $this->fixtures->getWrappedExpectedContent()
         );
@@ -84,7 +83,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->fixtures->getContent()
         );
 
-        $this->assertSame(
+        self::assertSame(
             $wrapContent,
             $this->fixtures->getWrapExpectedContent()
         );
@@ -100,7 +99,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->fixtures->getUid(),
             $this->fixtures->getContent()
         );
-        $this->assertSame(
+        self::assertSame(
             $wrapContent,
             $this->fixtures->getWrapWithDropzoneExpectedContent()
         );
@@ -119,10 +118,10 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
-        $this->fail('Expected Property "table" missing Exception has not been raised.');
+        self::fail('Expected Property "table" missing Exception has not been raised.');
     }
 
     /**
@@ -138,10 +137,10 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
-        $this->fail('Expected Property "table" missing Exception has not been raised.');
+        self::fail('Expected Property "table" missing Exception has not been raised.');
     }
 
     /**
@@ -157,10 +156,10 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
+            self::assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
             return;
         }
-        $this->fail('Expected Property "uid" missing Exception has not been raised.');
+        self::fail('Expected Property "uid" missing Exception has not been raised.');
     }
     /**
      * @test
@@ -174,10 +173,10 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
-        $this->fail('Expected Property "table" missing Exception has not been raised.');
+        self::fail('Expected Property "table" missing Exception has not been raised.');
     }
 
     /**
@@ -192,9 +191,9 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "uid" is not valid!');
+            self::assertEquals($exception->getMessage(), 'Property "uid" is not valid!');
             return;
         }
-        $this->fail('Expected Property "uid" missing Exception has not been raised.');
+        self::fail('Expected Property "uid" missing Exception has not been raised.');
     }
 }

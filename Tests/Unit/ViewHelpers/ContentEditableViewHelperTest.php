@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 /*
@@ -36,24 +37,24 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
         $instance = $this->getMock(ContentEditableViewHelper::class, ['registerArgument']);
-        $instance->expects($this->at(0))->method('registerArgument')->with(
+        $instance->expects(self::at(0))->method('registerArgument')->with(
             'table',
             'string',
-            $this->anything(),
+            self::anything(),
             true,
             false
         );
-        $instance->expects($this->at(1))->method('registerArgument')->with(
+        $instance->expects(self::at(1))->method('registerArgument')->with(
             'field',
             'string',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
-        $instance->expects($this->at(2))->method('registerArgument')->with(
+        $instance->expects(self::at(2))->method('registerArgument')->with(
             'uid',
             'string',
-            $this->anything(),
+            self::anything(),
             true,
             false
         );
@@ -70,11 +71,11 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
     public function testRenderWithoutFrontendEditingEnabled($value, array $arguments, $expected)
     {
         $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
-        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->expects(self::once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -96,11 +97,11 @@ class ContentEditableViewHelperTest extends ViewHelperBaseTestcase
         );
         ContentEditableFixtures::setAccessServiceEnabled(true);
         $instance = $this->getMock(ContentEditableViewHelper::class, ['renderChildren']);
-        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->expects(self::once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**

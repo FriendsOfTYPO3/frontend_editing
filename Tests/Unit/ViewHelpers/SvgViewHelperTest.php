@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 /*
@@ -34,31 +35,31 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
         $instance = $this->getMock(SvgViewHelper::class, ['registerArgument']);
-        $instance->expects($this->at(0))->method('registerArgument')->with(
+        $instance->expects(self::at(0))->method('registerArgument')->with(
             'source',
             'string',
-            $this->anything(),
+            self::anything(),
             true,
             false
         );
-        $instance->expects($this->at(1))->method('registerArgument')->with(
+        $instance->expects(self::at(1))->method('registerArgument')->with(
             'class',
             'string',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
-        $instance->expects($this->at(2))->method('registerArgument')->with(
+        $instance->expects(self::at(2))->method('registerArgument')->with(
             'width',
             'int',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
-        $instance->expects($this->at(3))->method('registerArgument')->with(
+        $instance->expects(self::at(3))->method('registerArgument')->with(
             'height',
             'int',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
@@ -78,7 +79,7 @@ class SvgViewHelperTest extends ViewHelperBaseTestcase
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
