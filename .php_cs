@@ -31,16 +31,7 @@
 if (PHP_SAPI !== 'cli') {
     die('This script supports command line usage only. Please check your command.');
 }
-// Define in which folders to search and which folders to exclude
-// Exclude some directories that are excluded by Git anyways to speed up the sniffing
-$finder = PhpCsFixer\Finder::create()
-    ->exclude('vendor')
-    ->exclude('typo3conf')
-    ->exclude('typo3temp')
-    ->exclude('typo3/sysext/core/Tests/Acceptance/Support/_generated')
-    ->notName('install.php')
-    ->notName('index.php')
-    ->in(__DIR__);
+
 // Return a Code Sniffing configuration using
 // all sniffers needed for PSR-2
 // and additionally:
@@ -102,4 +93,4 @@ return PhpCsFixer\Config::create()
         'single_trait_insert_per_statement' => true,
         'whitespace_after_comma_in_array' => true,
     ])
-    ->setFinder($finder);
+    ->setFinder(PhpCsFixer\Finder::create()->in(__DIR__));
