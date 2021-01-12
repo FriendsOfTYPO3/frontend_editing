@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\ViewHelpers;
 
 /*
@@ -34,31 +35,31 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
     public function testInitializeArgumentsRegistersExpectedArguments()
     {
         $instance = $this->getMock(CustomDropZoneViewHelper::class, ['registerArgument']);
-        $instance->expects($this->at(0))->method('registerArgument')->with(
+        $instance->expects(self::at(0))->method('registerArgument')->with(
             'tables',
             'array',
-            $this->anything(),
+            self::anything(),
             true,
             false
         );
-        $instance->expects($this->at(1))->method('registerArgument')->with(
+        $instance->expects(self::at(1))->method('registerArgument')->with(
             'fields',
             'array',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
-        $instance->expects($this->at(2))->method('registerArgument')->with(
+        $instance->expects(self::at(2))->method('registerArgument')->with(
             'pageUid',
             'string',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
-        $instance->expects($this->at(3))->method('registerArgument')->with(
+        $instance->expects(self::at(3))->method('registerArgument')->with(
             'prepend',
             'bool',
-            $this->anything(),
+            self::anything(),
             false,
             false
         );
@@ -75,11 +76,11 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
     public function testRenderWithoutFrontendEditingEnabled($value, array $arguments, $expected)
     {
         $instance = $this->getMock(CustomDropZoneViewHelper::class, ['renderChildren']);
-        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->expects(self::once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
@@ -92,11 +93,11 @@ class CustomDropZoneViewHelperTest extends ViewHelperBaseTestcase
     {
         ContentEditableFixtures::setAccessServiceEnabled(true);
         $instance = $this->getMock(CustomDropZoneViewHelper::class, ['renderChildren']);
-        $instance->expects($this->once())->method('renderChildren')->willReturn($value);
+        $instance->expects(self::once())->method('renderChildren')->willReturn($value);
         $instance->setArguments($arguments);
         $instance->setRenderingContext(new RenderingContextFixture());
         $result = $instance->render();
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**

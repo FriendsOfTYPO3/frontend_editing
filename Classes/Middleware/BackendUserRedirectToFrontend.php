@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
@@ -39,7 +40,7 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
      */
     protected function isUserDisallowedAccessBackend(BackendUserAuthentication $user): bool
     {
-        return boolval($user->getTSConfig()['frontend_editing.']['disallow_backend_access'] ?? false);
+        return (bool)($user->getTSConfig()['frontend_editing.']['disallow_backend_access'] ?? false);
     }
 
     /**

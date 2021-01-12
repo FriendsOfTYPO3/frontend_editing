@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 
 /*
@@ -30,7 +31,7 @@ class ExtensionManagerConfigurationServiceTest extends UnitTestCase
      */
     public function getExtensionManagerSettings()
     {
-        $this->assertSame(
+        self::assertSame(
             ExtensionManagerConfigurationService::getSettings(),
             []
         );

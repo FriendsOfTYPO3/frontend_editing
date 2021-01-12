@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\EditingPanel;
 
 /*
@@ -264,7 +265,7 @@ class FrontendEditingPanelTest extends UnitTestCase
         $GLOBALS['BE_USER']->uc['tx_frontend_editing_enable'] = $allowEditing;
         $subject = new FrontendEditingPanel();
 
-        $this->assertSame(
+        self::assertSame(
             $expect,
             $subject->editIcons(
                 $content,
