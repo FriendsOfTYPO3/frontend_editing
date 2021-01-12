@@ -33,10 +33,6 @@ class ExtensionManagerConfigurationService
      */
     public static function getSettings(): array
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
         $settings = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('frontend_editing');
 
         if (!is_array($settings)) {
