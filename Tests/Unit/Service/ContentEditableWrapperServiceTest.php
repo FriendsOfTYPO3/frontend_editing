@@ -17,8 +17,12 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
  */
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\FrontendEditing\Tests\Unit\Fixtures\ContentEditableFixtures;
 
 /**
@@ -43,31 +47,83 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
      */
     protected function setUp()
     {
-        Bootstrap::getInstance()->initializeBackendRouter();
+        parent::setUp();
+
+        $languageServiceMock = $this->createMock(LanguageService::class);
+
+        $languageServiceMock
+            ->method('sL')
+            ->willReturnArgument(0);
+
+        $GLOBALS['LANG'] = $languageServiceMock;
+
+        $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
+
+        $extensionConfigurationMock
+            ->method('get')
+            ->willReturn([]);
+
+        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfigurationMock);
+
         $this->subject = new ContentEditableWrapperService();
-        $this->fixtures = new ContentEditableFixtures();
     }
 
     protected function tearDown()
     {
         unset($this->subject);
+        unset($GLOBALS['TCA']);
     }
 
     /**
+     * Data provider for getWrappedContent()
+     *
+     * @return array[]
+     */
+    public function getWrappedContentDataProvider()
+    {
+        $content = $this->getUniqueId('content');
+
+        return [
+            'normal content' => [
+                '',
+                'tablename',
+                'fieldname',
+                123,
+                $content,
+                [
+                    'columns' => [
+                        'label' => 'Field label'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getWrappedContentDataProvider
      * @test
      */
-    public function getWrappedContent()
+    public function getWrappedContent(
+        string $expected,
+        string $table,
+        string $field,
+        int $uid,
+        string $content,
+        array $tableTca
+    )
     {
+        $GLOBALS['TCA'][$table] = $tableTca;
+
         $wrappedContent = $this->subject->wrapContentToBeEditable(
-            $this->fixtures->getTable(),
-            $this->fixtures->getField(),
-            $this->fixtures->getUid(),
-            $this->fixtures->getContent()
+            $table,
+            $field,
+            $uid,
+            $content
         );
 
-        self::assertSame(
+        $this->assertSame(
             $wrappedContent,
-            $this->fixtures->getWrappedExpectedContent()
+            $expected
         );
     }
 
@@ -83,7 +139,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->fixtures->getContent()
         );
 
-        self::assertSame(
+        $this->assertSame(
             $wrapContent,
             $this->fixtures->getWrapExpectedContent()
         );
@@ -99,7 +155,8 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
             $this->fixtures->getUid(),
             $this->fixtures->getContent()
         );
-        self::assertSame(
+
+        $this->assertSame(
             $wrapContent,
             $this->fixtures->getWrapWithDropzoneExpectedContent()
         );
@@ -118,7 +175,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
         self::fail('Expected Property "table" missing Exception has not been raised.');
@@ -137,7 +194,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
         self::fail('Expected Property "table" missing Exception has not been raised.');
@@ -156,7 +213,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            self::assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
+            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
             return;
         }
         self::fail('Expected Property "uid" missing Exception has not been raised.');
@@ -173,7 +230,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            self::assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
+            $this->assertEquals($exception->getMessage(), 'Property "table" can not to be empty!');
             return;
         }
         self::fail('Expected Property "table" missing Exception has not been raised.');
@@ -191,7 +248,7 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
                 $this->fixtures->getContent()
             );
         } catch (\Exception $exception) {
-            self::assertEquals($exception->getMessage(), 'Property "uid" is not valid!');
+            $this->assertEquals($exception->getMessage(), 'Property "uid" is not valid!');
             return;
         }
         self::fail('Expected Property "uid" missing Exception has not been raised.');

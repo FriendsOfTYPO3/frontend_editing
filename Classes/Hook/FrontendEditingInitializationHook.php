@@ -41,6 +41,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
@@ -270,7 +271,7 @@ class FrontendEditingInitializationHook
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.F.setDisableModalOnNewCe(' .
-                (int)ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'] .
+                (int)ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders'] .
             ');
             window.FrontendEditingMode = true;
             window.TYPO3.settings = {
