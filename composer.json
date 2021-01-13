@@ -19,7 +19,8 @@
 		"typo3/cms-feedit": "*"
 	},
 	"replace": {
-		"typo3-ter/frontend-editing": "self.version"
+		"typo3-ter/frontend-editing": "self.version",
+		"typo3/class-alias-loader": "< 1.1.0"
 	},
 	"autoload": {
 		"psr-4": {
