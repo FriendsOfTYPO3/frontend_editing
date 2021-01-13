@@ -25,7 +25,6 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 
 /**

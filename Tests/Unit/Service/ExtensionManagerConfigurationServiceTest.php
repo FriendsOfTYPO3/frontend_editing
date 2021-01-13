@@ -19,7 +19,6 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\Styleguide\TcaDataGenerator\TableHandler\General;
 

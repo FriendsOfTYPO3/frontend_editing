@@ -31,7 +31,6 @@ use TYPO3\CMS\Frontend\Tests\Unit\ContentObject\Fixtures\PageRepositoryFixture;
 use TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
 use TYPO3\CMS\Styleguide\TcaDataGenerator\TableHandler\General;
 
 /**
@@ -81,7 +80,6 @@ class FrontendEditingPanelTest extends UnitTestCase
         $this->frontendControllerMock->page =  [];
         $this->frontendControllerMock->sys_page = $pageRepositoryMock;
         $GLOBALS['TSFE'] = $this->frontendControllerMock;
-
     }
 
     /**
