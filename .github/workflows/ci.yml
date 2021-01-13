@@ -168,11 +168,11 @@ jobs:
       - name: Run unit tests
         run: composer ci:tests:unit
 
-      - name: Run functional tests
-        env:
-          typo3DatabaseHost: 127.0.0.1
-          typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
-          typo3DatabaseName: typo3
-          typo3DatabaseUsername: root
-          typo3DatabasePassword: password
-        run: composer ci:tests:functional
+#      - name: Run functional tests
+#        env:
+#          typo3DatabaseHost: 127.0.0.1
+#          typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
+#          typo3DatabaseName: typo3
+#          typo3DatabaseUsername: root
+#          typo3DatabasePassword: password
+#        run: composer ci:tests:functional
