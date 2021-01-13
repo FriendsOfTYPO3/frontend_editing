@@ -16,11 +16,11 @@
 		"helmich/typo3-typoscript-lint": "^2.0"
 	},
 	"conflict": {
-		"typo3/cms-feedit": "*"
+		"typo3/cms-feedit": "*",
+		"typo3/class-alias-loader": "< 1.1.0"
 	},
 	"replace": {
-		"typo3-ter/frontend-editing": "self.version",
-		"typo3/class-alias-loader": "< 1.1.0"
+		"typo3-ter/frontend-editing": "self.version"
 	},
 	"autoload": {
 		"psr-4": {
