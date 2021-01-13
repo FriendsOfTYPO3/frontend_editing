@@ -11,7 +11,7 @@ addons:
       - parallel
 
 env:
-  - NODE_VERSION="6.0"
+  - NODE_VERSION="12.0"
 
 cache:
   directories:
