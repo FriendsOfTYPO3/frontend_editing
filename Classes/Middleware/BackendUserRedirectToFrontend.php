@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Middleware;
@@ -13,8 +14,6 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 
 /**
  * Middleware check if backend user allowed to access BE
- *
- * @package TYPO3\CMS\FrontendEditing\Middleware
  */
 class BackendUserRedirectToFrontend implements MiddlewareInterface
 {
@@ -41,7 +40,7 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
      */
     protected function isUserDisallowedAccessBackend(BackendUserAuthentication $user): bool
     {
-        return boolval($user->getTSConfig()['frontend_editing.']['disallow_backend_access'] ?? false);
+        return (bool)($user->getTSConfig()['frontend_editing.']['disallow_backend_access'] ?? false);
     }
 
     /**

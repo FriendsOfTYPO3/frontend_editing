@@ -1,4 +1,5 @@
 <?php
+
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Frontend Editing',
     'description' => 'Enable editors to work with the content in the most intuitive way possible',

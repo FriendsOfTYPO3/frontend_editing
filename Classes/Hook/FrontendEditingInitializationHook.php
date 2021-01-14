@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
@@ -30,7 +31,6 @@ use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
@@ -40,7 +40,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
@@ -57,7 +57,7 @@ class FrontendEditingInitializationHook
     /**
      * @var TypoScriptFrontendController
      */
-    protected $typoScriptFrontendController = null;
+    protected $typoScriptFrontendController;
 
     /**
      * @var IconFactory
@@ -270,7 +270,7 @@ class FrontendEditingInitializationHook
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.F.setDisableModalOnNewCe(' .
-                (int)ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'] .
+                (int)ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders'] .
             ');
             window.FrontendEditingMode = true;
             window.TYPO3.settings = {
@@ -384,7 +384,7 @@ class FrontendEditingInitializationHook
                     GeneralUtility::getFileAbsFileName(
                         'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
                     )
-                )) .';',
+                )) . ';',
                 true,
                 true
             );

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
 
 /*
@@ -16,7 +17,10 @@ namespace TYPO3\CMS\FrontendEditing\Tests\Unit\Service\ContentEditable;
  */
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
+use TYPO3\CMS\Styleguide\TcaDataGenerator\TableHandler\General;
 
 /**
  * Test case for class TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService.
@@ -30,8 +34,16 @@ class ExtensionManagerConfigurationServiceTest extends UnitTestCase
      */
     public function getExtensionManagerSettings()
     {
-        $this->assertSame(
-            ExtensionManagerConfigurationService::getSettings(),
+        $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
+
+        $extensionConfigurationMock
+            ->method('get')
+            ->willReturn([]);
+
+        GeneralUtility::addInstance(ExtensionConfiguration::class, $extensionConfigurationMock);
+
+        self::assertSame(
+            ConfigurationUtility::getExtensionConfiguration(),
             []
         );
     }

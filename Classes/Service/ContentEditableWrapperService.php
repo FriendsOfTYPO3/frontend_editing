@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Service;
 
@@ -26,6 +27,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -33,11 +35,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class ContentEditableWrapperService
 {
     const DEFAULT_WRAPPER_TAG_NAME = 'div';
-
-    /**
-     * @var ExtensionManagerConfigurationService
-     */
-    protected $extensionManagerConfigurationService;
 
     /**
      * @var IconFactory
@@ -59,10 +56,8 @@ class ContentEditableWrapperService
      */
     public function __construct()
     {
-        $this->extensionManagerConfigurationService =
-            GeneralUtility::makeInstance(ExtensionManagerConfigurationService::class);
         $this->contentEditableWrapperTagName = self::DEFAULT_WRAPPER_TAG_NAME;
-        $tagName = $this->extensionManagerConfigurationService->getSettings()['contentEditableWrapperTagName'];
+        $tagName = ConfigurationUtility::getExtensionConfiguration()['contentEditableWrapperTagName'];
         if ($tagName) {
             $this->contentEditableWrapperTagName = $tagName;
         }

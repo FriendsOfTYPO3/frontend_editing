@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Controller;
 
 /*
@@ -24,7 +25,7 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 
 /**
  * Class for fetching the proper RTE configuration of a given field
@@ -152,7 +153,7 @@ class EditorController
             $this->rteConfiguration['externalPlugins'] = [];
         }
 
-        if (ExtensionManagerConfigurationService::getSettings()['enablePlaceholders']) {
+        if (ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders']) {
             $this->rteConfiguration['externalPlugins']['confighelper'] = [
                 'resource' => 'EXT:frontend_editing/Resources/Public/JavaScript/Plugins/confighelper/plugin.js'
             ];
