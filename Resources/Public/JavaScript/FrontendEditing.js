@@ -14,7 +14,7 @@
 /**
  * FrontendEditing: The foundation for the frontend editing interactions
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
+define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage', 'TYPO3/CMS/FrontendEditing/Scroller'], function ($, Storage, Scroller) {
 	'use strict';
 
 	// Hold event listeners and the callbacks
@@ -52,33 +52,33 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 		FrontendEditing.events[key] = value;
 	};
 
-	// Scroll function when draging content elements to top or bottom of window
-	var stop = true;
-	var scroll = function(step) {
-		var scrollY = $('iframe').contents().scrollTop();
-		$('iframe').contents().scrollTop(scrollY + step);
-		if (!stop) {
-			setTimeout(function() {
-				scroll(step);
-			}, 20);
-		}
-	};
+    // Scroll function when dragging content elements to top or bottom of window
+    var $iframe = $('iframe');
+    var $scrollAreaTop = $('<div style="position: absolute; left: 0; top: 0; right: 0; background: rgba(0,0,0,0.2)"/>')
+        .height(150)
+        .hide()
+        .insertAfter($iframe);
+    var $scrollAreaBottom = $('<div style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2)"/>')
+        .height(100)
+        .hide()
+        .insertAfter($iframe);
 
-	$('[draggable]').on('drag', function(event) {
-		stop = true;
-		if (event.clientY > 0 && event.clientY < 150) {
-			stop = false;
-			scroll(-1);
-		}
-		if (event.originalEvent.clientY > ($('iframe').height() - 100)) {
-			stop = false;
-			scroll(1);
-		}
-	});
+    var scroller = Scroller($iframe, $iframe.contents(), $scrollAreaTop, $scrollAreaBottom);
 
-	$('[draggable]').on('dragend', function(e) {
-		stop = true;
-	});
+    $scrollAreaTop
+        .on('dragleave', scroller.stopScrolling)
+		.on('dragenter', function() {
+			scroller.startScrolling(-4);
+		});
+    $scrollAreaBottom
+        .on('dragleave', scroller.stopScrolling)
+		.on('dragenter', function() {
+			scroller.startScrolling(4);
+		});
+
+    $('[draggable]')
+		.on('dragstart', scroller.enable)
+		.on('dragend', scroller.disable);
 
 	// Public API
 	FrontendEditing.prototype = {
@@ -182,9 +182,9 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			translationLabels = labels;
 		},
 
-    setDisableModalOnNewCe: function (disable) {
-      disableModalOnNewCe = disable;
-    },
+		setDisableModalOnNewCe: function (disable) {
+		  disableModalOnNewCe = disable;
+		},
 
 		translate: function (key) {
 			if (translationLabels[key]) {
@@ -294,12 +294,12 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/Storage'], function ($, Storage) {
 			var paramsObj = F.parseQuery(ev.dataTransfer.getData('params').substr(1));
 			var fullUrlObj = {};
 			$.extend(true, fullUrlObj, paramsObj, newUrlQueryStringObj);
-      var fullUrlQueryString = F.serializeObj(fullUrlObj);
+			var fullUrlQueryString = F.serializeObj(fullUrlObj);
 			if (disableModalOnNewCe) {
-			  F.newContent(fullUrlQueryString);
-      } else {
-        F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
-      }
+				F.newContent(fullUrlQueryString);
+      		} else {
+        		F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
+      		}
 		},
 
 		indicateCeStart: function (ev) {
