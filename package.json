@@ -13,19 +13,27 @@
     "build:css": "npm run check:css && npm run compile:css && npm run postcss:css",
     "php:codesniffer": ".Build/bin/phpcs --standard=PSR2 Classes/ Tests/ *.php",
     "php:unittests": "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/",
-    "build:suite": "npm run build:css && npm run php:codesniffer && npm run php:unittests"
+    "build:suite": "npm run build:css && npm run php:codesniffer && npm run php:unittests",
+    "storybook": "start-storybook -p 6006 -c storybook/.storybook",
+    "build-storybook": "build-storybook -c storybook/.storybook"
   },
   "dependencies": {
     "immutable": "^3.8",
     "toastr": "^2.1.2"
   },
   "devDependencies": {
+    "@storybook/react": "^6.1.14",
     "autoprefixer": "^7.2.3",
     "eslint": "^7.17.0",
+    "html-loader": "^1.3.2",
+    "jquery": "^3.4.1",
     "node-sass": "^4.7.2",
     "postcss": "^6.0.14",
     "postcss-clean": "^1.1.0",
     "postcss-cli": "^4.1.1",
+    "postcss-loader": "^4.1.0",
+    "react": "^16",
+    "react-dom": "^16",
     "stylelint": "^8.4.0"
   },
   "repository": {

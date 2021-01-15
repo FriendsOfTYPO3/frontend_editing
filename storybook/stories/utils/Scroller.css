@@ -1,0 +1,15 @@
+.scrollarea {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.2);
+  left: 0;
+  right: 0;
+  height: 10%;
+}
+
+.scrollarea-top {
+  top: 0;
+}
+
+.scrollarea-bottom {
+  bottom: 0;
+}
