@@ -11,6 +11,9 @@ module.exports = {
     webpackFinal: (config) => {
 
         Object.assign(config.resolve.alias, {
+            // "jquery": path.resolve(__dirname, '../../.Build/Web/typo3/sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery-3.2.1.js'),
+            // "TYPO3/CMS/Core": path.resolve(__dirname, '../../.Build/Web/typo3/sysext/core/Resources/Public/JavaScript'),
+            // "TYPO3/CMS/Backend": path.resolve(__dirname, '../../.Build/Web/typo3/sysext/backend/Resources/Public/JavaScript'),
             "TYPO3/CMS/FrontendEditing": path.resolve(__dirname, '../../Resources/Public/JavaScript'),
         });
 
