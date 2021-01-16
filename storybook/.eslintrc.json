@@ -4,7 +4,15 @@
     "browser": true,
     "amd": true,
     "jquery": true,
-    "es6": true
+    "es6": true,
+    "es2017": true,
+    "es2020": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     //Possible Errors
@@ -46,7 +54,7 @@
 
     //Variables
     "no-label-var": "error",
-    "no-unused-vars": "warn",
+//    "no-unused-vars": "warn",
 
     //Stylistic
     "array-bracket-newline": ["warn", "consistent"],
@@ -60,14 +68,14 @@
     "func-call-spacing": "warn",
     //maybe not the best idea ?:/
     "func-name-matching": "warn",
-    "func-names": ["warn", "as-needed"], //would be nice to debug without anonymous
+//    "func-names": ["warn", "as-needed"], //would be nice to debug without anonymous
     "id-denylist": ["warn", "data", "err", "e", "callback"],
     "indent": "warn",
     "key-spacing": "warn",
     "keyword-spacing": "warn",
     "linebreak-style": "warn",
     "max-depth": "warn",
-    "max-len": "warn",
+    "max-len": ["warn", {"code": 120}],
     //    "max-lines-per-function" seems only to be usefull to find long functions ...
     //    "max-lines-per-function": "off",
     "max-nested-callbacks": ["warn", 3],

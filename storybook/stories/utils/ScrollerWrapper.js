@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './Scroller.css';
 
 export const withScroller = (EmbeddedElement) => {
-    return ({speed, ...rest}) => {
+    return ({speed, onError, ...rest}) => {
         const scrollElement = useRef(null);
         const scrollTopElement = useRef(null);
         const scrollBottomElement = useRef(null);
@@ -15,48 +15,76 @@ export const withScroller = (EmbeddedElement) => {
 
             let scroller = null;
 
-            function startScrollingTop() {
-                scroller.startScrolling(-speed);
+            function startScrollingTop () {
+                if (scroller !== null) {
+                    scroller.startScrolling(-speed);
+                }
             }
 
-            function startScrollingBottom() {
-                scroller.startScrolling(speed);
+            function startScrollingBottom () {
+                if (scroller !== null) {
+                    scroller.startScrolling(speed);
+                }
+            }
+
+            function stopScrolling () {
+                if (scroller !== null) {
+                    scroller.stopScrolling();
+                }
+            }
+
+            function reloadScroller () {
+                if (scroller !== null) {
+                    try {
+                        scroller.reload();
+                    } catch (scrollerError) {
+                        onError(scrollerError.toString());
+                    }
+                }
             }
 
             import('TYPO3/CMS/FrontendEditing/Scroller').then(({default: Scroller}) => {
-                scroller = Scroller(
-                    scrollElement.current,
-                    currentScrollTopEl,
-                    currentScrollBottomEl
-                );
-
-                currentScrollTopEl.addEventListener('mouseleave', scroller.stopScrolling);
-                currentScrollTopEl.addEventListener('mouseenter', startScrollingTop);
-                currentScrollBottomEl.addEventListener('mouseleave', scroller.stopScrolling);
-                currentScrollBottomEl.addEventListener('mouseenter', startScrollingBottom);
-
-                scroller.enable();
+                try {
+                    scroller = Scroller(
+                        scrollElement.current,
+                        currentScrollTopEl,
+                        currentScrollBottomEl
+                    );
+                    scroller.enable();
+                } catch (scrollerError) {
+                    onError(scrollerError.toString());
+                }
             });
 
+            scrollElement.current.addEventListener('load', reloadScroller);
+
+            currentScrollTopEl.addEventListener('mouseleave', stopScrolling);
+            currentScrollTopEl.addEventListener('mouseenter', startScrollingTop);
+            currentScrollBottomEl.addEventListener('mouseleave', stopScrolling);
+            currentScrollBottomEl.addEventListener('mouseenter', startScrollingBottom);
+
             return function () {
+                scrollElement.current.removeEventListener('load', reloadScroller);
+
+                currentScrollTopEl.removeEventListener('mouseleave', stopScrolling);
+                currentScrollTopEl.removeEventListener('mouseenter', startScrollingTop);
+                currentScrollBottomEl.removeEventListener('mouseleave', stopScrolling);
+                currentScrollBottomEl.removeEventListener('mouseenter', startScrollingBottom);
+
                 if (scroller !== null) {
                     scroller.disable();
-                    currentScrollTopEl.removeEventListener('mouseleave', scroller.stopScrolling);
-                    currentScrollTopEl.removeEventListener('mouseenter', startScrollingTop);
-                    currentScrollBottomEl.removeEventListener('mouseleave', scroller.stopScrolling);
-                    currentScrollBottomEl.removeEventListener('mouseenter', startScrollingBottom);
                 }
-            }
+            };
         });
 
         return (
             <Fragment>
                 <EmbeddedElement ref={scrollElement} {...rest}/>
-                <div ref={scrollTopElement} className="scrollarea scrollarea-top"></div>
-                <div ref={scrollBottomElement} className="scrollarea scrollarea-bottom"></div>
+                <div ref={scrollTopElement} className="scrollarea scrollarea-top" style={{display: 'none'}}/>
+                <div ref={scrollBottomElement} className="scrollarea scrollarea-bottom" style={{display: 'none'}}/>
             </Fragment>
         );
-    }
+    };
 };
 
 export const ScrollableDiv = forwardRef(({children}, ref) => {
@@ -80,9 +108,9 @@ DivScroller.propTypes = {
 
 export const IframeScroller = withScroller(forwardRef((props, ref) => {
     let url = props.url;
-    if(!url){
+    if (!url) {
         useEffect(() => {
-            ref.current.contentDocument.body.style.height = "300vh";
+            ref.current.contentDocument.body.style.height = '300vh';
         });
         url = 'about:blank';
     }
@@ -96,6 +124,7 @@ export const IframeScroller = withScroller(forwardRef((props, ref) => {
 }));
 IframeScroller.propTypes = {
     speed: PropTypes.number,
+    onError: PropTypes.func
 };
 
 
