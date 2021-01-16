@@ -147,7 +147,7 @@ define(['jquery'], function ScrollerModule ($) {
             } else {
                 scrollHeight = $target[0].scrollHeight;
             }
-            var maxScroll = scrollHeight - $target.height();
+            var maxScroll = scrollHeight - $target[0].clientHeight;
             // round max scroll up so it match the height
             // eslint-disable-next-line no-magic-numbers
             return Math.round(maxScroll + 0.5);
