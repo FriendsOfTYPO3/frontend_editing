@@ -27,7 +27,7 @@ define(['jquery'], function ScrollerModule ($) {
     return function Scroller (target, scrollAreaTop, scrollAreaBottom) {
         var $target = $(target);
         var $scrollTarget = $target;
-        var isScrollTargetDocument = $target.is('iframe');
+        var isScrollTargetDocument = false;
         var $scrollAreaTop = $(scrollAreaTop);
         var $scrollAreaBottom = $(scrollAreaBottom);
 
@@ -124,6 +124,7 @@ define(['jquery'], function ScrollerModule ($) {
 
         function reload () {
             if ($target.is('iframe')) {
+                isScrollTargetDocument = true;
                 $scrollTarget = $target.contents();
                 if (!$scrollTarget || $scrollTarget.length === 0) {
                     // seems more to be a restriction error
