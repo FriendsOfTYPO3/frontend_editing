@@ -66,60 +66,62 @@ class EditorController
 
         $configurations = [];
         $elements = [];
-        foreach ($queryParameters['elements'] as $element) {
-            $table = $element['table'];
-            $uid = (int)$element['uid'];
-            $fieldName = $element['field'];
+        if (isset($queryParameters['elements'])) {
+            foreach ($queryParameters['elements'] as $element) {
+                $table = $element['table'];
+                $uid = (int)$element['uid'];
+                $fieldName = $element['field'];
 
-            $formDataCompilerInput = [
-                'vanillaUid' => (int)$uid,
-                'tableName' => $table,
-                'command' => 'edit',
-                // done intentionally to speed up the compilation of the processedTca
-                'disabledWizards' => true
-            ];
+                $formDataCompilerInput = [
+                    'vanillaUid' => (int)$uid,
+                    'tableName' => $table,
+                    'command' => 'edit',
+                    // done intentionally to speed up the compilation of the processedTca
+                    'disabledWizards' => true
+                ];
 
-            $this->formData = $formDataCompiler->compile($formDataCompilerInput);
-            $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
-            $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
-            $hasCkeditorConfiguration = $this->rteConfiguration !== null;
+                $this->formData = $formDataCompiler->compile($formDataCompilerInput);
+                $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
+                $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
+                $hasCkeditorConfiguration = $this->rteConfiguration !== null;
 
-            $editorConfiguration = $this->prepareConfigurationForEditor();
+                $editorConfiguration = $this->prepareConfigurationForEditor();
 
-            $externalPlugins = '';
-            foreach ($this->getExtraPlugins() as $pluginName => $config) {
-                $editorConfiguration[$pluginName] = $config['config'];
-                if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
-                    $editorConfiguration['extraPlugins'] .= ',';
+                $externalPlugins = '';
+                foreach ($this->getExtraPlugins() as $pluginName => $config) {
+                    $editorConfiguration[$pluginName] = $config['config'];
+                    if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
+                        $editorConfiguration['extraPlugins'] .= ',';
+                    }
+                    $editorConfiguration['extraPlugins'] .= $pluginName;
+
+                    $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
+                    $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
+                    $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
+                    $externalPlugins .= '\'\');';
                 }
-                $editorConfiguration['extraPlugins'] .= $pluginName;
 
-                $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
-                $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
-                $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
-                $externalPlugins .= '\'\');';
-            }
+                $configuration = [
+                    'configuration' => $editorConfiguration,
+                    'hasCkeditorConfiguration' => $hasCkeditorConfiguration,
+                    'externalPlugins' => $externalPlugins,
+                ];
 
-            $configuration = [
-                'configuration' => $editorConfiguration,
-                'hasCkeditorConfiguration' => $hasCkeditorConfiguration,
-                'externalPlugins' => $externalPlugins,
-            ];
-
-            $configurationKey = '';
-            foreach ($configurations as $existingConfigurationKey => $existingConfiguration) {
-                if (json_encode($existingConfiguration) === json_encode($configuration)) {
-                    $configurationKey = $existingConfigurationKey;
-                    break;
+                $configurationKey = '';
+                foreach ($configurations as $existingConfigurationKey => $existingConfiguration) {
+                    if (json_encode($existingConfiguration) === json_encode($configuration)) {
+                        $configurationKey = $existingConfigurationKey;
+                        break;
+                    }
                 }
-            }
 
-            if ($configurationKey === '') {
-                $configurationKey = count($configurations);
-                $configurations[$configurationKey] = $configuration;
-            }
+                if ($configurationKey === '') {
+                    $configurationKey = count($configurations);
+                    $configurations[$configurationKey] = $configuration;
+                }
 
-            $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
+                $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
+            }
         }
 
         $response->getBody()->write(json_encode([
