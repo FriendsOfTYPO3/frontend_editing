@@ -17,7 +17,7 @@ define([
       // $('#tx_frontendediting_iframe').length
       // console.log($('#typo3-contentIframe #tx_frontendediting_iframe'));
       if (document.getElementById('tx_frontendediting_iframe')) {
-        console.log('ASPIMP');
+        console.log('YESSER');
       }
       // el.target.style.width = window.scrollY + 100 + 'px';
       console.log('yes');
@@ -42,13 +42,8 @@ define([
     $('.t3js-scaffold-content').on('click', '#typo3-pagetree-tree .node-bg', function(event) {
       //event.preventDefault();
       //event.stopPropagation();
-      //alert('MN');
-      /*FormEngine.preventExitIfNotSaved(function() {
-        console.log('MN');
-      })*/
-
       if (window.frames[1].window.frames[0]) {
-        // alert('MATTAS');
+        // alert('IFRAME');
       }
 
       console.log(storage.isEmpty());
