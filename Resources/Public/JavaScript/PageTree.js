@@ -38,7 +38,7 @@ define([
 
     console.log('TRIGGERED');
     //
-  $('.t3js-scaffold-content #typo3-pagetree-tree .node-bg').off();
+  // $('.t3js-scaffold-content #typo3-pagetree-tree .node-bg').off();
     $('.t3js-scaffold-content').on('click', '#typo3-pagetree-tree .node-bg', function(event) {
       //event.preventDefault();
       //event.stopPropagation();
