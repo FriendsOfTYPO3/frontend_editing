@@ -13,9 +13,6 @@
 
 /**
  * FrontendEditing.Scroller: Controller for basic scrolling
- *
- * Use Scroller.reload function if the size of the viewport
- * get changed or if an iframe get reloaded.
  */
 define(['jquery'], function ScrollerModule ($) {
     'use strict';
@@ -27,7 +24,7 @@ define(['jquery'], function ScrollerModule ($) {
     return function Scroller (target, scrollAreaTop, scrollAreaBottom) {
         var $target = $(target);
         var $scrollTarget = $target;
-        var isScrollTargetDocument = false;
+        var isScrollTargetDocument = $target.is('iframe');
         var $scrollAreaTop = $(scrollAreaTop);
         var $scrollAreaBottom = $(scrollAreaBottom);
 
@@ -37,8 +34,6 @@ define(['jquery'], function ScrollerModule ($) {
         var scrolling = false;
         var timeoutId = -1;
         var speed = 0;
-
-        reload();
 
         function stopScrolling () {
             scrolling = false;
@@ -108,6 +103,16 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function enable () {
+            if (isScrollTargetDocument) {
+                $scrollTarget = $target.contents();
+                if (!$scrollTarget || $scrollTarget.length === 0) {
+                    // seems more to be a restriction error
+                    // but as fact there is no reference of document
+                    throw new ReferenceError(
+                        'Unable to access the document of the iframe.'
+                    );
+                }
+            }
             enabled = true;
             scrolling = false;
             var scrollY = $scrollTarget.scrollTop();
@@ -123,17 +128,6 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function reload () {
-            if ($target.is('iframe')) {
-                isScrollTargetDocument = true;
-                $scrollTarget = $target.contents();
-                if (!$scrollTarget || $scrollTarget.length === 0) {
-                    // seems more to be a restriction error
-                    // but as fact there is no reference of document
-                    throw new ReferenceError(
-                        'Unable to access the document of the iframe.'
-                    );
-                }
-            }
             if (getMaxScroll() <= 0) {
                 disable();
             } else  if (enabled) {
