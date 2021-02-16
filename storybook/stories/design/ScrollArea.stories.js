@@ -1,8 +1,6 @@
 import React from 'react';
 import ScrollArea from './ScrollArea';
 
-import '../../../Resources/Public/Css/inline_editing.css';
-
 export default {
     title: 'Design/ScrollArea',
     component: ScrollArea,
@@ -17,6 +15,7 @@ export default {
 
 const Template = ({html, backgroundColor, ...args}) => (
     <div style={{
+        contain: 'content',
         position: 'relative',
         minHeight: '200px',
         background: backgroundColor ? backgroundColor : 'transparent'
