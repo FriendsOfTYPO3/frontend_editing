@@ -1,16 +1,20 @@
 import React from 'react';
+import DropZone, {DropZoneEnabled, DropZoneStates} from './DropZone';
 
-import '../../../Resources/Public/Css/inline_editing.css';
-
-export const DropzoneEnableTemplate = ({children, ...args}) => (
-    <div className="dropzones-enabled" {...args}>{children}</div>
-);
-const DivTemplate = ({...args}) => <div {...args} />;
+const Template = ({state, ...args}) => {
+    if (state) {
+        state = state.reduce((tot, state) => (tot | DropZoneStates[state]), 0);
+    }
+    return (
+        <DropZone state={state} {...args} />
+    );
+};
 
 export const DropzoneEnableDecorator = (Story) => (
-    <DropzoneEnableTemplate><Story/></DropzoneEnableTemplate>
+    <DropZoneEnabled><Story/></DropZoneEnabled>
 );
-export const DropzoneBeforeAfterDecorator = (Story) => (
+
+const DropzoneBeforeAfterDecorator = (Story) => (
     <div>
         <div>Before Dropzone</div>
         <Story/>
@@ -20,37 +24,32 @@ export const DropzoneBeforeAfterDecorator = (Story) => (
 
 export default {
     title: 'Design/Dropzone',
-    excludeStories: ['DropzoneEnableTemplate', 'DropzoneEnableDecorator', 'DropzoneBeforeAfterDecorator']
+    excludeStories: ['DropzoneEnableDecorator'],
+    decorators: [DropzoneBeforeAfterDecorator],
+    argTypes: {
+        state: {
+            control: {
+                type: 'multi-select',
+                options: Object.keys(DropZoneStates),
+            }
+        },
+    }
 };
 
-export const simple = DivTemplate.bind({});
-simple.decorators = [DropzoneBeforeAfterDecorator];
-simple.args = {
-    className: 't3-frontend-editing__dropzone',
-};
+export const disabled = Template.bind({});
 
-export const enabled = DivTemplate.bind({});
-enabled.decorators = [DropzoneEnableDecorator, DropzoneBeforeAfterDecorator];
-enabled.args = simple.args;
+export const enabled = Template.bind({});
+enabled.decorators = [DropzoneEnableDecorator];
 
-export const enabledActive = DivTemplate.bind({});
+export const enabledActive = Template.bind({});
 enabledActive.decorators = enabled.decorators;
 enabledActive.args = {
-    ...enabled.args,
-    className: enabled.args.className + ' active',
+    state: ['active'],
 };
 
-export const enabledHidden = DivTemplate.bind({});
+export const enabledHidden = Template.bind({});
 enabledHidden.decorators = enabled.decorators;
 enabledHidden.args = {
-    ...enabled.args,
-    className: enabled.args.className + ' t3-frontend-editing__dropzone-hidden',
-};
-
-export const enabledActiveHidden = DivTemplate.bind({});
-enabledActiveHidden.decorators = enabled.decorators;
-enabledActiveHidden.args = {
-    ...enabledActive.args,
-    className: enabledActive.args.className + ' t3-frontend-editing__dropzone-hidden',
+    state: ['hidden'],
 };
 
