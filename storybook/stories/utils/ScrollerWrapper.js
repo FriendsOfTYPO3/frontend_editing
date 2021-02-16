@@ -57,6 +57,8 @@ export const withScroller = (EmbeddedElement) => {
             });
 
             scrollElement.current.addEventListener('load', reloadScroller);
+            const resizeObserver = new ResizeObserver(reloadScroller);
+            resizeObserver.observe(scrollElement.current);
 
             currentScrollTopEl.addEventListener('mouseleave', stopScrolling);
             currentScrollTopEl.addEventListener('mouseenter', startScrollingTop);
@@ -65,6 +67,7 @@ export const withScroller = (EmbeddedElement) => {
 
             return function () {
                 scrollElement.current.removeEventListener('load', reloadScroller);
+                resizeObserver.unobserve(scrollElement.current);
 
                 currentScrollTopEl.removeEventListener('mouseleave', stopScrolling);
                 currentScrollTopEl.removeEventListener('mouseenter', startScrollingTop);
