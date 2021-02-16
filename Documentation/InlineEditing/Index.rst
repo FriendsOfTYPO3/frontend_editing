@@ -167,6 +167,26 @@ Output:
        This is the content text to edit
    </div>
 
+Example with RTE links parsed:
+
+When not using *lib.parseFunc* internal links will have the following format *t3://page?uid=1*
+
+.. code-block:: html
+
+   <core:contentEditable table="tt_content" field="bodytext" uid="{item.uid}">
+        <f:format.html parseFuncTSPath="lib.parseFunc">
+            {item.bodytext}
+        </f:format.html>
+   </core:contentEditable>
+
+Output:
+
+.. code-block:: html
+
+   <div contenteditable="true" data-table="tt_content" data-field="bodytext" data-uid="1">
+       This is the content text to edit <a href="https://mydomain.com/path/to/page">My parsed link</a>
+   </div>
+
 
 .. _viewhelpers-customdropzone:
 
