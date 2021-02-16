@@ -9,7 +9,7 @@ module.exports = {
         '\\.(css|sass|scss)$': '<rootDir>/__mocks__/style.js',
         '\\.(html)$': '<rootDir>/__mocks__/file.js',
 
-        'TYPO3/CMS/FrontendEditing': '/Resources/Public/JavaScript',
+        '^TYPO3/CMS/FrontendEditing(.*)$': '<rootDir>/../../Resources/Public/JavaScript$1',
     },
     'transformIgnorePatterns': ['/node_modules/', '/Resources/Public/']
 };
