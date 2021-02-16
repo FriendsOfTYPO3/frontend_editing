@@ -1,0 +1,48 @@
+.scrollarea {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    left: 0;
+    right: 0;
+    min-height: 50px;
+    height: 10%;
+    display: flex;
+}
+
+@supports (backdrop-filter: blur(1px) brightness(0.4)) {
+    .scrollarea {
+        background: transparent;
+        backdrop-filter: blur(1px) brightness(0.4);
+    }
+}
+
+.scrollarea:before {
+    content: "up";
+    display: block;
+    width: 0;
+    height: 0;
+    margin: auto;
+}
+
+.scrollarea-top {
+    top: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.scrollarea-top:before {
+    content: "";
+    border: 25px solid transparent;
+    border-top-width: 0;
+    border-bottom-color: #fff;
+}
+
+.scrollarea-bottom {
+    bottom: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.scrollarea-bottom:before {
+    content: "";
+    border-color: #fff transparent transparent;
+    border-style: solid;
+    border-width: 25px 25px 0;
+}

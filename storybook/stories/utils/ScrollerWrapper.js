@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useRef, forwardRef} from 'react';
 import PropTypes from 'prop-types';
 
-import './Scroller.css';
+import ScrollArea from '../design/ScrollArea';
 
 export const withScroller = (EmbeddedElement) => {
     return ({speed, onError, ...rest}) => {
@@ -83,8 +83,8 @@ export const withScroller = (EmbeddedElement) => {
         return (
             <Fragment>
                 <EmbeddedElement ref={scrollElement} {...rest}/>
-                <div ref={scrollTopElement} className="scrollarea scrollarea-top" style={{display: 'none'}}/>
-                <div ref={scrollBottomElement} className="scrollarea scrollarea-bottom" style={{display: 'none'}}/>
+                <ScrollArea ref={scrollTopElement} />
+                <ScrollArea ref={scrollBottomElement} place="bottom" />
             </Fragment>
         );
     };
