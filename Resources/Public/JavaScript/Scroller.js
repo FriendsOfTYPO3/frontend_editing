@@ -103,21 +103,10 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function enable () {
-            if (isScrollTargetDocument) {
-                $scrollTarget = $target.contents();
-                if (!$scrollTarget || $scrollTarget.length === 0) {
-                    // seems more to be a restriction error
-                    // but as fact there is no reference of document
-                    throw new ReferenceError(
-                        'Unable to access the document of the iframe.'
-                    );
-                }
-            }
             enabled = true;
             scrolling = false;
-            var scrollY = $scrollTarget.scrollTop();
-            checkScrollUpBound(scrollY);
-            checkScrollDownBound(scrollY);
+
+            reload();
         }
 
         function disable () {
@@ -128,10 +117,23 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function reload () {
+            if (isScrollTargetDocument) {
+                $scrollTarget = $target.contents();
+                if (!$scrollTarget || $scrollTarget.length === 0) {
+                    // seems more to be a restriction error
+                    // but as fact there is no reference of document
+                    throw new ReferenceError(
+                        'Unable to access the document of the iframe.'
+                    );
+                }
+            }
             if (getMaxScroll() <= 0) {
-                disable();
+                $scrollAreaBottom.hide();
+                $scrollAreaTop.hide();
             } else  if (enabled) {
-                enable();
+                var scrollY = $scrollTarget.scrollTop();
+                checkScrollUpBound(scrollY);
+                checkScrollDownBound(scrollY);
             }
         }
 
@@ -145,7 +147,7 @@ define(['jquery'], function ScrollerModule ($) {
             var maxScroll = scrollHeight - $target[0].clientHeight;
             // round max scroll up so it match the height
             // eslint-disable-next-line no-magic-numbers
-            return Math.round(maxScroll + 0.5);
+            return Math.round(maxScroll + 0.499);
         }
 
         return {
