@@ -23,6 +23,8 @@ define(['jquery'], function ScrollerModule ($) {
 
     return function Scroller (target, scrollAreaTop, scrollAreaBottom) {
         var $target = $(target);
+        var $scrollTarget = $target;
+        var isScrollTargetDocument = $target.is('iframe');
         var $scrollAreaTop = $(scrollAreaTop);
         var $scrollAreaBottom = $(scrollAreaBottom);
 
@@ -37,6 +39,7 @@ define(['jquery'], function ScrollerModule ($) {
             scrolling = false;
             if (timeoutId >= 0) {
                 window.clearTimeout(timeoutId);
+                timeoutId = -1;
             }
         }
 
@@ -49,8 +52,7 @@ define(['jquery'], function ScrollerModule ($) {
 
             if (speed !== 0) {
                 var checkFnc;
-                var contents = $target.contents();
-                var scrollY = contents.scrollTop();
+                var scrollY = $scrollTarget.scrollTop();
                 if (speed < 0) {
                     checkFnc = checkScrollUpBound;
                     checkScrollDownBound(scrollY + speed, true);
@@ -63,12 +65,12 @@ define(['jquery'], function ScrollerModule ($) {
                 //share checkFnc variable
                 var scroll = function () {
                     if (scrolling) {
-                        var $contents = $target.contents();
-                        var scrollY = $contents.scrollTop() + speed;
+                        var scrollY = $scrollTarget.scrollTop() + speed;
                         scrollY = checkFnc(scrollY);
+                        $scrollTarget.scrollTop(scrollY);
+                        timeoutId = -1;
                         if (scrolling) {
-                            $contents.scrollTop(scrollY);
-                            timeoutId = setTimeout(scroll, updateRate);
+                            timeoutId = window.setTimeout(scroll, updateRate);
                         }
                     }
                 };
@@ -89,8 +91,7 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function checkScrollDownBound (scrollY) {
-            var $contents = $target.contents();
-            var maxScroll = $contents.height() - $target.height();
+            var maxScroll = getMaxScroll();
             if (scrollY >= maxScroll) {
                 $scrollAreaBottom.hide();
                 scrollY = maxScroll;
@@ -104,10 +105,8 @@ define(['jquery'], function ScrollerModule ($) {
         function enable () {
             enabled = true;
             scrolling = false;
-            var $contents = $target.contents();
-            var scrollY = $contents.scrollTop();
-            checkScrollUpBound(scrollY);
-            checkScrollDownBound(scrollY);
+
+            reload();
         }
 
         function disable () {
@@ -117,7 +116,42 @@ define(['jquery'], function ScrollerModule ($) {
             $scrollAreaTop.hide();
         }
 
+        function reload () {
+            if (isScrollTargetDocument) {
+                $scrollTarget = $target.contents();
+                if (!$scrollTarget || $scrollTarget.length === 0) {
+                    // seems more to be a restriction error
+                    // but as fact there is no reference of document
+                    throw new ReferenceError(
+                        'Unable to access the document of the iframe.'
+                    );
+                }
+            }
+            if (getMaxScroll() <= 0) {
+                $scrollAreaBottom.hide();
+                $scrollAreaTop.hide();
+            } else  if (enabled) {
+                var scrollY = $scrollTarget.scrollTop();
+                checkScrollUpBound(scrollY);
+                checkScrollDownBound(scrollY);
+            }
+        }
+
+        function getMaxScroll () {
+            var scrollHeight;
+            if (isScrollTargetDocument) {
+                scrollHeight = $scrollTarget.height();
+            } else {
+                scrollHeight = $target[0].scrollHeight;
+            }
+            var maxScroll = scrollHeight - $target[0].clientHeight;
+            // round max scroll up so it match the height
+            // eslint-disable-next-line no-magic-numbers
+            return Math.round(maxScroll + 0.499);
+        }
+
         return {
+            reload: reload,
             enable: enable,
             disable: disable,
             startScrolling: startScrolling,
