@@ -10,6 +10,11 @@ export default {
                 type: 'color',
             },
         },
+        arrow: {
+            control: {
+                type: 'boolean',
+            },
+        },
     },
 };
 
