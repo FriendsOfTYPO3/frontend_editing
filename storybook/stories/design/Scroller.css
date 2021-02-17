@@ -30,11 +30,11 @@
 .scrollarea--arrow:before {
     content: "";
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: 32px;
+    height: 32px;
     margin: auto;
     position: relative;
-    border: 16px solid rgba(255, 255, 255, 0.8);
+    border: 12px solid rgba(255, 255, 255, 0.8);
     transform: scale(1, 0.6) rotate(45deg);
     transition: border-color 250ms ease, transform 250ms ease;
 }
