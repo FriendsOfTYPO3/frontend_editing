@@ -33,6 +33,9 @@
   tt_content.mailform.stdWrap < lib.fluidContent.stdWrap
 
   config {
+    # Disable spam protection
+    spamProtectEmailAddresses = 0
+
     tx_extbase {
       objects {
         TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
@@ -49,10 +52,10 @@
               current = 1
               # Add frontend_editing=true if this is a GET form (rather than POST)
               innerWrap = <input type="hidden" name="frontend_editing" value="true">|
-                  innerWrap.if {
-                  value.data = parameters : method
-                  value.case = lower
-                  equals = get
+                innerWrap.if {
+                value.data = parameters : method
+                value.case = lower
+                equals = get
               }
               dataWrap = <form { parameters : allParams }>|</form>
             }
@@ -81,7 +84,4 @@
 
   # Prevent links from being parsed to FE url
   lib.parseFunc_RTE.tags.a >
-
-  # Disable spam protection
-  config.spamProtectEmailAddresses = 0
 [global]
