@@ -32,23 +32,13 @@ tt_content.textpic.stdWrap < lib.fluidContent.stdWrap
 tt_content.uploads.stdWrap < lib.fluidContent.stdWrap
 tt_content.mailform.stdWrap < lib.fluidContent.stdWrap
 
-config.tx_extbase{
-    objects {
-        TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
+config {
+    tx_extbase {
+        objects {
+            TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
+        }
     }
-}
-
-# Prevent links from being parsed to FE url
-lib.parseFunc_RTE.tags.a >
-
-# Disable spam protection
-config.spamProtectEmailAddresses = 0
-
-[global]
-
-[backend.user.isLoggedIn]
-
-    config.tx_frontendediting {
+    tx_frontendediting {
         # These transformations are applied to the page being edited to ensure features work as expected and inceptions
         # are avoided.
         pageContentPreProcessing {
@@ -60,7 +50,7 @@ config.spamProtectEmailAddresses = 0
 
                         # Add frontend_editing=true if this is a GET form (rather than POST)
                         innerWrap = <input type="hidden" name="frontend_editing" value="true">|
-                        innerWrap.if {
+                            innerWrap.if {
                             value.data = parameters : method
                             value.case = lower
                             equals = get
@@ -91,5 +81,12 @@ config.spamProtectEmailAddresses = 0
             }
         }
     }
+}
+
+# Prevent links from being parsed to FE url
+lib.parseFunc_RTE.tags.a >
+
+# Disable spam protection
+config.spamProtectEmailAddresses = 0
 
 [global]
