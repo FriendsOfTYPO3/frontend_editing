@@ -3,15 +3,35 @@ import LoadingScreenWrapper from './LoadingScreenWrapper';
 
 import loadFragment from './loadFragments';
 
+let fragments;
+
+try {
+    fragments = loadFragment(require.context('./LoadingScreen', true, /\.html$/), './LoadingScreen.html');
+} catch (typeError) {
+    //non webpack environment
+    const path = './LoadingScreen/LoadingScreen.html';
+    fragments = {
+        cache: {[path]: require(path)},
+        defaultKey: path
+    };
+}
+
 const {
     cache: loadingScreens,
     defaultKey: defaultLoadingScreen
-} = loadFragment(require.context('./LoadingScreen', true, /\.html$/));
+} = fragments;
 
 const Template = ({children, ...args}) => {
+    let html = loadingScreens[children];
+    if (!html) {
+        html = loadingScreens[defaultLoadingScreen];
+        if (!html) {
+            html = Object.values(loadingScreens)[0];
+        }
+    }
     return (
         <LoadingScreenWrapper {...args}>
-            <div dangerouslySetInnerHTML={{__html: loadingScreens[children]}}/>
+            <div dangerouslySetInnerHTML={{__html: html}}/>
         </LoadingScreenWrapper>
     );
 };

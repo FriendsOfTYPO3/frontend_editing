@@ -15,6 +15,7 @@ export default {
     component: LoadingScreenWrapper,
     parameters: {
         layout: 'fullscreen',
+        storyshots: {disable: true},
     }
 };
 
