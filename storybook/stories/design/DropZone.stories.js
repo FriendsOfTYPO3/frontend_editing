@@ -26,6 +26,13 @@ export default {
     title: 'Design/Dropzone',
     excludeStories: ['DropzoneEnableDecorator'],
     decorators: [DropzoneBeforeAfterDecorator],
+    parameters: {
+        docs: {
+            description: {
+                component: 'Created with react because it get created on server by a function',
+            },
+        },
+    },
     argTypes: {
         state: {
             control: {

@@ -4,6 +4,13 @@ import ScrollArea from './ScrollArea';
 export default {
     title: 'Design/ScrollArea',
     component: ScrollArea,
+    parameters: {
+        docs: {
+            description: {
+                component: 'Created with react because it get created on server by a function',
+            },
+        },
+    },
     argTypes: {
         backgroundColor: {
             control: {
