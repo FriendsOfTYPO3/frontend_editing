@@ -1,9 +1,12 @@
 import React from 'react';
 import LoadingScreenHtml from './LoadingScreen.html';
+import LoadingScreenWrapper from './LoadingScreenWrapper';
 
 const Template = (args) => {
     return (
-        <div {...args} dangerouslySetInnerHTML={{__html: LoadingScreenHtml}}/>
+        <LoadingScreenWrapper {...args}>
+            <div dangerouslySetInnerHTML={{__html: LoadingScreenHtml}}/>
+        </LoadingScreenWrapper>
     );
 };
 
@@ -21,7 +24,17 @@ const Decorator = (Story) => (
 
 export default {
     title: 'Design/LoadingScreen',
+    component: LoadingScreenWrapper,
     decorators: [Decorator],
 };
 
-export const normal = Template.bind({});
+export const Hidden = Template.bind({});
+Hidden.args = {
+    className: 't3-frontend-editing__loading-screen',
+};
+
+export const Visible = Template.bind({});
+Visible.args = {
+    className: 't3-frontend-editing__loading-screen',
+    visible: true,
+};
