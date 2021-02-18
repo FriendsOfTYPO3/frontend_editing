@@ -52,9 +52,11 @@
               current = 1
               # Add frontend_editing=true if this is a GET form (rather than POST)
               innerWrap = <input type="hidden" name="frontend_editing" value="true">|
-                innerWrap.if {
-                value.data = parameters : method
-                value.case = lower
+              innerWrap.if {
+                value {
+                  data = parameters : method
+                  case = lower
+                }
                 equals = get
               }
               dataWrap = <form { parameters : allParams }>|</form>
