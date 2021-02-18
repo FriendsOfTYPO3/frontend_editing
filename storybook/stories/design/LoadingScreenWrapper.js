@@ -25,7 +25,6 @@ export default LoadingScreenWrapper;
 LoadingScreenWrapper.propTypes = {
     visible: PropTypes.bool,
     className: PropTypes.string,
-    children: PropTypes.element,
 };
 
 
