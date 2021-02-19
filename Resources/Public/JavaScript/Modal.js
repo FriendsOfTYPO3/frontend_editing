@@ -26,10 +26,16 @@ define([
     'use strict';
 
     function getButton (text, confirmCallback, active, btnVariant) {
-        if (!btnVariant) {
-            btnVariant = 'default';
-        } else if(Number.isInteger(btnVariant)){
-            btnVariant = Severity.getCssClass(btnVariant);
+        var btnClass = 'btn-';
+        if(Number.isInteger(btnVariant)){
+            btnClass += Severity.getCssClass(btnVariant);
+        } else {
+            // add default variant as base
+            btnClass += 'default';
+            if (btnVariant) {
+                // add custom variant
+                btnClass += ' btn-' + btnVariant;
+            }
         }
         return {
             text: text,
@@ -41,7 +47,7 @@ define([
                 }
             },
             active: active,
-            btnClass: 'btn-' + btnVariant
+            btnClass: btnClass
         };
     }
 
