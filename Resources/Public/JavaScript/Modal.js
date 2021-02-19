@@ -27,7 +27,7 @@ define([
 
     function getButton (text, confirmCallback, active, btnVariant) {
         var btnClass = 'btn-';
-        if(Number.isInteger(btnVariant)){
+        if (Number.isInteger(btnVariant)) {
             btnClass += Severity.getCssClass(btnVariant);
         } else {
             // add default variant as base
@@ -135,8 +135,7 @@ define([
                 title,
                 message,
                 Severity.warning,
-                buttons,
-
+                buttons
             );
         },
     };
