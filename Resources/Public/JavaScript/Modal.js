@@ -91,9 +91,16 @@ define([
                 this.buttonClickListener = listener;
                 return this;
             },
-            prependButton: function (button) {
-                this.insertButton(0, button);
+            onEscape: function (listener) {
+                testConstraints(builder.constraints.func, listener, 'listener');
+                this.escapeListener = listener;
                 return this;
+            },
+            dismissOnButtonClick: function () {
+                return this.onButtonClick(dismissModal);
+            },
+            prependButton: function (button) {
+                return this.insertButton(0, button);
             },
             appendButton: function (button) {
                 this.configuration.buttons.push(button);
@@ -107,12 +114,32 @@ define([
             show: function () {
                 var buttonClickListener = this.buttonClickListener;
                 var readyListener = this.readyListener;
-                if (buttonClickListener) {
+                var escapeListener = this.escapeListener;
+                if (escapeListener || buttonClickListener) {
                     this.onReady(function prepareButtonClick (currentModal) {
-                        currentModal.on(
-                            'button.clicked',
-                            buttonClickListener
-                        );
+                        if (escapeListener) {
+                            var dismiss = false;
+                            currentModal.on(
+                                'modal-dismiss',
+                                function modalDismissListener () {
+                                    dismiss = true;
+                                }
+                            );
+                            currentModal.on(
+                                'hidden.bs.modal',
+                                function modalDismissListener () {
+                                    if (!dismiss) {
+                                        escapeListener();
+                                    }
+                                }
+                            );
+                        }
+                        if (buttonClickListener) {
+                            currentModal.on(
+                                'button.clicked',
+                                buttonClickListener
+                            );
+                        }
                         if (readyListener) {
                             readyListener(currentModal);
                         }
@@ -189,12 +216,12 @@ define([
             }
         }
         if ((constraints & builder.constraints.func) !== 0) {
-            if (typeof variable !== 'function') {
+            if (variable && typeof variable !== 'function') {
                 throw new TypeError("'" + name + "' is not a function");
             }
         }
         if ((constraints & builder.constraints.int) !== 0) {
-            if (!Number.isInteger(variable)) {
+            if (variable && !Number.isInteger(variable)) {
                 throw new TypeError("'" + name + "' is not a integer");
             }
         }
@@ -209,11 +236,12 @@ define([
     function createBaseModel (title, message) {
         return builder.modal(title, message)
             .setSeverity(Severity.warning)
-            .onButtonClick(dismissModal);
+            .dismissOnButtonClick();
     }
 
     function createShowModel (title, message, callbacks) {
         return createBaseModel(title, message)
+            .onEscape(callbacks.yes)
             .appendButton(
                 builder.button(translateKeys.okayLabel)
                     .translateLabel()
@@ -223,6 +251,7 @@ define([
 
     function createConfirmModel (title, message, callbacks) {
         return createShowModel(title, message, callbacks)
+            .onEscape(callbacks.no)
             .prependButton(createCancelButton(callbacks.no));
     }
 
@@ -235,6 +264,10 @@ define([
     }
 
     return {
+        /**
+         * Simple modal builder which make modal much easier and more fun.
+         */
+        builder: builder,
         /**
          * Simple modal notification popup to annoy some users ... has to be an
          * important message - maybe written in uppercase. XD
@@ -269,6 +302,7 @@ define([
 
             return createBaseModel(translateKeys.titleNavigate, message)
                 .translateTitle()
+                .onEscape(callbacks.no)
                 .appendButton(createCancelButton(callbacks.no))
                 .appendButton(
                     builder.button(translateKeys.saveLabel)
