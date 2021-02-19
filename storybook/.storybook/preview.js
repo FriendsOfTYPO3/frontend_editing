@@ -7,3 +7,11 @@ try {
     // shit happens
     console.log(ex);
 }
+
+if (!window.TYPO3) {
+    window.TYPO3 = {
+        settings: {
+            ajaxUrls: '',
+        }
+    };
+}
