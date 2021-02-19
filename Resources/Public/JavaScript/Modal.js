@@ -24,6 +24,73 @@ define([
     Severity
 ) {
     'use strict';
+    var translateKeys = {
+        titleNavigate: 'title.navigate',
+        discardLabel: 'button.discard_navigate',
+        saveLabel: 'button.save',
+        cancelLabel: 'button.cancel',
+        okayLabel: 'button.okay',
+    };
+
+    function translate (key) {
+        switch (key) {
+        case 'title.navigate':
+            return 'Navigate';
+        case 'button.discard_navigate':
+            return 'Discard and Navigate';
+        case 'button.save':
+            return 'Save All';
+        case 'button.cancel':
+            return 'Cancel';
+        case 'button.okay':
+            return 'OK';
+        default:
+        }
+        throw new TypeError('key was not found in translate table');
+    }
+
+    function createButtonBuilder (name) {
+        return {
+            text: name,
+            name: name,
+            active: false,
+
+            setLabel: function (label) {
+                this.text = label;
+                return this;
+            },
+            setActive: function () {
+                this.active = true;
+                return this;
+            },
+            onClick: function (clickCallback) {
+                this.trigger = clickCallback;
+                return this;
+            },
+            setSeverity: function (severity) {
+                this.severity = severity;
+                return this;
+            },
+            setVariant: function (variant) {
+                this.variant = variant;
+                return this;
+            },
+
+            get btnClass () {
+                var btnClass = 'btn-';
+                if (this.severity) {
+                    btnClass += Severity.getCssClass(this.severity);
+                } else {
+                    btnClass += 'default';
+                }
+                if (this.variant) {
+                    // add custom variant
+                    btnClass += ' btn-' + this.variant;
+                }
+                return btnClass;
+            },
+        };
+    }
 
     // used if custom with non-default btn variant is used
     var argIndex = 4;
@@ -56,10 +123,18 @@ define([
         };
     }
 
+    // Simple modal close after button clicked
+    function attachButtonClickedListener (currentModal) {
+        currentModal.on('button.clicked', function buttonClicked () {
+            $(this)
+                .trigger('modal-dismiss');
+        });
+    }
+
     return {
         /**
-         * Simple modal notification popup to annoy some users ... have to be an
-         * important message - maybe write it in uppercase. XD
+         * Simple modal notification popup to annoy some users ... has to be an
+         * important message - maybe written in uppercase. XD
          * @param message
          * @param callbacks
          */
@@ -126,22 +201,30 @@ define([
                 throw new TypeError("'saveCallback' is not a function");
             }
 
-            var title = 'Navigate';
-            var discardLabel = 'Discard and Navigate';
-            var saveLabel = 'Save All';
-            var cancelLabel = 'Cancel';
             var buttons = [
-                getButton(cancelLabel, callbacks.no, true, 'left'),
-                getButton(saveLabel, saveCallback, false),
-                getButton(discardLabel, callbacks.yes, false, Severity.error)
+                createButtonBuilder(translateKeys.cancelLabel)
+                    .setLabel(translate(translateKeys.cancelLabel))
+                    .onClick(callbacks.no)
+                    .setActive()
+                    .setVariant('left'),
+                createButtonBuilder(translateKeys.saveLabel)
+                    .setLabel(translate(translateKeys.saveLabel))
+                    .onClick(saveCallback),
+                createButtonBuilder(translateKeys.discardLabel)
+                    .setLabel(translate(translateKeys.discardLabel))
+                    .onClick(callbacks.yes)
+                    .setSeverity(Severity.error),
             ];
 
-            return Modal.confirm(
-                title,
-                message,
-                Severity.warning,
-                buttons
-            );
+            return Modal.advanced({
+                title: translate(translateKeys.titleNavigate),
+                content: message,
+                severity: Severity.warning,
+                buttons: buttons,
+                // bad callback naming, callback if modal is ready
+                /*eslint-disable-next-line id-denylist*/
+                callback: attachButtonClickedListener
+            });
         },
     };
 });

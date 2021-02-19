@@ -11,7 +11,7 @@ export default {
         storyshots: {disable: true},
     },
     argTypes: {
-        onDismiss: {action: 'cancel'},
+        onDismiss: {action: 'modal-dismiss'},
         type: {
             control: {
                 type: 'inline-radio',
