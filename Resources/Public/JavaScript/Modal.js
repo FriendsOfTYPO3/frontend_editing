@@ -31,22 +31,96 @@ define([
         cancelLabel: 'button.cancel',
         okayLabel: 'button.okay',
     };
+    var translateValues = {
+        'title.navigate': 'Navigate',
+        'button.discard_navigate': 'Discard and Navigate',
+        'button.save': 'Save All',
+        'button.cancel': 'Cancel',
+        'button.okay': 'OK',
+    };
 
     function translate (key) {
-        switch (key) {
-        case 'title.navigate':
-            return 'Navigate';
-        case 'button.discard_navigate':
-            return 'Discard and Navigate';
-        case 'button.save':
-            return 'Save All';
-        case 'button.cancel':
-            return 'Cancel';
-        case 'button.okay':
-            return 'OK';
-        default:
+        if (translateValues[key]) {
+            return translateValues[key];
         }
-        throw new TypeError('key was not found in translate table');
+        throw new TypeError("'" + key + "' does not exist in translate table");
+    }
+
+    var builder = {
+        constraints: {
+            'required': 1,
+            'func': 2,
+            'int': 4,
+        },
+
+        modal: createModalBuilder,
+        button: createButtonBuilder,
+    };
+
+    function createModalBuilder (title, message) {
+        testConstraints(builder.constraints.required, title, 'title');
+        testConstraints(builder.constraints.required, message, 'message');
+
+        return {
+            configuration: {
+                title: title,
+                content: message,
+                severity: Severity.info,
+                buttons: [],
+            },
+
+            translateTitle: function () {
+                this.configuration.title = translate(this.configuration.title);
+                return this;
+            },
+            setSeverity: function (severity) {
+                testConstraints(builder.constraints.int, severity, 'severity');
+                this.configuration.severity = severity;
+                return this;
+            },
+            onReady: function (listener) {
+                testConstraints(builder.constraints.func, listener, 'listener');
+                // bad callback naming, callback if modal is ready
+                /*eslint-disable-next-line id-denylist*/
+                this.configuration.callback = listener;
+                this.readyListener = listener;
+                return this;
+            },
+            onButtonClick: function (listener) {
+                testConstraints(builder.constraints.func, listener, 'listener');
+                this.buttonClickListener = listener;
+                return this;
+            },
+            prependButton: function (button) {
+                this.insertButton(0, button);
+                return this;
+            },
+            appendButton: function (button) {
+                this.configuration.buttons.push(button);
+                return this;
+            },
+            insertButton: function (index, button) {
+                this.configuration.buttons.splice(index, 0, button);
+                return this;
+            },
+
+            show: function () {
+                var buttonClickListener = this.buttonClickListener;
+                var readyListener = this.readyListener;
+                if (buttonClickListener) {
+                    this.onReady(function prepareButtonClick (currentModal) {
+                        currentModal.on(
+                            'button.clicked',
+                            buttonClickListener
+                        );
+                        if (readyListener) {
+                            readyListener(currentModal);
+                        }
+                    });
+                }
+                return Modal.advanced(this.configuration);
+            }
+        };
     }
 
     function createButtonBuilder (name) {
@@ -55,19 +129,31 @@ define([
             name: name,
             active: false,
 
-            setLabel: function (label) {
+            setLabel: function (label, constraints) {
+                testConstraints(constraints, label, 'label');
                 this.text = label;
+                return this;
+            },
+            translateLabel: function () {
+                this.text = translate(this.text);
+                testConstraints(
+                    builder.constraints.required,
+                    this.text,
+                    'translate(this.text)'
+                );
                 return this;
             },
             setActive: function () {
                 this.active = true;
                 return this;
             },
-            onClick: function (clickCallback) {
+            onClick: function (clickCallback, constraints) {
+                testConstraints(constraints, clickCallback, 'clickCallback');
                 this.trigger = clickCallback;
                 return this;
             },
             setSeverity: function (severity) {
+                testConstraints(builder.constraints.int, severity, 'severity');
                 this.severity = severity;
                 return this;
             },
@@ -92,43 +178,60 @@ define([
         };
     }
 
-    // used if custom with non-default btn variant is used
-    var argIndex = 4;
-
-    function getButton (text, confirmCallback, active, btnVariant) {
-        var btnClass = 'btn-';
-        if (Number.isInteger(btnVariant)) {
-            btnClass += Severity.getCssClass(btnVariant);
-            btnVariant = arguments.length > argIndex
-                ? arguments[argIndex] : null;
-        } else {
-            // add default variant as base
-            btnClass += 'default';
+    function testConstraints (constraints, variable, name) {
+        if (!constraints) {
+            return;
         }
-        if (btnVariant) {
-            // add custom variant
-            btnClass += ' btn-' + btnVariant;
+        // TODO: make errors translation ready
+        if ((constraints & builder.constraints.required) !== 0) {
+            if (!variable) {
+                throw new TypeError("'" + name + "' is undefined");
+            }
         }
-        return {
-            text: text,
-            trigger: function () {
-                $(this)
-                    .trigger('modal-dismiss');
-                if (confirmCallback) {
-                    confirmCallback();
-                }
-            },
-            active: active,
-            btnClass: btnClass
-        };
+        if ((constraints & builder.constraints.func) !== 0) {
+            if (typeof variable !== 'function') {
+                throw new TypeError("'" + name + "' is not a function");
+            }
+        }
+        if ((constraints & builder.constraints.int) !== 0) {
+            if (!Number.isInteger(variable)) {
+                throw new TypeError("'" + name + "' is not a integer");
+            }
+        }
     }
 
     // Simple modal close after button clicked
-    function attachButtonClickedListener (currentModal) {
-        currentModal.on('button.clicked', function buttonClicked () {
-            $(this)
-                .trigger('modal-dismiss');
-        });
+    function dismissModal () {
+        $(this)
+            .trigger('modal-dismiss');
+    }
+
+    function createBaseModel (title, message) {
+        return builder.modal(title, message)
+            .setSeverity(Severity.warning)
+            .onButtonClick(dismissModal);
+    }
+
+    function createShowModel (title, message, callbacks) {
+        return createBaseModel(title, message)
+            .appendButton(
+                builder.button(translateKeys.okayLabel)
+                    .translateLabel()
+                    .onClick(callbacks.yes)
+            );
+    }
+
+    function createConfirmModel (title, message, callbacks) {
+        return createShowModel(title, message, callbacks)
+            .prependButton(createCancelButton(callbacks.no));
+    }
+
+    function createCancelButton (clickListener) {
+        return builder.button(translateKeys.cancelLabel)
+            .translateLabel()
+            .setActive()
+            .setVariant('left')
+            .onClick(clickListener);
     }
 
     return {
@@ -141,22 +244,8 @@ define([
         warning: function (message, callbacks) {
             callbacks = callbacks || {};
 
-            if (!message) {
-                throw new TypeError("'message' is undefined");
-            }
-
-            var title = message;
-            var okLabel = 'OK';
-            var buttons = [
-                getButton(okLabel, callbacks.yes, true)
-            ];
-
-            return Modal.show(
-                title,
-                message,
-                Severity.warning,
-                buttons
-            );
+            return createShowModel(message, message, callbacks)
+                .show();
         },
         /**
          * Simple confirm to make non critical decisions
@@ -166,24 +255,8 @@ define([
         confirm: function (message, callbacks) {
             callbacks = callbacks || {};
 
-            if (!message) {
-                throw new TypeError("'message' is undefined");
-            }
-
-            var title = message;
-            var cancelLabel = 'Cancel';
-            var okLabel = 'OK';
-            var buttons = [
-                getButton(cancelLabel, callbacks.no, true, 'left'),
-                getButton(okLabel, callbacks.yes)
-            ];
-
-            return Modal.confirm(
-                title,
-                message,
-                Severity.warning,
-                buttons
-            );
+            return createConfirmModel(message, message, callbacks)
+                .show();
         },
         /**
          * Confirm to leave page and lose data
@@ -194,37 +267,21 @@ define([
         confirmNavigate: function (message, saveCallback, callbacks) {
             callbacks = callbacks || {};
 
-            if (!message) {
-                throw new TypeError("'message' is undefined");
-            }
-            if (typeof saveCallback !== 'function') {
-                throw new TypeError("'saveCallback' is not a function");
-            }
-
-            var buttons = [
-                createButtonBuilder(translateKeys.cancelLabel)
-                    .setLabel(translate(translateKeys.cancelLabel))
-                    .onClick(callbacks.no)
-                    .setActive()
-                    .setVariant('left'),
-                createButtonBuilder(translateKeys.saveLabel)
-                    .setLabel(translate(translateKeys.saveLabel))
-                    .onClick(saveCallback),
-                createButtonBuilder(translateKeys.discardLabel)
-                    .setLabel(translate(translateKeys.discardLabel))
-                    .onClick(callbacks.yes)
-                    .setSeverity(Severity.error),
-            ];
-
-            return Modal.advanced({
-                title: translate(translateKeys.titleNavigate),
-                content: message,
-                severity: Severity.warning,
-                buttons: buttons,
-                // bad callback naming, callback if modal is ready
-                /*eslint-disable-next-line id-denylist*/
-                callback: attachButtonClickedListener
-            });
+            return createBaseModel(translateKeys.titleNavigate, message)
+                .translateTitle()
+                .appendButton(createCancelButton(callbacks.no))
+                .appendButton(
+                    builder.button(translateKeys.saveLabel)
+                        .translateLabel()
+                        .onClick(saveCallback, builder.constraints.required)
+                )
+                .appendButton(
+                    builder.button(translateKeys.discardLabel)
+                        .translateLabel()
+                        .onClick(callbacks.yes)
+                        .setSeverity(Severity.error)
+                )
+                .show();
         },
     };
 });
