@@ -25,17 +25,22 @@ define([
 ) {
     'use strict';
 
+    // used if custom with non-default btn variant is used
+    var argIndex = 4;
+
     function getButton (text, confirmCallback, active, btnVariant) {
         var btnClass = 'btn-';
         if (Number.isInteger(btnVariant)) {
             btnClass += Severity.getCssClass(btnVariant);
+            btnVariant = arguments.length > argIndex
+                ? arguments[argIndex] : null;
         } else {
             // add default variant as base
             btnClass += 'default';
-            if (btnVariant) {
-                // add custom variant
-                btnClass += ' btn-' + btnVariant;
-            }
+        }
+        if (btnVariant) {
+            // add custom variant
+            btnClass += ' btn-' + btnVariant;
         }
         return {
             text: text,
