@@ -61,45 +61,88 @@ define([
         testConstraints(builder.constraints.required, title, 'title');
         testConstraints(builder.constraints.required, message, 'message');
 
+        var handleEscape = true;
+        var buttonClickListener, escapeListener, readyListener;
+
+        function attachEscapeListener (currentModal) {
+            var hasModalDismissed = false;
+            function triggerEscapeEvent () {
+                if (!hasModalDismissed && escapeListener) {
+                    hasModalDismissed = true;
+                    escapeListener();
+                }
+            }
+
+            function preventTriggerEscape () {
+                hasModalDismissed = true;
+            }
+
+            function handleBackdrop () {
+                var targetInModelContent = false;
+                currentModal.on('click', function backdropDismiss () {
+                    if (targetInModelContent) {
+                        targetInModelContent = false;
+                    } else {
+                        triggerEscapeEvent();
+                        currentModal.trigger('modal-dismiss');
+                    }
+                });
+                currentModal
+                    .find('.modal-content')
+                    .on('click', function preventClose (event) {
+                        targetInModelContent = true;
+                    });
+            }
+
+            // handle escape by key
+            currentModal.on('modal-dismiss', preventTriggerEscape);
+            currentModal.on('hidden.bs.modal', triggerEscapeEvent);
+
+            // handle escape by close button
+            currentModal
+                .find(Modal.identifiers.close)
+                .on('click', triggerEscapeEvent);
+
+            // handle escape by backdrop
+            currentModal.on('shown.bs.modal', handleBackdrop);
+        }
+
         return {
-            handleEscape: true,
-            configuration: {
-                title: title,
-                content: message,
-                severity: Severity.info,
-                buttons: [],
-                additionalCssClasses: ['t3-frontend-editing__modal'],
-            },
+            title: title,
+            content: message,
+            severity: Severity.info,
+            buttons: [],
+            additionalCssClasses: ['t3-frontend-editing__modal'],
 
             translateTitle: function () {
-                this.configuration.title = translate(this.configuration.title);
+                this.title = translate(this.title);
                 return this;
             },
             setSeverity: function (severity) {
                 testConstraints(builder.constraints.int, severity, 'severity');
-                this.configuration.severity = severity;
+                this.severity = severity;
                 return this;
             },
             onReady: function (listener) {
                 testConstraints(builder.constraints.func, listener, 'listener');
                 // bad callback naming, callback if modal is ready
                 /*eslint-disable-next-line id-denylist*/
-                this.configuration.callback = listener;
-                this.readyListener = listener;
+                this.callback = listener;
+                readyListener = listener;
                 return this;
             },
             onButtonClick: function (listener) {
                 testConstraints(builder.constraints.func, listener, 'listener');
-                this.buttonClickListener = listener;
+                buttonClickListener = listener;
                 return this;
             },
             onEscape: function (listener) {
                 testConstraints(builder.constraints.func, listener, 'listener');
-                this.escapeListener = listener;
+                escapeListener = listener;
                 return this;
             },
             preventEscape: function () {
-                this.handleEscape = false;
+                handleEscape = false;
                 return this;
             },
             dismissOnButtonClick: function () {
@@ -109,85 +152,42 @@ define([
                 return this.insertButton(0, button);
             },
             appendButton: function (button) {
-                this.configuration.buttons.push(button);
+                this.buttons.push(button);
                 return this;
             },
             insertButton: function (index, button) {
-                this.configuration.buttons.splice(index, 0, button);
+                this.buttons.splice(index, 0, button);
                 return this;
             },
 
             show: function () {
-                var buttonClickListener = this.buttonClickListener;
-                var escapeListener = this.escapeListener;
-                if (escapeListener || buttonClickListener) {
-                    var readyListener = this.readyListener;
-                    var handleEscape = this.handleEscape;
-                    this.onReady(function prepareButtonClick (currentModal) {
-                        function modalDismiss () {
-                            if (!dismiss) {
-                                escapeListener();
-                            }
-                            currentModal.trigger('modal-dismiss');
-                        }
+                //copy ready listener cause it gets reset in next func
+                var ready = readyListener;
+                this.onReady(function prepareListeners (currentModal) {
+                    if (!handleEscape) {
+                        currentModal
+                            .find(Modal.identifiers.close)
+                            .hide();
+                    }
 
-                        var dismiss = false;
+                    if (buttonClickListener) {
+                        currentModal.on('button.clicked', buttonClickListener);
+                    }
 
-                        if (handleEscape) {
-                            if (escapeListener) {
-                                currentModal.on(
-                                    'modal-dismiss',
-                                    function modalDismissListener () {
-                                        dismiss = true;
-                                    }
-                                );
+                    if (ready) {
+                        ready(currentModal);
+                    }
 
-                                currentModal.on(
-                                    'hidden.bs.modal',
-                                    modalDismiss
-                                );
-                                currentModal.find(Modal.identifiers.close)
-                                    .on('click', modalDismiss);
-                            }
-                        } else {
-                            currentModal.find(Modal.identifiers.close)
-                                .hide();
-                        }
-                        if (buttonClickListener) {
-                            currentModal.on(
-                                'button.clicked',
-                                buttonClickListener
-                            );
-                        }
-                        if (readyListener) {
-                            readyListener(currentModal);
-                        }
-                        currentModal.modal({
-                            keyboard: handleEscape,
-                            backdrop: 'static',
-                        });
-
-                        if (escapeListener) {
-                            currentModal.on(
-                                'shown.bs.modal',
-                                function handleBackdrop () {
-                                    currentModal
-                                        .on('click', dismissModal);
-                                    currentModal
-                                        .find('.modal-content')
-                                        .on(
-                                            'click',
-                                            function preventClose(event) {
-                                                event.stopPropagation();
-                                            }
-                                        );
-                                }
-                            );
-                        }
+                    currentModal.modal({
+                        keyboard: handleEscape,
+                        backdrop: 'static',
                     });
-                }
+                    if (handleEscape) {
+                        attachEscapeListener(currentModal);
+                    }
+                });
 
-                return Modal.advanced(this.configuration);
+                return Modal.advanced(this);
             }
         };
     }
