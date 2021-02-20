@@ -62,11 +62,13 @@ define([
         testConstraints(builder.constraints.required, message, 'message');
 
         return {
+            handleEscape: true,
             configuration: {
                 title: title,
                 content: message,
                 severity: Severity.info,
                 buttons: [],
+                additionalCssClasses: ['t3-frontend-editing__modal'],
             },
 
             translateTitle: function () {
@@ -96,6 +98,10 @@ define([
                 this.escapeListener = listener;
                 return this;
             },
+            preventEscape: function () {
+                this.handleEscape = false;
+                return this;
+            },
             dismissOnButtonClick: function () {
                 return this.onButtonClick(dismissModal);
             },
@@ -113,26 +119,39 @@ define([
 
             show: function () {
                 var buttonClickListener = this.buttonClickListener;
-                var readyListener = this.readyListener;
                 var escapeListener = this.escapeListener;
                 if (escapeListener || buttonClickListener) {
+                    var readyListener = this.readyListener;
+                    var handleEscape = this.handleEscape;
                     this.onReady(function prepareButtonClick (currentModal) {
-                        if (escapeListener) {
-                            var dismiss = false;
-                            currentModal.on(
-                                'modal-dismiss',
-                                function modalDismissListener () {
-                                    dismiss = true;
-                                }
-                            );
-                            currentModal.on(
-                                'hidden.bs.modal',
-                                function modalDismissListener () {
-                                    if (!dismiss) {
-                                        escapeListener();
+                        function modalDismiss () {
+                            if (!dismiss) {
+                                escapeListener();
+                            }
+                            currentModal.trigger('modal-dismiss');
+                        }
+
+                        var dismiss = false;
+
+                        if (handleEscape) {
+                            if (escapeListener) {
+                                currentModal.on(
+                                    'modal-dismiss',
+                                    function modalDismissListener () {
+                                        dismiss = true;
                                     }
-                                }
-                            );
+                                );
+
+                                currentModal.on(
+                                    'hidden.bs.modal',
+                                    modalDismiss
+                                );
+                                currentModal.find(Modal.identifiers.close)
+                                    .on('click', modalDismiss);
+                            }
+                        } else {
+                            currentModal.find(Modal.identifiers.close)
+                                .hide();
                         }
                         if (buttonClickListener) {
                             currentModal.on(
@@ -143,8 +162,31 @@ define([
                         if (readyListener) {
                             readyListener(currentModal);
                         }
+                        currentModal.modal({
+                            keyboard: handleEscape,
+                            backdrop: 'static',
+                        });
+
+                        if (escapeListener) {
+                            currentModal.on(
+                                'shown.bs.modal',
+                                function handleBackdrop () {
+                                    currentModal
+                                        .on('click', dismissModal);
+                                    currentModal
+                                        .find('.modal-content')
+                                        .on(
+                                            'click',
+                                            function preventClose(event) {
+                                                event.stopPropagation();
+                                            }
+                                        );
+                                }
+                            );
+                        }
                     });
                 }
+
                 return Modal.advanced(this.configuration);
             }
         };
@@ -233,24 +275,25 @@ define([
             .trigger('modal-dismiss');
     }
 
-    function createBaseModel (title, message) {
+    function createBaseModal (title, message) {
         return builder.modal(title, message)
             .setSeverity(Severity.warning)
             .dismissOnButtonClick();
     }
 
-    function createShowModel (title, message, callbacks) {
-        return createBaseModel(title, message)
+    function createShowModal (title, message, callbacks) {
+        return createBaseModal(title, message)
             .onEscape(callbacks.yes)
             .appendButton(
                 builder.button(translateKeys.okayLabel)
                     .translateLabel()
                     .onClick(callbacks.yes)
+                    .setActive()
             );
     }
 
-    function createConfirmModel (title, message, callbacks) {
-        return createShowModel(title, message, callbacks)
+    function createConfirmModal (title, message, callbacks) {
+        return createShowModal(title, message, callbacks)
             .onEscape(callbacks.no)
             .prependButton(createCancelButton(callbacks.no));
     }
@@ -277,7 +320,7 @@ define([
         warning: function (message, callbacks) {
             callbacks = callbacks || {};
 
-            return createShowModel(message, message, callbacks)
+            return createShowModal(message, message, callbacks)
                 .show();
         },
         /**
@@ -288,7 +331,7 @@ define([
         confirm: function (message, callbacks) {
             callbacks = callbacks || {};
 
-            return createConfirmModel(message, message, callbacks)
+            return createConfirmModal(message, message, callbacks)
                 .show();
         },
         /**
@@ -300,9 +343,9 @@ define([
         confirmNavigate: function (message, saveCallback, callbacks) {
             callbacks = callbacks || {};
 
-            return createBaseModel(translateKeys.titleNavigate, message)
+            return createBaseModal(translateKeys.titleNavigate, message)
                 .translateTitle()
-                .onEscape(callbacks.no)
+                .preventEscape()
                 .appendButton(createCancelButton(callbacks.no))
                 .appendButton(
                     builder.button(translateKeys.saveLabel)

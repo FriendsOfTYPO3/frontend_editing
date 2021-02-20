@@ -11,7 +11,9 @@ try {
 if (!window.TYPO3) {
     window.TYPO3 = {
         settings: {
-            ajaxUrls: '',
+            ajaxUrls: {
+                icons: ''
+            },
         }
     };
 }
