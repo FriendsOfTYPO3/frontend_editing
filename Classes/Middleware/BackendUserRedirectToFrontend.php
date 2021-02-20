@@ -25,12 +25,31 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        // Allow ajax requests even though isUserDisallowedAccessBackend is true
+        $routePath = $request->getAttributes()['routePath'];
+        if (in_array($routePath, $this->getAllowedRoutePaths())) {
+            return $handler->handle($request);
+        }
+
         $user = $this->getBackendUser();
         if (!$user->isAdmin() && $this->isUserDisallowedAccessBackend($user)) {
             return new RedirectResponse($this->buildFrontendUri($request));
         }
 
         return $handler->handle($request);
+    }
+
+    /**
+     * Return the available allowed route paths
+     *
+     * @return string[]
+     */
+    protected function getAllowedRoutePaths(): array
+    {
+        return [
+            '/ajax/frontend-editing/editor-configuration',
+            '/ajax/frontend-editing/process'
+        ];
     }
 
     /**
