@@ -8,6 +8,7 @@
 /.Build/*
 composer.lock
 /vendor
+/var
 
 # Node packages.
 /node_modules
@@ -19,4 +20,5 @@ package-lock.json
 # PHP CS fix caches
 .php_cs.cache
 
-/var
+# Storybook build folder
+storybook-static/
