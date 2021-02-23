@@ -35,7 +35,6 @@
     "@babel/plugin-transform-destructuring",
     "@babel/plugin-transform-spread",
     "@babel/plugin-transform-for-of",
-    "babel-plugin-macros",
+    "babel-plugin-macros"
   ]
-
 }

@@ -15,11 +15,11 @@
     }
   },
   "rules": {
-    //Possible Errors
+    // Possible Errors
     "no-console": "error",
     "no-unreachable-loop": "error",
 
-    //Best Practices
+    // Best Practices
     "complexity": "error",
     "consistent-return": "error",
     "curly": "error",
@@ -52,13 +52,11 @@
     // strict mode
     "strict": ["error", "safe"],
 
-    //Variables
+    // Variables
     "no-label-var": "error",
-//    "no-unused-vars": "warn",
 
-    //Stylistic
+    // Stylistic
     "array-bracket-newline": ["warn", "consistent"],
-    //    "array-bracket-spacing": ["error", "always", { "singleValue": false }],
     "block-spacing": "warn",
     "brace-style": "warn",
     "camelcase": "warn",
@@ -66,9 +64,7 @@
     "comma-style": "warn",
     "eol-last": "warn",
     "func-call-spacing": "warn",
-    //maybe not the best idea ?:/
     "func-name-matching": "warn",
-//    "func-names": ["warn", "as-needed"], //would be nice to debug without anonymous
     "id-denylist": ["warn", "data", "err", "e", "callback"],
     "indent": "warn",
     "key-spacing": "warn",
@@ -76,11 +72,9 @@
     "linebreak-style": "warn",
     "max-depth": "warn",
     "max-len": ["warn", {"code": 120}],
-    //    "max-lines-per-function" seems only to be usefull to find long functions ...
-    //    "max-lines-per-function": "off",
     "max-nested-callbacks": ["warn", 3],
     "max-statements-per-line": ["warn", { "max": 1 }],
-    "newline-per-chained-call": ["warn", {"ignoreChainWithDepth": 1}],
+    "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 1 }],
     "no-array-constructor": "warn",
     "no-lonely-if": "warn",
     "no-mixed-operators": "warn",
