@@ -15,7 +15,7 @@ jobs:
       - name: Configure PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 7.1
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v1
@@ -26,7 +26,7 @@ jobs:
             php${{ matrix.php-version }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-progress
+        run: composer install --no-progress --ignore-platform-reqs
 
       - name: Install and Build 🔧
         run: |
