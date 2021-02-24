@@ -188,6 +188,12 @@ Output:
    </div>
 
 
+A full example on how to get a news single record content editable can be found here. Note
+that the headline, teaser and description are inline editable.
+
+https://gist.github.com/MattiasNilsson/903b5cfe770fa9eadafd3d4de2c32895
+
+
 .. _viewhelpers-customdropzone:
 
 customDropZone
