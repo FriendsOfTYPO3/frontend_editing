@@ -106,8 +106,9 @@ define([
 						}
 						require([
 							'jquery',
-							'TYPO3/CMS/Backend/Modal'
-						], function ($, Modal) {
+							'TYPO3/CMS/Backend/Modal',
+							'TYPO3/CMS/Backend/Toolbar/ShortcutMenu'
+						], function ($, Modal, ShortcutMenu ) {
 
 							Modal.advanced({
 								type: Modal.types.iframe,
