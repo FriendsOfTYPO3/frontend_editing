@@ -152,7 +152,16 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163297);
         }
         if (empty($uid)) {
-            throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163305);
+            $this->logger->error(
+                'Property "uid" can not to be empty!',
+                [
+                    'table' => $table,
+                    'uid' => $uid,
+                    'class' => __CLASS__
+                ]
+            );
+
+            return $content;
         }
 
         $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
