@@ -106,7 +106,6 @@ class ContentEditableWrapperService
                 ]
             );
 
-            //throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163287);
             return $content;
         }
 
