@@ -61,7 +61,7 @@ define(
             },
         };
 
-        var _configuration;
+        var conf;
         var translationLabels = $.extend({}, fallbackTranslation);
         var namespaceMapping = $.extend({}, defaultNamespaceMapping);
 
@@ -72,6 +72,25 @@ define(
 
         var translators = {};
 
+        function configure () {
+            if (conf.translationLabels) {
+                $.extend(
+                    translationLabels,
+                    conf.translationLabels
+                );
+                translatorFactory.setTranslationLabels(
+                    translationLabels
+                );
+            }
+            if (conf.namespaceMapping) {
+                $.extend(
+                    namespaceMapping,
+                    conf.namespaceMapping
+                );
+                translatorFactory.setNamespaceMappings(namespaceMapping);
+            }
+        }
+
         return {
             /**
              * Configure the translator only once.
@@ -80,29 +99,13 @@ define(
              */
             init: function (configuration) {
                 if (!_configuration) {
-                    _configuration = configuration;
-                    if (configuration.translationLabels) {
-                        translationLabels = $.extend(
-                            {},
-                            translationLabels,
-                            configuration.translationLabels
-                        );
-                        translatorFactory.setTranslationLabels(
-                            translationLabels
-                        );
-                    }
-                    if (configuration.namespaceMapping) {
-                        namespaceMapping = $.extend(
-                            {},
-                            namespaceMapping,
-                            configuration.namespaceMapping
-                        );
-                        translatorFactory.setNamespaceMapping(namespaceMapping);
-                    }
+                    conf = configuration;
+                    configure();
                 }
             },
             getTranslator: function (namespace) {
-                var namespaceKey = namespace ? namespace.toLowerCase() : 'GLOBAL';
+                var namespaceKey =
+                    namespace ? namespace.toLowerCase() : 'GLOBAL';
 
                 if (!translators[namespaceKey]) {
                     translators[namespaceKey] =

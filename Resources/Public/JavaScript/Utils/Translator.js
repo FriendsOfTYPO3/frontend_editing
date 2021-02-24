@@ -18,13 +18,13 @@
 define(['jquery'], function createTranslatorFactory ($) {
     'use strict';
 
-    return function TranslatorFactory (translationLabels, namespaceMapping) {
-        var _translationLabels = {
+    return function TranslatorFactory (labels, mappings) {
+        var translationLabels = {
             'error.type.key_invalid': 'Invalid translation key: \'{0}\'',
             'translator.error.namespace_not_found':
                 'Invalid namespace key: \'{0}\'',
         };
-        var _namespaceMapping = {
+        var namespaceMappings = {
             translator: {
                 translationKeyInvalid:
                     'error.type.key_invalid',
@@ -33,43 +33,43 @@ define(['jquery'], function createTranslatorFactory ($) {
             },
         };
 
-        _prepareTranslationLabels(translationLabels);
-        _setNamespaceMapping(namespaceMapping);
+        setTranslationLabels(labels);
+        setNamespaceMappings(mappings);
 
-        function _prepareTranslationLabels (newTranslationLabels) {
-            _translationLabels = $.extend(
-                _translationLabels,
+        function setTranslationLabels (newTranslationLabels) {
+            $.extend(
+                translationLabels,
                 newTranslationLabels
             );
         }
 
-        function _setNamespaceMapping (newNamespaceMapping) {
-            _namespaceMapping = $.extend(
-                _namespaceMapping,
-                newNamespaceMapping
+        function setNamespaceMappings (newNamespaceMappings) {
+            $.extend(
+                namespaceMappings,
+                newNamespaceMappings
             );
         }
 
-        function _getNamespaceMapping (namespace) {
+        function getNamespaceMapping (namespace) {
             if (!namespace) {
-                var keys = Object.keys(_translationLabels);
+                var keys = Object.keys(translationLabels);
                 var retVal = {};
                 for (var i = 0; i < keys.length; i++) {
                     retVal[keys[i]] = keys[i];
                 }
                 return retVal;
             }
-            if (_namespaceMapping[namespace]) {
-                return _namespaceMapping[namespace];
+            if (namespaceMappings[namespace]) {
+                return namespaceMappings[namespace];
             }
             throw new TypeError(_translate(
-                _namespaceMapping.translator.namespaceMappingNotFound,
+                namespaceMappings.translator.namespaceMappingNotFound,
                 namespace
             ));
         }
 
         function _translate (key) {
-            var s = _translationLabels[key];
+            var s = translationLabels[key];
             if (arguments.length > 1) {
                 for (var i = 0; i < arguments.length - 1; i++) {
                     var reg = new RegExp('\\{' + i + '\\}', 'gm');
@@ -81,11 +81,11 @@ define(['jquery'], function createTranslatorFactory ($) {
         }
 
         return {
-            setTranslationLabels: _prepareTranslationLabels,
-            setNamespaceMapping: _setNamespaceMapping,
+            setTranslationLabels: setTranslationLabels,
+            setNamespaceMappings: setNamespaceMappings,
             createTranslator: function (namespace) {
                 //used to get keys
-                var namespaceMapping = _getNamespaceMapping(namespace);
+                var namespaceMapping = getNamespaceMapping(namespace);
                 return {
                     /**
                      * Gets the namespace mapping object to override
@@ -116,7 +116,7 @@ define(['jquery'], function createTranslatorFactory ($) {
                         }
                         throw new TypeError(
                             _translate(
-                                _namespaceMapping.translator
+                                namespaceMappings.translator
                                     .translationKeyInvalid
                             )
                         );
