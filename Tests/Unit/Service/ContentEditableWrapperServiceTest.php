@@ -147,21 +147,18 @@ class ContentEditableWrapperServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function tryWrapContentAndExpectAnExceptionForMissingUid()
+    public function tryWrapContentWithMissingUidAndExceptGetUnwrappedContent()
     {
-        try {
-            $wrappedContent = $this->subject->wrapContent(
-                $this->fixtures->getTable(),
-                0,
-                $this->fixtures->getDataArr(),
-                $this->fixtures->getContent()
-            );
-        } catch (\Exception $exception) {
-            $this->assertEquals($exception->getMessage(), 'Property "uid" can not to be empty!');
-            return;
-        }
-        $this->fail('Expected Property "uid" missing Exception has not been raised.');
+        $wrappedContent = $this->subject->wrapContent(
+            $this->fixtures->getTable(),
+            0,
+            $this->fixtures->getDataArr(),
+            $this->fixtures->getContent()
+        );
+
+        $this->assertEquals($this->fixtures->getContent(), $wrappedContent);
     }
+
     /**
      * @test
      */

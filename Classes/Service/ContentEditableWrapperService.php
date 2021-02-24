@@ -26,6 +26,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -55,12 +57,18 @@ class ContentEditableWrapperService
     protected $uriBuilder;
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * ContentEditableWrapperService constructor
      */
     public function __construct()
     {
         $this->extensionManagerConfigurationService =
             GeneralUtility::makeInstance(ExtensionManagerConfigurationService::class);
+        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         $this->contentEditableWrapperTagName = self::DEFAULT_WRAPPER_TAG_NAME;
         $tagName = $this->extensionManagerConfigurationService->getSettings()['contentEditableWrapperTagName'];
         if ($tagName) {
@@ -89,7 +97,16 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
         }
         if (empty($uid)) {
-            throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163287);
+            $this->logger->error(
+                'Property "uid" can not to be empty!',
+                [
+                    'table' => $table,
+                    'field' => $field,
+                    'class' => __CLASS__
+                ]
+            );
+
+            return $content;
         }
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
@@ -135,7 +152,16 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163297);
         }
         if (empty($uid)) {
-            throw new \InvalidArgumentException('Property "uid" can not to be empty!', 1486163305);
+            $this->logger->error(
+                'Property "uid" can not to be empty!',
+                [
+                    'table' => $table,
+                    'uid' => $uid,
+                    'class' => __CLASS__
+                ]
+            );
+
+            return $content;
         }
 
         $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
