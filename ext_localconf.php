@@ -4,6 +4,8 @@ defined('TYPO3_MODE') or die();
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
 
+// Exclude the frontend editing from the cHash calculations
+$GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'frontend_editing';
 
 if (TYPO3_MODE === 'FE' &&
     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
