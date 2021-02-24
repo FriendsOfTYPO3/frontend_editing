@@ -6,7 +6,7 @@ import './Modal.css';
 
 export const Type = ['confirm', 'confirmNavigate', 'warning'];
 
-const ModalWrapper = ({message, onDismiss, type = 'confirm'}) => {
+const ModalWrapper = ({message, onDismiss, onError, type = 'confirm'}) => {
     let modal = null;
     let modalInstance = null;
 
@@ -29,6 +29,14 @@ const ModalWrapper = ({message, onDismiss, type = 'confirm'}) => {
         if (modal) {
             if (type === 'confirmNavigate') {
                 modalInstance = modal[type]( message, save, {yes: okay, no: cancel});
+            } else if (type === 'variable_not_defined') {
+                modalInstance = modal.builder.modal();
+            } else if (type === 'variable_not_function') {
+                modalInstance = modal.builder.modal('title', 'content')
+                    .onReady('str');
+            } else if (type === 'variable_not_integer') {
+                modalInstance = modal.builder.modal('title', 'content')
+                    .setSeverity('1');
             } else {
                 modalInstance = modal[type]( message, {yes: okay, no: cancel});
             }
@@ -37,8 +45,12 @@ const ModalWrapper = ({message, onDismiss, type = 'confirm'}) => {
 
     useEffect(() => {
         import('TYPO3/CMS/FrontendEditing/Modal').then(({default: Modal}) => {
-            modal = Modal;
-            show();
+            try {
+                modal = Modal;
+                show();
+            } catch (exception) {
+                onError(exception.toString());
+            }
         });
         return () => {
             if (modalInstance) {
@@ -63,7 +75,6 @@ const ModalWrapper = ({message, onDismiss, type = 'confirm'}) => {
 export default ModalWrapper;
 
 ModalWrapper.propTypes = {
-    title: PropTypes.string,
     message: PropTypes.string,
 };
 
