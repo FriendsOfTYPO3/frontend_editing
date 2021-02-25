@@ -64,7 +64,7 @@ class ContentObjectRendererHook
             return '';
         }
 
-        // Maybe the where clause needs parsed to stdwrap befor we get the colPos
+        // Maybe the where clause needs parsed to stdwrap before we get the colPos
         if (isset($conf['select.']['where.'])) {
             $conf['select.']['where'] = $pObject->stdWrapValue('where', $conf['select.']);
         }

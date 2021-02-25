@@ -28,6 +28,7 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -111,6 +112,10 @@ class ContentEditableWrapperService
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
+        if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
+            return $content;
+        }
+
         $placeholderText = $this->getPlaceholderText($table, $field);
 
         $content = sprintf(
@@ -161,6 +166,10 @@ class ContentEditableWrapperService
                 ]
             );
 
+            return $content;
+        }
+
+        if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
             return $content;
         }
 
@@ -224,6 +233,10 @@ class ContentEditableWrapperService
         }
         if ($uid < 0) {
             throw new \InvalidArgumentException('Property "uid" is not valid!', 1486163439);
+        }
+
+        if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
+            return $content;
         }
 
         $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
@@ -422,6 +435,7 @@ class ContentEditableWrapperService
      * @param array $defaultValues
      * @param bool $uidAsPid
      * @return string
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      */
     public function renderNewUrl(
         string $table,
@@ -553,5 +567,40 @@ class ContentEditableWrapperService
         }
 
         return $placeholderText;
+    }
+
+    /**
+     * Check if content element editing is disabled by TS config
+     *
+     * @param BackendUserAuthentication $user
+     * @param int $contentUid
+     * @return bool $notEditable
+     */
+    protected function isUserDisallowedEditingOfContentElement(BackendUserAuthentication $user, int $contentUid): bool
+    {
+        $notEditable = false;
+        if (!$user->isAdmin() &&
+            $user->getTSConfig()['frontend_editing.']['disallow_content_editing'] &&
+            GeneralUtility::inList($user->getTSConfig()['frontend_editing.']['disallow_content_editing'], $contentUid)
+        ) {
+            $notEditable = true;
+        }
+
+        return $notEditable;
+    }
+
+    /**
+     * Return BE user from global
+     *
+     * @return BackendUserAuthentication
+     */
+    protected function getBackendUser(): BackendUserAuthentication
+    {
+        $backendUser = $GLOBALS['BE_USER'];
+        if (!$backendUser) {
+            $backendUser = GeneralUtility::makeInstance(BackendUserAuthentication::class);
+        }
+
+        return $backendUser;
     }
 }
