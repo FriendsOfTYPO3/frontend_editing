@@ -422,6 +422,7 @@ class ContentEditableWrapperService
      * @param array $defaultValues
      * @param bool $uidAsPid
      * @return string
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      */
     public function renderNewUrl(
         string $table,
