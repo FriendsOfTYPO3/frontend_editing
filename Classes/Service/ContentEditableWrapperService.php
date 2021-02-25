@@ -579,8 +579,7 @@ class ContentEditableWrapperService
     protected function isUserDisallowedEditingOfContentElement(BackendUserAuthentication $user, int $contentUid): bool
     {
         $notEditable = false;
-        if (
-            !$user->isAdmin() &&
+        if (!$user->isAdmin() &&
             $user->getTSConfig()['frontend_editing.']['disallow_content_editing'] &&
             GeneralUtility::inList($user->getTSConfig()['frontend_editing.']['disallow_content_editing'], $contentUid)
         ) {
