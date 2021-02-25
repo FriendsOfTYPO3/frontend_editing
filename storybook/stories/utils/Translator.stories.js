@@ -58,3 +58,19 @@ Namespace.args = {
         'maybeOrMaybeNot',
     ]
 };
+
+export const Configure = ListTemplate.bind({});
+Configure.argTypes = Namespace.argTypes;
+Configure.args = {
+    ...Namespace.args,
+    namespace: 'modal',
+    translationLabels: {
+        'title.navigate': 'Navigate Titel override',
+        'button.save_navigate': 'Save and Navigate',
+    },
+    namespaceMapping: {
+        modal: {
+            saveLabel: 'button.save_navigate',
+        }
+    }
+};

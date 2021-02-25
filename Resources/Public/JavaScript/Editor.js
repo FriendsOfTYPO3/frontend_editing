@@ -15,9 +15,11 @@
  * Editor: used in iframe for DOM interaction
  */
 define([
-	'jquery'
+	'jquery',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 ], function (
-	$
+	$,
+    TranslatorLoader
 ) {
 	'use strict';
 

@@ -7,7 +7,7 @@
     border: 1px solid black;
 }
 
-.translator-table-wrapper > table > tr > th,
+.translator-table-wrapper > table > thead > tr > th,
 .translator-table-wrapper > table > tbody > tr > td {
     padding: 0.25rem;
     border-left: 1px solid black;
@@ -18,7 +18,7 @@
     background: lightgray;
 }
 
-.translator-table-wrapper > table > tr > th {
+.translator-table-wrapper > table > thead > tr > th {
     background: darkslategray;
     color: whitesmoke;
 }

@@ -34,32 +34,47 @@ export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '')
 };
 
 export const withNamespaceMapping = (EmbeddedElement) => {
-    return ({onError, namespace, ...rest}) => {
+    return ({onError, namespace, translationLabels, namespaceMapping, ...rest}) => {
         const [translators, setTranslators] = useState({});
 
         useEffect(() => {
             if (!translators[namespace]) {
                 import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader').then(({default: factory}) => {
-                    try {
+                    if (translationLabels || namespaceMapping) {
+                        factory.init({
+                            translationLabels,
+                            namespaceMapping
+                        });
+                    }
+
+                    function translate () {
                         let translator = factory.getTranslator(namespace);
                         setTranslators({
-                            ...namespaceMapping,
+                            ...translators,
                             [namespace]: translator
                         });
-                    } catch (translationError) {
-                        onError(translationError.toString());
+                    }
+
+                    if (onError) {
+                        try {
+                            translate();
+                        } catch (translationError) {
+                            onError(translationError.toString());
+                        }
+                    } else {
+                        translate();
                     }
                 });
             }
         });
 
-        let namespaceMapping = {};
+        let mapping = {};
         if (translators[namespace]) {
-            namespaceMapping = translators[namespace].getKeys();
+            mapping = translators[namespace].getKeys();
         }
 
         return (
-            <EmbeddedElement {...rest} namespace={namespace} namespaceMapping={namespaceMapping}>
+            <EmbeddedElement {...rest} onError={onError} namespace={namespace} namespaceMapping={mapping}>
             </EmbeddedElement>
         );
     };
@@ -88,11 +103,13 @@ export const ListTranslator = withNamespaceMapping(({namespace, namespaceMapping
         <div className="translator-table-wrapper">
             <h4>{namespace}</h4>
             <table>
-                <tr>
-                    <th>namespace key</th>
-                    <th>translation key</th>
-                    <th>translation</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>namespace key</th>
+                        <th>translation key</th>
+                        <th>translation</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {Object.entries(namespaceMapping)
                         .map( ([name, key]) => (

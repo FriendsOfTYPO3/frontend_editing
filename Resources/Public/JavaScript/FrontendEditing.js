@@ -32,7 +32,7 @@ define([
     };
 
     var t = TranslatorLoader.getTranslator('frontendEditing');
-    translateKeys = $.extend(translateKeys, translator.getKeys());
+    translateKeys = $.extend(translateKeys, t.getKeys());
 
 
   // Hold event listeners and the callbacks

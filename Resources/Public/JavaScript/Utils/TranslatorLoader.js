@@ -107,6 +107,7 @@ define(
             }
             if (conf.namespaceMapping) {
                 $.extend(
+                    true,
                     namespaceMapping,
                     conf.namespaceMapping
                 );
@@ -121,7 +122,7 @@ define(
              * @param {object} configuration object
              */
             init: function (configuration) {
-                if (!_configuration) {
+                if (!conf) {
                     conf = configuration;
                     configure();
                 }
