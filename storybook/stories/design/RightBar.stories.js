@@ -4,13 +4,14 @@ import loadFragment from './loadFragments';
 let fragments;
 
 try {
-    fragments = loadFragment(require.context('./RightBar', true, /\.html$/), './RightBar.html');
+    fragments = loadFragment(require.context('./RightBar', true, /\.(html|css)$/), './RightBar.html');
 } catch (typeError) {
     //non webpack environment
     const path = './RightBar/RightBar.html';
     fragments = {
         cache: {[path]: require(path)},
-        defaultKey: path
+        defaultKey: path,
+        resources: {},
     };
 }
 
@@ -19,6 +20,7 @@ const {
     defaultKey: defaultLeftBar
 } = fragments;
 
+const cssFileExtension = '.html';
 const Template = ({template, ...args}) => {
     let html = RightBar[template];
     if (!html) {
@@ -26,6 +28,16 @@ const Template = ({template, ...args}) => {
         if (!html) {
             html = Object.values(RightBar)[0];
         }
+    }
+    if (Array.isArray(fragments.resources[template])) {
+        fragments.resources[template].forEach(key => {
+            if (key.slice(-cssFileExtension.length) === cssFileExtension) {
+                (async () => {
+                    key = key.slice('./'.length, -cssFileExtension.length);
+                    await import('./RightBar/' + key + '.css');
+                })();
+            }
+        });
     }
     return (
         <div dangerouslySetInnerHTML={{__html: html}}/>

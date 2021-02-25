@@ -20,3 +20,13 @@ BE access can be disabled by setting TSconfig for user or entire BE group. This 
     # Disallow BE access
     frontend_editing.disallow_backend_access = 1
 
+Disallow editing for content elements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Possibility to disallow a user or a user group editing to a specific set of content elements.
+A comma separated list of content id´s are provided, this setting is ignored for admin users.
+
+.. code-block:: typoscript
+
+    # Disallow editing for content elements
+    frontend_editing.disallow_content_editing = 29,30
