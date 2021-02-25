@@ -23,8 +23,15 @@ define(
         /*eslint-disable max-len*/
         // because of resource declaration
         var fallbackTranslation = {
+            'notifications.save-title': 'Content saved',
+            'notifications.save-went-wrong': 'Something went wrong',
+            'notifications.no-changes-title': 'No changes made',
+            'notifications.no-changes-description': 'There are currently no changes made to the content on the page!',
+            'notifications.remove-all-changes': 'Are you sure you want to remove all unsaved changes?',
             'notifications.unsaved-changes': 'You have some unsaved changes. They will disappear if you navigate away!',
             'notifications.delete-content-element': 'Are you sure you want to delete the content element?',
+            'notifications.change_site_root': 'You are going to switch to another site. Are you sure ?',
+            'notifications.save-pages-title': 'Page saved',
             'notifications.request.configuration.fail': 'Could not fetch editor configurations due to a request error. ({0}, "{1}")',
             'title.navigate': 'Navigate',
             'button.discard_navigate': 'Discard and Navigate',
@@ -64,6 +71,17 @@ define(
                     'notifications.delete-content-element',
                 informRequestFailed: 'notifications.request.configuration.fail'
             },
+            gui: {
+                updatedContentTitle: 'notifications.save-title',
+                updatedPageTitle: 'notifications.save-pages-title',
+                updateRequestErrorTitle: 'notifications.save-went-wrong',
+                saveWithoutChange: 'notifications.no-changes-description',
+                saveWithoutChangeTitle: 'notifications.no-changes-title',
+                confirmDiscardChanges: 'notifications.remove-all-changes',
+                confirmChangeSiteRoot: 'notifications.change_site_root',
+                confirmChangeSiteRootWithChange:
+                    'notifications.unsaved-changes',
+            }
         };
 
         var conf;

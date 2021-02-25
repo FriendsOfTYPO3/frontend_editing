@@ -20,18 +20,18 @@ module.exports = {
         // "right-bar.page-edit": "Edit page properties",
         // "right-bar.page-new": "Create new Page",
 
-        // 'notifications.save-title':
-        //     'Content saved',
+        'notifications.save-title':
+            'Content saved',
         // 'notifications.save-description':
         //     'Saved the content with identifier:',
-        // 'notifications.save-went-wrong':
-        //     'Something went wrong',
-        // 'notifications.no-changes-title':
-        //     'No changes made',
-        // 'notifications.no-changes-description':
-        //     'There are currently no changes made to the content on the page!',
-        // 'notifications.remove-all-changes':
-        //     'Are you sure you want to remove all unsaved changes?',
+        'notifications.save-went-wrong':
+            'Something went wrong',
+        'notifications.no-changes-title':
+            'No changes made',
+        'notifications.no-changes-description':
+            'There are currently no changes made to the content on the page!',
+        'notifications.remove-all-changes':
+            'Are you sure you want to remove all unsaved changes?',
         'notifications.unsaved-changes':
             'You have some unsaved changes. They will disappear if you navigate away!',
         'notifications.delete-content-element':
@@ -40,10 +40,10 @@ module.exports = {
         //     'You would have the option to add an element now, if this feature was implemented.',
         // 'notifications.content-locked':
         //     'The content is currently locked, do you still want to save?',
-        // 'notifications.change_site_root':
-        //     'You are going to switch to another site. Are you sure ?',
-        // 'notifications.save-pages-title':
-        //     'Page saved',
+        'notifications.change_site_root':
+            'You are going to switch to another site. Are you sure ?',
+        'notifications.save-pages-title':
+            'Page saved',
         // 'notifications.update.content.success':
         //     'Content updated (%s)',
         // 'notifications.update.pages.success':
@@ -113,5 +113,16 @@ module.exports = {
             actionEditDelete: 'notifications.delete-content-element',
             initLoadFailed: 'notifications.delete-content-element',
         },
-    }
+        gui: {
+            updatedContentTitle: 'notifications.save-title',
+            updatedPageTitle: 'notifications.save-pages-title',
+            updateRequestErrorTitle: 'notifications.save-went-wrong',
+            saveWithoutChange: 'notifications.no-changes-description',
+            saveWithoutChangeTitle: 'notifications.no-changes-title',
+            confirmDiscardChanges: 'notifications.remove-all-changes',
+            confirmChangeSiteRoot: 'notifications.change_site_root',
+            confirmChangeSiteRootWithChange:
+                'notifications.unsaved-changes',
+        }
+    },
 };
