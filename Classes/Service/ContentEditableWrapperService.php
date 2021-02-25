@@ -596,6 +596,11 @@ class ContentEditableWrapperService
      */
     protected function getBackendUser(): BackendUserAuthentication
     {
-        return $GLOBALS['BE_USER'];
+        $backendUser = $GLOBALS['BE_USER'];
+        if (!$backendUser) {
+            $backendUser = GeneralUtility::makeInstance(BackendUserAuthentication::class);
+        }
+
+        return $backendUser;
     }
 }
