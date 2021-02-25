@@ -25,6 +25,7 @@ define(
         var fallbackTranslation = {
             'notifications.unsaved-changes': 'You have some unsaved changes. They will disappear if you navigate away!',
             'notifications.delete-content-element': 'Are you sure you want to delete the content element?',
+            'notifications.request.configuration.fail': 'Could not fetch editor configurations due to a request error. ({0}, "{1}")',
             'title.navigate': 'Navigate',
             'button.discard_navigate': 'Discard and Navigate',
             'button.save': 'Save All',
@@ -58,9 +59,10 @@ define(
                 confirmNavigateWithChange: 'notifications.unsaved-changes',
             },
             editor: {
-                actionUnsavedChanges: 'notifications.unsaved-changes',
-                actionEditDelete: 'notifications.delete-content-element',
-                initLoadFailed: 'notifications.delete-content-element',
+                confirmOpenModalWithChange: 'notifications.unsaved-changes',
+                confirmDeleteContentElement:
+                    'notifications.delete-content-element',
+                informRequestFailed: 'notifications.request.configuration.fail'
             },
         };
 

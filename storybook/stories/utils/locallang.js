@@ -56,8 +56,8 @@ module.exports = {
         //     'The content element was created',
         // 'notifications.new.content.fail':
         //     'The content element could not be created',
-        // 'notifications.request.configuration.fail':
-        //     'Could not fetch editor configurations due to a request error. ({0}, "{1}")',
+        'notifications.request.configuration.fail':
+            'Could not fetch editor configurations due to a request error. ({0}, "{1}")',
         // "placeholder.label-wrap": "Enter %s here",
         // "placeholder.default-label": "Enter text here",
         // "right-bar.element-title": "Drag and drop on page to create a new '%s' content element.",

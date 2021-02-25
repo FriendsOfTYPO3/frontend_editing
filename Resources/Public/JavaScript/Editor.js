@@ -21,6 +21,19 @@ define([
 ) {
 	'use strict';
 
+    var translateKeys = {
+        confirmOpenModalWithChange: 'notifications.unsaved-changes',
+        confirmDeleteContentElement: 'notifications.delete-content-element',
+        informRequestFailed: 'notifications.request.configuration.fail',
+    };
+
+    var translator = TranslatorLoader.getTranslator('editor');
+    translateKeys = $.extend(translateKeys, translator.getKeys());
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
+    }
+
 	var defaultEditorConfig = {
 		skin: 'moono',
 		entities_latin: false,
@@ -87,7 +100,7 @@ define([
 				// Open/edit|new action
 				that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
 					if (!storage.isEmpty()) {
-						F.confirm(F.translate('notifications.unsaved-changes'), {
+						F.confirm(translate(translateKeys.confirmOpenModalWithChange), {
 							yes: function () {
 								openModal($(this));
 							},
@@ -144,7 +157,7 @@ define([
 
 				// Delete action
 				that.find('.icon-actions-edit-delete').on('click', function () {
-					F.confirm(F.translate('notifications.delete-content-element'), {
+					F.confirm(translate(translateKeys.confirmDeleteContentElement), {
 						yes: function () {
 							F.delete(that.data('uid'), that.data('table'));
 						},
@@ -300,7 +313,7 @@ define([
 				F.trigger(
 					F.REQUEST_ERROR,
 					{
-						message: F.translate('notifications.request.configuration.fail',
+						message: translate(translateKeys.informRequestFailed,
 							response.status,
 							response.statusText
 						)
