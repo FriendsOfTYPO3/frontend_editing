@@ -105,6 +105,9 @@ module.exports = {
             variableNotFunction: 'error.type.not_function',
             variableNotInteger: 'error.type.not_integer',
         },
+        frontendEditing: {
+            confirmNavigateWithChange: 'notifications.unsaved-changes',
+        },
         editor: {
             actionUnsavedChanges: 'notifications.unsaved-changes',
             actionEditDelete: 'notifications.delete-content-element',
