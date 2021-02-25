@@ -1,8 +1,6 @@
 import React from 'react';
 import loadFragment from './loadFragments';
 
-// import './RightBar/RightBarCheckbox.css';
-
 let fragments;
 
 try {
