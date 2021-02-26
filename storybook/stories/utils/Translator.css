@@ -1,0 +1,24 @@
+.translator-div-wrapper,
+.translator-table-wrapper {
+    font-size: 18px;
+}
+
+.translator-table-wrapper > table {
+    border: 1px solid black;
+}
+
+.translator-table-wrapper > table > thead > tr > th,
+.translator-table-wrapper > table > tbody > tr > td {
+    padding: 0.25rem;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.translator-table-wrapper > table > tbody > tr:nth-child(2n + 2) {
+    background: lightgray;
+}
+
+.translator-table-wrapper > table > thead > tr > th {
+    background: darkslategray;
+    color: whitesmoke;
+}

@@ -16,10 +16,12 @@
  */
 define([
     'jquery',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
     'TYPO3/CMS/Backend/Modal',
     'TYPO3/CMS/Backend/Severity'
 ], function ModalFactory (
     $,
+    TranslatorLoader,
     Modal,
     Severity
 ) {
@@ -30,20 +32,16 @@ define([
         saveLabel: 'button.save',
         cancelLabel: 'button.cancel',
         okayLabel: 'button.okay',
-    };
-    var translateValues = {
-        'title.navigate': 'Navigate',
-        'button.discard_navigate': 'Discard and Navigate',
-        'button.save': 'Save All',
-        'button.cancel': 'Cancel',
-        'button.okay': 'OK',
+        variableNotDefined: 'error.type.undefined',
+        variableNotFunction: 'error.type.not_function',
+        variableNotInteger: 'error.type.not_integer',
     };
 
-    function translate (key) {
-        if (translateValues[key]) {
-            return translateValues[key];
-        }
-        throw new TypeError("'" + key + "' does not exist in translate table");
+    var translator = TranslatorLoader.getTranslator('modal');
+    translateKeys = $.extend(translateKeys, translator.getKeys());
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
     }
 
     var builder = {
@@ -251,20 +249,25 @@ define([
         if (!constraints) {
             return;
         }
-        // TODO: make errors translation ready
         if ((constraints & builder.constraints.required) !== 0) {
             if (!variable) {
-                throw new TypeError("'" + name + "' is undefined");
+                throw new TypeError(
+                    translate(translateKeys.variableNotDefined, name));
             }
         }
         if ((constraints & builder.constraints.func) !== 0) {
             if (variable && typeof variable !== 'function') {
-                throw new TypeError("'" + name + "' is not a function");
+                throw new TypeError(
+                    translate(translateKeys.variableNotFunction, name));
             }
         }
         if ((constraints & builder.constraints.int) !== 0) {
             if (variable && !Number.isInteger(variable)) {
-                throw new TypeError("'" + name + "' is not a integer");
+                //maybe to picky since it is only used as decision for design
+                //razz (flood) sys-admin with warning would be better
+                //TODO: log notice "errors" on server
+                throw new TypeError(
+                    translate(translateKeys.variableNotInteger, name));
             }
         }
     }
