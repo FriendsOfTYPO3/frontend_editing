@@ -1,4 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
+import {compareObjects} from "./utils";
 
 export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '') => {
     return ({onError, parameters = [], ...rest}) => {
@@ -32,51 +33,118 @@ export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '')
         );
     };
 };
-
 export const withNamespaceMapping = (EmbeddedElement) => {
-    return ({onError, namespace, translationLabels, namespaceMapping, ...rest}) => {
-        const [translators, setTranslators] = useState({});
+    return class NamespaceMappingWrapper extends React.Component {
+        constructor (props) {
+            super(props);
+            this.state = {
+                contexts: {},
+                mapping: {}
+            };
 
-        useEffect(() => {
-            if (!translators[namespace]) {
-                import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader').then(({default: factory}) => {
-                    if (translationLabels || namespaceMapping) {
-                        factory.init({
-                            translationLabels,
-                            namespaceMapping
-                        });
-                    }
-
-                    function translate () {
-                        let translator = factory.getTranslator(namespace);
-                        setTranslators({
-                            ...translators,
-                            [namespace]: translator
-                        });
-                    }
-
-                    if (onError) {
-                        try {
-                            translate();
-                        } catch (translationError) {
-                            onError(translationError.toString());
-                        }
-                    } else {
-                        translate();
-                    }
-                });
-            }
-        });
-
-        let mapping = {};
-        if (translators[namespace]) {
-            mapping = translators[namespace].getKeys();
+            this.initFactory = this.initFactory.bind(this);
+            this.useTranslator = this.useTranslator.bind(this);
+            this.setContexts = this.setContexts.bind(this);
         }
 
-        return (
-            <EmbeddedElement {...rest} onError={onError} namespace={namespace} namespaceMapping={mapping}>
-            </EmbeddedElement>
-        );
+        setContexts (namespace, context) {
+            this.setState({
+                contexts: {
+                    ...this.state.contexts,
+                    [namespace]: context
+                }
+            });
+        }
+
+        initFactory ({default: factory}) {
+            if (!this.mounted) {
+                // component seems to be unmounted
+                return;
+            }
+
+            this.factory = factory;
+
+            this.loadTranslator();
+        }
+
+        loadTranslator () {
+            const {translationLabels, namespaceMapping, namespace, onError} = this.props;
+            const configuration = {
+                translationLabels,
+                namespaceMapping
+            };
+
+            this.factory.configure(configuration, 'override');
+
+            if (!this.state.contexts[namespace]) {
+                if (onError) {
+                    try {
+                        this.useTranslator(configuration);
+                    } catch (translationError) {
+                        onError(translationError.toString());
+                    }
+                } else {
+                    this.useTranslator(configuration);
+                }
+            }
+        }
+
+        useTranslator (configuration) {
+            const {namespace} = this.props;
+            this.setContexts(namespace,
+                this.factory.useTranslator(namespace, (translator, initial) => {
+                    if (!initial) {
+                        if (this.props.namespace === namespace) {
+                            if (!compareObjects(this.state.mapping, translator.getKeys())) {
+                                this.setState({
+                                    mapping: translator.getKeys()
+                                });
+                            }
+                        }
+                    }
+                })
+            );
+        }
+
+        componentDidMount () {
+            this.mounted = true;
+            import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader')
+                .then(this.initFactory);
+        }
+
+        componentDidUpdate () {
+            if (this.factory) {
+                this.loadTranslator();
+            }
+        }
+
+        componentWillUnmount () {
+            this.mounted = false;
+            Object.keys(this.state.contexts)
+                .forEach(namespace => {
+                    this.state.contexts[namespace].unregister();
+                });
+            this.setState({
+                contexts: null
+            });
+        }
+
+        render () {
+            const {
+                onError, namespace,
+                translationLabels, namespaceMapping,
+                ...rest
+            } = this.props;
+
+            return (
+                <EmbeddedElement
+                    {...rest}
+                    onError={onError}
+                    namespace={namespace}
+                    namespaceMapping={this.state.mapping}>
+                </EmbeddedElement>
+            );
+        }
     };
 };
 
@@ -98,7 +166,7 @@ export const DivTranslator = ({children, ...rest}) => {
     );
 };
 
-export const ListTranslator = withNamespaceMapping(({namespace, namespaceMapping, ...rest}) => {
+export const ListTranslator = withNamespaceMapping(({namespace, namespaceMapping, keys, ...rest}) => {
     return (
         <div className="translator-table-wrapper">
             <h4>{namespace}</h4>

@@ -46,8 +46,9 @@ define([
         confirmChangeSiteRootWithChange: 'notifications.unsaved-changes',
     };
 
-    var translator = TranslatorLoader.getTranslator('gui');
-    translateKeys = $.extend(translateKeys, translator.getKeys());
+    var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
+        translateKeys = $.extend(translateKeys, t.getKeys());
+    }).translator;
 
     function translate () {
         return translator.translate.apply(translator, arguments);

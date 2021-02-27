@@ -51,7 +51,6 @@ Namespace.argTypes = {
     },
 };
 Namespace.args = {
-    keys: Object.keys(translations.raw),
     namespace: 'All',
     parameters: [
         'titleOrMessageOrSomethingElse',
@@ -62,7 +61,7 @@ Namespace.args = {
 export const Configure = ListTemplate.bind({});
 Configure.argTypes = Namespace.argTypes;
 Configure.args = {
-    ...Namespace.args,
+    parameters: Namespace.args.parameters,
     namespace: 'modal',
     translationLabels: {
         'title.navigate': 'Navigate Titel override',

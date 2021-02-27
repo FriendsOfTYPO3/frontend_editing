@@ -31,8 +31,10 @@ define([
         confirmNavigateWithChange: 'notifications.unsaved-changes',
     };
 
-    var t = TranslatorLoader.getTranslator('frontendEditing');
-    translateKeys = $.extend(translateKeys, t.getKeys());
+    var t = TranslatorLoader
+        .useTranslator('frontendEditing', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
 
 
   // Hold event listeners and the callbacks
@@ -197,7 +199,7 @@ define([
     },
 
     setTranslationLabels: function (labels) {
-        TranslatorLoader.init({
+        TranslatorLoader.configure({
             translationLabels: labels
         });
     },

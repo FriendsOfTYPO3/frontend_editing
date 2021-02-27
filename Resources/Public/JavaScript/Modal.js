@@ -37,8 +37,10 @@ define([
         variableNotInteger: 'error.type.not_integer',
     };
 
-    var translator = TranslatorLoader.getTranslator('modal');
-    translateKeys = $.extend(translateKeys, translator.getKeys());
+    var translator = TranslatorLoader
+        .useTranslator('modal', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
 
     function translate () {
         return translator.translate.apply(translator, arguments);
