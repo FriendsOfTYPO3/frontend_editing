@@ -1,5 +1,4 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {compareObjects} from "./utils";
 
 export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '') => {
     return ({onError, parameters = [], ...rest}) => {
@@ -44,13 +43,14 @@ export const withNamespaceMapping = (EmbeddedElement) => {
     return class NamespaceMappingWrapper extends React.Component {
         constructor (props) {
             super(props);
+            this.contexts = {};
             this.state = {
-                contexts: {},
                 mapping: {}
             };
 
             this.initFactory = this.initFactory.bind(this);
             this.useTranslator = this.useTranslator.bind(this);
+            this.unmountContexts = this.unmountContexts.bind(this);
         }
 
         initFactory ({default: factory}) {
@@ -65,15 +65,17 @@ export const withNamespaceMapping = (EmbeddedElement) => {
         }
 
         loadTranslator () {
-            const {translationLabels, namespaceMapping, namespace, onError} = this.props;
+            const {translationLabels, namespaceMapping, namespace, onError, mergeStrategy} = this.props;
             const configuration = {
                 translationLabels,
                 namespaceMapping
             };
 
-            this.factory.configure(configuration, 'override');
+            this.factory.configure(configuration, mergeStrategy);
 
-            if (!this.state.contexts[namespace]) {
+            const context = this.contexts[namespace];
+            if (!context) {
+                this.currentNamespace = namespace;
                 if (onError) {
                     try {
                         this.useTranslator();
@@ -83,37 +85,39 @@ export const withNamespaceMapping = (EmbeddedElement) => {
                 } else {
                     this.useTranslator();
                 }
+            } else if (this.currentNamespace !== namespace) {
+                this.currentNamespace = namespace;
+                this.unmountContexts();
+                this.contexts[namespace] = context;
+                this.setState({
+                    mapping: context.translator.getKeys()
+                });
             }
         }
 
         useTranslator () {
             if (this.mounted) {
                 const {namespace} = this.props;
-                function configureCallback (translator, initial) {
-                    if (!initial && this.mounted) {
+                function configureCallback (translator) {
+                    if (this.mounted) {
                         if (this.props.namespace === namespace) {
-                            if (!compareObjects(this.state.mapping, translator.getKeys())) {
-                                this.setState({
-                                    mapping: translator.getKeys()
-                                });
-                            } else if (!compareObjects(this.state.translationLabels, this.props.translationLabels)) {
-                                this.setState({
-                                    translationLabels: this.props.translationLabels
-                                });
-                            }
+                            this.setState({
+                                mapping: translator.getKeys()
+                            });
                         }
                     }
                 }
                 configureCallback = configureCallback.bind(this);
-                const context = this.factory.useTranslator(namespace, configureCallback);
-                this.setState({
-                    contexts: {
-                        ...this.state.contexts,
-                        [namespace]: context
-                    },
-                    mapping: context.translator.getKeys()
-                });
+                this.unmountContexts();
+                this.contexts[namespace] = this.factory.useTranslator(namespace, configureCallback);
             }
+        }
+
+        unmountContexts () {
+            Object.keys(this.contexts)
+                .forEach(namespace => {
+                    this.contexts[namespace].unregister();
+                });
         }
 
         componentDidMount () {
@@ -130,19 +134,14 @@ export const withNamespaceMapping = (EmbeddedElement) => {
 
         componentWillUnmount () {
             this.mounted = false;
-            Object.keys(this.state.contexts)
-                .forEach(namespace => {
-                    this.state.contexts[namespace].unregister();
-                });
-            this.setState({
-                contexts: null
-            });
+            this.unmountContexts();
+            this.contexts = null;
         }
 
         render () {
             const {
                 onError, namespace,
-                translationLabels, namespaceMapping,
+                translationLabels, namespaceMapping, mergeStrategy,
                 ...rest
             } = this.props;
 

@@ -250,10 +250,15 @@ define(
                     if ((mergeStrategy & this.mergeStrategy.merge) !== 0) {
                         var mergeDeep =
                             mergeStrategy === this.mergeStrategy.mergeDeep;
-                        newConfiguration = $.extend(mergeDeep,
+                        newConfiguration.translationLabels = $.extend(mergeDeep,
                             {},
-                            conf,
-                            newConfiguration
+                            conf.translationLabels,
+                            newConfiguration.translationLabels
+                        );
+                        newConfiguration.namespaceMapping = $.extend(mergeDeep,
+                            {},
+                            conf.namespaceMapping,
+                            newConfiguration.namespaceMapping
                         );
                     }
                     if (!compareObjects(conf, newConfiguration)) {

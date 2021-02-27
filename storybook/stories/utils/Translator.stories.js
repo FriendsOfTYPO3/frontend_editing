@@ -60,6 +60,12 @@ Namespace.args = {
 
 export const Configure = ListTemplate.bind({});
 Configure.argTypes = Namespace.argTypes;
+Configure.argTypes.mergeStrategy = {
+    control: {
+        type: 'inline-radio',
+        options: ['none', 'merge', 'mergeDeep', 'override'],
+    }
+};
 Configure.args = {
     parameters: Namespace.args.parameters,
     namespace: 'modal',
@@ -71,5 +77,6 @@ Configure.args = {
         modal: {
             saveLabel: 'button.save_navigate',
         }
-    }
+    },
+    mergeStrategy: 'none',
 };
