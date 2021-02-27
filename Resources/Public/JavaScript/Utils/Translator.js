@@ -43,6 +43,7 @@ define(['jquery'], function createTranslatorFactory ($) {
 
         function setTranslationLabels (newTranslationLabels) {
             translationLabels = $.extend(
+                {},
                 defaulSettigns.translationLabels,
                 newTranslationLabels
             );
@@ -51,6 +52,7 @@ define(['jquery'], function createTranslatorFactory ($) {
         function setNamespaceMappings (newNamespaceMappings) {
             namespaceMappings = $.extend(
                 true,
+                {},
                 defaulSettigns.namespaceMappings,
                 newNamespaceMappings
             );

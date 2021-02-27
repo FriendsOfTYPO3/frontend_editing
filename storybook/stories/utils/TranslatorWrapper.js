@@ -14,16 +14,23 @@ export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '')
         }
 
         useEffect(() => {
-            let translator = null;
+            let unregister = null;
 
             import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader').then(({default: factory}) => {
-                try {
-                    translator = factory.getTranslator();
-                    setTranslation(translator.translate(key, parameters));
-                } catch (translationError) {
-                    onError(translationError.toString());
-                }
+                unregister = factory.useTranslator(null, translator => {
+                    try {
+                        setTranslation(translator.translate(key, parameters));
+                    } catch (translationError) {
+                        setTranslation('');
+                        onError(translationError.toString());
+                    }
+                }).unregister;
             });
+            return () => {
+                if (unregister) {
+                    unregister();
+                }
+            };
         });
 
         return (
@@ -44,16 +51,6 @@ export const withNamespaceMapping = (EmbeddedElement) => {
 
             this.initFactory = this.initFactory.bind(this);
             this.useTranslator = this.useTranslator.bind(this);
-            this.setContexts = this.setContexts.bind(this);
-        }
-
-        setContexts (namespace, context) {
-            this.setState({
-                contexts: {
-                    ...this.state.contexts,
-                    [namespace]: context
-                }
-            });
         }
 
         initFactory ({default: factory}) {
@@ -79,31 +76,44 @@ export const withNamespaceMapping = (EmbeddedElement) => {
             if (!this.state.contexts[namespace]) {
                 if (onError) {
                     try {
-                        this.useTranslator(configuration);
+                        this.useTranslator();
                     } catch (translationError) {
                         onError(translationError.toString());
                     }
                 } else {
-                    this.useTranslator(configuration);
+                    this.useTranslator();
                 }
             }
         }
 
-        useTranslator (configuration) {
-            const {namespace} = this.props;
-            this.setContexts(namespace,
-                this.factory.useTranslator(namespace, (translator, initial) => {
-                    if (!initial) {
+        useTranslator () {
+            if (this.mounted) {
+                const {namespace} = this.props;
+                function configureCallback (translator, initial) {
+                    if (!initial && this.mounted) {
                         if (this.props.namespace === namespace) {
                             if (!compareObjects(this.state.mapping, translator.getKeys())) {
                                 this.setState({
                                     mapping: translator.getKeys()
                                 });
+                            } else if (!compareObjects(this.state.translationLabels, this.props.translationLabels)) {
+                                this.setState({
+                                    translationLabels: this.props.translationLabels
+                                });
                             }
                         }
                     }
-                })
-            );
+                }
+                configureCallback = configureCallback.bind(this);
+                const context = this.factory.useTranslator(namespace, configureCallback);
+                this.setState({
+                    contexts: {
+                        ...this.state.contexts,
+                        [namespace]: context
+                    },
+                    mapping: context.translator.getKeys()
+                });
+            }
         }
 
         componentDidMount () {
