@@ -78,19 +78,15 @@ define([
             }
 
             function handleBackdrop () {
-                var targetInModelContent = false;
-                currentModal.on('click', function backdropDismiss () {
-                    if (targetInModelContent) {
-                        targetInModelContent = false;
-                    } else {
-                        triggerEscapeEvent();
-                        currentModal.trigger('modal-dismiss');
-                    }
+                currentModal.on('click', function backdropDismiss (event) {
+                    event.stopPropagation();
+                    triggerEscapeEvent();
+                    currentModal.trigger('modal-dismiss');
                 });
                 currentModal
-                    .find('.modal-content')
+                    .find(Modal.identifiers.content)
                     .on('click', function preventClose (event) {
-                        targetInModelContent = true;
+                        event.stopPropagation();
                     });
             }
 
