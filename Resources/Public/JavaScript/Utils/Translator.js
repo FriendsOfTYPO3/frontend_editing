@@ -19,33 +19,41 @@ define(['jquery'], function createTranslatorFactory ($) {
     'use strict';
 
     return function TranslatorFactory (labels, mappings) {
-        var translationLabels = {
-            'error.type.key_invalid': 'Invalid translation key: \'{0}\'',
-            'translator.error.namespace_not_found':
-                'Invalid namespace key: \'{0}\'',
-        };
-        var namespaceMappings = {
-            translator: {
-                translationKeyInvalid:
-                    'error.type.key_invalid',
-                namespaceMappingNotFound:
-                    'translator.error.namespace_not_found',
+        var defaulSettigns = {
+            translationLabels: {
+                'error.type.key_invalid': 'Invalid translation key: \'{0}\'',
+                'translator.error.namespace_not_found':
+                    'Invalid namespace key: \'{0}\'',
+            },
+            namespaceMappings: {
+                translator: {
+                    translationKeyInvalid:
+                        'error.type.key_invalid',
+                    namespaceMappingNotFound:
+                        'translator.error.namespace_not_found',
+                },
             },
         };
+
+        var translationLabels = {};
+        var namespaceMappings = {};
 
         setTranslationLabels(labels);
         setNamespaceMappings(mappings);
 
         function setTranslationLabels (newTranslationLabels) {
-            $.extend(
-                translationLabels,
+            translationLabels = $.extend(
+                {},
+                defaulSettigns.translationLabels,
                 newTranslationLabels
             );
         }
 
         function setNamespaceMappings (newNamespaceMappings) {
-            $.extend(
-                namespaceMappings,
+            namespaceMappings = $.extend(
+                true,
+                {},
+                defaulSettigns.namespaceMappings,
                 newNamespaceMappings
             );
         }
@@ -85,14 +93,13 @@ define(['jquery'], function createTranslatorFactory ($) {
             setNamespaceMappings: setNamespaceMappings,
             createTranslator: function (namespace) {
                 //used to get keys
-                var namespaceMapping = getNamespaceMapping(namespace);
                 return {
                     /**
                      * Gets the namespace mapping object to override
                      * @returns {object} namespace to translation key mapping
                      */
                     getKeys: function () {
-                        return $.extend({}, namespaceMapping);
+                        return $.extend({}, getNamespaceMapping(namespace));
                     },
                     /**
                      * Get translation string by passed key argument and replace

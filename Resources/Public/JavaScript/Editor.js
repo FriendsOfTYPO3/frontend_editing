@@ -29,8 +29,10 @@ define([
         informRequestFailed: 'notifications.request.configuration.fail',
     };
 
-    var translator = TranslatorLoader.getTranslator('editor');
-    translateKeys = $.extend(translateKeys, translator.getKeys());
+    var translator = TranslatorLoader
+        .useTranslator('editor', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
 
     function translate () {
         return translator.translate.apply(translator, arguments);

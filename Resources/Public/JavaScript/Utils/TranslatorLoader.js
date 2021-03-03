@@ -93,50 +93,209 @@ define(
             namespaceMapping
         );
 
-        var translators = {};
+        var namespacesContext = {};
 
-        function configure () {
-            if (conf.translationLabels) {
-                $.extend(
-                    translationLabels,
-                    conf.translationLabels
-                );
-                translatorFactory.setTranslationLabels(
-                    translationLabels
+        /**
+         * Compares two objects, arrays or strings and compare the value
+         * recursively.
+         * @param {*} obj1 accepts object, array and string
+         * @param {*} obj2 accepts object, array and string
+         * @returns {boolean} true if they are truly equal, otherwise false
+         */
+        function compareObjects (obj1, obj2) {
+            var type1 = typeof obj1;
+            var type2 = typeof obj2;
+            if (type1 !== type2) {
+                return false;
+            }
+
+            if (Array.isArray(obj1)) {
+                if (obj1.length !== obj2.length) {
+                    return false;
+                }
+                for (var x = 0; x < obj1.length; x++) {
+                    var found = false;
+                    for (var y = 0; y < obj2.length; y++) {
+                        if (compareObjects(obj1[x], obj2[y])) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return false;
+                    }
+                }
+            } else if (type1 === 'object') {
+                var keys1 = Object.keys(obj1);
+                var keys2 = Object.keys(obj2);
+
+                if (keys1.length !== keys2.length) {
+                    return false;
+                }
+                for (var i = 0; i < keys1.length; i++) {
+                    if (!compareObjects(obj1[keys1[i]], obj2[keys1[i]])) {
+                        return false;
+                    }
+                }
+            } else {
+                return obj1 === obj2;
+            }
+            return true;
+        }
+
+        /**
+         * reset configurations and forward them to the factory
+         * @param {{translationLabels, namespaceMapping}} newConfiguration
+         */
+        function configure (newConfiguration) {
+            conf = newConfiguration;
+
+            translationLabels = $.extend(
+                {},
+                fallbackTranslation,
+                (conf && conf.translationLabels) ? conf.translationLabels : {}
+            );
+            translatorFactory.setTranslationLabels(translationLabels);
+
+            namespaceMapping = $.extend(
+                true,
+                {},
+                defaultNamespaceMapping,
+                (conf && conf.namespaceMapping) ? conf.namespaceMapping : {}
+            );
+            translatorFactory.setNamespaceMappings(namespaceMapping);
+        }
+
+        function triggerConfigureCallbacks () {
+            var namespaces = Object.keys(namespacesContext);
+            for (var x = 0; x < namespaces.length; x++) {
+                var namespace = namespaces[x];
+                var context = namespacesContext[namespace];
+                for (var y = 0; y < context.configureCallbacks.length; y++) {
+                    triggerConfigureCallback(
+                        context.configureCallbacks[y],
+                        context.translator
+                    );
+                }
+            }
+        }
+
+        function getNamespacesContext (namespace) {
+            var namespaceKey = namespace ? namespace : 'GLOBAL';
+            if (!namespacesContext[namespaceKey]) {
+                namespacesContext[namespaceKey] = {
+                    configureCallbacks: [],
+                    translator:
+                        translatorFactory.createTranslator(namespace),
+                };
+
+            }
+            return namespacesContext[namespaceKey];
+        }
+
+        function registerConfigureCallback (context, configureCallback) {
+            var index = -1;
+
+            if (configureCallback) {
+                index = context.length;
+                context.configureCallbacks.push(configureCallback);
+                triggerConfigureCallback(
+                    configureCallback,
+                    context.translator,
+                    true
                 );
             }
-            if (conf.namespaceMapping) {
-                $.extend(
-                    true,
-                    namespaceMapping,
-                    conf.namespaceMapping
-                );
-                translatorFactory.setNamespaceMappings(namespaceMapping);
+
+            return function unregister () {
+                if (index >= 0 && index < context.length) {
+                    context.configureCallbacks[index] = null;
+                }
+            };
+        }
+
+        function triggerConfigureCallback (
+            configureCallback,
+            translator,
+            initial
+        ) {
+            if (typeof configureCallback === 'function') {
+                configureCallback(translator, initial === true);
             }
         }
 
         return {
-            /**
-             * Configure the translator only once.
-             * Sets language labels and namespace mapping.
-             * @param {object} configuration object
-             */
-            init: function (configuration) {
-                if (!conf) {
-                    conf = configuration;
-                    configure();
-                }
+            mergeStrategy: {
+                none: 1,
+                merge: 2,
+                mergeDeep: 6, // merge (2) + mergeDeep (4)
+                override: 8,
             },
-            getTranslator: function (namespace) {
-                var namespaceKey =
-                    namespace ? namespace : 'GLOBAL';
-
-                if (!translators[namespaceKey]) {
-                    translators[namespaceKey] =
-                        translatorFactory.createTranslator(namespace);
+            /**
+             * Configures languageLabels and namespaceMapping.
+             * If already defined it needs to be forced by a merge strategy
+             * to define the new configuration. Or else it skips configuration.
+             * @param {{translationLabels, namespaceMapping}} newConfiguration
+             * @param {string?} mergeStrategy can be 'override' or 'merge'
+             * @returns {boolean} true if successfully configured,
+             * otherwise false
+             */
+            configure: function (newConfiguration, mergeStrategy) {
+                mergeStrategy = this.mergeStrategy[mergeStrategy];
+                if (!mergeStrategy) {
+                    mergeStrategy = this.mergeStrategy.none;
                 }
 
-                return translators[namespaceKey];
+                //skip if config already defined and no merge strategy was given
+                if (!conf || mergeStrategy > this.mergeStrategy.none) {
+                    if ((mergeStrategy & this.mergeStrategy.merge) !== 0) {
+                        var mergeDeep =
+                            mergeStrategy === this.mergeStrategy.mergeDeep;
+                        newConfiguration.translationLabels = $.extend(mergeDeep,
+                            {},
+                            conf.translationLabels,
+                            newConfiguration.translationLabels
+                        );
+                        newConfiguration.namespaceMapping = $.extend(mergeDeep,
+                            {},
+                            conf.namespaceMapping,
+                            newConfiguration.namespaceMapping
+                        );
+                    }
+                    if (!compareObjects(conf, newConfiguration)) {
+                        //configuration changed
+                        configure(newConfiguration);
+                        triggerConfigureCallbacks();
+                    }
+                    return true;
+                }
+
+                return false;
+            },
+            /**
+             * Register an configure callback to get informed about
+             * configuration changes like key mapping or translation label
+             * change.
+             * @param {string} namespace if no namespace is defined the global
+             * translator get used
+             * @param {function?} configureCallback
+             * @returns {{translator, unregister}} translator context
+             */
+            useTranslator: function (namespace, configureCallback) {
+                var context = getNamespacesContext(namespace);
+
+                return {
+                    translator: context.translator,
+                    unregister:
+                        registerConfigureCallback(context, configureCallback),
+                };
+            },
+            /**
+             * Used to handle single translation (maybe testing ;)
+             * @param {string} namespace
+             * @returns Translator with the given namespace
+             */
+            getTranslator: function (namespace) {
+                return getNamespacesContext(namespace).translator;
             },
         };
     }

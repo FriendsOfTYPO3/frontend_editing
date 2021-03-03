@@ -13,16 +13,23 @@ export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '')
         }
 
         useEffect(() => {
-            let translator = null;
+            let unregister = null;
 
             import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader').then(({default: factory}) => {
-                try {
-                    translator = factory.getTranslator();
-                    setTranslation(translator.translate(key, parameters));
-                } catch (translationError) {
-                    onError(translationError.toString());
-                }
+                unregister = factory.useTranslator(null, translator => {
+                    try {
+                        setTranslation(translator.translate(key, parameters));
+                    } catch (translationError) {
+                        setTranslation('');
+                        onError(translationError.toString());
+                    }
+                }).unregister;
             });
+            return () => {
+                if (unregister) {
+                    unregister();
+                }
+            };
         });
 
         return (
@@ -32,51 +39,121 @@ export const withTranslator = (EmbeddedElement, translateProp, placeHolder = '')
         );
     };
 };
-
 export const withNamespaceMapping = (EmbeddedElement) => {
-    return ({onError, namespace, translationLabels, namespaceMapping, ...rest}) => {
-        const [translators, setTranslators] = useState({});
+    return class NamespaceMappingWrapper extends React.Component {
+        constructor (props) {
+            super(props);
+            this.contexts = {};
+            this.state = {
+                mapping: {}
+            };
 
-        useEffect(() => {
-            if (!translators[namespace]) {
-                import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader').then(({default: factory}) => {
-                    if (translationLabels || namespaceMapping) {
-                        factory.init({
-                            translationLabels,
-                            namespaceMapping
-                        });
-                    }
-
-                    function translate () {
-                        let translator = factory.getTranslator(namespace);
-                        setTranslators({
-                            ...translators,
-                            [namespace]: translator
-                        });
-                    }
-
-                    if (onError) {
-                        try {
-                            translate();
-                        } catch (translationError) {
-                            onError(translationError.toString());
-                        }
-                    } else {
-                        translate();
-                    }
-                });
-            }
-        });
-
-        let mapping = {};
-        if (translators[namespace]) {
-            mapping = translators[namespace].getKeys();
+            this.initFactory = this.initFactory.bind(this);
+            this.useTranslator = this.useTranslator.bind(this);
+            this.unmountContexts = this.unmountContexts.bind(this);
         }
 
-        return (
-            <EmbeddedElement {...rest} onError={onError} namespace={namespace} namespaceMapping={mapping}>
-            </EmbeddedElement>
-        );
+        initFactory ({default: factory}) {
+            if (!this.mounted) {
+                // component seems to be unmounted
+                return;
+            }
+
+            this.factory = factory;
+
+            this.loadTranslator();
+        }
+
+        loadTranslator () {
+            const {translationLabels, namespaceMapping, namespace, onError, mergeStrategy} = this.props;
+            const configuration = {
+                translationLabels,
+                namespaceMapping
+            };
+
+            this.factory.configure(configuration, mergeStrategy);
+
+            const context = this.contexts[namespace];
+            if (!context) {
+                this.currentNamespace = namespace;
+                if (onError) {
+                    try {
+                        this.useTranslator();
+                    } catch (translationError) {
+                        onError(translationError.toString());
+                    }
+                } else {
+                    this.useTranslator();
+                }
+            } else if (this.currentNamespace !== namespace) {
+                this.currentNamespace = namespace;
+                this.unmountContexts();
+                this.contexts[namespace] = context;
+                this.setState({
+                    mapping: context.translator.getKeys()
+                });
+            }
+        }
+
+        useTranslator () {
+            if (this.mounted) {
+                const {namespace} = this.props;
+                function configureCallback (translator) {
+                    if (this.mounted) {
+                        if (this.props.namespace === namespace) {
+                            this.setState({
+                                mapping: translator.getKeys()
+                            });
+                        }
+                    }
+                }
+                configureCallback = configureCallback.bind(this);
+                this.unmountContexts();
+                this.contexts[namespace] = this.factory.useTranslator(namespace, configureCallback);
+            }
+        }
+
+        unmountContexts () {
+            Object.keys(this.contexts)
+                .forEach(namespace => {
+                    this.contexts[namespace].unregister();
+                });
+        }
+
+        componentDidMount () {
+            this.mounted = true;
+            import('TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader')
+                .then(this.initFactory);
+        }
+
+        componentDidUpdate () {
+            if (this.factory) {
+                this.loadTranslator();
+            }
+        }
+
+        componentWillUnmount () {
+            this.mounted = false;
+            this.unmountContexts();
+            this.contexts = null;
+        }
+
+        render () {
+            const {
+                onError, namespace,
+                translationLabels, namespaceMapping, mergeStrategy,
+                ...rest
+            } = this.props;
+
+            return (
+                <EmbeddedElement
+                    {...rest}
+                    onError={onError}
+                    namespace={namespace}
+                    namespaceMapping={this.state.mapping}>
+                </EmbeddedElement>
+            );
+        }
     };
 };
 
@@ -98,7 +175,7 @@ export const DivTranslator = ({children, ...rest}) => {
     );
 };
 
-export const ListTranslator = withNamespaceMapping(({namespace, namespaceMapping, ...rest}) => {
+export const ListTranslator = withNamespaceMapping(({namespace, namespaceMapping, keys, ...rest}) => {
     return (
         <div className="translator-table-wrapper">
             <h4>{namespace}</h4>

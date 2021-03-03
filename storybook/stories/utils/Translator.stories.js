@@ -51,7 +51,6 @@ Namespace.argTypes = {
     },
 };
 Namespace.args = {
-    keys: Object.keys(translations.raw),
     namespace: 'All',
     parameters: [
         'titleOrMessageOrSomethingElse',
@@ -61,8 +60,14 @@ Namespace.args = {
 
 export const Configure = ListTemplate.bind({});
 Configure.argTypes = Namespace.argTypes;
+Configure.argTypes.mergeStrategy = {
+    control: {
+        type: 'inline-radio',
+        options: ['none', 'merge', 'mergeDeep', 'override'],
+    }
+};
 Configure.args = {
-    ...Namespace.args,
+    parameters: Namespace.args.parameters,
     namespace: 'modal',
     translationLabels: {
         'title.navigate': 'Navigate Titel override',
@@ -72,5 +77,6 @@ Configure.args = {
         modal: {
             saveLabel: 'button.save_navigate',
         }
-    }
+    },
+    mergeStrategy: 'none',
 };
