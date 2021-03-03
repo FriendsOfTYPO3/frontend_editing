@@ -58,3 +58,7 @@ $fade-timing: linear;
 
 // Extra space
 $twenty: 20px;
+
+// shadows
+$focus-shadow: 0 0 0 2px transparentize($gray-darker, 0.1);
+$focus-shadow-sm: 0 0 0 1px transparentize($gray-darker, 0.1);
