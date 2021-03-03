@@ -53,6 +53,7 @@
     border-left-width: 0;
 }
 
+.scrollarea--arrow__mouseover:before,
 .scrollarea--arrow:hover:before {
     transform: $scroll-area-arrow-scale--hover rotate(45deg);
     border-color: $scroll-area-arrow-color--hover;
