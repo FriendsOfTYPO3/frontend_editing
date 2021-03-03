@@ -104,7 +104,7 @@ define([
                 .on('click', triggerEscapeEvent);
 
             // handle escape by backdrop
-            currentModal.on('shown.bs.modal', handleBackdrop);
+            handleBackdrop();
         }
 
         return {
