@@ -46,6 +46,15 @@
         background-color: $gray;
         border-color: $gray;
         color: $white;
+
+        //temporary, since buttons aren't disabled at all!
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $gray;
+            border-color: $gray;
+            color: $white;
+        }
     }
 }
 

@@ -33,6 +33,7 @@
             color: $white;
             background-color: lighten($gray-dark, 20%);
         }
+
         &:focus {
             color: $white;
         }
@@ -152,7 +153,6 @@
         margin: 0;
         min-width: $right-bar-width - $top-bar-height;
         padding: 5px $top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
-        //display: flex;
 
         button {
             margin-right: 5px;

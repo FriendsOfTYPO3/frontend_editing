@@ -156,10 +156,14 @@ define([
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
+                $discardButton.prop('disabled', false);
+                $saveButton.prop('disabled', false);
 				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
+                $discardButton.prop('disabled', true);
+                $saveButton.prop('disabled', true);
 				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
