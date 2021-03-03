@@ -21,7 +21,8 @@ define([
 	'TYPO3/CMS/FrontendEditing/Editor',
 	'TYPO3/CMS/FrontendEditing/Contrib/toastr',
 	'TYPO3/CMS/Backend/Modal',
-	'TYPO3/CMS/Backend/Severity'
+	'TYPO3/CMS/Backend/Severity',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 ], function (
 	$,
 	FrontendEditing,
@@ -29,11 +30,32 @@ define([
 	Editor,
 	toastr,
 	Modal,
-	Severity
+	Severity,
+    TranslatorLoader
 ) {
 	'use strict';
 
-	// Extend FrontendEditing with additional events
+    var translateKeys = {
+        updatedContentTitle: 'notifications.save-title',
+        updatedPageTitle: 'notifications.save-pages-title',
+        updateRequestErrorTitle: 'notifications.save-went-wrong',
+        saveWithoutChange: 'notifications.no-changes-description',
+        saveWithoutChangeTitle: 'notifications.no-changes-title',
+        confirmDiscardChanges: 'notifications.remove-all-changes',
+        confirmChangeSiteRoot: 'notifications.change_site_root',
+        confirmChangeSiteRootWithChange: 'notifications.unsaved-changes',
+    };
+
+    var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
+        translateKeys = $.extend(translateKeys, t.getKeys());
+    }).translator;
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
+    }
+
+
+    // Extend FrontendEditing with additional events
 	var events = {
 		LEFT_PANEL_TOGGLE: 'LEFT_PANEL_TOGGLE'
 	};
@@ -109,21 +131,21 @@ define([
 		F.on(F.UPDATE_CONTENT_COMPLETE, function (data) {
 			showSuccess(
 				data.message,
-				F.translate('notifications.save-title')
+				translate(translateKeys.updatedContentTitle)
 			);
 		});
 
 		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
 			showSuccess(
 				data.message,
-				F.translate('notifications.save-pages-title')
+				translate(translateKeys.updatedPageTitle)
 			);
 		});
 
 		F.on(F.REQUEST_ERROR, function (data) {
 			showError(
 				data.message,
-				F.translate('notifications.save-went-wrong')
+				translate(translateKeys.updateRequestErrorTitle)
 			);
 		});
 
@@ -156,8 +178,8 @@ define([
 			F.saveAll();
 		} else {
 			showWarning(
-				F.translate('notifications.no-changes-description'),
-				F.translate('notifications.no-changes-title')
+				translate(translateKeys.saveWithoutChange),
+				translate(translateKeys.saveWithoutChangeTitle)
 			);
 		}
 	}
@@ -169,7 +191,7 @@ define([
 
 		$('.t3-frontend-editing__discard').on('click', function () {
 			if (!storage.isEmpty()) {
-				F.confirm(F.translate('notifications.remove-all-changes'), {
+				F.confirm(translate(translateKeys.confirmDiscardChanges), {
 					yes: function () {
 						storage.clear();
 						F.refreshIframe();
@@ -564,6 +586,7 @@ define([
 		callbacks = callbacks || {};
 
 		// Confirm dialog
+		//TODO: replace by Modal module
 		if (message === F.translate('notifications.unsaved-changes')) {
 			TYPO3.Modal.confirm(
 				'Navigate',
@@ -648,12 +671,16 @@ define([
 		return false;
 	}
 
-	function siteRootChange(element) {
-		var linkUrl = String($(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()),
-			message = storage.isEmpty() ? 'notifications.change_site_root' : 'notifications.unsaved-changes';
+	function siteRootChange (element) {
+		var linkUrl = String(
+			$(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()
+		);
+		var key = storage.isEmpty()
+			? translateKeys.confirmChangeSiteRoot
+			: translateKeys.confirmChangeSiteRootWithChange;
 
 		if (linkUrl !== '0') {
-			F.confirm(F.translate(message), {
+			F.confirm(translate(key), {
 				yes: function () {
 					window.location.href = linkUrl;
 				},

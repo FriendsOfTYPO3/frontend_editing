@@ -17,13 +17,25 @@
 define([
     'jquery',
     'TYPO3/CMS/FrontendEditing/Storage',
-    'TYPO3/CMS/FrontendEditing/Scroller'
-], function (
+    'TYPO3/CMS/FrontendEditing/Scroller',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
+], function createFrontendEditing (
     $,
     Storage,
-    Scroller
+    Scroller,
+    TranslatorLoader
 ) {
-  'use strict';
+    'use strict';
+
+    var translateKeys = {
+        confirmNavigateWithChange: 'notifications.unsaved-changes',
+    };
+
+    var t = TranslatorLoader
+        .useTranslator('frontendEditing', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
+
 
   // Hold event listeners and the callbacks
   var listeners = {};
@@ -148,7 +160,7 @@ define([
         if (this.getStorage().isEmpty()) {
           window.location.href = linkUrl;
         } else {
-          this.confirm(F.translate('notifications.unsaved-changes'), {
+          this.confirm(t.translate(translateKeys.confirmNavigateWithChange), {
             yes: function() {
               window.location.href = linkUrl;
             },
@@ -187,29 +199,31 @@ define([
     },
 
     setTranslationLabels: function (labels) {
-      translationLabels = labels;
+        TranslatorLoader.configure({
+            translationLabels: labels
+        });
     },
 
     setDisableModalOnNewCe: function (disable) {
       disableModalOnNewCe = disable;
     },
 
-    translate: function (key) {
-      if (translationLabels[key]) {
-        var s = translationLabels[key];
-
-        if (arguments.length > 1) {
-          for (var i = 0; i < arguments.length - 1; i++) {
-            var reg = new RegExp("\\{" + i + "\\}", "gm");
-            s = s.replace(reg, arguments[i + 1]);
-          }
-        }
-
-        return s;
-      } else {
-        F.error('Invalid translation key: ' + key);
-      }
-    },
+        /**
+         * Used to get translated strings by key.
+         * @deprecated Use TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader or
+         * a high level function.
+         * @param key
+         * @returns {*}
+         */
+        translate: function (key) {
+            try {
+                var translator = TranslatorLoader.getTranslator();
+                return translator.translate.apply(translator, arguments);
+            } catch (exception) {
+                F.error(exception.toString());
+            }
+            return key;
+        },
 
     parseQuery: function (queryString) {
       var query = {};
