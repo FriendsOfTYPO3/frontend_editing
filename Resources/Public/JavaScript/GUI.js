@@ -20,8 +20,7 @@ define([
 	'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 	'TYPO3/CMS/FrontendEditing/Editor',
 	'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-	'TYPO3/CMS/Backend/Modal',
-	'TYPO3/CMS/Backend/Severity',
+    'TYPO3/CMS/FrontendEditing/Modal',
     'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 ], function (
 	$,
@@ -29,8 +28,7 @@ define([
 	D3IndentedTree,
 	Editor,
 	toastr,
-	Modal,
-	Severity,
+    Modal,
     TranslatorLoader
 ) {
 	'use strict';
@@ -105,7 +103,6 @@ define([
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var Modal;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -195,7 +192,7 @@ define([
 
 		$('.t3-frontend-editing__discard').on('click', function () {
 			if (!storage.isEmpty()) {
-				F.confirm(translate(translateKeys.confirmDiscardChanges), {
+				Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
 					yes: function () {
 						storage.clear();
 						F.refreshIframe();
@@ -586,88 +583,27 @@ define([
 		flashMessage(messageTypes.WARNING, message, title);
 	}
 
-	function confirm(message, callbacks) {
-		callbacks = callbacks || {};
+    /**
+	 * Shows a confirm modal. If message is 'notifications.unsaved-changes' a
+	 * special "save all" button will be presented.
+     * @param message
+     * @param callbacks
+	 * @deprecated
+     */
+    function confirm (message, callbacks) {
+        callbacks = callbacks || {};
 
-		// Confirm dialog
-		//TODO: replace by Modal module
-		if (message === F.translate('notifications.unsaved-changes')) {
-			TYPO3.Modal.confirm(
-				'Navigate',
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'Save All',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								save();
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					},
-					{
-						text: 'Discard and Navigate',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								storage.clear();
-								F.refreshIframe();
-								F.trigger(F.CONTENT_CHANGE);
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-danger'
-					}
-				]
-			);
-		} else {
-			TYPO3.Modal.confirm(
-				message,
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'OK',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					}
-				]
-			);
-		}
-	}
+        if (message === F.translate('notifications.unsaved-changes')) {
+            Modal.confirmNavigate(message, function save() {
+                if (typeof callbacks.yes === 'function') {
+                    save();
+                    callbacks.yes();
+                }
+            }, callbacks);
+        } else {
+            Modal.confirmNavigate(message, callbacks);
+        }
+    }
 
 	function windowOpen(url) {
 		var vHWin = window.open(url, 'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
@@ -675,26 +611,36 @@ define([
 		return false;
 	}
 
-	function siteRootChange (element) {
-		var linkUrl = String(
-			$(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()
-		);
-		var key = storage.isEmpty()
-			? translateKeys.confirmChangeSiteRoot
-			: translateKeys.confirmChangeSiteRootWithChange;
+    function siteRootChange (element) {
+        var linkUrl = String(
+            $(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()
+        );
 
-		if (linkUrl !== '0') {
-			F.confirm(translate(key), {
-				yes: function () {
-					window.location.href = linkUrl;
-				},
-				no: function () {
-					element.selectedIndex = 0;
-				}
-			});
-		}
+        if (linkUrl !== '0') {
+            return;
+        }
 
-	}
+        var callbacks = {
+            yes: function () {
+                window.location.href = linkUrl;
+            },
+            no: function () {
+                element.selectedIndex = 0;
+            }
+        };
 
-	return FrontendEditing;
+        if (storage.isEmpty()) {
+            Module.confirm(
+                translate(translateKeys.confirmChangeSiteRoot),
+                callbacks
+            );
+        } else {
+            Module.confirmNavigate(
+                translate(translateKeys.confirmChangeSiteRootWithChange),
+                callbacks
+            );
+        }
+    }
+
+    return FrontendEditing;
 });

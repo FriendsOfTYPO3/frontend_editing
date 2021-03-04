@@ -15,11 +15,13 @@
  * Editor: used in iframe for DOM interaction
  */
 define([
-	'jquery',
-    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
+    'jquery',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
+    'TYPO3/CMS/FrontendEditing/Modal',
 ], function (
-	$,
-    TranslatorLoader
+    $,
+    TranslatorLoader,
+	Modal
 ) {
 	'use strict';
 
@@ -104,14 +106,18 @@ define([
 				// Open/edit|new action
 				that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
 					if (!storage.isEmpty()) {
-						F.confirm(translate(translateKeys.confirmOpenModalWithChange), {
-							yes: function () {
-								openModal($(this));
-							},
-							no: function () {
-								return false;
-							}
-						});
+                        Modal.confirmNavigate(
+                        	translate(translateKeys.confirmOpenModalWithChange),
+                            {
+                                yes: function () {
+                                    openModal($(this));
+                                },
+                                no: function () {
+                                	// TODO: check if tis was part of discard function
+                                    return false;
+                                }
+                            }
+                        );
 					} else {
 						openModal($(this));
 					}
@@ -159,17 +165,23 @@ define([
 
 				});
 
-				// Delete action
-				that.find('.icon-actions-edit-delete').on('click', function () {
-					F.confirm(translate(translateKeys.confirmDeleteContentElement), {
-						yes: function () {
-							F.delete(that.data('uid'), that.data('table'));
-						},
-						no: function () {
-							// Do nothing
-						}
-					});
-				});
+                // Delete action
+                that.find('.icon-actions-edit-delete')
+                    .on('click', function () {
+                        Modal.confirm(
+                            translate(
+                                translateKeys.confirmDeleteContentElement
+                            ),
+                            {
+                                yes: function () {
+                                    F.delete(
+                                        that.data('uid'),
+                                        that.data('table')
+                                    );
+                                },
+                            }
+                        );
+                    });
 
 				// Hide/Unhide action
 				that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function () {
