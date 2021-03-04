@@ -18,12 +18,14 @@ define([
     'jquery',
     'TYPO3/CMS/FrontendEditing/Storage',
     'TYPO3/CMS/FrontendEditing/Scroller',
-    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
+    'TYPO3/CMS/FrontendEditing/Modal'
 ], function createFrontendEditing (
     $,
     Storage,
     Scroller,
-    TranslatorLoader
+    TranslatorLoader,
+    Modal
 ) {
     'use strict';
 
@@ -175,22 +177,28 @@ define([
       }
     },
 
-    navigate: function (linkUrl) {
-      if (linkUrl && linkUrl.indexOf('#') !== 0) {
-        if (this.getStorage().isEmpty()) {
-          window.location.href = linkUrl;
-        } else {
-          this.confirm(t.translate(translateKeys.confirmNavigateWithChange), {
-            yes: function() {
-              window.location.href = linkUrl;
-            },
-            no: function() {
-              F.hideLoadingScreen();
+        navigate: function (linkUrl) {
+            if (linkUrl && linkUrl.indexOf('#') !== 0) {
+                if (this.getStorage().isEmpty()) {
+                    window.location.href = linkUrl;
+                } else {
+                    Modal.confirmNavigate(
+                        t.translate(translateKeys.confirmNavigateWithChange),
+                        function save () {
+                            F.saveAll();
+                            window.location.href = linkUrl;
+                        },
+                        {
+                            yes: function () {
+                                window.location.href = linkUrl;
+                            },
+                            no: function () {
+                                F.hideLoadingScreen();
+                            }
+                        });
+                }
             }
-          });
-        }
-      }
-    },
+        },
 
     loadInModal: function (url) {
       require([

@@ -589,14 +589,14 @@ define([
         callbacks = callbacks || {};
 
         if (message === F.translate('notifications.unsaved-changes')) {
-            Modal.confirmNavigate(message, function save() {
+            Modal.confirmNavigate(message, function save () {
                 if (typeof callbacks.yes === 'function') {
-                    save();
+                    F.saveAll();
                     callbacks.yes();
                 }
             }, callbacks);
         } else {
-            Modal.confirmNavigate(message, callbacks);
+            Modal.confirm(message, callbacks);
         }
     }
 
@@ -632,7 +632,13 @@ define([
         } else {
             Module.confirmNavigate(
                 translate(translateKeys.confirmChangeSiteRootWithChange),
-                callbacks
+                function save () {
+                    if (typeof callbacks.yes === 'function') {
+                        F.saveAll();
+                        callbacks.yes();
+                    }
+                },
+            	callbacks
             );
         }
     }

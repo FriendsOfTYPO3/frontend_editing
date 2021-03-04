@@ -108,6 +108,10 @@ define([
 					if (!storage.isEmpty()) {
                         Modal.confirmNavigate(
                         	translate(translateKeys.confirmOpenModalWithChange),
+                            function save () {
+                                F.saveAll();
+                                openModal($(this));
+                            },
                             {
                                 yes: function () {
                                     openModal($(this));
