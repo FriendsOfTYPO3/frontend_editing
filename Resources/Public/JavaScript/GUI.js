@@ -633,10 +633,8 @@ define([
             Module.confirmNavigate(
                 translate(translateKeys.confirmChangeSiteRootWithChange),
                 function save () {
-                    if (typeof callbacks.yes === 'function') {
-                        F.saveAll();
-                        callbacks.yes();
-                    }
+                    F.saveAll();
+                    callbacks.yes();
                 },
             	callbacks
             );
