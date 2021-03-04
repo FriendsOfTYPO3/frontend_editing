@@ -153,18 +153,6 @@ define([
       return storage;
     },
 
-    confirm: function (message, callbacks) {
-      var confirmed = confirm(message);
-
-      callbacks = callbacks || {};
-      if (confirmed && typeof callbacks.yes === 'function') {
-        callbacks.yes();
-      }
-      if (!confirmed && typeof callbacks.no === 'function') {
-        callbacks.no();
-      }
-    },
-
     on: function (event, callback) {
       if (typeof callback === 'function') {
         if (listeners[event]) {
