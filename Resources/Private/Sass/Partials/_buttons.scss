@@ -71,5 +71,6 @@
 
     &:focus {
         box-shadow: $focus-shadow-sm;
+        outline: none;
     }
 }
