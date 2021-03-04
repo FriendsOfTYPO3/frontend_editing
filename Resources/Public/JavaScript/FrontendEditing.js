@@ -83,7 +83,7 @@ define([
         .hide()
         .insertAfter($iframe);
 
-    var scroller = Scroller($iframe, $iframe.contents(), $scrollAreaTop, $scrollAreaBottom);
+    var scroller = Scroller($iframe, $scrollAreaTop, $scrollAreaBottom);
 
     $scrollAreaTop
         .on('dragleave', scroller.stopScrolling)
