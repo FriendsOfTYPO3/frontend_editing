@@ -18,14 +18,29 @@ define([
     'jquery',
     'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
     'TYPO3/CMS/Backend/Modal',
-    'TYPO3/CMS/Backend/Severity'
+    'TYPO3/CMS/Backend/Severity',
+    './Utils/Logger'
 ], function ModalFactory (
     $,
     TranslatorLoader,
     Modal,
-    Severity
+    Severity,
+    loggers
 ) {
     'use strict';
+    loggers.current.info('--> start ModalFactory');
+
+    var identifiers = Modal.identifiers || {
+        modal: '.t3js-modal',
+        content: '.t3js-modal-content',
+        title: '.t3js-modal-title',
+        close: '.t3js-modal-close',
+        body: '.t3js-modal-body',
+        footer: '.t3js-modal-footer',
+        iframe: '.t3js-modal-iframe',
+        iconPlaceholder: '.t3js-modal-icon-placeholder'
+    };
+
     var translateKeys = {
         titleNavigate: 'title.navigate',
         discardLabel: 'button.discard_navigate',
@@ -58,26 +73,34 @@ define([
     };
 
     function createModalBuilder (title, message) {
+        loggers.current.info('--> start builder.modal');
         testConstraints(builder.constraints.required, title, 'title');
         testConstraints(builder.constraints.required, message, 'message');
 
         var handleEscape = true;
         var buttonClickListener, escapeListener, readyListener;
 
+        loggers.current.info('<-- end builder.modal');
+
         function attachEscapeListener (currentModal) {
+            loggers.current.info('--> start builder.modal.attachEscapeListener');
             var hasModalDismissed = false;
             function triggerEscapeEvent () {
+                loggers.current.info('--> start builder.modal.triggerEscapeEvent');
                 if (!hasModalDismissed && escapeListener) {
                     hasModalDismissed = true;
                     escapeListener();
                 }
+                loggers.current.info('<-- end builder.modal.triggerEscapeEvent');
             }
 
             function preventTriggerEscape () {
+                loggers.current.info('--> builder.modal.preventTriggerEscape');
                 hasModalDismissed = true;
             }
 
             function handleBackdrop () {
+                loggers.current.info('--> start builder.modal.handleBackdrop');
                 var targetInModelContent = false;
                 currentModal.on('click', function backdropDismiss () {
                     if (targetInModelContent) {
@@ -92,6 +115,7 @@ define([
                     .on('click', function preventClose (event) {
                         targetInModelContent = true;
                     });
+                loggers.current.info('<-- end builder.modal.handleBackdrop');
             }
 
             // handle escape by key
@@ -100,11 +124,12 @@ define([
 
             // handle escape by close button
             currentModal
-                .find(Modal.identifiers.close)
+                .find(identifiers.close)
                 .on('click', triggerEscapeEvent);
 
             // handle escape by backdrop
             currentModal.on('shown.bs.modal', handleBackdrop);
+            loggers.current.info('<-- end builder.modal.attachEscapeListener');
         }
 
         return {
@@ -115,20 +140,26 @@ define([
             additionalCssClasses: ['t3-frontend-editing__modal'],
 
             translateTitle: function () {
+                loggers.current.info('--> start builder.modal.translateTitle');
                 this.title = translate(this.title);
+                loggers.current.info('<-- end builder.modal.translateTitle');
                 return this;
             },
             setSeverity: function (severity) {
+                loggers.current.info('--> start builder.modal.setSeverity(%s)', severity);
                 testConstraints(builder.constraints.int, severity, 'severity');
+                loggers.current.info('<-- end builder.modal.setSeverity');
                 this.severity = severity;
                 return this;
             },
             onReady: function (listener) {
+                loggers.current.info('--> start builder.modal.onReady(%s)', listener);
                 testConstraints(builder.constraints.func, listener, 'listener');
                 // bad callback naming, callback if modal is ready
                 /*eslint-disable-next-line id-denylist*/
                 this.callback = listener;
                 readyListener = listener;
+                loggers.current.info('<-- end builder.modal.onReady');
                 return this;
             },
             onButtonClick: function (listener) {
@@ -166,7 +197,7 @@ define([
                 this.onReady(function prepareListeners (currentModal) {
                     if (!handleEscape) {
                         currentModal
-                            .find(Modal.identifiers.close)
+                            .find(identifiers.close)
                             .hide();
                     }
 
@@ -311,6 +342,7 @@ define([
             .onClick(clickListener);
     }
 
+    loggers.current.info('<-- end ModalFactory');
     return {
         /**
          * Simple modal builder which make modal much easier and more fun.
@@ -323,6 +355,7 @@ define([
          * @param callbacks
          */
         warning: function (message, callbacks) {
+            loggers.current.warn("warning with message", message);
             callbacks = callbacks || {};
 
             return createShowModal(message, message, callbacks)

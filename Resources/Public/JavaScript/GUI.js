@@ -20,7 +20,7 @@ define([
 	'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 	'TYPO3/CMS/FrontendEditing/Editor',
 	'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-	'TYPO3/CMS/Backend/Modal',
+	'./Modal',
 	'TYPO3/CMS/Backend/Severity',
     'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 ], function (
@@ -105,7 +105,6 @@ define([
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var Modal;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -588,80 +587,18 @@ define([
 		// Confirm dialog
 		//TODO: replace by Modal module
 		if (message === F.translate('notifications.unsaved-changes')) {
-			TYPO3.Modal.confirm(
-				'Navigate',
+			Modal.confirmNavigate(
 				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'Save All',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								save();
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					},
-					{
-						text: 'Discard and Navigate',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								storage.clear();
-								F.refreshIframe();
-								F.trigger(F.CONTENT_CHANGE);
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-danger'
-					}
-				]
+                function () {
+                    if (typeof callbacks.yes === 'function') {
+                        save();
+                        callbacks.yes();
+                    }
+                },
+                callbacks
 			);
 		} else {
-			TYPO3.Modal.confirm(
-				message,
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'OK',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					}
-				]
-			);
+			Modal.confirm(message, callbacks);
 		}
 	}
 
