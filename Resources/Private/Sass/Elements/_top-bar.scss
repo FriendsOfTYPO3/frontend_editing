@@ -11,7 +11,7 @@
     font-size: $font-size-regular;
 
     .btn {
-        color: $white !important;
+        color: $white;
     }
 }
 
@@ -21,14 +21,21 @@
     font-weight: 300;
     font-size: $font-size-regular;
     text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
 
     .btn-backend {
-        height: $top-bar-height !important;
-        border: 0;
+        height: $top-bar-height;
+        //border: 0;
         border-right: 1px solid darken($color-t3-gray-dark, 10%);
 
         &:hover {
+            color: $white;
             background-color: lighten($gray-dark, 20%);
+        }
+
+        &:focus {
+            color: $white;
         }
 
         span {
@@ -49,17 +56,17 @@
     transition: left $push-duration $push-timing;
     position: relative;
     left: 0;
-    width: 30%;
     float: left;
+    flex: 0;
 }
 
 .t3-frontend-editing__top-bar-right {
     transition: right $push-duration $push-timing;
-    width: 70%;
-    float: right;
     text-align: right;
-    right: 0;
-    position: relative;
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
 
     .top-bar-items {
         transition: margin $push-duration $push-timing;
@@ -143,23 +150,21 @@
     }
 
     .top-bar-action-buttons {
-        float: right;
         margin: 0;
         min-width: $right-bar-width - $top-bar-height;
         padding: 5px $top-bar-height 5px 5px; // create offset for t3-frontend-editing__full-view
 
         button {
-            float: left;
             margin-right: 5px;
         }
 
         .t3-frontend-editing__save {
             &:not(.btn-inactive) {
-                background-color: $color-t3-primary !important;
-                border: none !important;
+                background-color: $color-t3-primary;
+                border: none;
 
                 &:hover {
-                    background-color: darken($color-t3-primary, 7%) !important;
+                    background-color: darken($color-t3-primary, 7%);
                 }
             }
         }
@@ -221,7 +226,7 @@
     .btn-logout {
         text-decoration: none;
         display: inline-block;
-        border: 1px solid $gray-light !important;
+        border: 1px solid $gray-light;
 
         .btn-text {
             position: relative;

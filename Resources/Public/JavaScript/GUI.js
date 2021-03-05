@@ -19,18 +19,16 @@ define([
 	'TYPO3/CMS/FrontendEditing/Crud',
 	'TYPO3/CMS/FrontendEditing/D3IndentedTree',
 	'TYPO3/CMS/FrontendEditing/Editor',
-	'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-	'TYPO3/CMS/Backend/Modal',
-	'TYPO3/CMS/Backend/Severity',
+    'TYPO3/CMS/FrontendEditing/Notification',
+    'TYPO3/CMS/FrontendEditing/Modal',
     'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 ], function (
 	$,
 	FrontendEditing,
 	D3IndentedTree,
 	Editor,
-	toastr,
-	Modal,
-	Severity,
+    Notification,
+    Modal,
     TranslatorLoader
 ) {
 	'use strict';
@@ -90,11 +88,6 @@ define([
 		WARNING: 'WARNING'
 	};
 
-	var toastrOptions = {
-		'positionClass': 'toast-top-left',
-		'preventDuplicates': true
-	};
-
 	var $itemCounter;
 	var $iframe;
 	var $loadingScreen;
@@ -105,7 +98,6 @@ define([
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var Modal;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -129,21 +121,21 @@ define([
 		});
 
 		F.on(F.UPDATE_CONTENT_COMPLETE, function (data) {
-			showSuccess(
+			Notification.success(
 				data.message,
 				translate(translateKeys.updatedContentTitle)
 			);
 		});
 
 		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
-			showSuccess(
+            Notification.success(
 				data.message,
 				translate(translateKeys.updatedPageTitle)
 			);
 		});
 
 		F.on(F.REQUEST_ERROR, function (data) {
-			showError(
+            Notification.error(
 				data.message,
 				translate(translateKeys.updateRequestErrorTitle)
 			);
@@ -156,10 +148,14 @@ define([
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
+                $discardButton.prop('disabled', false);
+                $saveButton.prop('disabled', false);
 				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
+                $discardButton.prop('disabled', true);
+                $saveButton.prop('disabled', true);
 				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
@@ -177,7 +173,7 @@ define([
 		if (!storage.isEmpty()) {
 			F.saveAll();
 		} else {
-			showWarning(
+            Notification.warning(
 				translate(translateKeys.saveWithoutChange),
 				translate(translateKeys.saveWithoutChangeTitle)
 			);
@@ -191,7 +187,7 @@ define([
 
 		$('.t3-frontend-editing__discard').on('click', function () {
 			if (!storage.isEmpty()) {
-				F.confirm(translate(translateKeys.confirmDiscardChanges), {
+				Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
 					yes: function () {
 						storage.clear();
 						F.refreshIframe();
@@ -552,118 +548,57 @@ define([
 		return $iframe;
 	}
 
-	function flashMessage(type, message, title) {
-		var toastrFunction;
-		switch (type) {
-			case messageTypes.OK:
-				toastrFunction = 'success';
-				break;
-			case messageTypes.ERROR:
-				toastrFunction = 'error';
-				break;
-			case messageTypes.WARNING:
-				toastrFunction = 'warning';
-				break;
-			default:
-				throw 'Invalid message type ' + type;
-		}
-		toastr[toastrFunction](message, title, toastrOptions);
-	}
+    /**
+	 * Shows a success notification
+     * @param message
+     * @param title
+	 * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+     */
+    function showSuccess (message, title) {
+        Notification.success(message, title);
+    }
 
-	function showSuccess(message, title) {
-		flashMessage(messageTypes.OK, message, title);
-	}
+    /**
+     * Shows a error notification
+     * @param message
+     * @param title
+     * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+     */
+    function showError (message, title) {
+        Notification.error(message, title);
+    }
 
-	function showError(message, title) {
-		flashMessage(messageTypes.ERROR, message, title);
-	}
+    /**
+     * Shows a warning notification
+     * @param message
+     * @param title
+     * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+     */
+    function showWarning (message, title) {
+        Notification.warning(message, title);
+    }
 
-	function showWarning(message, title) {
-		flashMessage(messageTypes.WARNING, message, title);
-	}
+    /**
+	 * Shows a confirm modal. If message is 'notifications.unsaved-changes' a
+	 * special "save all" button will be presented.
+     * @param message
+     * @param callbacks
+	 * @deprecated
+     */
+    function confirm (message, callbacks) {
+        callbacks = callbacks || {};
 
-	function confirm(message, callbacks) {
-		callbacks = callbacks || {};
-
-		// Confirm dialog
-		//TODO: replace by Modal module
-		if (message === F.translate('notifications.unsaved-changes')) {
-			TYPO3.Modal.confirm(
-				'Navigate',
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'Save All',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								save();
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					},
-					{
-						text: 'Discard and Navigate',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								storage.clear();
-								F.refreshIframe();
-								F.trigger(F.CONTENT_CHANGE);
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-danger'
-					}
-				]
-			);
-		} else {
-			TYPO3.Modal.confirm(
-				message,
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'OK',
-						trigger: function () {
-							$(this).trigger('modal-dismiss');
-							if (typeof callbacks.yes === 'function') {
-								callbacks.yes();
-							}
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					}
-				]
-			);
-		}
-	}
+        if (message === F.translate('notifications.unsaved-changes')) {
+            Modal.confirmNavigate(message, function save () {
+                if (typeof callbacks.yes === 'function') {
+                    F.saveAll();
+                    callbacks.yes();
+                }
+            }, callbacks);
+        } else {
+            Modal.confirm(message, callbacks);
+        }
+    }
 
 	function windowOpen(url) {
 		var vHWin = window.open(url, 'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
@@ -671,26 +606,40 @@ define([
 		return false;
 	}
 
-	function siteRootChange (element) {
-		var linkUrl = String(
-			$(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()
-		);
-		var key = storage.isEmpty()
-			? translateKeys.confirmChangeSiteRoot
-			: translateKeys.confirmChangeSiteRootWithChange;
+    function siteRootChange (element) {
+        var linkUrl = String(
+            $(element).val() + '?FEEDIT_BE_SESSION_KEY=' + F.getBESessionId()
+        );
 
-		if (linkUrl !== '0') {
-			F.confirm(translate(key), {
-				yes: function () {
-					window.location.href = linkUrl;
-				},
-				no: function () {
-					element.selectedIndex = 0;
-				}
-			});
-		}
+        if (linkUrl !== '0') {
+            return;
+        }
 
-	}
+        var callbacks = {
+            yes: function () {
+                window.location.href = linkUrl;
+            },
+            no: function () {
+                element.selectedIndex = 0;
+            }
+        };
 
-	return FrontendEditing;
+        if (storage.isEmpty()) {
+            Module.confirm(
+                translate(translateKeys.confirmChangeSiteRoot),
+                callbacks
+            );
+        } else {
+            Module.confirmNavigate(
+                translate(translateKeys.confirmChangeSiteRootWithChange),
+                function save () {
+                    F.saveAll();
+                    callbacks.yes();
+                },
+            	callbacks
+            );
+        }
+    }
+
+    return FrontendEditing;
 });

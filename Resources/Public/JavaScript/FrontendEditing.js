@@ -18,12 +18,14 @@ define([
     'jquery',
     'TYPO3/CMS/FrontendEditing/Storage',
     'TYPO3/CMS/FrontendEditing/Scroller',
-    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
+    'TYPO3/CMS/FrontendEditing/Modal'
 ], function createFrontendEditing (
     $,
     Storage,
     Scroller,
-    TranslatorLoader
+    TranslatorLoader,
+    Modal
 ) {
     'use strict';
 
@@ -73,32 +75,52 @@ define([
   };
 
     // Scroll function when dragging content elements to top or bottom of window
+    var scrollSpeed = 4;
     var $iframe = $('iframe');
-    var $scrollAreaTop = $('<div style="position: absolute; left: 0; top: 0; right: 0; background: rgba(0,0,0,0.2)"/>')
-        .height(150)
-        .hide()
-        .insertAfter($iframe);
-    var $scrollAreaBottom = $('<div style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2)"/>')
-        .height(100)
-        .hide()
-        .insertAfter($iframe);
+    var $iframeWrapper = $('.t3-frontend-editing__iframe-wrapper');
+    var scrollAreaBaseClasses = 'scrollarea scrollarea--arrow';
+
+    var $scrollAreaTop = $iframeWrapper.find('.scrollarea-top');
+    if (!$scrollAreaTop) {
+        $scrollAreaTop = $('<div/>')
+            .addClass(scrollAreaBaseClasses)
+            .addClass('scrollarea-top scrollarea--arrow-up')
+            .hide()
+            .insertAfter($iframe);
+    }
+    var $scrollAreaBottom = $iframeWrapper.find('.scrollarea-bottom');
+    if (!$scrollAreaBottom) {
+        $scrollAreaBottom = $('<div/>')
+            .addClass(scrollAreaBaseClasses)
+            .addClass('scrollarea-bottom scrollarea--arrow-down')
+            .hide()
+            .insertAfter($iframe);
+    }
 
     var scroller = Scroller($iframe, $scrollAreaTop, $scrollAreaBottom);
 
+    function stopScrolling () {
+        $(this)
+            .removeClass('scrollarea--arrow__mouseover');
+        scroller.stopScrolling();
+    }
+
     $scrollAreaTop
-        .on('dragleave', scroller.stopScrolling)
-    .on('dragenter', function() {
-      scroller.startScrolling(-4);
-    });
+        .on('dragleave', stopScrolling)
+        .on('dragenter', function startScrollUp () {
+            $scrollAreaTop.addClass('scrollarea--arrow__mouseover');
+            scroller.startScrolling(-scrollSpeed);
+        });
     $scrollAreaBottom
-        .on('dragleave', scroller.stopScrolling)
-    .on('dragenter', function() {
-      scroller.startScrolling(4);
-    });
+        .on('dragleave', stopScrolling)
+        .on('dragenter', function startScrollDown () {
+            $scrollAreaBottom.addClass('scrollarea--arrow__mouseover');
+            scroller.startScrolling(scrollSpeed);
+        });
 
     $('[draggable]')
-    .on('dragstart', scroller.enable)
-    .on('dragend', scroller.disable);
+        .on('dragstart', scroller.enable)
+        .on('dragend', scroller.disable);
 
   // Public API
   FrontendEditing.prototype = {
@@ -131,18 +153,6 @@ define([
       return storage;
     },
 
-    confirm: function (message, callbacks) {
-      var confirmed = confirm(message);
-
-      callbacks = callbacks || {};
-      if (confirmed && typeof callbacks.yes === 'function') {
-        callbacks.yes();
-      }
-      if (!confirmed && typeof callbacks.no === 'function') {
-        callbacks.no();
-      }
-    },
-
     on: function (event, callback) {
       if (typeof callback === 'function') {
         if (listeners[event]) {
@@ -155,22 +165,28 @@ define([
       }
     },
 
-    navigate: function (linkUrl) {
-      if (linkUrl && linkUrl.indexOf('#') !== 0) {
-        if (this.getStorage().isEmpty()) {
-          window.location.href = linkUrl;
-        } else {
-          this.confirm(t.translate(translateKeys.confirmNavigateWithChange), {
-            yes: function() {
-              window.location.href = linkUrl;
-            },
-            no: function() {
-              F.hideLoadingScreen();
+        navigate: function (linkUrl) {
+            if (linkUrl && linkUrl.indexOf('#') !== 0) {
+                if (this.getStorage().isEmpty()) {
+                    window.location.href = linkUrl;
+                } else {
+                    Modal.confirmNavigate(
+                        t.translate(translateKeys.confirmNavigateWithChange),
+                        function save () {
+                            F.saveAll();
+                            window.location.href = linkUrl;
+                        },
+                        {
+                            yes: function () {
+                                window.location.href = linkUrl;
+                            },
+                            no: function () {
+                                F.hideLoadingScreen();
+                            }
+                        });
+                }
             }
-          });
-        }
-      }
-    },
+        },
 
     loadInModal: function (url) {
       require([

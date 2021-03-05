@@ -1,8 +1,5 @@
 import React from 'react';
 
-//TODO extract css to sass
-import '../design/Scroller.css';
-
 const ScrollArea = React.forwardRef(({place = 'top', arrow = true, ...args}, ref) => {
     let className = 'scrollarea';
     if (arrow) {

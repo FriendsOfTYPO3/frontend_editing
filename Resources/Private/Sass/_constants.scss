@@ -58,3 +58,29 @@ $fade-timing: linear;
 
 // Extra space
 $twenty: 20px;
+
+// shadows
+$focus-shadow: 0 0 0 2px transparentize($gray-darker, 0.1);
+$focus-shadow-sm: 0 0 0 1px transparentize($gray-darker, 0.1);
+
+// scroll area
+$scroll-area-background: rgba(0, 0, 0, 0.7);
+$scroll-area-backdrop-background: transparent;
+$scroll-area-backdrop: blur(1px) brightness(0.4);
+$scroll-area-max-height: 100px;
+$scroll-area-min-height: 50px;
+$scroll-area-height: 10%;
+
+$scroll-area-border: 1px solid rgba(255, 255, 255, 0.4);
+$scroll-area-border: 1px solid rgba(255, 255, 255, 0.4);
+
+$scroll-area-arrow-offset: 10px;
+$scroll-area-arrow-size: 32px;
+$scroll-area-arrow-color: rgba(255, 255, 255, 0.8);
+$scroll-area-arrow-width: 12px;
+$scroll-area-arrow-scale: scale(1, 0.6);
+$scroll-area-arrow-scale--hover: scale(0.75, 0.75);
+$scroll-area-arrow-color--hover: white;
+
+$scroll-area-arrow-transition-time: 250ms;
+$scroll-area-arrow-transition-function: ease;

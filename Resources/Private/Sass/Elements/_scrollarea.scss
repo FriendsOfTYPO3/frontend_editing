@@ -1,0 +1,60 @@
+.scrollarea {
+    contain: strict;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: $scroll-area-background;
+    min-height: $scroll-area-min-height;
+    max-height: $scroll-area-max-height;
+    height: $scroll-area-height;
+    display: flex;
+}
+
+@supports (backdrop-filter: $scroll-area-backdrop) {
+    .scrollarea {
+        background: $scroll-area-backdrop-background;
+        backdrop-filter: $scroll-area-backdrop;
+    }
+}
+
+.scrollarea-top {
+    top: 0;
+    border-bottom: $scroll-area-border;
+}
+
+.scrollarea-bottom {
+    bottom: 0;
+    border-top: $scroll-area-border;
+}
+
+.scrollarea--arrow:before {
+    content: "";
+    display: block;
+    width: $scroll-area-arrow-size;
+    height: $scroll-area-arrow-size;
+    margin: auto;
+    position: relative;
+    border: $scroll-area-arrow-width solid $scroll-area-arrow-color;
+    transform: $scroll-area-arrow-scale rotate(45deg);
+    transition:
+        border-color $scroll-area-arrow-transition-time $scroll-area-arrow-transition-function,
+        transform $scroll-area-arrow-transition-time $scroll-area-arrow-transition-function;
+}
+
+.scrollarea--arrow-up:before {
+    top: $scroll-area-arrow-offset;
+    border-bottom-width: 0;
+    border-right-width: 0;
+}
+
+.scrollarea--arrow-down:before {
+    top: -$scroll-area-arrow-offset;
+    border-top-width: 0;
+    border-left-width: 0;
+}
+
+.scrollarea--arrow__mouseover:before,
+.scrollarea--arrow:hover:before {
+    transform: $scroll-area-arrow-scale--hover rotate(45deg);
+    border-color: $scroll-area-arrow-color--hover;
+}

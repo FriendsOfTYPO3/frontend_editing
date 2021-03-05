@@ -14,7 +14,11 @@
 /**
  * FrontendEditing.Crud: Handling the CRUD requests for content
  */
-define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, FrontendEditing) {
+define([
+    'jquery',
+    'TYPO3/CMS/FrontendEditing/FrontendEditing',
+    'TYPO3/CMS/FrontendEditing/Modal',
+], function ($, FrontendEditing, Modal) {
 
 	'use strict';
 
@@ -149,7 +153,7 @@ define(['jquery', 'TYPO3/CMS/FrontendEditing/FrontendEditing'], function ($, Fro
 			data: lockedRecordData
 		}).done(function (data) {
 			if (data.success === true) {
-				F.confirm(data.message, {
+                Modal.confirm(data.message, {
 					yes: function () {
 						return false;
 					},
