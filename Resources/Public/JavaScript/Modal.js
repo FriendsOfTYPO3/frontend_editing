@@ -26,6 +26,19 @@ define([
     Severity
 ) {
     'use strict';
+
+    // simple ponyfill
+    var identifiers = Modal.identifiers || {
+        modal: '.t3js-modal',
+        content: '.t3js-modal-content',
+        title: '.t3js-modal-title',
+        close: '.t3js-modal-close',
+        body: '.t3js-modal-body',
+        footer: '.t3js-modal-footer',
+        iframe: '.t3js-modal-iframe',
+        iconPlaceholder: '.t3js-modal-icon-placeholder'
+    };
+
     var translateKeys = {
         titleNavigate: 'title.navigate',
         discardLabel: 'button.discard_navigate',
@@ -84,7 +97,7 @@ define([
                     currentModal.trigger('modal-dismiss');
                 });
                 currentModal
-                    .find(Modal.identifiers.content)
+                    .find(identifiers.content)
                     .on('click', function preventClose (event) {
                         event.stopPropagation();
                     });
@@ -96,7 +109,7 @@ define([
 
             // handle escape by close button
             currentModal
-                .find(Modal.identifiers.close)
+                .find(identifiers.close)
                 .on('click', triggerEscapeEvent);
 
             // handle escape by backdrop
@@ -162,7 +175,7 @@ define([
                 this.onReady(function prepareListeners (currentModal) {
                     if (!handleEscape) {
                         currentModal
-                            .find(Modal.identifiers.close)
+                            .find(identifiers.close)
                             .hide();
                     }
 
