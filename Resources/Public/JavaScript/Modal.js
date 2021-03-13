@@ -28,6 +28,19 @@ define([
     loggers
 ) {
     'use strict';
+
+    // simple ponyfill
+    var identifiers = Modal.identifiers || {
+        modal: '.t3js-modal',
+        content: '.t3js-modal-content',
+        title: '.t3js-modal-title',
+        close: '.t3js-modal-close',
+        body: '.t3js-modal-body',
+        footer: '.t3js-modal-footer',
+        iframe: '.t3js-modal-iframe',
+        iconPlaceholder: '.t3js-modal-icon-placeholder'
+    };
+
     loggers.modal.trace('--> ModalFactory');
 
     var identifiers = Modal.identifiers || {
@@ -105,19 +118,15 @@ define([
 
             function handleBackdrop () {
                 loggers.modal.trace('--> builder.modal.handleBackdrop');
-                var targetInModelContent = false;
-                currentModal.on('click', function backdropDismiss () {
-                    if (targetInModelContent) {
-                        targetInModelContent = false;
-                    } else {
-                        triggerEscapeEvent();
-                        currentModal.trigger('modal-dismiss');
-                    }
+                currentModal.on('click', function backdropDismiss (event) {
+                    event.stopPropagation();
+                    triggerEscapeEvent();
+                    currentModal.trigger('modal-dismiss');
                 });
                 currentModal
-                    .find('.modal-content')
+                    .find(identifiers.content)
                     .on('click', function preventClose (event) {
-                        targetInModelContent = true;
+                        event.stopPropagation();
                     });
                 loggers.modal.trace('<-- builder.modal.handleBackdrop');
             }
@@ -132,7 +141,7 @@ define([
                 .on('click', triggerEscapeEvent);
 
             // handle escape by backdrop
-            currentModal.on('shown.bs.modal', handleBackdrop);
+            handleBackdrop();
             loggers.modal.trace('<-- builder.modal.attachEscapeListener');
         }
 

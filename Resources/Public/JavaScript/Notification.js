@@ -12,6 +12,7 @@
  */
 
 /**
+ * Module: TYPO3/CMS/FrontendEditing/Notification
  * Notification: Notification (toastr) wrapper
  */
 define([

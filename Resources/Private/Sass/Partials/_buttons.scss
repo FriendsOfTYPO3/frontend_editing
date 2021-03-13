@@ -1,34 +1,76 @@
-.btn-min-width {
-    min-width: 130px;
+.top-bar-action-buttons {
+    > .btn-min-width {
+        min-width: 130px;
+    }
+
+    > .btn {
+        font-family: $font-family-base;
+        border: 0;
+        border-radius: 0;
+        height: $top-bar-height - 10px;
+        font-size: $font-size-regular;
+        padding: 0 14px;
+        text-transform: uppercase;
+        outline: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    > .btn-default {
+        border: 1px solid $gray-light;
+        background-color: transparent;
+
+        &:focus,
+        &:hover {
+            color: $white;
+            background-color: transparentize($gray-light, 0.5);
+        }
+    }
+
+    > .btn-default.disabled.focus,
+    > .btn-default.disabled:focus,
+    > .btn-default.disabled:hover,
+    > .btn-default[disabled].focus,
+    > .btn-default[disabled]:focus,
+    > .btn-default[disabled]:hover,
+    > fieldset[disabled] .btn-default.focus,
+    > fieldset[disabled] .btn-default:focus,
+    > fieldset[disabled] .btn-default:hover,
+    //temporary, button has to be disabled since it should not be focusable!
+    > .btn-inactive {
+        cursor: not-allowed;
+        //temporary, button has to be disabled since it should not be focusable!
+        //pointer-events: none;
+        background-color: $gray;
+        border-color: $gray;
+        color: $white;
+
+        //temporary, since buttons aren't disabled at all!
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: $gray;
+            border-color: $gray;
+            color: $white;
+        }
+    }
 }
 
-.btn {
-    font-family: $font-family-base;
-    border: 0;
-    border-radius: 0 !important;
-    height: $top-bar-height - 10px !important;
-    font-size: $font-size-regular !important;
-    padding: 0 14px !important;
-    text-transform: uppercase;
-    outline: none;
+.t3-frontend-editing__modal .btn-left {
+    float: left;
+}
+
+.t3-frontend-editing__modal .btn {
+    min-width: calc(5ch + 15px * 2);
+    outline: 0;
+    padding: 0.5em 1.25em;
+    font-size: 0.9em;
+    border-radius: 0.25em;
 
     &:focus {
-        outline: none !important;
+        box-shadow: $focus-shadow-sm;
+        outline: none;
     }
-}
-
-.btn-default {
-    border: 1px solid $gray-light !important;
-    background-color: transparent !important;
-
-    &:hover {
-        background-color: transparentize($gray-light, 0.5) !important;
-    }
-}
-
-.btn-inactive {
-    cursor: not-allowed;
-    pointer-events: none;
-    background-color: $gray !important;
-    border-color: $gray !important;
 }
