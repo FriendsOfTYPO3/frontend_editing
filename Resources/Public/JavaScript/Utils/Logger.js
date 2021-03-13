@@ -16,18 +16,135 @@
  * Simple base logger to get extend ready
  */
 define([
-    '../Contrib/pino',
     '../Contrib/ulog/ulog',
-], function createLogger (pino, ulog) {
+    './IndexedDB',
+], function createLogger (ulog, db) {
     'use strict';
 
-    var pinoLogger = pino();
-    var ulogger = ulog('FrontendEditing');
+    var _sendCallback = null;
+
+    var persist = function () {
+        return function sendLogToServer (rec) {
+            var error = new Error();
+            db.logs.add({
+                timestamp: Date.now(),
+                name: rec.name,
+                level: rec.level,
+                channel: rec.channel,
+                message: rec.message,
+                stack: error.stack
+            });
+        };
+    };
+
+    var server = function () {
+        return function sendLogToServer (rec) {
+            if (_sendCallback) {
+                var error = new Error();
+                _sendCallback({
+                    name: rec.name,
+                    level: rec.level,
+                    channel: rec.channel,
+                    message: rec.message,
+                    stack: error.stack
+                });
+            } else {
+                // use console directly to prevent an infinite loop, since it
+                // is unclear if debug could also lead to server function call
+                // eslint-disable-next-line no-console
+                console.debug(
+                    'sendLogToServer failed cause _sendCallback is not defined'
+                );
+            }
+        };
+    };
+
+    ulog.use({
+        outputs: {
+            server: server,
+            persist: persist
+        },
+        channels: {
+            persist: {
+                out: [
+                    console,
+                    persist,
+                    server,
+                ],
+            },
+        },
+        settings: {
+            persistLog: {
+                config: 'persist_log',
+                prop: {
+                    default: 'none',
+                },
+            },
+            persist: {
+                config: 'log_persist',
+                prop: {
+                    default: 'console persist server',
+                },
+            },
+        },
+        ext: function (logger) {
+            logger.persistEnabledFor = function (level) {
+                var persistLogLevel = logger[logger.persistLog.toUpperCase()];
+                return persistLogLevel >= logger[level.toUpperCase()];
+            };
+        },
+        after: function (logger) {
+            // eslint-disable-next-line guard-for-in
+            for (var level in this.levels) {
+                if (logger.enabledFor(level)) {
+                    var channel = 'output';
+                    if (logger.enabledFor(level)) {
+                        channel = 'persist';
+                    }
+                    logger[level] = logger.channels[channel].fns[level];
+                }
+            }
+        },
+    });
+
+    var ulogger = ulog('FEditing:Main');
+
+    function errorExceptionHandler (msg, url, lineNo, columnNo, error) {
+        ulogger.error(arguments);
+
+        return false;
+    }
+
+    function unhandledRejectionExceptionHandler (event) {
+        ulogger.error('Unhandled rejection occured.', event.reason);
+
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
+
+    window.addEventListener(
+        'error',
+        errorExceptionHandler
+    );
+    window.addEventListener(
+        'unhandledrejection',
+        unhandledRejectionExceptionHandler
+    );
+
 
     return {
-        pino: pinoLogger,
-        ulog: ulogger,
-        // current: pinoLogger,
-        current: ulogger
+        anylogger: ulogger,
+        set sendCallback (sendCallback) {
+            if (typeof sendCallback === 'function') {
+                _sendCallback = sendCallback;
+            }
+        },
+        get sendCallback () {
+            return _sendCallback;
+        },
+        get modal () {
+            return ulog('FEditing:Modal');
+        }
     };
 });
