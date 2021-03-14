@@ -23,21 +23,28 @@ define([
 
     var _sendCallback = null;
 
-    var persist = function () {
-        return function sendLogToServer (rec) {
+    function persistOutput () {
+        return function persistLog (rec) {
             var error = new Error();
-            db.logs.add({
-                timestamp: Date.now(),
-                name: rec.name,
-                level: rec.level,
-                channel: rec.channel,
-                message: rec.message,
-                stack: error.stack
-            });
+            try {
+                db.logs.add({
+                    timestamp: Date.now(),
+                    name: rec.name,
+                    level: rec.level,
+                    channel: rec.channel,
+                    message: rec.message,
+                    stack: error.stack
+                });
+            } catch (exception) {
+                // use console directly to prevent an infinite loop, since it
+                // is unclear if debug could also lead to server function call
+                // eslint-disable-next-line no-console
+                console.error('Unable to persist log record', exception);
+            }
         };
-    };
+    }
 
-    var server = function () {
+    function serverOutput () {
         return function sendLogToServer (rec) {
             if (_sendCallback) {
                 var error = new Error();
@@ -52,24 +59,24 @@ define([
                 // use console directly to prevent an infinite loop, since it
                 // is unclear if debug could also lead to server function call
                 // eslint-disable-next-line no-console
-                console.debug(
+                console.warn(
                     'sendLogToServer failed cause _sendCallback is not defined'
                 );
             }
         };
-    };
+    }
 
     ulog.use({
         outputs: {
-            server: server,
-            persist: persist
+            server: serverOutput,
+            persist: persistOutput
         },
         channels: {
             persist: {
                 out: [
                     console,
-                    persist,
-                    server,
+                    persistOutput,
+                    serverOutput,
                 ],
             },
         },
@@ -110,28 +117,27 @@ define([
     var ulogger = ulog('FEditing:Main');
 
     function errorExceptionHandler (msg, url, lineNo, columnNo, error) {
-        ulogger.error(arguments);
+        try {
+            ulogger.error(arguments);
+            return false;
+        } catch (exception) { /*let fallback to default error behaviour*/ }
 
-        return false;
+        return true;
     }
 
-    function unhandledRejectionExceptionHandler (event) {
-        ulogger.error('Unhandled rejection occured.', event.reason);
+    function unhandledRejectionHandler (event) {
+        try {
+            ulogger.error('Unhandled rejection occured.', event.reason);
 
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
+            event.preventDefault();
+            return false;
+        } catch (exception) { /*let fallback to default error behaviour*/ }
+
+        return true;
     }
 
-    window.addEventListener(
-        'error',
-        errorExceptionHandler
-    );
-    window.addEventListener(
-        'unhandledrejection',
-        unhandledRejectionExceptionHandler
-    );
-
+    window.addEventListener('error', errorExceptionHandler);
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
 
     return {
         anylogger: ulogger,
