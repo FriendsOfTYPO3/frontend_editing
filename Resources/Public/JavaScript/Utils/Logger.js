@@ -22,101 +22,35 @@ define([
     'use strict';
 
     var _sendCallback = null;
-
-    function persistOutput () {
-        return function persistLog (rec) {
-            var error = new Error();
-            try {
-                db.logs.add({
-                    timestamp: Date.now(),
-                    name: rec.name,
-                    level: rec.level,
-                    channel: rec.channel,
-                    message: rec.message,
-                    stack: error.stack
-                });
-            } catch (exception) {
-                // use console directly to prevent an infinite loop, since it
-                // is unclear if debug could also lead to server function call
-                // eslint-disable-next-line no-console
-                console.error('Unable to persist log record', exception);
-            }
-        };
-    }
-
-    function serverOutput () {
-        return function sendLogToServer (rec) {
-            if (_sendCallback) {
-                var error = new Error();
-                _sendCallback({
-                    name: rec.name,
-                    level: rec.level,
-                    channel: rec.channel,
-                    message: rec.message,
-                    stack: error.stack
-                });
-            } else {
-                // use console directly to prevent an infinite loop, since it
-                // is unclear if debug could also lead to server function call
-                // eslint-disable-next-line no-console
-                console.warn(
-                    'sendLogToServer failed cause _sendCallback is not defined'
-                );
-            }
-        };
-    }
-
-    ulog.use({
-        outputs: {
-            server: serverOutput,
-            persist: persistOutput
-        },
-        channels: {
-            persist: {
-                out: [
-                    console,
-                    persistOutput,
-                    serverOutput,
-                ],
-            },
-        },
-        settings: {
-            persistLog: {
-                config: 'persist_log',
-                prop: {
-                    default: 'none',
-                },
-            },
-            persist: {
-                config: 'log_persist',
-                prop: {
-                    default: 'console persist server',
-                },
-            },
-        },
-        ext: function (logger) {
-            logger.persistEnabledFor = function (level) {
-                var persistLogLevel = logger[logger.persistLog.toUpperCase()];
-                return persistLogLevel >= logger[level.toUpperCase()];
-            };
-        },
-        after: function (logger) {
-            // eslint-disable-next-line guard-for-in
-            for (var level in this.levels) {
-                if (logger.enabledFor(level)) {
-                    var channel = 'output';
-                    if (logger.enabledFor(level)) {
-                        channel = 'persist';
-                    }
-                    logger[level] = logger.channels[channel].fns[level];
-                }
-            }
-        },
-    });
-
     var ulogger = ulog('FEditing:Main');
 
-    function errorExceptionHandler (msg, url, lineNo, columnNo, error) {
+    addPersistOutputs();
+    addPersistChannel();
+
+    window.addEventListener('error', errorExceptionHandler);
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
+    return {
+        set sendCallback (sendCallback) {
+            if (typeof sendCallback === 'function') {
+                _sendCallback = sendCallback;
+            }
+        },
+        get sendCallback () {
+            return _sendCallback;
+        },
+
+        // specific loggers
+        get modal () {
+            return ulog('FEditing:Modal');
+        }
+    };
+
+    /**
+     * Log global unhandled errors and prevent default output.
+     * @return {boolean}
+     */
+    function errorExceptionHandler () {
         try {
             ulogger.error(arguments);
             return false;
@@ -125,6 +59,11 @@ define([
         return true;
     }
 
+    /**
+     * Log unhandled rejection from promises and prevent default output.
+     * @param event
+     * @return {boolean}
+     */
     function unhandledRejectionHandler (event) {
         try {
             ulogger.error('Unhandled rejection occured.', event.reason);
@@ -136,21 +75,151 @@ define([
         return true;
     }
 
-    window.addEventListener('error', errorExceptionHandler);
-    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+    /**
+     * Adds the persist ulog channel and override the output ulog channel
+     * for levels above configure persist_log. The new persist ulog channel
+     * can be configured as usual in ulog with log_persist config.
+     * Eg. log = debug and persist_log = warn
+     *  -> warn and errors has persist channel
+     *  -> info and debug has output channel
+     *  -> trace has drain channel
+     */
+    function addPersistChannel () {
+        ulog.use({
+            channels: {
+                persist: {
+                    out: [
+                        console,
+                    ],
+                },
+            },
+            settings: {
+                persistLog: {
+                    config: 'persist_log',
+                    prop: {
+                        default: 'none',
+                    },
+                },
+                persist: {
+                    config: 'log_persist',
+                    prop: {
+                        default: 'console',
+                    },
+                },
+            },
+            ext: function (logger) {
+                logger.persistEnabledFor = function persistEnabledFor (level) {
+                    var persistLog = logger.persistLog.toUpperCase();
+                    return logger[persistLog] >= logger[level.toUpperCase()];
+                };
+            },
+            after: function (logger) {
+                // eslint-disable-next-line guard-for-in
+                for (var level in this.levels) {
+                    if (logger.enabledFor(level)) {
+                        var channel = 'output';
+                        if (logger.enabledFor(level)) {
+                            channel = 'persist';
+                        }
+                        logger[level] = logger.channels[channel].fns[level];
+                    }
+                }
+            },
+        });
+    }
 
-    return {
-        anylogger: ulogger,
-        set sendCallback (sendCallback) {
-            if (typeof sendCallback === 'function') {
-                _sendCallback = sendCallback;
+    /**
+     * Adds ulog outputs used to persist log records.
+     */
+    function addPersistOutputs () {
+        ulog.use({
+            outputs: {
+                server: serverOutput,
+                persist: persistOutput
+            },
+        });
+    }
+
+    /**
+     * Returns a function that add log entry in an indexedDB.
+     */
+    function persistOutput () {
+        return function persistLog (rec) {
+            var logRecord = createLogRecord(rec);
+            try {
+                db.logs.add(logRecord);
+            } catch (exception) {
+                error(
+                    'Unable to persist log record',
+                    exception,
+                    logRecord
+                );
             }
-        },
-        get sendCallback () {
-            return _sendCallback;
-        },
-        get modal () {
-            return ulog('FEditing:Modal');
-        }
-    };
+        };
+    }
+
+    /**
+     * Returns a function that call the sendCallback function if defined.
+     */
+    function serverOutput () {
+        return function sendLogToServer (rec) {
+            var logRecord = createLogRecord(rec);
+            if (_sendCallback) {
+                try {
+                    _sendCallback(logRecord);
+                } catch (exception) {
+                    error(
+                        'Error occured during callback function',
+                        exception,
+                        logRecord
+                    );
+                }
+            } else {
+                warn(
+                    'sendLogToServer failed cause _sendCallback is not defined',
+                    logRecord
+                );
+            }
+        };
+    }
+
+    /**
+     * Create a log record used to persisting
+     * @param rec
+     * @return {{
+     *     timestamp: number,
+     *     name: string,
+     *     level: number,
+     *     channel: string,
+     *     message: [],
+     *     stack: (*|string)
+     * }}
+     */
+    function createLogRecord (rec) {
+        var error = new Error();
+        return {
+            timestamp: Date.now(),
+            name: rec.name,
+            level: rec.level,
+            channel: rec.channel,
+            message: rec.message,
+            stack: error.stack
+        };
+    }
+
+    /**
+     * Log error in console directly to prevent an infinite loop.
+     */
+    function error () {
+        // eslint-disable-next-line no-console
+        console.error(arguments);
+    }
+
+    /**
+     * Log warn in console directly to prevent an infinite loop.
+     */
+    function warn () {
+        // eslint-disable-next-line no-console
+        console.warn(arguments);
+    }
 });
