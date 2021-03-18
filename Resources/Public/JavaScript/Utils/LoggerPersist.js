@@ -183,6 +183,7 @@ define([
      * @param rec
      * @return {{
      *     timestamp: number,
+     *     url: string,
      *     name: string,
      *     level: number,
      *     channel: string,
