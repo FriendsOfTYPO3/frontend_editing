@@ -21,7 +21,7 @@ define(['../Contrib/dexie.min'], function createIndexedDB (Dexie) {
     var db = new Dexie('FrontendEditing');
     db.version(1)
         .stores({
-            logs: '++id, timestamp, name, level, channel, message, stack'
+            logs: '++id, timestamp, name, url, level, channel, message, stack'
         });
 
     db.open();

@@ -13,20 +13,21 @@
 
 /**
  * Module: TYPO3/CMS/FrontendEditing/Utils/LoggerPersist
- * Logger extension to make logs persistable:
+ * Logger extension to make logs persistable.
+ * Side effect:
  *  Create highorder ulog channel.
  *  Creates 2 ulog outputs to persist
  *   - persist: with indexedDb in use
  *   - server: calling the sendCallback function
- *
- * sendCallback = <server output callback function>
- * config = {
+ * Control:
+ *  sendCallback = <server output callback function>
+ *  config = {
  *      highorder_log: <log level>
  *      log_highorder: <log output definition>
  *      log: <log level>
  *      log_output: <log output definition>
  *      log_drain: <log output definition>
- * }
+ *  }
  */
 define([
     '../Contrib/ulog/ulog',
@@ -191,8 +192,11 @@ define([
      */
     function createLogRecord (rec) {
         var error = new Error();
+        var url = window && window.location
+            ? window.location.href : 'no window.location';
         return {
             timestamp: Date.now(),
+            url: url,
             name: rec.name,
             level: rec.level,
             channel: rec.channel,
