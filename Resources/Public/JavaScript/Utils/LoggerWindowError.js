@@ -19,11 +19,28 @@ define(['../Contrib/ulog/ulog'], function addLoggerWindowErrorHandler (ulog) {
     'use strict';
 
     var ulogger = ulog('FEditing:Main');
+    var eventListeners = [{
+        target: window,
+        name: 'error',
+        listener: errorExceptionHandler,
+    }, {
+        target: window,
+        name: 'unhandledrejection',
+        listener: unhandledRejectionHandler,
+    }];
 
-    window.addEventListener('error', errorExceptionHandler);
-    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
-
-    return {};
+    return {
+        register: function () {
+            eventListeners.forEach(function addEventListener (record) {
+                record.target.addEventListener(record.name, record.listener);
+            });
+        },
+        unregister: function () {
+            eventListeners.forEach(function addEventListener (record) {
+                record.target.removeEventListener(record.name, record.listener);
+            });
+        }
+    };
 
     /**
      * Log global unhandled errors and prevent default output.
