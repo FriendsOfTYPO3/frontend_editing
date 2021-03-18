@@ -30,21 +30,17 @@ define([
     window.addEventListener('error', errorExceptionHandler);
     window.addEventListener('unhandledrejection', unhandledRejectionHandler);
 
-    return {
-        set sendCallback (sendCallback) {
-            if (typeof sendCallback === 'function') {
-                _sendCallback = sendCallback;
-            }
-        },
-        get sendCallback () {
-            return _sendCallback;
-        },
+    function getLogger(name) {
+        return ulog(name);
+    }
 
-        // specific loggers
-        get modal () {
-            return ulog('FEditing:Modal');
+    getLogger.setSendCallback = function (sendCallback) {
+        if (typeof sendCallback === 'function') {
+            _sendCallback = sendCallback;
         }
     };
+
+    return getLogger;
 
     /**
      * Log global unhandled errors and prevent default output.
