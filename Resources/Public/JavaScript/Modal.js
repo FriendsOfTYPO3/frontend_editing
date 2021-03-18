@@ -25,11 +25,11 @@ define([
     TranslatorLoader,
     Modal,
     Severity,
-    loggers
+    logger
 ) {
     'use strict';
 
-    var log = loggers('FEditing:Component:Widget:Modal');
+    var log = logger('FEditing:Component:Widget:Modal');
     log.trace('--> ModalFactory');
 
     // simple ponyfill
@@ -407,7 +407,8 @@ define([
          * @param callbacks
          */
         warning: function (message, callbacks) {
-            log.debug('warning with message', message);
+            log.info('warning with message', message);
+
             callbacks = callbacks || {};
 
             return createShowModal(message, message, callbacks)
@@ -419,7 +420,8 @@ define([
          * @param callbacks
          */
         confirm: function (message, callbacks) {
-            log.debug('confirm with message', message);
+            log.info('confirm with message', message);
+
             callbacks = callbacks || {};
 
             return createConfirmModal(message, message, callbacks)
@@ -432,7 +434,8 @@ define([
          * @param callbacks
          */
         confirmNavigate: function (message, saveCallback, callbacks) {
-            log.debug('confirm navigate with message', message);
+            log.info('confirm navigate with message', message);
+
             callbacks = callbacks || {};
 
             return createBaseModal(translateKeys.titleNavigate, message)
