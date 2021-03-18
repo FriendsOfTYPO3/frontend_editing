@@ -12,19 +12,20 @@
  */
 
 /**
+ * Module: TYPO3/CMS/FrontendEditing/Modal
  * Modal: TYPO3 Modal wrapper with predefined configurations per use case
  */
 define([
     'jquery',
-    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
     'TYPO3/CMS/Backend/Modal',
     'TYPO3/CMS/Backend/Severity',
+    './Utils/TranslatorLoader',
     './Utils/Logger'
 ], function ModalFactory (
     $,
-    TranslatorLoader,
-    Modal,
+    T3Modal,
     Severity,
+    TranslatorLoader,
     logger
 ) {
     'use strict';
@@ -33,7 +34,7 @@ define([
     log.trace('--> ModalFactory');
 
     // simple ponyfill
-    var identifiers = Modal.identifiers || {
+    var identifiers = T3Modal.identifiers || {
         modal: '.t3js-modal',
         content: '.t3js-modal-content',
         title: '.t3js-modal-title',
@@ -245,7 +246,7 @@ define([
                 });
 
                 log.debug('init modal', this);
-                return Modal.advanced(this);
+                return T3Modal.advanced(this);
             }
         };
     }
