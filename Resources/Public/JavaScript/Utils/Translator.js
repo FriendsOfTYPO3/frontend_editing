@@ -15,10 +15,15 @@
  * Module: TYPO3/CMS/FrontendEditing/Utils/Translator
  * Simple language translator with mapping functionality
  */
-define(['jquery'], function createTranslatorFactory ($) {
+define(['jquery', './Logger'], function createTranslatorFactory ($, logger) {
     'use strict';
 
+    var log = logger('FEditing:Utils:TranslatorFactory');
+    log.trace('--> createTranslatorFactory');
+
     return function TranslatorFactory (labels, mappings) {
+        log.debug('create Translator Factory');
+
         var defaulSettigns = {
             translationLabels: {
                 'error.type.key_invalid': 'Invalid translation key: \'{0}\'',
@@ -42,20 +47,28 @@ define(['jquery'], function createTranslatorFactory ($) {
         setNamespaceMappings(mappings);
 
         function setTranslationLabels (newTranslationLabels) {
+            log.trace('setTranslationLabels', newTranslationLabels);
+
             translationLabels = $.extend(
                 {},
                 defaulSettigns.translationLabels,
                 newTranslationLabels
             );
+
+            log.debug('set new TranslationLabels', translationLabels);
         }
 
         function setNamespaceMappings (newNamespaceMappings) {
+            log.trace('setNamespaceMappings', newNamespaceMappings);
+
             namespaceMappings = $.extend(
                 true,
                 {},
                 defaulSettigns.namespaceMappings,
                 newNamespaceMappings
             );
+
+            log.debug('set new NamespaceMappings:', namespaceMappings);
         }
 
         function getNamespaceMapping (namespace) {
@@ -85,6 +98,8 @@ define(['jquery'], function createTranslatorFactory ($) {
                 }
             }
 
+            log.debug('translation:', key, s);
+
             return s;
         }
 
@@ -92,6 +107,8 @@ define(['jquery'], function createTranslatorFactory ($) {
             setTranslationLabels: setTranslationLabels,
             setNamespaceMappings: setNamespaceMappings,
             createTranslator: function (namespace) {
+                log.info('create Translator:', namespace);
+
                 //used to get keys
                 return {
                     /**
@@ -113,6 +130,8 @@ define(['jquery'], function createTranslatorFactory ($) {
                      * @returns {string} translation
                      */
                     translate: function (key) {
+                        log.debug('translate:', key);
+
                         if (Array.isArray(arguments[1])) {
                             var parameters = [key];
                             parameters.push.apply(parameters, arguments[1]);
