@@ -25,7 +25,7 @@ define([
     var ulogger = ulog('FEditing:Main');
 
     addPersistOutputs();
-    addPersistChannel();
+    addHighorderChannel();
 
     window.addEventListener('error', errorExceptionHandler);
     window.addEventListener('unhandledrejection', unhandledRejectionHandler);
@@ -76,50 +76,51 @@ define([
     }
 
     /**
-     * Adds the persist ulog channel and override the output ulog channel
-     * for levels above configure persist_log. The new persist ulog channel
-     * can be configured as usual in ulog with log_persist config.
-     * Eg. log = debug and persist_log = warn
-     *  -> warn and errors has persist channel
+     * Adds the highorder ulog channel and override the output ulog channel
+     * for levels above configure highorder_log. The new highorder ulog channel
+     * can be configured as usual in ulog with log_highorder config.
+     * Eg. log = debug and highorder_log = warn
+     *  -> warn and errors has highorder channel
      *  -> info and debug has output channel
      *  -> trace has drain channel
      */
-    function addPersistChannel () {
+    function addHighorderChannel () {
         ulog.use({
             channels: {
-                persist: {
+                highorder: {
                     out: [
                         console,
                     ],
                 },
             },
             settings: {
-                persistLog: {
-                    config: 'persist_log',
+                highorderLog: {
+                    config: 'highorder_log',
                     prop: {
                         default: 'none',
                     },
                 },
-                persist: {
-                    config: 'log_persist',
+                highorder: {
+                    config: 'log_highorder',
                     prop: {
                         default: 'console',
                     },
                 },
             },
             ext: function (logger) {
-                logger.persistEnabledFor = function persistEnabledFor (level) {
-                    var persistLog = logger.persistLog.toUpperCase();
-                    return logger[persistLog] >= logger[level.toUpperCase()];
-                };
+                function highorderEnabledFor (level) {
+                    var highorderLog = logger.highorderLog.toUpperCase();
+                    return logger[highorderLog] >= logger[level.toUpperCase()];
+                }
+                logger.highorderEnabledFor = highorderEnabledFor;
             },
             after: function (logger) {
                 // eslint-disable-next-line guard-for-in
                 for (var level in this.levels) {
                     if (logger.enabledFor(level)) {
                         var channel = 'output';
-                        if (logger.enabledFor(level)) {
-                            channel = 'persist';
+                        if (logger.highorderEnabledFor(level)) {
+                            channel = 'highorder';
                         }
                         logger[level] = logger.channels[channel].fns[level];
                     }
