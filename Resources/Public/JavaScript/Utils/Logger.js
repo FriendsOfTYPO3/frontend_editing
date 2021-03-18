@@ -25,7 +25,7 @@ define([
     window.addEventListener('error', errorExceptionHandler);
     window.addEventListener('unhandledrejection', unhandledRejectionHandler);
 
-    return function getLogger(name) {
+    return function getLogger (name) {
         return ulog(name);
     };
 
