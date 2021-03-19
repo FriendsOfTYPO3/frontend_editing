@@ -754,7 +754,7 @@ define([
 
                 var $this = $(this);
                 var dataSet = $this.data();
-                if (''+dataSet.uid === ''+item.uid &&
+                if (String(dataSet.uid) === String(item.uid) &&
                     dataSet.field === item.field &&
                     dataSet.table === item.table
                 ) {
