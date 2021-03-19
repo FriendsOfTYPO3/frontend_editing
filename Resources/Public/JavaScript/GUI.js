@@ -143,19 +143,7 @@ define([
     var $topLeftTitle, $topLeftBar;
 
     function init (options) {
-        setTimeout(() => {
-
-            log.info('init', options);
-        }, 10);
-        console.log(this);
-        console.log(Logger);
-        console.log("log", log);
-        console.log("debug", log.debug);
-        log.debug('init', options);
-        Logger('FEditing:GUI').info('init', options);
-        log.error('init');
-        log.debug('debug log rec', options);
-        log.warn('debug log rec', options);
+        log.info('init', options);
 
         findElements();
 
