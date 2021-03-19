@@ -17,10 +17,10 @@
  */
 define(
     ['jquery', './Translator', './Logger'],
-    function TranslatorLoader ($, createTranslatorFactory, logger) {
+    function TranslatorLoader ($, createTranslatorFactory, Logger) {
         'use strict';
 
-        var log = logger('FEditing:Utils:TranslatorLoader');
+        var log = Logger('FEditing:Utils:TranslatorLoader');
         log.trace('--> TranslatorLoader');
 
         /*eslint-disable max-len*/

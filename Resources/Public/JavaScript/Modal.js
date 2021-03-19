@@ -26,11 +26,11 @@ define([
     T3Modal,
     Severity,
     TranslatorLoader,
-    logger
+    Logger
 ) {
     'use strict';
 
-    var log = logger('FEditing:Component:Widget:Modal');
+    var log = Logger('FEditing:Component:Widget:Modal');
     log.trace('--> ModalFactory');
 
     // simple ponyfill

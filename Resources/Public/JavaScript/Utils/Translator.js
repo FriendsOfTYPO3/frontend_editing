@@ -15,10 +15,10 @@
  * Module: TYPO3/CMS/FrontendEditing/Utils/Translator
  * Simple language translator with mapping functionality
  */
-define(['jquery', './Logger'], function createTranslatorFactory ($, logger) {
+define(['jquery', './Logger'], function createTranslatorFactory ($, Logger) {
     'use strict';
 
-    var log = logger('FEditing:Utils:TranslatorFactory');
+    var log = Logger('FEditing:Utils:TranslatorFactory');
     log.trace('--> createTranslatorFactory');
 
     return function TranslatorFactory (labels, mappings) {
