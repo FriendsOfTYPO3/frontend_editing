@@ -12,65 +12,109 @@
  */
 
 /**
+ * Module: TYPO3/CMS/FrontendEditing/Storage
  * FrontendEditing.Storage: A wrapper class for using LocalStorage
  * has no dependencies to any other Frontend Editing related functionality
  * but is used in the main Frontend Editing app js.
  */
-define(['TYPO3/CMS/FrontendEditing/Contrib/immutable'], function (Immutable) {
-	'use strict';
+define([
+    './Contrib/immutable',
+    './Utils/Logger'
+], function createStorage (Immutable, Logger) {
+    'use strict';
 
-	var Storage = function(storageKey) {
-		this.storageKey = storageKey;
+    var log = Logger('FEditing:localStorage');
+    log.trace('--> createStorage');
 
-		// Always empty the storage when it's constructed
-		this.clear();
-	};
+    // TODO: use reducers and action with payload to create states to store
 
-	Storage.prototype = {
-		addSaveItem: function (id, item) {
-			var processedItems = {
-				saveItems: this.getSaveItems().set(id, item)
-			};
-			localStorage.setItem(this.storageKey, JSON.stringify(processedItems));
-		},
+    var Storage = function (storageKey) {
+        log.info('new Storage', storageKey);
 
-		getSaveItems: function() {
-			var saveItems = localStorage.getItem(this.storageKey);
-			saveItems = JSON.parse(saveItems);
-			if (saveItems === null || saveItems === '') {
-				saveItems = Immutable.Map({});
-			} else {
-				saveItems = Immutable.Map(saveItems.saveItems);
-			}
+        this.storageKey = storageKey;
 
-			return saveItems;
-		},
+        // Always empty the storage when it's constructed
+        this.clear();
+    };
 
-		getAllData: function() {
-			return JSON.parse(localStorage.getItem(this.storageKey));
-		},
+    Storage.prototype = {
+        addSaveItem: function (id, saveItem) {
+            log.debug('add save item', id, saveItem);
 
-		addItem: function(key, data) {
-			var items = localStorage.getItem(this.storageKey);
-			items = JSON.parse(items);
-			items = Immutable.Map(items);
-			var addedItems = items.set(key, data);
-			localStorage.setItem(this.storageKey, JSON.stringify(addedItems));
-		},
+            var items = this.getAllDataAsMap();
+            var saveItems = this._getSaveItems(items);
 
-		clear: function() {
-			var items = localStorage.getItem(this.storageKey);
-			items = JSON.parse(items);
-			items = Immutable.Map(items);
-			// Reset the saveItems but keep the rest of the states
-			var addedItems = items.set('saveItems', null);
-			localStorage.setItem(this.storageKey, JSON.stringify(addedItems));
-		},
+            saveItems = saveItems.set(id, saveItem);
+            var addedItems = items.set('saveItems', saveItems);
+            this._persistItems(addedItems);
+        },
 
-		isEmpty: function() {
-			return this.getSaveItems().count() === 0;
-		}
-	};
+        _getSaveItems: function (map) {
+            var saveItems = map.get('saveItems');
+            if (!saveItems) {
+                return Immutable.Map({});
+            }
+            return Immutable.Map(saveItems);
+        },
 
-	return Storage;
+        getSaveItems: function () {
+            var items = this.getAllDataAsMap();
+            return this._getSaveItems(items);
+        },
+
+        getAllData: function () {
+            return JSON.parse(localStorage.getItem(this.storageKey));
+        },
+
+        getAllDataAsMap: function () {
+            return Immutable.Map(this.getAllData());
+        },
+
+        addItem: function (key, item) {
+            log.debug('add item', key, item);
+
+            var items = this.getAllDataAsMap();
+            var addedItems = items.set(key, item);
+            this._persistItems(addedItems);
+        },
+
+        clear: function () {
+            var items = this.getAllDataAsMap();
+
+            log.debug('clear saveItems', items);
+
+            // Reset the saveItems but keep the rest of the states
+            var addedItems = items.set('saveItems', null);
+
+            log.trace('new item', addedItems);
+
+            this._persistItems(addedItems);
+        },
+
+        _persistItems: function (items) {
+            log.trace('_persistItems', items);
+
+            localStorage.setItem(this.storageKey, JSON.stringify(items));
+        },
+
+        isEmpty: function () {
+            var isEmpty = this.getSaveItems()
+                .isEmpty();
+
+            log.trace('isEmpty', isEmpty);
+
+            return isEmpty;
+        },
+
+        countSaveItems: function () {
+            var count = this.getSaveItems()
+                .count();
+
+            log.trace('countSaveItems', count);
+
+            return count;
+        }
+    };
+
+    return Storage;
 });
