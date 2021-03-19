@@ -12,16 +12,22 @@
 */
 
 /**
+ * Module: TYPO3/CMS/FrontendEditing/Scroller
  * FrontendEditing.Scroller: Controller for basic scrolling
  */
-define(['jquery'], function ScrollerModule ($) {
+define(['jquery', './Utils/Logger'], function createScrollerModule ($, Logger) {
     'use strict';
+
+    var log = Logger('FEditing:Utils:Scroller');
+    log.trace('--> createScrollerModule');
 
     var framesPerSecond = 50;
     /*eslint-disable-next-line no-magic-numbers*/
     var updateRate = 1000 / framesPerSecond;
 
     return function Scroller (target, scrollAreaTop, scrollAreaBottom) {
+        log.info('create Scroller');
+
         var $target = $(target);
         var $scrollTarget = $target;
         var isScrollTargetDocument = $target.is('iframe');
@@ -36,6 +42,8 @@ define(['jquery'], function ScrollerModule ($) {
         var speed = 0;
 
         function stopScrolling () {
+            log.info('create Scroller');
+
             scrolling = false;
             if (timeoutId >= 0) {
                 window.clearTimeout(timeoutId);
@@ -44,6 +52,8 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function startScrolling (newSpeed) {
+            log.trace('startScrolling', newSpeed);
+
             if (!enabled) {
                 return;
             }
@@ -51,6 +61,8 @@ define(['jquery'], function ScrollerModule ($) {
             speed = newSpeed;
 
             if (speed !== 0) {
+                log.debug('start Scrolling');
+
                 var checkFnc;
                 var scrollY = $scrollTarget.scrollTop();
                 if (speed < 0) {
@@ -66,7 +78,9 @@ define(['jquery'], function ScrollerModule ($) {
                 var scroll = function () {
                     if (scrolling) {
                         var scrollY = $scrollTarget.scrollTop() + speed;
+                        log.debug('estimated scroll position', scrollY, speed);
                         scrollY = checkFnc(scrollY);
+                        log.trace('new scroll position', scrollY, speed);
                         $scrollTarget.scrollTop(scrollY);
                         timeoutId = -1;
                         if (scrolling) {
@@ -80,7 +94,11 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function checkScrollUpBound (scrollY) {
+            log.trace('checkScrollUpBound', scrollY);
+
             if (scrollY <= 0) {
+                log.debug('up bound reached', scrollY);
+
                 $scrollAreaTop.hide();
                 scrollY = 0;
                 scrolling = false;
@@ -91,8 +109,16 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function checkScrollDownBound (scrollY) {
+            log.trace('checkScrollDownBound', scrollY);
+
             var maxScroll = getMaxScroll();
             if (scrollY >= maxScroll) {
+                log.debug(
+                    'down bound reached [scrollY, maxScroll]',
+                    scrollY,
+                    maxScroll
+                );
+
                 $scrollAreaBottom.hide();
                 scrollY = maxScroll;
                 scrolling = false;
@@ -103,6 +129,8 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function enable () {
+            log.info('enable');
+
             enabled = true;
             scrolling = false;
 
@@ -110,6 +138,8 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function disable () {
+            log.info('disable');
+
             enabled = false;
             stopScrolling();
             $scrollAreaBottom.hide();
@@ -117,6 +147,8 @@ define(['jquery'], function ScrollerModule ($) {
         }
 
         function reload () {
+            log.debug('reload');
+
             if (isScrollTargetDocument) {
                 $scrollTarget = $target.contents();
                 if (!$scrollTarget || $scrollTarget.length === 0) {
@@ -147,7 +179,11 @@ define(['jquery'], function ScrollerModule ($) {
             var maxScroll = scrollHeight - $target[0].clientHeight;
             // round max scroll up so it match the height
             // eslint-disable-next-line no-magic-numbers
-            return Math.round(maxScroll + 0.499);
+            var maxScroll = Math.round(maxScroll + 0.499);
+
+            log.trace('getMaxScroll', maxScroll);
+
+            return maxScroll;
         }
 
         return {
