@@ -260,7 +260,7 @@ define([
                 F.hideContent(uid, table, hide);
             });
 
-        var $moveUpButton = $inlineAction.find('.icon-actions-move-down');
+        var $moveUpButton = $inlineAction.find('.icon-actions-move-up');
         if (previous && String(previous.dataset.cid) === cid) {
             $moveUpButton.on('click', function moveContentUp () {
                 log.info('move content up action', uid, table);
