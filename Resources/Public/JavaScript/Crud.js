@@ -179,23 +179,7 @@ define([
             .done(function success (response) {
                 log.debug('check if record is locked.', response);
 
-                if (typeof response === 'string') {
-                    try {
-                        response = JSON.parse(response);
-                    } catch (exception) {
-                        log.error(
-                            'response is no JSON.',
-                            lockedRecordData,
-                            response
-                        );
-
-                        throw new TypeError(
-                            'response was not a JSON',
-                            response,
-                            exception
-                        );
-                    }
-                }
+                response = getJsonResponse(response);
 
                 if (response.success === true) {
                     // This is the last line of defence. If the code goes here
@@ -338,6 +322,9 @@ define([
                 if (!baseTriggerData) {
                     baseTriggerData = {};
                 }
+
+                response = getJsonResponse(response);
+
                 baseTriggerData.message = response.message;
                 F.trigger(F.UPDATE_CONTENT_COMPLETE, baseTriggerData);
             })
@@ -348,6 +335,27 @@ define([
                     message: jqXHR.responseText
                 });
             });
+    }
+
+    function getJsonResponse (response) {
+        if (typeof response === 'string') {
+            try {
+                response = JSON.parse(response);
+            } catch (exception) {
+                log.error(
+                    'response is no JSON.',
+                    response,
+                    exception
+                );
+
+                throw new TypeError(
+                    'response was not a JSON',
+                    response,
+                    exception
+                );
+            }
+        }
+        return response;
     }
 
     return FrontendEditing;
