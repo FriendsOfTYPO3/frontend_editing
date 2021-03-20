@@ -12,286 +12,314 @@
  */
 
 /**
+ * Module: TYPO3/CMS/FrontendEditing/Crud
  * FrontendEditing.Crud: Handling the CRUD requests for content
  */
 define([
     'jquery',
-    'TYPO3/CMS/FrontendEditing/FrontendEditing',
-    'TYPO3/CMS/FrontendEditing/Modal',
-], function ($, FrontendEditing, Modal) {
+    './FrontendEditing',
+    './Modal',
+    './Utils/Logger'
+], function createCrudModule ($, FrontendEditing, Modal, Logger) {
+    'use strict';
 
-	'use strict';
+    var log = Logger('FEditing:CRUD');
+    log.trace('--> createCrudModule');
 
-	// Extend FrontendEditing with additional events
-	var events = {
-		REQUEST_START: 'REQUEST_START',
-		REQUEST_COMPLETE: 'REQUEST_COMPLETE',
-		UPDATE_CONTENT_COMPLETE: 'UPDATE_CONTENT_COMPLETE',
-		UPDATE_PAGES_COMPLETE: 'UPDATE_PAGES_COMPLETE',
-		REQUEST_ERROR: 'REQUEST_ERROR'
-	};
-
-	// Add custom events to FrontendEditing
-	for (var key in events) {
-		FrontendEditing.addEvent(key, events[key]);
-	}
-
-	// Extend FrontendEditing with the following functions
-	FrontendEditing.prototype.saveAll = saveAll;
-	FrontendEditing.prototype.delete = deleteRecord;
-	FrontendEditing.prototype.newContent = newRecord;
-	FrontendEditing.prototype.hideContent = hideRecord;
-	FrontendEditing.prototype.moveContent = moveRecord;
-	FrontendEditing.prototype.getBESessionId = getBESessionId;
-	FrontendEditing.prototype.getEndpointUrl = getEndpointUrl;
-	FrontendEditing.prototype.setEndpointUrl = function (url) {
-		this._endpointUrl = url;
-	};
-	FrontendEditing.prototype.setBESessionId = function (beSessionId) {
-		this._beSessionId = beSessionId;
-	};
-
-	var numberOfRequestsLeft;
-
-	function getEndpointUrl(action) {
-		var url = F._endpointUrl;
-		if (action) {
-			url += '&action=' + action;
-		}
-		return url;
-	}
-
-	function getBESessionId() {
-		return F._beSessionId;
-	}
-
-	function saveAll() {
-		var storage = F.getStorage();
-		var items = storage.getSaveItems();
-		if (items.count() === 0) {
-			return this.error('Function saveAll called but no items to save');
-		}
-
-		F.trigger(F.REQUEST_START);
-
-		numberOfRequestsLeft = items.count();
-		items.forEach(function (item) {
-			F.showLoadingScreen();
-
-			// Check if a record is locked
-			$.when(checkIfRecordIsLocked(item)).done(function(data) {
-				// If user prompted yes or there was no locked record found
-				if (data === false) {
-					// Check if the CKEditor has configuration, otherwise remove HTML tags
-					var content;
-					var isInlineElement = item.inlineElement || false;
-
-					if (isInlineElement) {
-						content = item.text;
-					} else if (item.hasCkeditorConfiguration) {
-						content = CKEDITOR.instances[item.editorInstance].getData();
-					} else {
-						content = CKEDITOR.instances[item.editorInstance].editable().getText();
-					}
-
-					// Save the content
-					var saveItemData = {
-						'action': item.action,
-						'table': item.table,
-						'uid': item.uid,
-						'field': item.field,
-						'content': content
-					};
-					$.ajax({
-						url: getEndpointUrl(),
-						method: 'POST',
-						data: saveItemData
-					}).done(function (data) {
-						F.trigger(
-							F.UPDATE_CONTENT_COMPLETE,
-							{
-								message: data.message
-							}
-						);
-					}).fail(function (jqXHR) {
-						F.trigger(
-							F.REQUEST_ERROR,
-							{
-								message: jqXHR.responseText
-							}
-						);
-					}).always(function () {
-						numberOfRequestsLeft--;
-						if (numberOfRequestsLeft === 0) {
-							storage.clear();
-							F.trigger(F.REQUEST_COMPLETE);
-							F.trigger(F.CONTENT_CHANGE);
-						}
-
-						F.hideLoadingScreen();
-					});
-				} else {
-					storage.clear();
-					F.trigger(F.REQUEST_COMPLETE);
-					F.trigger(F.CONTENT_CHANGE);
-
-					F.hideLoadingScreen();
-				}
-			});
-		});
-	}
-
-	function checkIfRecordIsLocked(item) {
-		var lockedRecordData = {
-			'action': 'lockedRecord',
-			'table': item.table,
-			'uid': item.uid
-		};
-		$.ajax({
-			url: getEndpointUrl('lockedRecord'),
-			method: 'POST',
-			data: lockedRecordData
-		}).done(function (data) {
-			if (data.success === true) {
-                Modal.confirm(data.message, {
-					yes: function () {
-						return false;
-					},
-					no: function () {
-						return true;
-					}
-				});
-			}
-		});
-
-		return false;
-	}
-
-	function deleteRecord(uid, table) {
-		this.trigger(F.REQUEST_START);
-
-		$.ajax({
-			url: getEndpointUrl(),
-			method: 'DELETE',
-			data: {
-				table: table,
-				uid: uid
-			}
-		}).done(function (data) {
-			F.trigger(
-				F.UPDATE_CONTENT_COMPLETE,
-				{
-					title: 'Content deleted',
-					message: data.message
-				}
-			);
-		}).fail(function (jqXHR) {
-			F.trigger(
-				F.REQUEST_ERROR,
-				{
-					message: jqXHR.responseText
-				}
-			);
-		}).always(function () {
-			F.trigger(F.REQUEST_COMPLETE);
-		});
-	}
-
-	function hideRecord(uid, table, hide) {
-		this.trigger(F.REQUEST_START);
-
-		$.ajax({
-			url: getEndpointUrl('hide'),
-			method: 'POST',
-			data: {
-				uid: uid,
-				table: table,
-				hide: hide
-			}
-		}).done(function (data) {
-			F.trigger(
-				F.UPDATE_CONTENT_COMPLETE,
-				{
-					message: data.message
-				}
-			);
-		}).fail(function (jqXHR) {
-			F.trigger(
-				F.REQUEST_ERROR,
-				{
-					message: jqXHR.responseText
-				}
-			);
-		}).always(function () {
-			F.trigger(F.REQUEST_COMPLETE);
-		});
-	}
-
-	function moveRecord(uid, table, beforeUid, colPos, defVals) {
-    this.trigger(F.REQUEST_START);
-
-    var data = {
-      uid: uid,
-      table: table,
-      beforeUid: beforeUid,
-      defVals: defVals
+    // Extend FrontendEditing with additional events
+    var events = {
+        REQUEST_START: 'REQUEST_START',
+        REQUEST_COMPLETE: 'REQUEST_COMPLETE',
+        UPDATE_CONTENT_COMPLETE: 'UPDATE_CONTENT_COMPLETE',
+        UPDATE_PAGES_COMPLETE: 'UPDATE_PAGES_COMPLETE',
+        REQUEST_ERROR: 'REQUEST_ERROR'
     };
 
-    if (typeof colPos !== 'undefined') {
-      data.colPos = colPos;
+    // Add custom events to FrontendEditing
+    for (var key in events) {
+        if (!events.hasOwnProperty(key)) {
+            continue;
+        }
+
+        FrontendEditing.addEvent(key, events[key]);
     }
 
-    $.ajax({
-      url: getEndpointUrl('move'),
-      method: 'POST',
-      data: data
-    }).done(function (data) {
-      F.trigger(
-        F.UPDATE_CONTENT_COMPLETE,
-        {
-          message: data.message
-        }
-      );
-    }).fail(function (jqXHR) {
-      F.trigger(
-        F.REQUEST_ERROR,
-        {
-          message: jqXHR.responseText
-        }
-      );
-    }).always(function () {
-      F.trigger(F.REQUEST_COMPLETE);
-    });
-  }
+    // Extend FrontendEditing with the following functions
+    FrontendEditing.prototype.saveAll = saveAll;
+    FrontendEditing.prototype.delete = deleteRecord;
+    FrontendEditing.prototype.newContent = newRecord;
+    FrontendEditing.prototype.hideContent = hideRecord;
+    FrontendEditing.prototype.moveContent = moveRecord;
+    FrontendEditing.prototype.getBESessionId = getBESessionId;
+    FrontendEditing.prototype.setBESessionId = setBESessionId;
+    FrontendEditing.prototype.getEndpointUrl = getEndpointUrl;
+    FrontendEditing.prototype.setEndpointUrl = setEndpointUrl;
 
-  function newRecord(defVals) {
-    this.trigger(F.REQUEST_START);
+    var numberOfRequestsLeft;
 
-    var data = {data: defVals};
-
-    $.ajax({
-      url: getEndpointUrl('new'),
-      method: 'POST',
-      data: data
-    }).done(function (data) {
-      F.trigger(
-        F.UPDATE_CONTENT_COMPLETE,
-        {
-          message: data.message
+    function getEndpointUrl (action) {
+        var url = F._endpointUrl;
+        if (action) {
+            url += '&action=' + action;
         }
-      );
-    }).fail(function (jqXHR) {
-      F.trigger(
-        F.REQUEST_ERROR,
-        {
-          message: jqXHR.responseText
-        }
-      );
-    }).always(function () {
-      F.trigger(F.REQUEST_COMPLETE);
-      F.refreshIframe();
-    });
-  }
+        return url;
+    }
 
-	return FrontendEditing;
+    function setEndpointUrl (url) {
+        this._endpointUrl = url;
+    }
+
+    function getBESessionId () {
+        return F._beSessionId;
+    }
+
+    function setBESessionId (beSessionId) {
+        this._beSessionId = beSessionId;
+    }
+
+    function getContent (item) {
+        if (item.inlineElement) {
+            return item.text;
+        }
+
+        // Check if the CKEditor has configuration,
+        // otherwise remove HTML tags
+        var editor = CKEDITOR.instances[item.editorInstance];
+        if (item.hasCkeditorConfiguration) {
+            return editor.getData();
+        }
+        return editor.editable()
+            .getText();
+    }
+
+    function saveAll () {
+        var storage = F.getStorage();
+
+        var items = storage.getSaveItems();
+        if (items.count() === 0) {
+            log.error('Function saveAll called but no items to save');
+
+            throw new Error('No items to save in storage.');
+        }
+
+        F.trigger(F.REQUEST_START);
+
+        numberOfRequestsLeft = items.count();
+
+        items.forEach(function processSaveItem (item) {
+            F.showLoadingScreen();
+
+            $.when(checkIfRecordIsLocked(item))
+                .done(function saveItem (item) {
+                    var jqxhr = $.ajax({
+                        url: getEndpointUrl(),
+                        method: 'POST',
+                        // eslint-disable-next-line id-denylist
+                        data: {
+                            'action': item.action,
+                            'table': item.table,
+                            'uid': item.uid,
+                            'field': item.field,
+                            'content': getContent(item)
+                        }
+                    })
+                        .always(requestCompleted);
+
+                    appendBaseTriggers(jqxhr);
+                })
+                .fail(requestCompleted);
+        });
+
+        function requestCompleted () {
+            numberOfRequestsLeft--;
+            if (numberOfRequestsLeft === 0) {
+                storage.clear();
+                F.trigger(F.REQUEST_COMPLETE);
+                F.trigger(F.CONTENT_CHANGE);
+            }
+
+            F.hideLoadingScreen();
+        }
+    }
+
+    function checkIfRecordIsLocked (item) {
+        log.trace('checkIfRecordIsLocked.', item);
+
+        var canEdit = $.Deferred();
+
+        var lockedRecordData = {
+            'action': 'lockedRecord',
+            'table': item.table,
+            'uid': item.uid
+        };
+
+        log.debug('request if record is locked.', lockedRecordData);
+
+        $.ajax({
+            url: getEndpointUrl('lockedRecord'),
+            method: 'POST',
+            // eslint-disable-next-line id-denylist
+            data: lockedRecordData
+        })
+            .done(function success (response) {
+                log.debug('check if record is locked.', response);
+
+                if (typeof response === 'string') {
+                    try {
+                        response = JSON.parse(response);
+                    } catch (exception) {
+                        log.error(
+                            'response is no JSON.',
+                            lockedRecordData,
+                            response
+                        );
+
+                        throw new TypeError(
+                            'response was not a JSON',
+                            response,
+                            exception
+                        );
+                    }
+                }
+
+                if (response.success === true) {
+                    // This is the last line of defence. If the code goes here
+                    // the game is over since someone is going to lose data.
+                    // There should be no reason to get into this situation
+                    // because it is hard to decide what to do with more than
+                    // one change.
+                    // It also indicates that maybe the locking system went
+                    // wrong.
+                    // => It is extremely possible that someone lose data!
+
+                    // log.warn(
+                    //     'Record(s) locked. Maybe locking system is down',
+                    //     response.message
+                    // );
+
+                    Modal.confirm(response.message, {
+                        yes: function () {
+                            canEdit.resolve(item);
+                        },
+                        no: canEdit.reject
+                    });
+                } else {
+                    canEdit.resolve(item);
+                }
+            })
+            .fail(function failed () {
+                log.error('No answer from server to record is locked request.');
+
+                // This is the last line of defence. So since we don't know,
+                // we also don't do anything than shutting down:
+                throw new Error(
+                    'No answer from server to record is locked request.'
+                );
+            });
+
+        return canEdit;
+    }
+
+    function deleteRecord (uid, table) {
+        this.trigger(F.REQUEST_START);
+
+        var baseTriggerData = {
+            title: 'Content deleted',
+        };
+
+        var jqxhr = $.ajax({
+            url: getEndpointUrl(),
+            method: 'DELETE',
+            data: {
+                table: table,
+                uid: uid
+            }
+        });
+
+        appendTriggers(jqxhr, baseTriggerData);
+    }
+
+    function hideRecord (uid, table, hide) {
+        this.trigger(F.REQUEST_START);
+
+        var jqxhr = $.ajax({
+            url: getEndpointUrl('hide'),
+            method: 'POST',
+            data: {
+                uid: uid,
+                table: table,
+                hide: hide
+            }
+        });
+
+        appendTriggers(jqxhr);
+    }
+
+    function moveRecord (uid, table, beforeUid, colPos, defVals) {
+        this.trigger(F.REQUEST_START);
+
+        var data = {
+            uid: uid,
+            table: table,
+            beforeUid: beforeUid,
+            defVals: defVals
+        };
+
+        if (typeof colPos !== 'undefined') {
+            data.colPos = colPos;
+        }
+
+        var jqxhr = $.ajax({
+            url: getEndpointUrl('move'),
+            method: 'POST',
+            data: data
+        });
+
+        appendTriggers(jqxhr);
+    }
+
+    function newRecord (defVals) {
+        this.trigger(F.REQUEST_START);
+
+        var jqxhr = $.ajax({
+            url: getEndpointUrl('new'),
+            method: 'POST',
+            // eslint-disable-next-line id-denylist
+            data: {data: defVals}
+        })
+            .always(F.refreshIframe);
+
+        appendTriggers(jqxhr);
+    }
+
+    function appendTriggers (jqxhr, baseTriggerData) {
+        return appendBaseTriggers(jqxhr, baseTriggerData)
+            .always(function triggerFinish () {
+                F.trigger(F.REQUEST_COMPLETE);
+            });
+    }
+
+    /**
+     * Used since multiple requests are count once.
+     * @param jqxhr
+     * @param baseTriggerData
+     * @return {*}
+     */
+    function appendBaseTriggers (jqxhr, baseTriggerData) {
+        return jqxhr
+            .done(function triggerSuccess (response) {
+                if (!baseTriggerData) {
+                    baseTriggerData = {};
+                }
+                baseTriggerData.message = response.message;
+                F.trigger(F.UPDATE_CONTENT_COMPLETE, baseTriggerData);
+            })
+            .fail(function triggerError (jqXHR) {
+                F.trigger(F.REQUEST_ERROR, {
+                    message: jqXHR.responseText
+                });
+            });
+    }
+
+    return FrontendEditing;
 });
