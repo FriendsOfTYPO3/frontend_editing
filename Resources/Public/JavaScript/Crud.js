@@ -66,6 +66,8 @@ define([
     }
 
     function setEndpointUrl (url) {
+        log.debug('setEndpointUrl', url);
+
         this._endpointUrl = url;
     }
 
@@ -74,6 +76,9 @@ define([
     }
 
     function setBESessionId (beSessionId) {
+        // check if session id is top secret cause of persist
+        log.debug('setBESessionId', beSessionId);
+
         this._beSessionId = beSessionId;
     }
 
@@ -93,6 +98,8 @@ define([
     }
 
     function saveAll () {
+        log.trace('saveAll');
+
         var storage = F.getStorage();
 
         var items = storage.getSaveItems();
@@ -106,11 +113,17 @@ define([
 
         numberOfRequestsLeft = items.count();
 
+        log.debug('items to save', items);
+
         items.forEach(function processSaveItem (item) {
+            log.trace('processSaveItem', item);
+
             F.showLoadingScreen();
 
             $.when(checkIfRecordIsLocked(item))
                 .done(function saveItem (item) {
+                    log.debug('save item', item);
+
                     var jqxhr = $.ajax({
                         url: getEndpointUrl(),
                         method: 'POST',
@@ -133,6 +146,8 @@ define([
         function requestCompleted () {
             numberOfRequestsLeft--;
             if (numberOfRequestsLeft === 0) {
+                log.debug('all item saved');
+
                 storage.clear();
                 F.trigger(F.REQUEST_COMPLETE);
                 F.trigger(F.CONTENT_CHANGE);
@@ -221,6 +236,8 @@ define([
     }
 
     function deleteRecord (uid, table) {
+        log.debug('delete record', uid, table);
+
         this.trigger(F.REQUEST_START);
 
         var baseTriggerData = {
@@ -240,6 +257,8 @@ define([
     }
 
     function hideRecord (uid, table, hide) {
+        log.debug('set hide flag on record', uid, table, hide);
+
         this.trigger(F.REQUEST_START);
 
         var jqxhr = $.ajax({
@@ -256,6 +275,8 @@ define([
     }
 
     function moveRecord (uid, table, beforeUid, colPos, defVals) {
+        log.debug('move record', uid, table, beforeUid, colPos, defVals);
+
         this.trigger(F.REQUEST_START);
 
         var data = {
@@ -279,6 +300,8 @@ define([
     }
 
     function newRecord (defVals) {
+        log.debug('insert new record', defVals);
+
         this.trigger(F.REQUEST_START);
 
         var jqxhr = $.ajax({
@@ -295,6 +318,8 @@ define([
     function appendTriggers (jqxhr, baseTriggerData) {
         return appendBaseTriggers(jqxhr, baseTriggerData)
             .always(function triggerFinish () {
+                log.info('request completed');
+
                 F.trigger(F.REQUEST_COMPLETE);
             });
     }
@@ -308,6 +333,8 @@ define([
     function appendBaseTriggers (jqxhr, baseTriggerData) {
         return jqxhr
             .done(function triggerSuccess (response) {
+                log.info('update completed', response.message);
+
                 if (!baseTriggerData) {
                     baseTriggerData = {};
                 }
@@ -315,6 +342,8 @@ define([
                 F.trigger(F.UPDATE_CONTENT_COMPLETE, baseTriggerData);
             })
             .fail(function triggerError (jqXHR) {
+                log.warn('request failed', jqXHR.responseText);
+
                 F.trigger(F.REQUEST_ERROR, {
                     message: jqXHR.responseText
                 });
