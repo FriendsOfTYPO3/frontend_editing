@@ -445,10 +445,17 @@ define([
 
                     var $editableElements = $(configurableEditableElements);
                     $editableElements.each(function initEditor () {
+                        var $editableElement = $(this);
+
+                        var uid = $editableElement.data('uid');
+                        var table = $editableElement.data('table');
+                        var field = $editableElement.data('field');
+                        var elementIdentifier = uid + '_' + table + '_' + field;
+
                         var elementData = response.configurations[
                             response.elementToConfiguration[elementIdentifier]
                         ];
-                        configureCkEditor($(this), elementData);
+                        configureCkEditor($editableElement, elementData);
                     });
                 })
                 .fail(handleConfigurationRequestError)
@@ -456,12 +463,12 @@ define([
         }
     }
 
-    function configureCkEditor ($editableContent, elementData) {
-        log.trace('configureCkEditor', $editableContent, elementData);
+    function configureCkEditor ($editableElement, elementData) {
+        log.trace('configureCkEditor', $editableElement, elementData);
 
-        var uid = $editableContent.data('uid');
-        var table = $editableContent.data('table');
-        var field = $editableContent.data('field');
+        var uid = $editableElement.data('uid');
+        var table = $editableElement.data('table');
+        var field = $editableElement.data('field');
         var elementIdentifier = uid + '_' + table + '_' + field;
 
         // Ensure all plugins / buttons are loaded
@@ -489,7 +496,7 @@ define([
 
         // Initialize CKEditor now,
         // when finished remember any change
-        var ckeditor = $editableContent.ckeditor(config);
+        var ckeditor = $editableElement.ckeditor(config);
         ckeditor.on('instanceReady.ckeditor',
             function bindCkEditorHandler (event, editor) {
                 log.debug('ckEditor instance is ready', event, editor);
