@@ -75,7 +75,7 @@ define([
     // Add default events and a function to add other events
     FrontendEditing.events = events;
     FrontendEditing.addEvent = function addEvent (key, value) {
-        log.trace('addEvent', key, value);
+        log.debug('addEvent', key, value);
 
         FrontendEditing.events[key] = value;
     };
