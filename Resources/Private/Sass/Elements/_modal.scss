@@ -1,10 +1,45 @@
 .t3js-modal {
     font-family: $font-family-base;
     z-index: 9999999 !important;
+}
 
-    .t3js-active {
-        &.btn-default {
-            color: #000 !important;
+.t3-frontend-editing__modal {
+    font-size: 16px;
+
+    .close {
+        font-size: inherit;
+
+        &:hover {
+            outline: inherit;
         }
+
+        &:focus {
+            opacity: 1;
+            outline: 0;
+            box-shadow: $focus-shadow;
+            border-radius: 2px;
+
+            &:hover {
+                box-shadow: $focus-shadow;
+            }
+        }
+    }
+
+    .modal-title {
+        font-size: 1.25em;
+        font-weight: bold;
+    }
+
+    .modal-body {
+        padding-top: 1.5em;
+        padding-bottom: 1.5em;
+    }
+
+    p {
+        margin: 0.25em 0;
+    }
+
+    .modal-footer .btn + .btn {
+        margin-left: 15px;
     }
 }

@@ -15,11 +15,30 @@
  * Editor: used in iframe for DOM interaction
  */
 define([
-	'jquery'
+    'jquery',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
+    'TYPO3/CMS/FrontendEditing/Modal',
 ], function (
-	$
+    $,
+    TranslatorLoader,
+	Modal
 ) {
 	'use strict';
+
+    var translateKeys = {
+        confirmOpenModalWithChange: 'notifications.unsaved-changes',
+        confirmDeleteContentElement: 'notifications.delete-content-element',
+        informRequestFailed: 'notifications.request.configuration.fail',
+    };
+
+    var translator = TranslatorLoader
+        .useTranslator('editor', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
+    }
 
 	var defaultEditorConfig = {
 		skin: 'moono',
@@ -87,14 +106,22 @@ define([
 				// Open/edit|new action
 				that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
 					if (!storage.isEmpty()) {
-						F.confirm(F.translate('notifications.unsaved-changes'), {
-							yes: function () {
-								openModal($(this));
-							},
-							no: function () {
-								return false;
-							}
-						});
+                        Modal.confirmNavigate(
+                        	translate(translateKeys.confirmOpenModalWithChange),
+                            function save () {
+                                F.saveAll();
+                                openModal($(this));
+                            },
+                            {
+                                yes: function () {
+                                    openModal($(this));
+                                },
+                                no: function () {
+                                	// TODO: check if tis was part of discard function
+                                    return false;
+                                }
+                            }
+                        );
 					} else {
 						openModal($(this));
 					}
@@ -133,17 +160,23 @@ define([
 
 				});
 
-				// Delete action
-				that.find('.icon-actions-edit-delete').on('click', function () {
-					F.confirm(F.translate('notifications.delete-content-element'), {
-						yes: function () {
-							F.delete(that.data('uid'), that.data('table'));
-						},
-						no: function () {
-							// Do nothing
-						}
-					});
-				});
+                // Delete action
+                that.find('.icon-actions-edit-delete')
+                    .on('click', function () {
+                        Modal.confirm(
+                            translate(
+                                translateKeys.confirmDeleteContentElement
+                            ),
+                            {
+                                yes: function () {
+                                    F.delete(
+                                        that.data('uid'),
+                                        that.data('table')
+                                    );
+                                },
+                            }
+                        );
+                    });
 
 				// Hide/Unhide action
 				that.find('.icon-actions-edit-hide, .icon-actions-edit-unhide').on('click', function () {
@@ -291,7 +324,7 @@ define([
 				F.trigger(
 					F.REQUEST_ERROR,
 					{
-						message: F.translate('notifications.request.configuration.fail',
+						message: translate(translateKeys.informRequestFailed,
 							response.status,
 							response.statusText
 						)

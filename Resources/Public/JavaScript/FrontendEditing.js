@@ -17,13 +17,27 @@
 define([
     'jquery',
     'TYPO3/CMS/FrontendEditing/Storage',
-    'TYPO3/CMS/FrontendEditing/Scroller'
-], function (
+    'TYPO3/CMS/FrontendEditing/Scroller',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
+    'TYPO3/CMS/FrontendEditing/Modal'
+], function createFrontendEditing (
     $,
     Storage,
-    Scroller
+    Scroller,
+    TranslatorLoader,
+    Modal
 ) {
-  'use strict';
+    'use strict';
+
+    var translateKeys = {
+        confirmNavigateWithChange: 'notifications.unsaved-changes',
+    };
+
+    var t = TranslatorLoader
+        .useTranslator('frontendEditing', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
+
 
   // Hold event listeners and the callbacks
   var listeners = {};
@@ -61,32 +75,52 @@ define([
   };
 
     // Scroll function when dragging content elements to top or bottom of window
+    var scrollSpeed = 4;
     var $iframe = $('iframe');
-    var $scrollAreaTop = $('<div style="position: absolute; left: 0; top: 0; right: 0; background: rgba(0,0,0,0.2)"/>')
-        .height(150)
-        .hide()
-        .insertAfter($iframe);
-    var $scrollAreaBottom = $('<div style="position: absolute; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2)"/>')
-        .height(100)
-        .hide()
-        .insertAfter($iframe);
+    var $iframeWrapper = $('.t3-frontend-editing__iframe-wrapper');
+    var scrollAreaBaseClasses = 'scrollarea scrollarea--arrow';
 
-    var scroller = Scroller($iframe, $iframe.contents(), $scrollAreaTop, $scrollAreaBottom);
+    var $scrollAreaTop = $iframeWrapper.find('.scrollarea-top');
+    if (!$scrollAreaTop) {
+        $scrollAreaTop = $('<div/>')
+            .addClass(scrollAreaBaseClasses)
+            .addClass('scrollarea-top scrollarea--arrow-up')
+            .hide()
+            .insertAfter($iframe);
+    }
+    var $scrollAreaBottom = $iframeWrapper.find('.scrollarea-bottom');
+    if (!$scrollAreaBottom) {
+        $scrollAreaBottom = $('<div/>')
+            .addClass(scrollAreaBaseClasses)
+            .addClass('scrollarea-bottom scrollarea--arrow-down')
+            .hide()
+            .insertAfter($iframe);
+    }
+
+    var scroller = Scroller($iframe, $scrollAreaTop, $scrollAreaBottom);
+
+    function stopScrolling () {
+        $(this)
+            .removeClass('scrollarea--arrow__mouseover');
+        scroller.stopScrolling();
+    }
 
     $scrollAreaTop
-        .on('dragleave', scroller.stopScrolling)
-    .on('dragenter', function() {
-      scroller.startScrolling(-4);
-    });
+        .on('dragleave', stopScrolling)
+        .on('dragenter', function startScrollUp () {
+            $scrollAreaTop.addClass('scrollarea--arrow__mouseover');
+            scroller.startScrolling(-scrollSpeed);
+        });
     $scrollAreaBottom
-        .on('dragleave', scroller.stopScrolling)
-    .on('dragenter', function() {
-      scroller.startScrolling(4);
-    });
+        .on('dragleave', stopScrolling)
+        .on('dragenter', function startScrollDown () {
+            $scrollAreaBottom.addClass('scrollarea--arrow__mouseover');
+            scroller.startScrolling(scrollSpeed);
+        });
 
     $('[draggable]')
-    .on('dragstart', scroller.enable)
-    .on('dragend', scroller.disable);
+        .on('dragstart', scroller.enable)
+        .on('dragend', scroller.disable);
 
   // Public API
   FrontendEditing.prototype = {
@@ -119,18 +153,6 @@ define([
       return storage;
     },
 
-    confirm: function (message, callbacks) {
-      var confirmed = confirm(message);
-
-      callbacks = callbacks || {};
-      if (confirmed && typeof callbacks.yes === 'function') {
-        callbacks.yes();
-      }
-      if (!confirmed && typeof callbacks.no === 'function') {
-        callbacks.no();
-      }
-    },
-
     on: function (event, callback) {
       if (typeof callback === 'function') {
         if (listeners[event]) {
@@ -143,22 +165,28 @@ define([
       }
     },
 
-    navigate: function (linkUrl) {
-      if (linkUrl && linkUrl.indexOf('#') !== 0) {
-        if (this.getStorage().isEmpty()) {
-          window.location.href = linkUrl;
-        } else {
-          this.confirm(F.translate('notifications.unsaved-changes'), {
-            yes: function() {
-              window.location.href = linkUrl;
-            },
-            no: function() {
-              F.hideLoadingScreen();
+        navigate: function (linkUrl) {
+            if (linkUrl && linkUrl.indexOf('#') !== 0) {
+                if (this.getStorage().isEmpty()) {
+                    window.location.href = linkUrl;
+                } else {
+                    Modal.confirmNavigate(
+                        t.translate(translateKeys.confirmNavigateWithChange),
+                        function save () {
+                            F.saveAll();
+                            window.location.href = linkUrl;
+                        },
+                        {
+                            yes: function () {
+                                window.location.href = linkUrl;
+                            },
+                            no: function () {
+                                F.hideLoadingScreen();
+                            }
+                        });
+                }
             }
-          });
-        }
-      }
-    },
+        },
 
     loadInModal: function (url) {
       require([
@@ -187,29 +215,31 @@ define([
     },
 
     setTranslationLabels: function (labels) {
-      translationLabels = labels;
+        TranslatorLoader.configure({
+            translationLabels: labels
+        });
     },
 
     setDisableModalOnNewCe: function (disable) {
       disableModalOnNewCe = disable;
     },
 
-    translate: function (key) {
-      if (translationLabels[key]) {
-        var s = translationLabels[key];
-
-        if (arguments.length > 1) {
-          for (var i = 0; i < arguments.length - 1; i++) {
-            var reg = new RegExp("\\{" + i + "\\}", "gm");
-            s = s.replace(reg, arguments[i + 1]);
-          }
-        }
-
-        return s;
-      } else {
-        F.error('Invalid translation key: ' + key);
-      }
-    },
+        /**
+         * Used to get translated strings by key.
+         * @deprecated Use TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader or
+         * a high level function.
+         * @param key
+         * @returns {*}
+         */
+        translate: function (key) {
+            try {
+                var translator = TranslatorLoader.getTranslator();
+                return translator.translate.apply(translator, arguments);
+            } catch (exception) {
+                F.error(exception.toString());
+            }
+            return key;
+        },
 
     parseQuery: function (queryString) {
       var query = {};

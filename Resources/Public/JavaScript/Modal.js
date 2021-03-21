@@ -16,34 +16,47 @@
  */
 define([
     'jquery',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader',
     'TYPO3/CMS/Backend/Modal',
     'TYPO3/CMS/Backend/Severity'
 ], function ModalFactory (
     $,
+    TranslatorLoader,
     Modal,
     Severity
 ) {
     'use strict';
+
+    // simple ponyfill
+    var identifiers = Modal.identifiers || {
+        modal: '.t3js-modal',
+        content: '.t3js-modal-content',
+        title: '.t3js-modal-title',
+        close: '.t3js-modal-close',
+        body: '.t3js-modal-body',
+        footer: '.t3js-modal-footer',
+        iframe: '.t3js-modal-iframe',
+        iconPlaceholder: '.t3js-modal-icon-placeholder'
+    };
+
     var translateKeys = {
         titleNavigate: 'title.navigate',
         discardLabel: 'button.discard_navigate',
         saveLabel: 'button.save',
         cancelLabel: 'button.cancel',
         okayLabel: 'button.okay',
-    };
-    var translateValues = {
-        'title.navigate': 'Navigate',
-        'button.discard_navigate': 'Discard and Navigate',
-        'button.save': 'Save All',
-        'button.cancel': 'Cancel',
-        'button.okay': 'OK',
+        variableNotDefined: 'error.type.undefined',
+        variableNotFunction: 'error.type.not_function',
+        variableNotInteger: 'error.type.not_integer',
     };
 
-    function translate (key) {
-        if (translateValues[key]) {
-            return translateValues[key];
-        }
-        throw new TypeError("'" + key + "' does not exist in translate table");
+    var translator = TranslatorLoader
+        .useTranslator('modal', function reload (t) {
+            translateKeys = $.extend(translateKeys, t.getKeys());
+        }).translator;
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
     }
 
     var builder = {
@@ -78,19 +91,15 @@ define([
             }
 
             function handleBackdrop () {
-                var targetInModelContent = false;
-                currentModal.on('click', function backdropDismiss () {
-                    if (targetInModelContent) {
-                        targetInModelContent = false;
-                    } else {
-                        triggerEscapeEvent();
-                        currentModal.trigger('modal-dismiss');
-                    }
+                currentModal.on('click', function backdropDismiss (event) {
+                    event.stopPropagation();
+                    triggerEscapeEvent();
+                    currentModal.trigger('modal-dismiss');
                 });
                 currentModal
-                    .find('.modal-content')
+                    .find(identifiers.content)
                     .on('click', function preventClose (event) {
-                        targetInModelContent = true;
+                        event.stopPropagation();
                     });
             }
 
@@ -100,11 +109,11 @@ define([
 
             // handle escape by close button
             currentModal
-                .find(Modal.identifiers.close)
+                .find(identifiers.close)
                 .on('click', triggerEscapeEvent);
 
             // handle escape by backdrop
-            currentModal.on('shown.bs.modal', handleBackdrop);
+            handleBackdrop();
         }
 
         return {
@@ -166,7 +175,7 @@ define([
                 this.onReady(function prepareListeners (currentModal) {
                     if (!handleEscape) {
                         currentModal
-                            .find(Modal.identifiers.close)
+                            .find(identifiers.close)
                             .hide();
                     }
 
@@ -251,20 +260,25 @@ define([
         if (!constraints) {
             return;
         }
-        // TODO: make errors translation ready
         if ((constraints & builder.constraints.required) !== 0) {
             if (!variable) {
-                throw new TypeError("'" + name + "' is undefined");
+                throw new TypeError(
+                    translate(translateKeys.variableNotDefined, name));
             }
         }
         if ((constraints & builder.constraints.func) !== 0) {
             if (variable && typeof variable !== 'function') {
-                throw new TypeError("'" + name + "' is not a function");
+                throw new TypeError(
+                    translate(translateKeys.variableNotFunction, name));
             }
         }
         if ((constraints & builder.constraints.int) !== 0) {
             if (variable && !Number.isInteger(variable)) {
-                throw new TypeError("'" + name + "' is not a integer");
+                //maybe to picky since it is only used as decision for design
+                //razz (flood) sys-admin with warning would be better
+                //TODO: log notice "errors" on server
+                throw new TypeError(
+                    translate(translateKeys.variableNotInteger, name));
             }
         }
     }

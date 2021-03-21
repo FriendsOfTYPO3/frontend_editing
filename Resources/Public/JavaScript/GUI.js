@@ -18,20 +18,40 @@ define([
 		'jquery',
 		'TYPO3/CMS/FrontendEditing/Crud',
 		'TYPO3/CMS/FrontendEditing/Editor',
-		'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-		'TYPO3/CMS/Backend/Modal',
-		'TYPO3/CMS/Backend/Severity'
+    'TYPO3/CMS/FrontendEditing/Notification',
+    'TYPO3/CMS/FrontendEditing/Modal',
+    'TYPO3/CMS/FrontendEditing/Utils/TranslatorLoader'
 	], function (
 		$,
 		FrontendEditing,
 		Editor,
-		toastr,
-		Modal,
-		Severity
+		Notification,
+    Modal,
+    TranslatorLoader
 	) {
 	'use strict';
 
-	// Extend FrontendEditing with additional events
+    var translateKeys = {
+        updatedContentTitle: 'notifications.save-title',
+        updatedPageTitle: 'notifications.save-pages-title',
+        updateRequestErrorTitle: 'notifications.save-went-wrong',
+        saveWithoutChange: 'notifications.no-changes-description',
+        saveWithoutChangeTitle: 'notifications.no-changes-title',
+        confirmDiscardChanges: 'notifications.remove-all-changes',
+        confirmChangeSiteRoot: 'notifications.change_site_root',
+        confirmChangeSiteRootWithChange: 'notifications.unsaved-changes',
+    };
+
+    var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
+        translateKeys = $.extend(translateKeys, t.getKeys());
+    }).translator;
+
+    function translate () {
+        return translator.translate.apply(translator, arguments);
+    }
+
+
+    // Extend FrontendEditing with additional events
 	var events = {
 		LEFT_PANEL_TOGGLE: 'LEFT_PANEL_TOGGLE'
 	};
@@ -65,11 +85,6 @@ define([
 		WARNING: 'WARNING'
 	};
 
-	var toastrOptions = {
-		'positionClass': 'toast-top-left',
-		'preventDuplicates': true
-	};
-
 	var $itemCounter;
 	var $iframe;
 	var $loadingScreen;
@@ -80,7 +95,6 @@ define([
 	var storage;
 	var editorConfigurationUrl;
 	var resourcePath;
-	var Modal;
 
 	function init(options) {
 		$itemCounter = $('.top-bar-action-buttons .items-counter');
@@ -103,23 +117,23 @@ define([
 		});
 
 		F.on(F.UPDATE_CONTENT_COMPLETE, function (data) {
-			showSuccess(
+			Notification.success(
 				data.message,
-				F.translate('notifications.save-title')
+				translate(translateKeys.updatedContentTitle)
 			);
 		});
 
 		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
-			showSuccess(
+            Notification.success(
 				data.message,
-				F.translate('notifications.save-pages-title')
+				translate(translateKeys.updatedPageTitle)
 			);
 		});
 
 		F.on(F.REQUEST_ERROR, function (data) {
-			showError(
+            Notification.error(
 				data.message,
-				F.translate('notifications.save-went-wrong')
+				translate(translateKeys.updateRequestErrorTitle)
 			);
 		});
 
@@ -130,10 +144,14 @@ define([
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
+                $discardButton.prop('disabled', false);
+                $saveButton.prop('disabled', false);
 				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
+                $discardButton.prop('disabled', true);
+                $saveButton.prop('disabled', true);
 				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
@@ -151,9 +169,9 @@ define([
 		if (!storage.isEmpty()) {
 			F.saveAll();
 		} else {
-			showWarning(
-				F.translate('notifications.no-changes-description'),
-				F.translate('notifications.no-changes-title')
+            Notification.warning(
+				translate(translateKeys.saveWithoutChange),
+				translate(translateKeys.saveWithoutChangeTitle)
 			);
 		}
 	}
@@ -165,7 +183,7 @@ define([
 
 		$('.t3-frontend-editing__discard').on('click', function () {
 			if (!storage.isEmpty()) {
-				F.confirm(F.translate('notifications.remove-all-changes'), {
+				Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
 					yes: function () {
 						storage.clear();
 						F.refreshIframe();
@@ -429,117 +447,57 @@ define([
 		return $iframe;
 	}
 
-	function flashMessage(type, message, title) {
-		var toastrFunction;
-		switch (type) {
-			case messageTypes.OK:
-				toastrFunction = 'success';
-				break;
-			case messageTypes.ERROR:
-				toastrFunction = 'error';
-				break;
-			case messageTypes.WARNING:
-				toastrFunction = 'warning';
-				break;
-			default:
-				throw 'Invalid message type ' + type;
-		}
-		toastr[toastrFunction](message, title, toastrOptions);
-	}
+	/**
+   * Shows a success notification
+   * @param message
+   * @param title
+   * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+   */
+  function showSuccess (message, title) {
+    Notification.success(message, title);
+  }
 
-	function showSuccess(message, title) {
-		flashMessage(messageTypes.OK, message, title);
-	}
+  /**
+   * Shows a error notification
+   * @param message
+   * @param title
+   * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+   */
+  function showError (message, title) {
+    Notification.error(message, title);
+  }
 
-	function showError(message, title) {
-		flashMessage(messageTypes.ERROR, message, title);
-	}
+  /**
+   * Shows a warning notification
+   * @param message
+   * @param title
+   * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
+   */
+  function showWarning (message, title) {
+    Notification.warning(message, title);
+  }
 
-	function showWarning(message, title) {
-		flashMessage(messageTypes.WARNING, message, title);
-	}
+  /**
+   * Shows a confirm modal. If message is 'notifications.unsaved-changes' a
+   * special "save all" button will be presented.
+   * @param message
+   * @param callbacks
+   * @deprecated
+   */
+  function confirm (message, callbacks) {
+    callbacks = callbacks || {};
 
-	function confirm(message, callbacks) {
-		callbacks = callbacks || {};
-
-		// Confirm dialog
-		if (message === F.translate('notifications.unsaved-changes')) {
-			Modal.confirm(
-				'Navigate',
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-							Modal.dismiss();
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'Save All',
-						trigger: function () {
-							if (typeof callbacks.yes === 'function') {
-								save();
-								callbacks.yes();
-							}
-							Modal.dismiss();
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					},
-					{
-						text: 'Discard and Navigate',
-						trigger: function () {
-							if (typeof callbacks.yes === 'function') {
-								storage.clear();
-								F.refreshIframe();
-								F.trigger(F.CONTENT_CHANGE);
-								callbacks.yes();
-							}
-							Modal.dismiss();
-						},
-						active: false,
-						btnClass: 'btn-danger'
-					}
-				]
-			);
-		} else {
-			Modal.confirm(
-				message,
-				message,
-				Severity.warning,
-				[
-					{
-						text: 'Cancel',
-						trigger: function () {
-							if (typeof callbacks.no === 'function') {
-								callbacks.no();
-							}
-							Modal.dismiss();
-						},
-						active: true,
-						btnClass: 'btn-default'
-					},
-					{
-						text: 'OK',
-						trigger: function () {
-							if (typeof callbacks.yes === 'function') {
-								callbacks.yes();
-							}
-							Modal.dismiss();
-						},
-						active: false,
-						btnClass: 'btn-warning'
-					}
-				]
-			);
-		}
-	}
+    if (message === F.translate('notifications.unsaved-changes')) {
+      Modal.confirmNavigate(message, function save () {
+        if (typeof callbacks.yes === 'function') {
+          F.saveAll();
+          callbacks.yes();
+        }
+      }, callbacks);
+    } else {
+      Modal.confirm(message, callbacks);
+    }
+  }
 
 	function windowOpen(url) {
 		var vHWin = window.open(url, 'FEquickEditWindow', 'width=690,height=500,status=0,menubar=0,scrollbars=1,resizable=1');
