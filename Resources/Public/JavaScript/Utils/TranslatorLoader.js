@@ -16,9 +16,12 @@
  * TranslatorFactory bootstrap
  */
 define(
-    ['jquery', 'TYPO3/CMS/FrontendEditing/Utils/Translator'],
-    function TranslatorLoader ($, createTranslatorFactory) {
+    ['jquery', './Translator', './Logger'],
+    function TranslatorLoader ($, createTranslatorFactory, Logger) {
         'use strict';
+
+        var log = Logger('FEditing:Utils:TranslatorLoader');
+        log.trace('--> TranslatorLoader');
 
         /*eslint-disable max-len*/
         // because of resource declaration
@@ -103,14 +106,20 @@ define(
          * @returns {boolean} true if they are truly equal, otherwise false
          */
         function compareObjects (obj1, obj2) {
+            log.trace('compare objects', obj1, obj2);
+
             var type1 = typeof obj1;
             var type2 = typeof obj2;
             if (type1 !== type2) {
+                log.trace('compare failed. types are not equal');
+
                 return false;
             }
 
             if (Array.isArray(obj1)) {
                 if (obj1.length !== obj2.length) {
+                    log.trace('compare failed. arrays are not equal');
+
                     return false;
                 }
                 for (var x = 0; x < obj1.length; x++) {
@@ -122,6 +131,8 @@ define(
                         }
                     }
                     if (!found) {
+                        log.trace('Compare failed. Value not found', obj1[x]);
+
                         return false;
                     }
                 }
@@ -130,16 +141,27 @@ define(
                 var keys2 = Object.keys(obj2);
 
                 if (keys1.length !== keys2.length) {
+                    log.trace('compare failed. objects are not equal');
+
                     return false;
                 }
                 for (var i = 0; i < keys1.length; i++) {
                     if (!compareObjects(obj1[keys1[i]], obj2[keys1[i]])) {
+                        log.trace(
+                            'Compare failed. Value not found',
+                            obj1[keys1[i]]
+                        );
+
                         return false;
                     }
                 }
-            } else {
-                return obj1 === obj2;
+            } else if (obj1 !== obj2) {
+                log.trace('compare failed. objects are not equal');
+
+                return false;
             }
+            log.trace('compare succeed. objects are truly equal.');
+
             return true;
         }
 
@@ -148,6 +170,8 @@ define(
          * @param {{translationLabels, namespaceMapping}} newConfiguration
          */
         function configure (newConfiguration) {
+            log.debug('configure with new configuration', newConfiguration);
+
             conf = newConfiguration;
 
             translationLabels = $.extend(
@@ -167,6 +191,8 @@ define(
         }
 
         function triggerConfigureCallbacks () {
+            log.debug('trigger configure callbacks');
+
             var namespaces = Object.keys(namespacesContext);
             for (var x = 0; x < namespaces.length; x++) {
                 var namespace = namespaces[x];
@@ -183,6 +209,7 @@ define(
         function getNamespacesContext (namespace) {
             var namespaceKey = namespace ? namespace : 'GLOBAL';
             if (!namespacesContext[namespaceKey]) {
+                log.debug('create Translator');
                 namespacesContext[namespaceKey] = {
                     configureCallbacks: [],
                     translator:
@@ -194,6 +221,8 @@ define(
         }
 
         function registerConfigureCallback (context, configureCallback) {
+            log.debug('register configure callback');
+
             var index = -1;
 
             if (configureCallback) {
@@ -208,6 +237,11 @@ define(
 
             return function unregister () {
                 if (index >= 0 && index < context.length) {
+                    log.debug(
+                        'unregister configure callback',
+                        context.configureCallbacks[index]
+                    );
+
                     context.configureCallbacks[index] = null;
                 }
             };
@@ -240,6 +274,8 @@ define(
              * otherwise false
              */
             configure: function (newConfiguration, mergeStrategy) {
+                log.info('configure', newConfiguration, mergeStrategy);
+
                 mergeStrategy = this.mergeStrategy[mergeStrategy];
                 if (!mergeStrategy) {
                     mergeStrategy = this.mergeStrategy.none;
@@ -250,6 +286,9 @@ define(
                     if ((mergeStrategy & this.mergeStrategy.merge) !== 0) {
                         var mergeDeep =
                             mergeStrategy === this.mergeStrategy.mergeDeep;
+
+                        log.debug('merge config deep', mergeDeep);
+
                         newConfiguration.translationLabels = $.extend(mergeDeep,
                             {},
                             conf.translationLabels,
@@ -281,6 +320,8 @@ define(
              * @returns {{translator, unregister}} translator context
              */
             useTranslator: function (namespace, configureCallback) {
+                log.debug('use Translator', namespace);
+
                 var context = getNamespacesContext(namespace);
 
                 return {
@@ -295,6 +336,8 @@ define(
              * @returns Translator with the given namespace
              */
             getTranslator: function (namespace) {
+                log.debug('get Translator', namespace);
+
                 return getNamespacesContext(namespace).translator;
             },
         };
