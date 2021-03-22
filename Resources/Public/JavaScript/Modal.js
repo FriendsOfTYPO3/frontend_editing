@@ -216,10 +216,14 @@ define([
             show: function () {
                 log.trace('modal show', this.title);
 
+                var _currentModal = null;
+
                 //copy ready listener cause it gets reset in next func
                 var ready = readyListener;
                 this.onReady(function prepareListeners (currentModal) {
                     log.trace('modal ready', currentModal);
+
+                    _currentModal = currentModal;
 
                     if (!handleEscape) {
                         currentModal
@@ -240,13 +244,24 @@ define([
                         keyboard: handleEscape,
                         backdrop: 'static',
                     });
+
                     if (handleEscape) {
                         attachEscapeListener(currentModal);
                     }
+
+                    // TODO: find better solution to add keyboard escape handler
+                    throw new Error('Prevent construct modal');
                 });
 
                 log.debug('init modal', this);
-                return T3Modal.advanced(this);
+                try {
+                    return T3Modal.advanced(this);
+                } catch (error) {
+                    if(error.message !== 'Prevent construct modal') {
+                        throw error;
+                    }
+                }
+                return _currentModal;
             }
         };
     }
@@ -353,7 +368,9 @@ define([
     function dismissModal () {
         log.trace('modal dismiss');
 
-        $(this)
+        // TODO: check for a better solution
+        // since we don't know if it is the currentModal for real
+        T3Modal.currentModal
             .trigger('modal-dismiss');
     }
 
