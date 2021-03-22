@@ -331,8 +331,8 @@ class ContentEditableWrapperService
         $inlineIcons =
             $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
-            $this->renderIconWithWrap('delete', 'actions-edit-delete') .
-            $this->renderIconWithWrap('new', 'actions-document-new') .
+            $this->renderIconWithWrap('deleteItem', 'actions-edit-delete') .
+            $this->renderIconWithWrap('newRecordGeneral', 'actions-document-new') .
             $moveIcons;
 
         return $inlineIcons;
@@ -394,7 +394,7 @@ class ContentEditableWrapperService
     private function renderIconWithWrap(string $titleKey, string $iconKey, string $recordTitle = ''): string
     {
         $editRecordTitle = $GLOBALS['LANG']->sL(
-            'LLL:EXT:lang/Resources/Private/Language/locallang_mod_web_list.xlf:' . $titleKey
+            'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:' . $titleKey
         );
 
         // Append record title to 'title' attribute
