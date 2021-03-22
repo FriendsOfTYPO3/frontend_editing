@@ -170,9 +170,13 @@ define([
             },
 
             show: function () {
+                var _currentModal = null;
+
                 //copy ready listener cause it gets reset in next func
                 var ready = readyListener;
                 this.onReady(function prepareListeners (currentModal) {
+                    _currentModal = currentModal;
+
                     if (!handleEscape) {
                         currentModal
                             .find(identifiers.close)
@@ -191,12 +195,23 @@ define([
                         keyboard: handleEscape,
                         backdrop: 'static',
                     });
+
                     if (handleEscape) {
                         attachEscapeListener(currentModal);
                     }
+
+                    // TODO: find better solution to add keyboard escape handler
+                    throw new Error('Prevent construct modal');
                 });
 
-                return Modal.advanced(this);
+                try {
+                    return Modal.advanced(this);
+                } catch (error) {
+                    if(error.message !== 'Prevent construct modal') {
+                        throw error;
+                    }
+                }
+                return _currentModal;
             }
         };
     }
@@ -285,7 +300,9 @@ define([
 
     // Simple modal close after button clicked
     function dismissModal () {
-        $(this)
+        // TODO: check for a better solution
+        // since we don't know if it is the currentModal for real
+        Modal.currentModal
             .trigger('modal-dismiss');
     }
 
