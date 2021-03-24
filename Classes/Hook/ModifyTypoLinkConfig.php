@@ -15,8 +15,8 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Frontend\ContentObject\TypolinkModifyLinkConfigForPageLinksHookInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\TypolinkModifyLinkConfigForPageLinksHookInterface;
 
 /**
  * Hook is for adding the parameter to all links when GET parameter "frontend_editing_enabled" is present
@@ -31,7 +31,7 @@ class ModifyTypoLinkConfig implements TypolinkModifyLinkConfigForPageLinksHookIn
      * @param array $pageRow
      * @return array
      */
-    public function modifyPageLinkConfiguration(array $linkConfiguration, array $linkDetails, array $pageRow) : array
+    public function modifyPageLinkConfiguration(array $linkConfiguration, array $linkDetails, array $pageRow): array
     {
         $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing_enabled');
         if ((bool)$isFrontendEditingEnabled === true) {
