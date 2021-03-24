@@ -66,7 +66,7 @@ define([
     }
 
     function setEndpointUrl (url) {
-        log.debug('setEndpointUrl', url);
+        log.log('setEndpointUrl', url);
 
         this._endpointUrl = url;
     }
@@ -77,7 +77,7 @@ define([
 
     function setBESessionId (beSessionId) {
         // check if session id is top secret cause of persist
-        log.debug('setBESessionId', beSessionId);
+        log.log('setBESessionId', beSessionId);
 
         this._beSessionId = beSessionId;
     }
@@ -113,19 +113,21 @@ define([
 
         numberOfRequestsLeft = items.count();
 
-        log.debug('items to save', items);
+        log.info('items to save', items);
 
         items.forEach(function processSaveItem (item) {
-            log.trace('processSaveItem', item);
+            log.debug('processSaveItem', item);
 
             F.showLoadingScreen();
 
             $.when(checkIfRecordIsLocked(item))
                 .done(function saveItem (item) {
-                    log.debug('save item', item);
+                    var saveEndpoint = getEndpointUrl();
+
+                    log.log('save item', item, saveEndpoint);
 
                     var jqxhr = $.ajax({
-                        url: getEndpointUrl(),
+                        url: saveEndpoint,
                         method: 'POST',
                         // eslint-disable-next-line id-denylist
                         data: {
@@ -144,9 +146,16 @@ define([
         });
 
         function requestCompleted () {
+            log.debug(
+                'a request completed [numberOfRequestsLeft]',
+                numberOfRequestsLeft
+            );
+
             numberOfRequestsLeft--;
+            log.log('number of requests left', numberOfRequestsLeft);
+
             if (numberOfRequestsLeft === 0) {
-                log.debug('all item saved');
+                log.info('all item saved');
 
                 storage.clear();
                 F.trigger(F.REQUEST_COMPLETE);
@@ -158,7 +167,7 @@ define([
     }
 
     function checkIfRecordIsLocked (item) {
-        log.trace('checkIfRecordIsLocked.', item);
+        log.debug('checkIfRecordIsLocked.', item);
 
         var canEdit = $.Deferred();
 
@@ -168,18 +177,25 @@ define([
             'uid': item.uid
         };
 
-        log.debug('request if record is locked.', lockedRecordData);
+        var checkRecordLockedEndpoint = getEndpointUrl('lockedRecord');
+
+        log.log(
+            'request if record is locked.',
+            checkRecordLockedEndpoint,
+            lockedRecordData
+        );
 
         $.ajax({
-            url: getEndpointUrl('lockedRecord'),
+            url: checkRecordLockedEndpoint,
             method: 'POST',
             // eslint-disable-next-line id-denylist
             data: lockedRecordData
         })
             .done(function success (response) {
-                log.debug('check if record is locked.', response);
+                log.log('check if record is locked.', response);
 
-                response = getJsonResponse(response);
+                // workaround to issue #506 cause of empty string
+                response = response==='' ? {} : getJsonResponse(response);
 
                 if (response.success === true) {
                     // This is the last line of defence. If the code goes here
@@ -220,7 +236,9 @@ define([
     }
 
     function deleteRecord (uid, table) {
-        log.debug('delete record', uid, table);
+        var deleteEndpoint = getEndpointUrl();
+
+        log.info('delete record', deleteEndpoint, uid, table);
 
         this.trigger(F.REQUEST_START);
 
@@ -229,7 +247,7 @@ define([
         };
 
         var jqxhr = $.ajax({
-            url: getEndpointUrl(),
+            url: deleteEndpoint,
             method: 'DELETE',
             data: {
                 table: table,
@@ -241,12 +259,20 @@ define([
     }
 
     function hideRecord (uid, table, hide) {
-        log.debug('set hide flag on record', uid, table, hide);
+        var changeHideEndpoint = getEndpointUrl('hide');
+
+        log.info(
+            'set hide flag on record [changeHideEndpoint, uid, table, hide]',
+            changeHideEndpoint,
+            uid,
+            table,
+            hide
+        );
 
         this.trigger(F.REQUEST_START);
 
         var jqxhr = $.ajax({
-            url: getEndpointUrl('hide'),
+            url: changeHideEndpoint,
             method: 'POST',
             data: {
                 uid: uid,
@@ -259,7 +285,17 @@ define([
     }
 
     function moveRecord (uid, table, beforeUid, colPos, defVals) {
-        log.debug('move record', uid, table, beforeUid, colPos, defVals);
+        var moveEndpoint = getEndpointUrl('move');
+
+        log.info(
+            'move record [moveEndpoint, uid, table, beforeUid, colPos, defVals]',
+            moveEndpoint,
+            uid,
+            table,
+            beforeUid,
+            colPos,
+            defVals
+        );
 
         this.trigger(F.REQUEST_START);
 
@@ -275,7 +311,7 @@ define([
         }
 
         var jqxhr = $.ajax({
-            url: getEndpointUrl('move'),
+            url: moveEndpoint,
             method: 'POST',
             data: data
         });
@@ -284,12 +320,18 @@ define([
     }
 
     function newRecord (defVals) {
-        log.debug('insert new record', defVals);
+        var createEndpoint = getEndpointUrl('new');
+
+        log.info(
+            'insert new record [createEndpoint, defVals]',
+            createEndpoint,
+            defVals
+        );
 
         this.trigger(F.REQUEST_START);
 
         var jqxhr = $.ajax({
-            url: getEndpointUrl('new'),
+            url: createEndpoint,
             method: 'POST',
             // eslint-disable-next-line id-denylist
             data: {data: defVals}
