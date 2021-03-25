@@ -80,6 +80,15 @@ config {
                 }
             }
         }
+
+        customRecordEditing {
+            tx_news_pi1 {
+                actionName = detail
+                recordName = news
+                tableName = tx_news_domain_model_news
+                listTypeName = news_pi1
+            }
+        }
     }
 }
 
