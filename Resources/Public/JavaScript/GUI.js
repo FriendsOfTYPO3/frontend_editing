@@ -38,8 +38,6 @@ define([
         saveWithoutChange: 'notifications.no-changes-description',
         saveWithoutChangeTitle: 'notifications.no-changes-title',
         confirmDiscardChanges: 'notifications.remove-all-changes',
-        confirmChangeSiteRoot: 'notifications.change_site_root',
-        confirmChangeSiteRootWithChange: 'notifications.unsaved-changes',
     };
 
     var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
