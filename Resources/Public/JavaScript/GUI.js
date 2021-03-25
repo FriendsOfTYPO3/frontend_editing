@@ -122,14 +122,14 @@ define([
 		});
 
 		F.on(F.UPDATE_PAGES_COMPLETE, function (data) {
-            Notification.success(
+		  Notification.success(
 				data.message,
 				translate(translateKeys.updatedPageTitle)
 			);
 		});
 
 		F.on(F.REQUEST_ERROR, function (data) {
-            Notification.error(
+		  Notification.error(
 				data.message,
 				translate(translateKeys.updateRequestErrorTitle)
 			);
@@ -142,14 +142,14 @@ define([
 		F.on(F.CONTENT_CHANGE, function (items) {
 			var items = storage.getSaveItems();
 			if (items.count()) {
-                $discardButton.prop('disabled', false);
-                $saveButton.prop('disabled', false);
+        $discardButton.prop('disabled', false);
+        $saveButton.prop('disabled', false);
 				$discardButton.removeClass('btn-inactive');
 				$saveButton.removeClass('btn-inactive');
 				$itemCounter.html('(' + items.count() + ')');
 			} else {
-                $discardButton.prop('disabled', true);
-                $saveButton.prop('disabled', true);
+        $discardButton.prop('disabled', true);
+        $saveButton.prop('disabled', true);
 				$discardButton.addClass('btn-inactive');
 				$saveButton.addClass('btn-inactive');
 				$itemCounter.html('');
@@ -167,7 +167,7 @@ define([
 		if (!storage.isEmpty()) {
 			F.saveAll();
 		} else {
-            Notification.warning(
+      Notification.warning(
 				translate(translateKeys.saveWithoutChange),
 				translate(translateKeys.saveWithoutChangeTitle)
 			);
