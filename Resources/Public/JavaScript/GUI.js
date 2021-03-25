@@ -31,28 +31,25 @@ define([
 	) {
 	'use strict';
 
-    var translateKeys = {
-        updatedContentTitle: 'notifications.save-title',
-        updatedPageTitle: 'notifications.save-pages-title',
-        updateRequestErrorTitle: 'notifications.save-went-wrong',
-        saveWithoutChange: 'notifications.no-changes-description',
-        saveWithoutChangeTitle: 'notifications.no-changes-title',
-        confirmDiscardChanges: 'notifications.remove-all-changes',
-    };
+  var translateKeys = {
+      updatedContentTitle: 'notifications.save-title',
+      updatedPageTitle: 'notifications.save-pages-title',
+      updateRequestErrorTitle: 'notifications.save-went-wrong',
+      saveWithoutChange: 'notifications.no-changes-description',
+      saveWithoutChangeTitle: 'notifications.no-changes-title',
+      confirmDiscardChanges: 'notifications.remove-all-changes',
+  };
 
-    var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
-        translateKeys = $.extend(translateKeys, t.getKeys());
-    }).translator;
+  var translator = TranslatorLoader.useTranslator('gui', function reload (t) {
+      translateKeys = $.extend(translateKeys, t.getKeys());
+  }).translator;
 
-    function translate () {
-        return translator.translate.apply(translator, arguments);
-    }
+  function translate () {
+      return translator.translate.apply(translator, arguments);
+  }
 
-
-    // Extend FrontendEditing with additional events
-	var events = {
-		LEFT_PANEL_TOGGLE: 'LEFT_PANEL_TOGGLE'
-	};
+  // Extend FrontendEditing with additional events
+	var events = {};
 
 	// Add custom events to FrontendEditing
 	for (var key in events) {
@@ -76,12 +73,6 @@ define([
 
 	var pushDuration = 200;
 	var pushEasing = 'linear';
-
-	var messageTypes = {
-		OK: 'OK',
-		ERROR: 'ERROR',
-		WARNING: 'WARNING'
-	};
 
 	var $itemCounter;
 	var $iframe;
@@ -451,7 +442,7 @@ define([
    * @param title
    * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
    */
-  function showSuccess (message, title) {
+  function showSuccess(message, title) {
     Notification.success(message, title);
   }
 
@@ -461,7 +452,7 @@ define([
    * @param title
    * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
    */
-  function showError (message, title) {
+  function showError(message, title) {
     Notification.error(message, title);
   }
 
@@ -471,7 +462,7 @@ define([
    * @param title
    * @deprecated use TYPO3/CMS/FrontendEditing/Notification instead
    */
-  function showWarning (message, title) {
+  function showWarning(message, title) {
     Notification.warning(message, title);
   }
 
