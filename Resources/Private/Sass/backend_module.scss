@@ -1,0 +1,15 @@
+//
+// Frontend editing, backend module Styles
+// ---------------
+// Description: Backend module styles
+// Requires:    ../Sass/Configuration/Variables/_colors.scss
+// Usage:       This file is compiled to the standalone CSS file:
+//              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
+//
+
+.typo3-module-frontendediting {
+    .t3js-module-body {
+        padding: 65px 0 0 !important;
+        overflow: hidden !important;
+    }
+}
