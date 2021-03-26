@@ -138,6 +138,35 @@ This example lists editable the frontend user names and emails:
 	Are you using :typoscript:`editIcons.beforeLastTag = 1` or :typoscript:`editIcons.beforeLastTag = 0`? Used wrong, you may set the entire content element as editable, resulting in problems correctly saving the data and content from other fields appearing elsewhere after saving.
 
 
+.. _typoscript-custom-record-editing:
+
+TypoScript custom record editing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is a possibility to use the edit button when a single extension record is present. What then will happen is that an editor
+clicks the edit button and a modal with the form engine for the records is displayed instead of the plugin setup.
+
+For example in this case a configuration is added so that it is possible to edit a single news record. As long as an extension
+have records it is possible to add any kind of records.
+
+Frontend editing is shipped so that the news extension is editable out of the box!
+
+.. code-block:: typoscript
+
+    config {
+        tx_frontendediting {
+            customRecordEditing {
+                tx_news_pi1 {
+                    actionName = detail
+                    recordName = news
+                    tableName = tx_news_domain_model_news
+                    listTypeName = news_pi1
+                }
+            }
+        }
+    }
+
+
 .. _viewhelpers:
 
 View Helpers

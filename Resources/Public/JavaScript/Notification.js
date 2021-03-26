@@ -16,9 +16,13 @@
  * Notification: Notification (toastr) wrapper
  */
 define([
-    'TYPO3/CMS/FrontendEditing/Contrib/toastr'
-], function NotificationFactory (toastr) {
+    'TYPO3/CMS/FrontendEditing/Contrib/toastr',
+    './Utils/Logger'
+], function NotificationFactory (toastr, Logger) {
     'use strict';
+
+    var log = Logger('FEditing:Component:Widget:Notification');
+    log.trace('--> NotificationFactory');
 
     var toastrOptions = {
         'positionClass': 'toast-top-left',
@@ -27,14 +31,20 @@ define([
 
     return {
         success: function (message, title) {
+            log.debug('success', title, message);
+
             toastr.success(message, title, toastrOptions);
         },
 
         error: function (message, title) {
+            log.debug('error', title, message);
+
             toastr.error(message, title, toastrOptions);
         },
 
         warning: function (message, title) {
+            log.debug('warning', title, message);
+
             toastr.warning(message, title, toastrOptions);
         },
     };

@@ -5,7 +5,9 @@
   "scripts": {
     "add:resource:toastr": "NODE_ENV=production npm install && cp -a ./node_modules/toastr/toastr.js ./Resources/Public/Javascript/contrib/toastr.js",
     "add:resource:immutable": "NODE_ENV=production npm install && cp -a ./node_modules/immutable/dist/immutable.js ./Resources/Public/Javascript/Contrib/immutable.js",
-    "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run build:css",
+    "add:resource:dexie": "NODE_ENV=production npm install && cp -a ./node_modules/dexie/dist/dexie.min.js ./node_modules/dexie/dist/dexie.min.js.map ./Resources/Public/JavaScript/Contrib/",
+    "build:extension": "npm run add:resource:toastr && npm run add:resource:immutable && npm run add:resource:dexie && npm run build:resource:ulog && npm run build:css",
+    "build:resource:ulog": "NODE_ENV=production npm install && webpack --config ./webpack.contrib.config.js --mode production",
     "watch:css": "node-sass -rwx Resources/Private/Sass/ -o Resources/Public/Css/",
     "check:css": "stylelint -s scss Resources/Private/Sass/",
     "compile:css": "node-sass -x Resources/Private/Sass/ -o Resources/Public/Css/",
@@ -22,8 +24,13 @@
     "browserslist": "browserslist"
   },
   "dependencies": {
+    "dexie": "^3.0.3",
     "immutable": "^3.8",
-    "toastr": "^2.1.2"
+    "pino": "^6.11.1",
+    "toastr": "^2.1.2",
+    "ulog": "^2.0.0-beta.18",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -49,8 +56,7 @@
     "react": "^16",
     "react-dom": "^16",
     "spdx-license-ids": "^3.0.7",
-    "stylelint": "^8.4.0",
-    "webpack": "^4.46.0"
+    "stylelint": "^8.4.0"
   },
   "browserslist": [
     "Firefox ESR",
