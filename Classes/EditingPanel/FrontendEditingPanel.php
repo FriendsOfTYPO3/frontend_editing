@@ -16,11 +16,11 @@ namespace TYPO3\CMS\FrontendEditing\EditingPanel;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 
 /**
  * View class for the edit panels in frontend editing
