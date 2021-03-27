@@ -21,6 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\Components\Buttons\FullyRenderedButton;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -163,6 +164,119 @@ class FrontendEditingModuleController
                 ->setGetVariables($getVars);
             $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
         }
+
+        $this->addResponsiveUI($pageId, $buttonBar);
+    }
+
+    /**
+     * Add responsive UI to module docheader
+     *
+     * @param int $pageId
+     * @param ButtonBar $buttonBar
+     */
+    private function addResponsiveUI(int $pageId, ButtonBar $buttonBar)
+    {
+        // Add device orientation button to module docheader
+        $orientationButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3js-change-orientation')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:orientationButtonTitle'))
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-device-orientation-change', Icon::SIZE_SMALL));
+        $buttonBar->addButton($orientationButton, ButtonBar::BUTTON_POSITION_LEFT, 10);
+
+        // Add preset menu to module docheader
+        $presetSplitButtonElement = $buttonBar->makeSplitButton();
+        // Current state
+        $current = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?: []);
+        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:custom'));
+        $maximizeButtonLabel = $this->getLanguageService()->getLL('maximized');
+        if ($current['label'] !== $maximizeButtonLabel) {
+            $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
+            $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : 480);
+        }
+        $currentButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3js-preset-current t3js-change-preset')
+            ->setTitle($current['label'])
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('miscellaneous-placeholder', Icon::SIZE_SMALL))
+            ->setShowLabelText(true)
+            ->setDataAttributes([
+                'key' => 'current',
+                'label' => $current['label'],
+                'width' => '',
+                'height' => ''
+            ]);
+        $presetSplitButtonElement->addItem($currentButton, true);
+        // Maximize button
+        $maximizeButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3js-preset-maximized t3js-change-preset')
+            ->setTitle($maximizeButtonLabel . ' (100%x100%)')
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-fullscreen', Icon::SIZE_SMALL))
+            ->setShowLabelText(true)
+            ->setDataAttributes([
+                'key' => 'maximized',
+                'label' => $maximizeButtonLabel,
+                'width' => '',
+                'height' => ''
+            ]);
+        $presetSplitButtonElement->addItem($maximizeButton);
+        // Custom button
+        $custom = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?: []);
+        $custom['width'] = (isset($custom['width']) && (int)$custom['width'] >= 300 ? (int)$custom['width'] : 320);
+        $custom['height'] = (isset($custom['height']) && (int)$custom['height'] >= 300 ? (int)$custom['height'] : 480);
+        $customButtonLabel = $this->getLanguageService()->getLL('custom');
+        $customButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3js-preset-custom t3js-change-preset')
+            ->setTitle($customButtonLabel . ' (' . $custom['width'] . 'x' . $custom['height'] . ')')
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-expand', Icon::SIZE_SMALL))
+            ->setShowLabelText(true)
+            ->setDataAttributes([
+                'key' => 'custom',
+                'label' => $customButtonLabel,
+                'width' => $custom['width'],
+                'height' => $custom['height']
+            ]);
+        $presetSplitButtonElement->addItem($customButton);
+        // Presets buttons
+        $presetGroups = $this->getPreviewPresets($pageId);
+        foreach ($presetGroups as $presetGroup => $presets) {
+            $separatorButton = $buttonBar->makeLinkButton()
+                ->setHref('#')
+                ->setClasses('divider')
+                ->setTitle('──────────────────')
+                ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('miscellaneous-placeholder', Icon::SIZE_SMALL))
+                ->setShowLabelText(true)
+                ->setDisabled(true);
+            $presetSplitButtonElement->addItem($separatorButton);
+            foreach ($presets as $preset) {
+                $presetButtonLabel = $preset['label'];
+                $presetButton = $buttonBar->makeLinkButton()
+                    ->setHref('#')
+                    ->setClasses('t3js-change-preset')
+                    ->setTitle($presetButtonLabel . ' (' . $preset['width'] . 'x' . $preset['height'] . ')')
+                    ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-device-' . $presetGroup, Icon::SIZE_SMALL))
+                    ->setShowLabelText(true)
+                    ->setDataAttributes([
+                        'key' => $preset['key'],
+                        'label' => $presetButtonLabel,
+                        'width' => $preset['width'],
+                        'height' => $preset['height']
+                    ]);
+                $presetSplitButtonElement->addItem($presetButton);
+            }
+        }
+        $buttonBar->addButton($presetSplitButtonElement, ButtonBar::BUTTON_POSITION_LEFT, 20);
+
+        // Add width & height input to module docheader
+        $sizeButtons = new FullyRenderedButton();
+        $sizeButtons->setHtmlSource('
+            <input class="t3js-frontendediting-input-width" type="number" name="width" min="300" max="9999" value="' . $current['width'] . '">
+            x
+            <input class="t3js-frontendediting-input-height" type="number" name="height" min="300" max="9999" value="' . $current['height'] . '">
+        ');
+        $buttonBar->addButton($sizeButtons, ButtonBar::BUTTON_POSITION_LEFT, 15);
     }
 
     /**
@@ -227,10 +341,10 @@ class FrontendEditingModuleController
         $icons['unidentified'] = $iconFactory->getIcon('actions-device-unidentified', Icon::SIZE_SMALL)->render('inline');
 
         $current = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?: []);
-        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
-        $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
-        $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : 480);
 
+        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
+        $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : null);
+        $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : null);
         $custom = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?: []);
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);

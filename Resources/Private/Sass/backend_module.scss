@@ -6,10 +6,84 @@
 // Usage:       This file is compiled to the standalone CSS file:
 //              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
 //
+$module-bg-color: #494949;
+$dropdown-bg-color: #292929;
+$dropdown-color: #fff;
+$dropdown-btn-hover-color: #424242;
 
 .typo3-module-frontendediting {
-    .t3js-module-body {
-        padding: 65px 0 0 !important;
-        overflow: hidden !important;
+    .module {
+        background-color: transparent;
+
+        // Reset FullyRenderedButton container (hard-coded in TYPO3)
+        span.btn.btn-default {
+            border: 0;
+            background-color: transparent;
+            padding: 2px;
+
+            &.active,
+            &:active {
+                box-shadow: none;
+            }
+        }
+
+        // Hide placeholder icon from preset split button (TYPO3 split button requires an icon)
+        .t3js-change-preset {
+            .icon-miscellaneous-placeholder {
+                display: none;
+            }
+        }
+
+        .dropdown-menu {
+            // Darken background of dropdown buttons
+            .btn:not(.divider) {
+                background-color: $dropdown-bg-color;
+                text-align: left;
+                width: 100%;
+
+                &:hover,
+                &:focus,
+                &.focus {
+                    color: $dropdown-color;
+                    background-color: $dropdown-btn-hover-color;
+                }
+            }
+
+            // Style btn divider (TYPO3 ButtonBar doesn't allow div so I must use btn as divider)
+            .btn.divider {
+                cursor: default;
+                color: $dropdown-color;
+                background-color: $dropdown-bg-color;
+            }
+
+            // Can't use svg with  ButtonBar->makeLinkButton()->setIcon() so I invert them
+            .icon-markup {
+                filter: invert(1);
+
+                .icon-color {
+                    fill: $dropdown-color;
+                }
+            }
+        }
+
+        .module-body {
+            padding: 65px 0 0 !important; // Must use !important because TYPO3 set padding-top via JS
+            overflow: hidden; // Avoid scrollbars when FE iframe is full size
+            text-align: center; // Center the div containing the FE iframe
+
+            .typo3-messages {
+                text-align: left;
+            }
+
+            .frontendediting-resizeable {
+                display: inline-block;
+            }
+
+            #tx_frontendediting_iframe {
+                border: 0;
+                height: 100%;
+                width: 100%;
+            }
+        }
     }
 }
