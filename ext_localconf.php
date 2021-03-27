@@ -15,6 +15,10 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'fronte
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] =
     \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
 
+// Register the preHeaderRenderHook for backend document template
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['renderPreProcess']['frontend_editing/pagetree-actions'] =
+    \TYPO3\CMS\FrontendEditing\Hook\Backend\Template\DocumentTemplate::class . '->mainBackendModule';
+
 // Hook to unset page setup before render the toolbars to speed up the render
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->unsetPageSetup';
