@@ -166,6 +166,33 @@ class FrontendEditingModuleController
         }
 
         $this->addResponsiveUI($pageId, $buttonBar);
+
+        $this->addActionsUI($pageId, $buttonBar);
+    }
+
+    /**
+     * Add responsive UI to module docheader
+     *
+     * @param int $pageId
+     * @param ButtonBar $buttonBar
+     */
+    private function addActionsUI(int $pageId, ButtonBar $buttonBar)
+    {
+        $saveAllButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__save')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.save-all'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-document-save', Icon::SIZE_SMALL));
+        $buttonBar->addButton($saveAllButton, ButtonBar::BUTTON_POSITION_LEFT, -10);
+
+        $discardButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__discard')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.discard-all'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-edit-delete', Icon::SIZE_SMALL));
+        $buttonBar->addButton($discardButton, ButtonBar::BUTTON_POSITION_LEFT, -9);
     }
 
     /**

@@ -75,13 +75,14 @@ define([
     FrontendEditing.prototype.windowOpen = windowOpen;
     FrontendEditing.prototype.iframe = getIframe;
     FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
+    FrontendEditing.prototype.save = save;
+    FrontendEditing.prototype.discard = discard;
 
     var CLASS_HIDDEN = 'hidden';
 
     var pushDuration = 200;
     var pushEasing = 'linear';
 
-    var $itemCounter;
     var $iframe;
     var $loadingScreen;
     var loadingScreenLevel = 0;
@@ -93,11 +94,10 @@ define([
     var resourcePath;
 
     function init(options) {
-        $itemCounter = $('.top-bar-action-buttons .items-counter');
         $iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
         $loadingScreen = $('.t3-frontend-editing__loading-screen');
-        $saveButton = $('.t3-frontend-editing__save');
-        $discardButton = $('.t3-frontend-editing__discard');
+        $saveButton = window.parent.window.$('.t3-frontend-editing__save');
+        $discardButton = window.parent.window.$('.t3-frontend-editing__discard');
         editorConfigurationUrl = options.editorConfigurationUrl;
         resourcePath = options.resourcePath;
 
@@ -140,17 +140,11 @@ define([
         F.on(F.CONTENT_CHANGE, function (items) {
             var items = storage.getSaveItems();
             if (items.count()) {
-                $discardButton.prop('disabled', false);
-                $saveButton.prop('disabled', false);
-                $discardButton.removeClass('btn-inactive');
-                $saveButton.removeClass('btn-inactive');
-                $itemCounter.html('(' + items.count() + ')');
+                $saveButton.addClass('active');
+                $discardButton.addClass('active');
             } else {
-                $discardButton.prop('disabled', true);
-                $saveButton.prop('disabled', true);
-                $discardButton.addClass('btn-inactive');
-                $saveButton.addClass('btn-inactive');
-                $itemCounter.html('');
+                $saveButton.removeClass('active');
+                $discardButton.removeClass('active');
             }
         });
 
@@ -172,23 +166,19 @@ define([
         }
     }
 
+    function discard() {
+        if (!storage.isEmpty()) {
+            Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
+                yes: function () {
+                    storage.clear();
+                    F.refreshIframe();
+                    F.trigger(F.CONTENT_CHANGE);
+                }
+            });
+        }
+    }
+
     function bindActions() {
-        $saveButton.on('click', function (e) {
-            save();
-        });
-
-        $('.t3-frontend-editing__discard').on('click', function () {
-            if (!storage.isEmpty()) {
-                Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
-                    yes: function () {
-                        storage.clear();
-                        F.refreshIframe();
-                        F.trigger(F.CONTENT_CHANGE);
-                    }
-                });
-            }
-        });
-
         var t = 0;
         var y = 0;
         var u = 1;

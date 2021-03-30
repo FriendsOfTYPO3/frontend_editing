@@ -55,8 +55,8 @@ define([
             top.TYPO3.Backend.NavigationContainer.PageTree.instance.settings.readOnlyMode = false;
           } else if (e.target.name === 'save') {
             // Save the content and the continue navigation
-            // Content iframe and the frontend editing iframe
-            $('#typo3-contentIframe').contents().find("#tx_frontendediting_iframe").contents().find('.t3-frontend-editing__save').click();
+            // Use the save function in TYPO3/CMS/FrontendEditing/GUI
+            window[1][0].F.save()
             Modal.dismiss();
             // Activate the PageTree actions again
             top.TYPO3.Backend.NavigationContainer.PageTree.instance.settings.readOnlyMode = false;

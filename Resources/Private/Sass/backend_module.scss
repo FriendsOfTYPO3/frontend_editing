@@ -6,14 +6,33 @@
 // Usage:       This file is compiled to the standalone CSS file:
 //              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
 //
+
+// Include Color Variables
+@import '_colors.scss';
+
 $module-bg-color: #494949;
 $dropdown-bg-color: #292929;
-$dropdown-color: #fff;
 $dropdown-btn-hover-color: #424242;
 
 .typo3-module-frontendediting {
     .module {
         background-color: transparent;
+
+        .t3-frontend-editing__save {
+            &.active {
+                background-color: $color-t3-primary;
+                border-color: $color-t3-primary;
+                color: $color-white;
+            }
+        }
+
+        .t3-frontend-editing__discard {
+            &.active {
+                background-color: $gray-darker;
+                border-color: $gray-darker;
+                color: $color-white;
+            }
+        }
 
         // Reset FullyRenderedButton container (hard-coded in TYPO3)
         span.btn.btn-default {
@@ -44,7 +63,7 @@ $dropdown-btn-hover-color: #424242;
                 &:hover,
                 &:focus,
                 &.focus {
-                    color: $dropdown-color;
+                    color: $color-white;
                     background-color: $dropdown-btn-hover-color;
                 }
             }
@@ -52,7 +71,7 @@ $dropdown-btn-hover-color: #424242;
             // Style btn divider (TYPO3 ButtonBar doesn't allow div so I must use btn as divider)
             .btn.divider {
                 cursor: default;
-                color: $dropdown-color;
+                color: $color-white;
                 background-color: $dropdown-bg-color;
             }
 
@@ -61,7 +80,7 @@ $dropdown-btn-hover-color: #424242;
                 filter: invert(1);
 
                 .icon-color {
-                    fill: $dropdown-color;
+                    fill: $color-white;
                 }
             }
         }
