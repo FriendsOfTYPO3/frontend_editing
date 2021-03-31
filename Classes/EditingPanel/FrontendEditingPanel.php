@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 
 /**
  * View class for the edit panels in frontend editing
@@ -119,20 +120,22 @@ class FrontendEditingPanel
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
-        $pluginConfiguration = $this->getPluginConfiguration();
-        // Check if customRecordEditing is present
-        if (isset($pluginConfiguration['customRecordEditing'])
-            && is_array($pluginConfiguration['customRecordEditing'])
-        ) {
-            $pageArguments = $this->frontendController->getPageArguments()->getArguments();
-            foreach ($pluginConfiguration['customRecordEditing'] as $key => $customRecordEditing) {
-                // Check that params match the custom editing configuration
-                if (isset($pageArguments[$key])
-                    && $pageArguments[$key]['action'] === $customRecordEditing['actionName']
-                ) {
-                    if ($dataArr !== null && $dataArr['list_type'] === $customRecordEditing['listTypeName']) {
-                        $table = $customRecordEditing['tableName'];
-                        $editUid = $pageArguments[$key][$customRecordEditing['recordName']];
+        if (CompatibilityUtility::typo3VersionIsGreaterThan('10.0')) {
+            $pluginConfiguration = $this->getPluginConfiguration();
+            // Check if customRecordEditing is present
+            if (isset($pluginConfiguration['customRecordEditing'])
+                && is_array($pluginConfiguration['customRecordEditing'])
+            ) {
+                $pageArguments = $this->frontendController->getPageArguments()->getArguments();
+                foreach ($pluginConfiguration['customRecordEditing'] as $key => $customRecordEditing) {
+                    // Check that params match the custom editing configuration
+                    if (isset($pageArguments[$key])
+                        && $pageArguments[$key]['action'] === $customRecordEditing['actionName']
+                    ) {
+                        if ($dataArr !== null && $dataArr['list_type'] === $customRecordEditing['listTypeName']) {
+                            $table = $customRecordEditing['tableName'];
+                            $editUid = $pageArguments[$key][$customRecordEditing['recordName']];
+                        }
                     }
                 }
             }

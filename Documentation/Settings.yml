@@ -7,7 +7,7 @@ conf.py:
   copyright: 2017
   project: TYPO3 Frontend Editing
   version: 1.10
-  release: 1.10.0
+  release: 1.10.1
   latex_documents:
   - - Index
     - frontend_editing.tex
