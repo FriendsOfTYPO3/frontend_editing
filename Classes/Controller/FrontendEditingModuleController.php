@@ -141,6 +141,11 @@ class FrontendEditingModuleController
         }
 
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+
+        $this->addActionsUI($pageId, $buttonBar);
+
+        $this->addResponsiveUI($pageId, $buttonBar);
+
         $showButton = $buttonBar->makeLinkButton()
             ->setHref($targetUrl)
             ->setOnClick('window.open(this.href, \'newTYPO3frontendWindow\').focus();return false;')
@@ -164,8 +169,39 @@ class FrontendEditingModuleController
                 ->setGetVariables($getVars);
             $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
         }
+    }
 
-        $this->addResponsiveUI($pageId, $buttonBar);
+    /**
+     * Add action buttons to UI
+     *
+     * @param int $pageId
+     * @param ButtonBar $buttonBar
+     */
+    private function addActionsUI(int $pageId, ButtonBar $buttonBar)
+    {
+        $saveAllButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__save')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.save-all'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-document-save', Icon::SIZE_SMALL));
+        $buttonBar->addButton($saveAllButton, ButtonBar::BUTTON_POSITION_LEFT, -10);
+
+        $discardButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__discard')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.discard-all'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-close', Icon::SIZE_SMALL));
+        $buttonBar->addButton($discardButton, ButtonBar::BUTTON_POSITION_LEFT, -9);
+
+        $fullScreenButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__full-view')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.full-view'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-fullscreen', Icon::SIZE_SMALL));
+        $buttonBar->addButton($fullScreenButton, ButtonBar::BUTTON_POSITION_LEFT, -8);
     }
 
     /**

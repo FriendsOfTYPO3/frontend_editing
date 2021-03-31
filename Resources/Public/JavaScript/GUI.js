@@ -75,29 +75,32 @@ define([
     FrontendEditing.prototype.windowOpen = windowOpen;
     FrontendEditing.prototype.iframe = getIframe;
     FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
+    FrontendEditing.prototype.save = save;
+    FrontendEditing.prototype.discard = discard;
+    FrontendEditing.prototype.fullView = fullView;
 
     var CLASS_HIDDEN = 'hidden';
 
     var pushDuration = 200;
     var pushEasing = 'linear';
 
-    var $itemCounter;
     var $iframe;
     var $loadingScreen;
     var loadingScreenLevel = 0;
     var $saveButton;
     var $discardButton;
+    var $fullViewButton;
     var iframeUrl;
     var storage;
     var editorConfigurationUrl;
     var resourcePath;
 
     function init(options) {
-        $itemCounter = $('.top-bar-action-buttons .items-counter');
         $iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
         $loadingScreen = $('.t3-frontend-editing__loading-screen');
-        $saveButton = $('.t3-frontend-editing__save');
-        $discardButton = $('.t3-frontend-editing__discard');
+        $saveButton = window.parent.window.$('.t3-frontend-editing__save');
+        $discardButton = window.parent.window.$('.t3-frontend-editing__discard');
+        $fullViewButton = window.parent.window.$('.t3-frontend-editing__full-view');
         editorConfigurationUrl = options.editorConfigurationUrl;
         resourcePath = options.resourcePath;
 
@@ -140,17 +143,11 @@ define([
         F.on(F.CONTENT_CHANGE, function (items) {
             var items = storage.getSaveItems();
             if (items.count()) {
-                $discardButton.prop('disabled', false);
-                $saveButton.prop('disabled', false);
-                $discardButton.removeClass('btn-inactive');
-                $saveButton.removeClass('btn-inactive');
-                $itemCounter.html('(' + items.count() + ')');
+                $saveButton.addClass('active');
+                $discardButton.addClass('active');
             } else {
-                $discardButton.prop('disabled', true);
-                $saveButton.prop('disabled', true);
-                $discardButton.addClass('btn-inactive');
-                $saveButton.addClass('btn-inactive');
-                $itemCounter.html('');
+                $saveButton.removeClass('active');
+                $discardButton.removeClass('active');
             }
         });
 
@@ -172,54 +169,45 @@ define([
         }
     }
 
-    function bindActions() {
-        $saveButton.on('click', function (e) {
-            save();
-        });
-
-        $('.t3-frontend-editing__discard').on('click', function () {
-            if (!storage.isEmpty()) {
-                Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
-                    yes: function () {
-                        storage.clear();
-                        F.refreshIframe();
-                        F.trigger(F.CONTENT_CHANGE);
-                    }
-                });
-            }
-        });
-
-        var t = 0;
-        var y = 0;
-        var u = 1;
-
-        $('.t3-frontend-editing__full-view').on('click', function () {
-            t = ++t % 2;
-            y = ++y % 2;
-            u = ++u % 2;
-
-            $('.t3-frontend-editing__top-bar').stop().animate({top: u ? 0 : -160}, pushDuration, pushEasing);
-
-            $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
-            $('.t3-frontend-editing__full-view').toggleClass('full-view-active');
-            $('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
-            $('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
-
-            if ($('.t3-frontend-editing__right-bar').hasClass('open')) {
-                $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
-            } else if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
-                $('.t3-frontend-editing__right-bar').toggleClass('closed');
-            } else {
-                $('.t3-frontend-editing__right-bar').toggleClass('closed');
-            }
-            F.getStorage().addItem('fullScreenState', {
-                isActive: $('.t3-frontend-editing__full-view').hasClass('full-view-active')
+    function discard() {
+        if (!storage.isEmpty()) {
+            Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
+                yes: function () {
+                    storage.clear();
+                    F.refreshIframe();
+                    F.trigger(F.CONTENT_CHANGE);
+                }
             });
+        }
+    }
+
+    function fullView() {
+        var t = 0;
+
+        t = ++t % 2;
+
+        $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
+        $fullViewButton.toggleClass('full-view-active');
+        $('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
+        $('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
+
+        if ($('.t3-frontend-editing__right-bar').hasClass('open')) {
+            $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+        } else if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
+            $('.t3-frontend-editing__right-bar').toggleClass('closed');
+        } else {
+            $('.t3-frontend-editing__right-bar').toggleClass('closed');
+        }
+        F.getStorage().addItem('fullScreenState', {
+            isActive: $fullViewButton.hasClass('full-view-active')
         });
+    }
+
+    function bindActions() {
+        var t = 0;
 
         $('.top-right-title').on('click', function () {
             $('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
-            $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
             t = ++t % 2;
@@ -306,7 +294,7 @@ define([
 
         if (typeof states.fullScreenState !== 'undefined') {
             if (states.fullScreenState.isActive) {
-                $('.t3-frontend-editing__full-view').trigger('click');
+                $fullViewButton.trigger('click');
             }
         }
     }

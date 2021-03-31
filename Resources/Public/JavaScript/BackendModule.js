@@ -42,6 +42,12 @@ define([
 
     customSelector: '.t3js-preset-custom',
 
+    saveAllSelector: '.t3-frontend-editing__save',
+
+    discardSelector: '.t3-frontend-editing__discard',
+
+    fullViewSelector: '.t3-frontend-editing__full-view',
+
     changeOrientationSelector: '.t3js-change-orientation',
     changePresetSelector: '.t3js-change-preset',
 
@@ -185,6 +191,24 @@ define([
     $(FrontedEditing.currentButtonSelector).data('width', $(FrontedEditing.inputWidthSelector).val());
     $(FrontedEditing.currentButtonSelector).data('height', $(FrontedEditing.inputHeightSelector).val());
 
+    // Save All button
+    $(document).on('click', FrontedEditing.saveAllSelector, function() {
+      // Use the save function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.save();
+    });
+
+    // Discard button
+    $(document).on('click', FrontedEditing.discardSelector, function() {
+      // Use the discard function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.discard();
+    });
+
+    // Full view button
+    $(document).on('click', FrontedEditing.fullViewSelector, function() {
+      // Use the fullView function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.fullView();
+    });
+
     // Change orientation
     $(document).on('click', FrontedEditing.changeOrientationSelector, function() {
       var width = $(FrontedEditing.inputHeightSelector).val();
@@ -201,6 +225,7 @@ define([
       FrontedEditing.setLabel(FrontedEditing.defaultLabel);
       FrontedEditing.persistCustomPresetAfterChange();
     });
+
     $(document).on('change', FrontedEditing.inputHeightSelector, function() {
       var width = $(FrontedEditing.inputWidthSelector).val();
       var height = $(FrontedEditing.inputHeightSelector).val();
