@@ -46,6 +46,8 @@ define([
 
     discardSelector: '.t3-frontend-editing__discard',
 
+    fullViewSelector: '.t3-frontend-editing__full-view',
+
     changeOrientationSelector: '.t3js-change-orientation',
     changePresetSelector: '.t3js-change-preset',
 
@@ -199,6 +201,12 @@ define([
     $(document).on('click', FrontedEditing.discardSelector, function() {
       // Use the discard function in TYPO3/CMS/FrontendEditing/GUI
       window[0].F.discard();
+    });
+
+    // Full view button
+    $(document).on('click', FrontedEditing.fullViewSelector, function() {
+      // Use the fullView function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.fullView();
     });
 
     // Change orientation

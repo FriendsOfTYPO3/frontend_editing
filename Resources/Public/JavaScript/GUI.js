@@ -77,6 +77,7 @@ define([
     FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
     FrontendEditing.prototype.save = save;
     FrontendEditing.prototype.discard = discard;
+    FrontendEditing.prototype.fullView = fullView;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -88,6 +89,7 @@ define([
     var loadingScreenLevel = 0;
     var $saveButton;
     var $discardButton;
+    var $fullViewButton;
     var iframeUrl;
     var storage;
     var editorConfigurationUrl;
@@ -98,6 +100,7 @@ define([
         $loadingScreen = $('.t3-frontend-editing__loading-screen');
         $saveButton = window.parent.window.$('.t3-frontend-editing__save');
         $discardButton = window.parent.window.$('.t3-frontend-editing__discard');
+        $fullViewButton = window.parent.window.$('.t3-frontend-editing__full-view');
         editorConfigurationUrl = options.editorConfigurationUrl;
         resourcePath = options.resourcePath;
 
@@ -178,38 +181,33 @@ define([
         }
     }
 
+    function fullView() {
+        var t = 0;
+
+        t = ++t % 2;
+
+        $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
+        $fullViewButton.toggleClass('full-view-active');
+        $('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
+        $('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
+
+        if ($('.t3-frontend-editing__right-bar').hasClass('open')) {
+            $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
+        } else if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
+            $('.t3-frontend-editing__right-bar').toggleClass('closed');
+        } else {
+            $('.t3-frontend-editing__right-bar').toggleClass('closed');
+        }
+        F.getStorage().addItem('fullScreenState', {
+            isActive: $fullViewButton.hasClass('full-view-active')
+        });
+    }
+
     function bindActions() {
         var t = 0;
-        var y = 0;
-        var u = 1;
-
-        $('.t3-frontend-editing__full-view').on('click', function () {
-            t = ++t % 2;
-            y = ++y % 2;
-            u = ++u % 2;
-
-            $('.t3-frontend-editing__top-bar').stop().animate({top: u ? 0 : -160}, pushDuration, pushEasing);
-
-            $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
-            $('.t3-frontend-editing__full-view').toggleClass('full-view-active');
-            $('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
-            $('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
-
-            if ($('.t3-frontend-editing__right-bar').hasClass('open')) {
-                $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
-            } else if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
-                $('.t3-frontend-editing__right-bar').toggleClass('closed');
-            } else {
-                $('.t3-frontend-editing__right-bar').toggleClass('closed');
-            }
-            F.getStorage().addItem('fullScreenState', {
-                isActive: $('.t3-frontend-editing__full-view').hasClass('full-view-active')
-            });
-        });
 
         $('.top-right-title').on('click', function () {
             $('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
-            $('.t3-frontend-editing__top-bar-right').toggleClass('push-toleft');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
             $('.t3-frontend-editing__right-bar').toggleClass('open');
             t = ++t % 2;
@@ -296,7 +294,7 @@ define([
 
         if (typeof states.fullScreenState !== 'undefined') {
             if (states.fullScreenState.isActive) {
-                $('.t3-frontend-editing__full-view').trigger('click');
+                $fullViewButton.trigger('click');
             }
         }
     }

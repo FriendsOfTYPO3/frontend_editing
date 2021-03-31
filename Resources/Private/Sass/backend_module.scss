@@ -34,6 +34,12 @@ $dropdown-btn-hover-color: #424242;
             }
         }
 
+        .full-view-active {
+            background-color: $color-t3-primary;
+            border-color: $color-t3-primary;
+            color: $color-white;
+        }
+
         // Reset FullyRenderedButton container (hard-coded in TYPO3)
         span.btn.btn-default {
             border: 0;

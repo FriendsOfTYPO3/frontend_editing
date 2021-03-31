@@ -2,7 +2,7 @@
     background-color: $gray;
     color: $white;
     position: absolute;
-    top: $top-bar-height;
+    top: 0;
     right: -$right-bar-width;
     width: $right-bar-width;
     bottom: 0;
@@ -24,7 +24,7 @@
 
         .elements-wrapper {
             overflow-y: scroll;
-            height: calc(100vh - #{$top-bar-height * 3});
+            height: calc(100vh - #{$top-bar-height * 2});
         }
 
         &::-webkit-scrollbar {

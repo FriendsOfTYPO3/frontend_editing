@@ -10,9 +10,9 @@
             <trans-unit id="top-bar.discard-all">
                 <source>Discard</source>
             </trans-unit>
-            <trans-unit id="left-bar.site-tree">
-                <source>Site Tree</source>
-            </trans-unit>
+			<trans-unit id="top-bar.full-view">
+				<source>Full view</source>
+			</trans-unit>
             <trans-unit id="right-bar.tools-properties">
                 <source>TOOLS &amp; PROPERTIES</source>
             </trans-unit>

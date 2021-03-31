@@ -1,6 +1,6 @@
 .t3-frontend-editing__iframe-wrapper {
     transition: width $push-duration $push-timing;
-    margin-top: $top-bar-height * 2;
+    margin-top: $top-bar-height;
     margin-right: $right-bar-width;
     position: relative;
     width: 100%;
@@ -17,7 +17,7 @@
 
     iframe {
         width: 100%;
-        height: calc(100vh - #{$top-bar-height * 2});
+        height: calc(100vh - #{$top-bar-height});
         margin: 0 auto;
         display: block;
         box-shadow: 0 0 15px 0 $gray;
@@ -83,50 +83,11 @@ body {
     user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 
-.t3-frontend-editing__full-view {
-    z-index: 11000;
-    position: absolute;
-    right: 0;
-    left: auto;
-    width: $top-bar-height;
-    height: $top-bar-height;
-    background-color: $gray-dark;
-    font-size: 1em;
-    line-height: 1em;
-    border: 0;
-    border-left: 1px solid darken($color-t3-gray-dark, 10%);
-    border-radius: 0;
-    outline: 0;
-    padding: 0;
-
-    &:hover {
-        background-color: lighten($gray-dark, 20%);
-    }
-
-    &.full-view-active {
-        background-color: $color-t3-primary;
-        border: 1px dashed $black;
-
-        svg path {
-            fill: $black;
-        }
-
-        &:hover {
-            background-color: lighten($color-t3-primary, 10%);
-            color: $black;
-        }
-    }
-
-    svg path {
-        fill: $color-t3-gray-light;
-    }
-}
-
 .t3-frontend-editing__ckeditor-bar__wrapper {
     background: #2b2b2b;
     height: $top-bar-height;
     position: absolute;
-    top: $top-bar-height;
+    top: 0;
     z-index: 1;
     margin: 0 auto;
     width: auto;
