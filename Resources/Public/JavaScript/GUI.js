@@ -94,6 +94,7 @@ define([
     var storage;
     var editorConfigurationUrl;
     var resourcePath;
+    var t = 0;
 
     function init(options) {
         $iframe = $('.t3-frontend-editing__iframe-wrapper iframe');
@@ -182,8 +183,6 @@ define([
     }
 
     function fullView() {
-        var t = 0;
-
         t = ++t % 2;
 
         $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
@@ -204,8 +203,6 @@ define([
     }
 
     function bindActions() {
-        var t = 0;
-
         $('.top-right-title').on('click', function () {
             $('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
             $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
