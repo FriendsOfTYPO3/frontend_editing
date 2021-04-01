@@ -48,7 +48,7 @@
 
     .top-right-title {
         text-align: right;
-        background-color: $header-top-bg-color;
+        background-color: $t3-gray;
         height: $top-bar-height;
         width: $right-bar-width;
         z-index: 1;
@@ -59,6 +59,7 @@
             display: inline-block;
             padding-right: 5px;
             vertical-align: middle;
+            color: $black;
         }
 
         .right-bar-button {
@@ -71,14 +72,14 @@
             width: 45px;
             text-align: center;
             position: absolute;
-            color: $gray-light;
+            color: $black;
             font-size: 32px;
             left: -45px;
             top: 0;
-            background-color: $black;
+            background-color: $t3-gray;
 
             &:hover {
-                background-color: lighten($black, 20%);
+                background-color: darken($t3-gray, 20%);
                 color: $white;
             }
         }

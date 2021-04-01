@@ -84,7 +84,7 @@ body {
 }
 
 .t3-frontend-editing__ckeditor-bar__wrapper {
-    background: #2b2b2b;
+    background: $t3-gray;
     height: $top-bar-height;
     position: absolute;
     top: 0;
@@ -100,7 +100,7 @@ body {
 }
 
 .t3-frontend-editing__ckeditor-bar {
-    background: #2b2b2b;
+    background: $t3-gray;
     color: #fff;
     height: $top-bar-height;
     position: absolute;
@@ -114,6 +114,7 @@ body {
         top: -1px !important;
         left: 0 !important;
         right: auto !important;
+        box-shadow: unset;
 
         &.left-open {
             left: 290px !important;
