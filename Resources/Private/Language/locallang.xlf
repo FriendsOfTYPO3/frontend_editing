@@ -116,9 +116,6 @@
             <trans-unit id="refreshPage" resname="refreshPage">
                 <source>Refresh page</source>
             </trans-unit>
-			<trans-unit id="orientationButtonTitle" resname="orientationButtonTitle">
-				<source>Switch orientation</source>
-			</trans-unit>
         </body>
     </file>
 </xliff>

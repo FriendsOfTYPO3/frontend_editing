@@ -212,14 +212,6 @@ class FrontendEditingModuleController
      */
     private function addResponsiveUI(int $pageId, ButtonBar $buttonBar)
     {
-        // Add device orientation button to module docheader
-        $orientationButton = $buttonBar->makeLinkButton()
-            ->setHref('#')
-            ->setClasses('t3js-change-orientation')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:orientationButtonTitle'))
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-device-orientation-change', Icon::SIZE_SMALL));
-        $buttonBar->addButton($orientationButton, ButtonBar::BUTTON_POSITION_LEFT, 10);
-
         // Add preset menu to module docheader
         $presetSplitButtonElement = $buttonBar->makeSplitButton();
         // Current state

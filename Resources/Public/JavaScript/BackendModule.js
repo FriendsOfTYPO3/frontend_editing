@@ -48,7 +48,6 @@ define([
 
     fullViewSelector: '.t3-frontend-editing__full-view',
 
-    changeOrientationSelector: '.t3js-change-orientation',
     changePresetSelector: '.t3js-change-preset',
 
     inputWidthSelector: '.t3js-frontendediting-input-width',
@@ -207,14 +206,6 @@ define([
     $(document).on('click', FrontedEditing.fullViewSelector, function() {
       // Use the fullView function in TYPO3/CMS/FrontendEditing/GUI
       window[0].F.fullView();
-    });
-
-    // Change orientation
-    $(document).on('click', FrontedEditing.changeOrientationSelector, function() {
-      var width = $(FrontedEditing.inputHeightSelector).val();
-      var height = $(FrontedEditing.inputWidthSelector).val();
-      FrontedEditing.setSize(width, height);
-      FrontedEditing.persistCurrentPreset();
     });
 
     // On change
