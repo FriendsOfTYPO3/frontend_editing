@@ -19,7 +19,7 @@
             position: relative;
             height: $top-bar-height * 2;
             z-index: 1100;
-            background: $gray;
+            background: $t3-gray;
         }
 
         .elements-wrapper {
@@ -115,10 +115,9 @@
             height: $top-bar-height;
             font-size: 1em;
             line-height: 1em;
-            border-left: 1px solid $gray-mid;
 
             &:hover {
-                background-color: lighten($gray, 7%);
+                background-color: darken($t3-gray, 20%);
             }
 
             .hidden-elements-toggle-button {
