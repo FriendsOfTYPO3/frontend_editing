@@ -1,6 +1,6 @@
 .t3-frontend-editing__right-bar {
     background-color: $gray;
-    color: $white;
+    color: $black;
     position: absolute;
     top: 0;
     right: -$right-bar-width;
@@ -15,6 +15,8 @@
     }
 
     .top-right-bar-wrapper {
+        background-color: $t3-gray;
+
         .top-right-relative {
             position: relative;
             height: $top-bar-height * 2;
@@ -25,6 +27,10 @@
         .elements-wrapper {
             overflow-y: scroll;
             height: calc(100vh - #{$top-bar-height * 2});
+
+            .elements {
+                background-color: $t3-gray;
+            }
         }
 
         &::-webkit-scrollbar {
