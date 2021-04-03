@@ -46,12 +46,12 @@
             width: 230px;
             padding: 0;
             line-height: 1.1;
-            color: $gray-light;
+            color: $black;
 
             &:first-of-type {
                 font-size: $font-size-smaller;
                 padding-top: 4px;
-                color: $white;
+                color: $black;
             }
         }
     }
@@ -86,11 +86,11 @@
         width: 24px;
         display: inline-block;
         cursor: pointer;
-        color: $gray;
+        color: $t3-gray-divider;
 
         &:hover,
         &.active {
-            color: $white;
+            color: $black;
         }
     }
 
@@ -130,7 +130,7 @@
 
 .accordion-grid {
     .grid {
-        color: $white;
+        color: $black;
     }
 
     .accordion-content {
@@ -145,11 +145,11 @@
 
     .element {
         display: block;
-        background-color: $gray-dark;
+        background-color: $t3-gray;
         margin: 0;
-        padding: 10px;
         margin-bottom: 2px;
-        border-bottom: 1px solid $gray;
+        padding: 10px;
+        border-bottom: 1px solid $t3-gray-divider;
 
         .content-icon {
             vertical-align: top;
@@ -182,6 +182,6 @@
     }
 
     .list-view {
-        color: $white;
+        color: $black;
     }
 }
