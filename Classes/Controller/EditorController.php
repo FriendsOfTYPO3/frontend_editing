@@ -16,10 +16,10 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\FrontendEditing\Backend\Form\FormDataGroup\FrontendTcaDatabaseRecord;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
-use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
@@ -59,7 +59,7 @@ class EditorController
         }
 
         /** @var TcaDatabaseRecord $formDataGroup */
-        $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
+        $formDataGroup = GeneralUtility::makeInstance(FrontendTcaDatabaseRecord::class);
         /** @var FormDataCompiler $formDataCompiler */
         $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
 
