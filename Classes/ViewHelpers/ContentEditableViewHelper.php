@@ -99,7 +99,6 @@ class ContentEditableViewHelper extends AbstractViewHelper
     ) {
         $content = $renderChildrenClosure();
         $content = ($content != null ? $content : '');
-        $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
 
         $access = GeneralUtility::makeInstance(AccessService::class);
         if ($access->isBackendContext()) {
@@ -114,6 +113,7 @@ class ContentEditableViewHelper extends AbstractViewHelper
                 $pageRepositoryClassName = PageRepository::class;
             }
 
+            $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
             $isPageContentEditAllowed = false;
             try {
                 $isPageContentEditAllowed = $access->isPageContentEditAllowed(
