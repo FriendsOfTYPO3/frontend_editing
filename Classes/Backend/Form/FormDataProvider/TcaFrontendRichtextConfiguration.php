@@ -24,16 +24,22 @@ class TcaFrontendRichtextConfiguration implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
-            if (empty($fieldConfig['config']['type']) || $fieldConfig['config']['type'] !== 'text') {
+            if (
+                empty($fieldConfig['config']['type'])
+                || $fieldConfig['config']['type'] !== 'text'
+                || !isset($fieldConfig['config']['enableFrontendRichtext'])
+            ) {
                 continue;
             }
 
-            if (isset($fieldConfig['config']['enableFrontendRichtext'])) {
-                $fieldConfig['config']['enableRichtext'] = (bool)$fieldConfig['config']['enableFrontendRichtext'];
-                $modifiedFieldConfig['config']['richtextConfiguration'] =
-                    $fieldConfig['config']['frontendRichtextConfiguration'];
-                unset($fieldConfig['config']['frontendRichtextConfiguration']);
-            }
+            $fieldConfig['config']['enableRichtext'] = (bool)$fieldConfig['config']['enableFrontendRichtext'];
+
+            $fieldConfig['config']['richtextConfiguration'] =
+                $fieldConfig['config']['frontendRichtextConfiguration'];
+
+            unset($fieldConfig['config']['frontendRichtextConfiguration']);
+
+            $result['processedTca']['columns'][$fieldName] = $fieldConfig;
         }
 
         return $result;

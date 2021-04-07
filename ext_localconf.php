@@ -16,16 +16,13 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDa
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'][
     \TYPO3\CMS\FrontendEditing\Backend\Form\FormDataProvider\TcaFrontendRichtextConfiguration::class
 ] = [
-    'depends' => [
-        TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
-        TYPO3\CMS\Backend\Form\FormDataProvider\TcaFlexProcess::class
+    'before' => [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class
     ]
 ];
 
-// Make sure frontend-related RTE configuration is set before RTE configuration and transformation.
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'][
-    \TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class
-]['depends'][] = \TYPO3\CMS\FrontendEditing\Backend\Form\FormDataProvider\TcaFrontendRichtextConfiguration::class;
+// Add RTE presets for frontend use
+$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['bronly'] = 'EXT:frontend_editing/Configuration/RTE/BrOnly.yaml';
 
 /**
  * Hooks
