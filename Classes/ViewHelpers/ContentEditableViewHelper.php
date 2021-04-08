@@ -24,8 +24,6 @@ use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * View helper to enable frontend editing for records in fluid
@@ -101,7 +99,8 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string Rendered email link
      */
-    public function render() {
+    public function render()
+    {
         $content = $this->renderChildren();
         $access = GeneralUtility::makeInstance(AccessService::class);
 

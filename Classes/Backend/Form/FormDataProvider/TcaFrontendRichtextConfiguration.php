@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Backend\Form\FormDataProvider;
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use TYPO3\CMS\Core\Configuration\Richtext;
-use TYPO3\CMS\Core\Html\RteHtmlParser;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Frontend editing-specific resolving of databaseRow field content for type=text, especially rich text configuration.

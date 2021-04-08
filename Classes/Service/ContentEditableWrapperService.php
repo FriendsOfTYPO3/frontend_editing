@@ -93,8 +93,7 @@ class ContentEditableWrapperService
         string $content,
         ?string $tag = null,
         array $additionalAttibutes = []
-    ): string
-    {
+    ): string {
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);

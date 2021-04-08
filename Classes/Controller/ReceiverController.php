@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
-use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
 
 /**
  * Main class for handling requests sent via Frontend Editing, and providing the information
