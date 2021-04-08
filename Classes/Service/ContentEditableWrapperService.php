@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -80,10 +81,19 @@ class ContentEditableWrapperService
      * @param string $field
      * @param int $uid
      * @param string $content
+     * @param string|null $tag Optional tag name to use, e.g. "div"
+     * @param array $additionalAttibutes An array of additional arguments for the tag.
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function wrapContentToBeEditable(string $table, string $field, int $uid, string $content): string
+    public function wrapContentToBeEditable(
+        string $table,
+        string $field,
+        int $uid,
+        string $content,
+        ?string $tag = null,
+        array $additionalAttibutes = []
+    ): string
     {
         // Check that data is not empty
         if (empty($table)) {
@@ -107,32 +117,34 @@ class ContentEditableWrapperService
 
         $this->switchToLocalLanguageEquivalent($table, $uid);
 
+        $tagBuilder = new TagBuilder(
+            $tag ?? $this->contentEditableWrapperTagName,
+            $content
+        );
+
+        $tagBuilder->ignoreEmptyAttributes(true);
+
+        $tagBuilder->addAttributes($additionalAttibutes);
+
         if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
-            return $content;
+            return $tag === null ? $content : $tagBuilder->render();
         }
 
         $placeholderText = $this->getPlaceholderText($table, $field);
 
-        $content = sprintf(
-            '<%s '
-            . 'contenteditable="true" '
-            . 'data-table="%s" '
-            . 'data-field="%s" '
-            . 'data-uid="%d" '
-            . 'class="%s" '
-            . 'placeholder="%s"'
-            . '>%s</%s>',
-            $this->contentEditableWrapperTagName,
-            $table,
-            $field,
-            $uid,
-            $this->checkIfContentElementIsHidden($table, (int)$uid),
-            htmlspecialchars($placeholderText),
-            $content,
-            $this->contentEditableWrapperTagName
-        );
+        $tagBuilder->addAttributes([
+            'contenteditable' => 'true',
+            'data-table' => $table,
+            'data-field' => $field,
+            'data-uid' => $uid,
+            'class' => trim(
+                $this->getContentElementClass($table, (int)$uid)
+                . ' ' . $tagBuilder->getAttribute('class')
+            ),
+            'placeholder' => $placeholderText,
+        ]);
 
-        return $content;
+        return $tagBuilder->render();
     }
 
     /**
@@ -168,7 +180,7 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
+        $hiddenElementClassName = $this->getContentElementClass($table, (int)$uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
         $recordTitle = $this->recordTitle($table, $dataArr);
@@ -491,7 +503,7 @@ class ContentEditableWrapperService
      * @param int $uid
      * @return string $hiddenClassName
      */
-    public function checkIfContentElementIsHidden(string $table, int $uid): string
+    public function getContentElementClass(string $table, int $uid): string
     {
         $hiddenClassName = '';
         $row = BackendUtility::getRecord($table, $uid);
