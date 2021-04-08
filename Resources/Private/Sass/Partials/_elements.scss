@@ -45,11 +45,13 @@
             display: inline-block;
             width: 230px;
             padding: 0;
-            line-height: 1.1;
+            line-height: 1.2;
             color: $black;
+            font-size: $font-size-smaller;
 
             &:first-of-type {
                 font-size: $font-size-smaller;
+                font-weight: bold;
                 padding-top: 4px;
                 color: $black;
             }
@@ -69,8 +71,16 @@
     }
 }
 
-.content-element-hierarchy-tab .element:hover {
-    cursor: pointer;
+.content-element-hierarchy-tab {
+    .accordion {
+        .element-action {
+            padding: 6px 10px;
+        }
+    }
+
+    .element:hover {
+        cursor: pointer;
+    }
 }
 
 .wizard-elements-tabs .element:hover {

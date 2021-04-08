@@ -14,7 +14,7 @@
 				<source>Full view</source>
 			</trans-unit>
             <trans-unit id="right-bar.tools-properties">
-                <source>TOOLS &amp; PROPERTIES</source>
+                <source>Tools &amp; Properties</source>
             </trans-unit>
             <trans-unit id="right-bar.page-edit">
                 <source>Edit page properties</source>

@@ -18,9 +18,9 @@ $scroll-bar-track: rgba(63, 63, 63, 0.6);
 $transparent-opacity: rgba(30, 30, 30, 0.9);
 
 // Font
-$font-family-base: "Share", Verdana, Helvetica, Arial, sans-serif;
+$font-family-base: Verdana, Arial, Helvetica, sans-serif;
 
-$font-family-user-input: Verdana, Helvetica, Arial, sans-serif;
+$font-family-user-input: $font-family-base;
 
 $font-size-smaller: 12px;
 $font-size-small: 14px;
