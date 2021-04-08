@@ -1,4 +1,4 @@
-[backend.user.isLoggedIn && request.getQueryParams()['frontend_editing'] == true]
+[backend.user.isLoggedIn && (request.getQueryParams()['frontend_editing'] == true || request.getQueryParams()['route'] matches '#^/ajax/frontend-editing/#')]
 
   lib.fluidContent {
     stdWrap {
@@ -81,6 +81,41 @@
           }
         }
       }
+
+      # Catch-all processing before a field value is persisted to database. Key (e.g. "bronly") is the RTE configuration
+      # name, set in a field's TCA config (richtextConfiguration or frontendRichtextConfiguration).
+      contentPersistPreProcessingPatterns {
+        bronly {
+          replacement {
+            10 {
+              search.char = 13
+              replace =
+            }
+
+            20 {
+              search.char = 10
+              replace =
+            }
+
+            30 {
+              search = #<br\s*\/?>#i
+              replace.char = 10
+              useRegExp = 1
+            }
+          }
+        }
+      }
+
+      # Example processing of content before it is being persisted to database. For all types, use <type> = *
+      #      contentPersistPreProcessing {
+      #        <tableName> {
+      #          <type> {
+      #            <field> {
+      #              # Any stdWrap property
+      #            }
+      #          }
+      #        }
+      #      }
 
       customRecordEditing {
         tx_news_pi1 {

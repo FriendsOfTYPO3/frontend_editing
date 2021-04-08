@@ -146,7 +146,7 @@ class ContentEditableFixtures
             $this->table,
             $this->field,
             $this->uid,
-            $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
+            $this->contentEditableWrapperService->getContentElementClass($this->table, $this->uid),
             $this->content
         );
 
@@ -169,7 +169,7 @@ class ContentEditableFixtures
                 ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
                 '%s' .
             '</div>',
-            $this->contentEditableWrapperService->checkIfContentElementIsHidden($this->table, $this->uid),
+            $this->contentEditableWrapperService->getContentElementClass($this->table, $this->uid),
             $this->contentEditableWrapperService->recordTitle($this->table, $this->dataArr),
             $class,
             $this->table,

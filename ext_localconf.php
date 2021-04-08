@@ -8,6 +8,22 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CM
 // Exclude the frontend editing from the cHash calculations
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'frontend_editing';
 
+// Copy configuration array so we can have our own.
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'] =
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
+
+// Add processor for frontend-related RTE configuration
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'][
+    \TYPO3\CMS\FrontendEditing\Backend\Form\FormDataProvider\TcaFrontendRichtextConfiguration::class
+] = [
+    'before' => [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class
+    ]
+];
+
+// Add RTE presets for frontend use
+$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['bronly'] = 'EXT:frontend_editing/Configuration/RTE/BrOnly.yaml';
+
 /**
  * Hooks
  */
