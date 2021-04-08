@@ -3,32 +3,16 @@ name: TER release
 on:
   push:
     tags:
-      - '*'
+      - "**"
 
 jobs:
-  ter-release:
-    name: TER release
-    runs-on: ubuntu-latest
-    env:
-      TYPO3_EXTENSION_KEY: 'frontend_editing'
-      REPOSITORY_URL: 'https://github.com/FriendsOfTYPO3/frontend_editing'
-      TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
-      TYPO3_API_USERNAME: ${{ secrets.TYPO3_API_USERNAME }}
-      TYPO3_API_PASSWORD: ${{ secrets.TYPO3_API_PASSWORD }}
-
+  publish:
+    runs-on: ubuntu-20.04
     steps:
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: "Checkout"
+        uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: "Publish new version to TER"
+        uses: tomasnorre/typo3-upload-ter@v2
         with:
-          php-version: '7.4'
-          extensions: intl, mbstring, xml, soap, zip, curl
-
-      - name: Install EXT:tailor
-        run: composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
-
-      - name: Upload EXT:${{ env.EXTENSION_KEY }} as ${{ steps.get_version.outputs.VERSION }} to TER
-        run: php ~/.composer/vendor/bin/tailor ter:publish ${{ steps.get_version.outputs.VERSION }} --artefact=${{ env.REPOSITORY_URL }}/archive/${{ steps.get_version.outputs.VERSION }}.zip --comment="New release of version ${{ steps.get_version.outputs.VERSION }} - see details, changelog and documentation on ${{ env.REPOSITORY_URL }}"
+          api-token: ${{ secrets.TYPO3_API_TOKEN }}
