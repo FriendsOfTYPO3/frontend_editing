@@ -132,50 +132,8 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             $isPageContentEditAllowed = true;
         }
 
-<<<<<<< HEAD
         if (!$access->isEnabled() || !$isPageContentEditAllowed) {
             return $this->renderAsTag($content);
-=======
-            if ($typo3VersionNumber < 10000000) {
-                // @extensionScannerIgnoreLine
-                $pageRepositoryClassName = DeprecatedPageRepository::class;
-            } else {
-                $pageRepositoryClassName = PageRepository::class;
-            }
-
-            $record = BackendUtility::getRecord($arguments['table'], (int)$arguments['uid']);
-            $isPageContentEditAllowed = false;
-            try {
-                $isPageContentEditAllowed = $access->isPageContentEditAllowed(
-                    GeneralUtility::makeInstance($pageRepositoryClassName)
-                        ->getPage_noCheck($record['pid'])
-                );
-            } catch (\Exception $exception) {
-                // Suppress Exception and no database access
-                $isPageContentEditAllowed = true;
-            }
-
-            if (!$access->isEnabled() || !$isPageContentEditAllowed) {
-                return $content;
-            }
-
-            $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-            if (empty($arguments['field'])) {
-                $content = $wrapperService->wrapContent(
-                    $arguments['table'],
-                    (int)$arguments['uid'],
-                    ($record ? $record : []),
-                    $content
-                );
-            } else {
-                $content = $wrapperService->wrapContentToBeEditable(
-                    $arguments['table'],
-                    $arguments['field'],
-                    (int)$arguments['uid'],
-                    $content
-                );
-            }
->>>>>>> origin/develop-2.0
         }
 
         $filteredArguments = array_diff_key(
