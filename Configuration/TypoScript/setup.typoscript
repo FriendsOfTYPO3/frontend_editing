@@ -106,16 +106,16 @@
         }
       }
 
-#      # Example processing of content before it is being persisted to database. For all types, use <type> = *
-#      contentPersistPreProcessing {
-#        <tableName> {
-#          <type> {
-#            <field> {
-#              # Any stdWrap property
-#            }
-#          }
-#        }
-#      }
+      # Example processing of content before it is being persisted to database. For all types, use <type> = *
+      #      contentPersistPreProcessing {
+      #        <tableName> {
+      #          <type> {
+      #            <field> {
+      #              # Any stdWrap property
+      #            }
+      #          }
+      #        }
+      #      }
 
       customRecordEditing {
         tx_news_pi1 {
