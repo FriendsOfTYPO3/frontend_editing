@@ -55,27 +55,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyP
 /**
  * Pre processors
  */
-// Save core content element "Bullets"
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-cobjbullets'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeBullets::class;
-
-// Save core content element "Table"
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-cobjtable'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeTable::class;
-
-// Save headers, field header, will also affect field header_layout
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-CeHeader'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeHeader::class;
-
-// Register BE user avatar provider on FE
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
-) {
-    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['avatarProviders']['frontendEditingAvatarProvider'] = [
-        'provider' => \TYPO3\CMS\FrontendEditing\Provider\Avatar\FrontendEditingAvatarProvider::class
-    ];
-}
+\TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility::registerEventHandlerAsSignalSlot(
+    \TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent::class,
+    \TYPO3\CMS\FrontendEditing\Controller\Event\Handler\TypoScriptPrepareFieldUpdateEventHandler::class
+);
 
 /**
  * Custom icons

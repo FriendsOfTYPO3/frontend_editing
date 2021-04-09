@@ -17,7 +17,10 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * Miscellaneous functions relating to compatibility with different TYPO3 versions
@@ -76,5 +79,68 @@ class CompatibilityUtility
     public static function getTypo3VersionInteger()
     {
         return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
+    }
+
+    /**
+     * Dispatch an event as PSR-14 in TYPO3 v10+ and signal in TYPO3 v9.
+     *
+     * @param object $event
+     * @return object
+     */
+    public static function dispatchEvent(object $event): object
+    {
+        if (self::typo3VersionIsLessThan('10')) {
+            /** @var Dispatcher $signalSlotDispatcher */
+            $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
+
+            $eventClassName = get_class($event);
+
+            $signalSlotDispatcher->dispatch(
+                $eventClassName,
+                self::classNameToSignalName($eventClassName),
+                [$event]
+            );
+
+            return $event;
+        }
+
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
+
+        return $eventDispatcher->dispatch($event);
+    }
+
+    /**
+     * Register a PSR-14 event as a signal slot in TYPO3 v9.
+     *
+     * @param string $eventClassName
+     * @param string $eventHandlerClassName
+     */
+    public static function registerEventHandlerAsSignalSlot(string $eventClassName, string $eventHandlerClassName)
+    {
+        if (self::typo3VersionIsGreaterThanOrEqualTo('10')) {
+            return;
+        }
+
+        /** @var Dispatcher $signalSlotDispatcher */
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
+
+        $signalSlotDispatcher->connect(
+            $eventClassName,
+            self::classNameToSignalName($eventClassName),
+            $eventHandlerClassName,
+            '__invoke'
+        );
+    }
+
+    /**
+     * Returns "className" from "Foo\Bar\ClassName".
+     *
+     * @param string $className
+     * @return string
+     */
+    protected static function classNameToSignalName(string $className)
+    {
+        return lcfirst(array_pop(explode('\\', $className)));
     }
 }
