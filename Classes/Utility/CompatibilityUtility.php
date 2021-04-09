@@ -17,13 +17,9 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Utility\ClassNamingUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**

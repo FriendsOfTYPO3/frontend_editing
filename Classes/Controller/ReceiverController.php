@@ -19,13 +19,10 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
 use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
