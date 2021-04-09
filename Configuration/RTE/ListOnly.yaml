@@ -7,13 +7,15 @@ processing:
 
   allowTags:
     - li
+    - dt
+    - dd
 
   allowAttributes: []
 
   allowTagsOutside:
     - li
-
-  HTMLparser_db: []
+    - dt
+    - dd
 
 # Minimal configuration for the editor
 editor:
@@ -23,6 +25,13 @@ editor:
       - { name: editing,   groups: [find, selection, spellchecker] }
       - { name: specialcharacters,   groups: [ insertcharacters ] }
 
-    allowedContent: li
+    allowedContent:
+      - li
+      - dt
+      - dd
+
+    disallowedContent:
+      - ul
+      - ol
 
     forcePasteAsPlainText: true

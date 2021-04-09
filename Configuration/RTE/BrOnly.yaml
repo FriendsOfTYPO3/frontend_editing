@@ -12,11 +12,6 @@ processing:
 
   allowTagsOutside: []
 
-  HTMLparser_db:
-    allowTags: br
-    noAttrib: br
-    htmlSpecialChars: -1
-
 # Minimal configuration for the editor
 editor:
   config:
