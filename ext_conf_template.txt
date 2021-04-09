@@ -2,4 +2,4 @@
 contentEditableWrapperTagName = div
 
 # cat=features/enable/10; type=boolean; label=LLL:EXT:frontend_editing/Resources/Private/Language/locallang_be.xlf:extension_management.placeholders
-enablePlaceholders = 0
+enablePlaceholders = 1
