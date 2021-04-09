@@ -246,25 +246,11 @@ define([
         $parent.attr('href', 'javascript:;');
       }
 
-      // Only div is allowed for CKeditor instance
-      if ($el.prop('tagName').toLowerCase() !== 'div') {
-        $el.on('blur keyup paste input', function (event) {
-          var dataSet = $el.data();
-          storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
-            'action': 'save',
-            'table': dataSet.table,
-            'uid': dataSet.uid,
-            'field': dataSet.field,
-            'hasCkeditorConfiguration': null,
-            'editorInstance': null,
-            'inlineElement': true,
-            'text': $el.text()
-          });
-          F.trigger(F.CONTENT_CHANGE);
-        });
-      } else {
-        configurableEditableElements.push(this);
+      if (!CKEDITOR.dtd.$editable[$el.prop('tagName').toLowerCase()]) {
+        CKEDITOR.dtd.$editable[$el.prop('tagName').toLowerCase()] = 1;
       }
+
+      configurableEditableElements.push(this);
     });
 
     var requestData = [];
