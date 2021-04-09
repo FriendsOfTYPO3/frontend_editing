@@ -122,7 +122,7 @@ class ContentEditableWrapperService
             $tag ?? $this->contentEditableWrapperTagName,
             $content
         );
-
+        $tagBuilder->forceClosingTag(true);
         $tagBuilder->ignoreEmptyAttributes(true);
 
         $tagBuilder->addAttributes($additionalAttibutes);
@@ -196,6 +196,7 @@ class ContentEditableWrapperService
             'span',
             $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle)
         );
+        $inlineActionTagBuilder->forceClosingTag(true);
 
         $inlineActionTagBuilder->addAttributes([
             'style' => 'display:none;',
@@ -214,6 +215,7 @@ class ContentEditableWrapperService
             $this->contentEditableWrapperTagName,
             $inlineActionTagBuilder->render() . $content
         );
+        $tagBuilder->forceClosingTag(true);
 
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__ce ' . $hiddenElementClassName,
@@ -263,6 +265,7 @@ class ContentEditableWrapperService
             TagBuilder::class,
             $this->contentEditableWrapperTagName
         );
+        $tagBuilder->forceClosingTag(true);
 
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__dropzone',
