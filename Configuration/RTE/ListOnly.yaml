@@ -7,15 +7,11 @@ processing:
 
   allowTags:
     - li
-    - dt
-    - dd
 
   allowAttributes: []
 
   allowTagsOutside:
     - li
-    - dt
-    - dd
 
 # Minimal configuration for the editor
 editor:
@@ -27,8 +23,6 @@ editor:
 
     allowedContent:
       - li
-      - dt
-      - dd
 
     disallowedContent:
       - ul
