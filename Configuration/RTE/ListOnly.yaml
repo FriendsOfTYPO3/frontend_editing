@@ -6,11 +6,12 @@ processing:
   mode: default
 
   allowTags:
-    - br
+    - li
 
   allowAttributes: []
 
-  allowTagsOutside: []
+  allowTagsOutside:
+    - li
 
 # Minimal configuration for the editor
 editor:
@@ -20,6 +21,11 @@ editor:
       - { name: editing,   groups: [find, selection, spellchecker] }
       - { name: specialcharacters,   groups: [ insertcharacters ] }
 
-    enterMode: 2
-    forceEnterMode: true
+    allowedContent:
+      - li
+
+    disallowedContent:
+      - ul
+      - ol
+
     forcePasteAsPlainText: true

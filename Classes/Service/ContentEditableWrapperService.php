@@ -94,6 +94,8 @@ class ContentEditableWrapperService
         ?string $tag = null,
         array $additionalAttibutes = []
     ): string {
+        $tag = $tag ?? $this->contentEditableWrapperTagName;
+
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
@@ -114,18 +116,30 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $this->switchToLocalLanguageEquivalent($table, $uid);
-
         /** @var TagBuilder $tagBuilder */
         $tagBuilder = GeneralUtility::makeInstance(
             TagBuilder::class,
-            $tag ?? $this->contentEditableWrapperTagName,
+            $tag,
             $content
         );
         $tagBuilder->forceClosingTag(true);
         $tagBuilder->ignoreEmptyAttributes(true);
 
         $tagBuilder->addAttributes($additionalAttibutes);
+
+        // Definition lists are not supported in CKEditor v4.
+        if (strtolower($tag) === 'dl') {
+            $this->logger->error(
+                'Definition lists are not supported in CKEditor v4.',
+                [
+                    'table' => $table,
+                    'field' => $field,
+                    'class' => __CLASS__
+                ]
+            );
+
+            return $tagBuilder->render();
+        }
 
         if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
             return $tag === null ? $content : $tagBuilder->render();
