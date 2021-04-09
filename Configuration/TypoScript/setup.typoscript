@@ -104,6 +104,41 @@
             }
           }
         }
+
+        listonly {
+          replacement {
+            10 {
+              search.char = 13
+              replace =
+            }
+
+            20 {
+              search.char = 10
+              replace =
+            }
+
+            30 {
+              search = #\s+#
+              replace.char = 32
+              useRegExp = 1
+            }
+
+            40 {
+              search = #</li>#i
+              replace {
+                char = 10
+                wrap = </li>|
+              }
+              useRegExp = 1
+            }
+
+            50 {
+              search = #<li[^>]*>([^<]+)</li>#i
+              replace = ${1}
+              useRegExp = 1
+            }
+          }
+        }
       }
 
       # Example processing of content before it is being persisted to database. For all types, use <type> = *

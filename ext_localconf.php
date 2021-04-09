@@ -23,6 +23,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDa
 
 // Add RTE presets for frontend use
 $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['bronly'] = 'EXT:frontend_editing/Configuration/RTE/BrOnly.yaml';
+$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['listonly'] = 'EXT:frontend_editing/Configuration/RTE/ListOnly.yaml';
 
 /**
  * Hooks
