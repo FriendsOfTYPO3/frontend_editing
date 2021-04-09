@@ -97,7 +97,7 @@ class CompatibilityUtility
             /** @var Dispatcher $signalSlotDispatcher */
             $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
 
-            $eventClassName = get_class($eventClassName);
+            $eventClassName = get_class($event);
 
             $signalSlotDispatcher->dispatch(
                 $eventClassName,
