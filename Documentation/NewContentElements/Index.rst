@@ -7,46 +7,6 @@
 Content elements
 ----------------
 
-
-.. _custom-records-dropzone:
-
-Custom Records
-""""""""""""""
-
-With this feature, webmaster is allowed to insert directly record into custom configured zone.
-For example: a webmaster can insert news directly into the news list.
-
-The configuration is done in 2 parts.
-
-A custom zone is added via "CustomDropZoneViewHelper" in record listing
-Allowed record are registered in TypoScript as follows:
-
-  .. code-block:: typoscript
-
-    plugin.tx_frontendediting{
-        customRecords {
-            10 {
-                table = tx_news_domain_model_news
-                pid = 6
-            }
-        }
-    }
-
-After the Typoscript is added you also need to adjust the Fluid template with
-the following code:
-
-.. code-block:: html
-
-    <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
-    </core:customDropZone>
-
-The result will be this:
-
-  .. figure:: ../Images/CustomRecordsDropzone.png
-     :alt: Custom records for dropzones
-
-.. _new-content-elements:
-
 New Content Elements
 """"""""""""""""""""
 

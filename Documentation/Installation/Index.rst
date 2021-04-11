@@ -11,11 +11,14 @@ Installation
 Required steps
 ==============
 
-The following steps are required to active the frontend editing for a TYPO3 installation.
+The following steps are required to use frontend editing in a TYPO3 installation.
 
-- Install and active the extension called *frontend_editing*
+* Install the extension
 
-- Add the static TypoScript template *Frontend Editing* to the site roots where the features should be activated
+   #. **Using Composer** (recommended): `composer req friendsoftypo3/frontend-editing` or by downloading the extension
+   #. **Using the Extension Manager** in *Admin Tools > Extensions* as explained in the :ref:`Extension Installation <t3install:extension-installation>` chapter of the official TYPO3 documentation.
+
+* Add the static TypoScript template *Frontend Editing* to the site roots where the features should be activated
 
   .. figure:: ../Images/AddTypoScript.png
      :alt: TYPO3 frontend editing TyposScript
@@ -25,12 +28,12 @@ The following steps are required to active the frontend editing for a TYPO3 inst
 Optional steps
 ==============
 
-- Set the baseUrl for frontend editing if server path is not a top directory. This is done by adding the following part to setup typoscript:
+* Set the baseUrl for frontend editing if server path is not a top directory. This is done by adding the following part to setup typoscript:
 
   .. code-block:: typoscript
 
      plugin.tx_frontendediting.baseUrl = /
 
-- Include the static template *Editable Fluid Styled Content v9*, to include basic editable templates for Fluid Styled Content in TYPO3 v9.
+* Include the static template *Editable Fluid Styled Content v9*, to include basic editable templates for Fluid Styled Content in TYPO3 v9.
 
-- Enable the Placeholder feature in the extension configuration. By enabling this feature, empty editable content areas will appear with placeholders. Content elements will also appear directly after you have dropped them on the page, skipping the modal pop-up with a backend form that would otherwise appear. :ref:`extension-manager-settings`
+* Disable the Placeholder feature in the extension configuration. By disabling this feature, empty editable content areas will no longer with placeholders. When creating a new content element by dragging and dropping onto the page, a modal pop-up with a backend form will appear so that you can fill in the initial content. :ref:`extension-manager-settings`
