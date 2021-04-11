@@ -13,3 +13,4 @@ Configure and Customize
    ViewHelpers/Index
    TypoScript/Index
    TCA/Index
+   UserTs/Index
