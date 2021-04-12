@@ -72,7 +72,7 @@ Example event handler
    use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
    use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEventHandlerInterface;
 
-   class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEventHandlerInterface
+   class RemoveUtf8CharactersPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEventHandlerInterface
    {
        public function __invoke(PrepareFieldUpdateEvent $event): void
        {
