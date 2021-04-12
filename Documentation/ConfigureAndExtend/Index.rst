@@ -1,5 +1,8 @@
 .. include:: Includes.txt
 
+
+.. _configureandextend:
+
 ====================
 Configure and Extend
 ====================

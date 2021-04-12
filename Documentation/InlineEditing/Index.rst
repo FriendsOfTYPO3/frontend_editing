@@ -8,7 +8,10 @@
 Editable regions and record editing
 ===================================
 
-You can create frontend-editable regions using Fluid ViewHelpers or TypoScipt.
+This is an introduction to configuring and customizing Frontend Editing. You can
+create frontend-editable regions using Fluid ViewHelpers or TypoScipt.
+
+For in-depth configuration options, see :ref:`configureandextend`.
 
 .. _fluid-styled-content:
 
