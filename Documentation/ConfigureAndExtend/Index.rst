@@ -20,3 +20,4 @@ work in your TYPO3 instance, and how to extend the functionality.
    TCA/Index
    UserTs/Index
    ExtensionConfiguration/Index
+   HooksAndEvents/Index
