@@ -17,4 +17,4 @@ Pages may not render properly (blank page) if the setting `[FE][disableNoCachePa
 Other issues
 """"""""""""
 
-A full list of bugs can be found at https://github.com/FriendsOfTYPO3/frontend_editing/issues
+A full list of bugs can be found in our `issue tracker <https://github.com/FriendsOfTYPO3/frontend_editing/issues>`__.
