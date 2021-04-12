@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Service;
 
@@ -18,17 +19,19 @@ namespace TYPO3\CMS\FrontendEditing\Service;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Core\Log\Logger;
-use TYPO3\CMS\Core\Log\LogManager;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
  * A class for adding wrapping for a content element to be editable
@@ -36,11 +39,6 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 class ContentEditableWrapperService
 {
     const DEFAULT_WRAPPER_TAG_NAME = 'div';
-
-    /**
-     * @var ExtensionManagerConfigurationService
-     */
-    protected $extensionManagerConfigurationService;
 
     /**
      * @var IconFactory
@@ -67,11 +65,9 @@ class ContentEditableWrapperService
      */
     public function __construct()
     {
-        $this->extensionManagerConfigurationService =
-            GeneralUtility::makeInstance(ExtensionManagerConfigurationService::class);
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
         $this->contentEditableWrapperTagName = self::DEFAULT_WRAPPER_TAG_NAME;
-        $tagName = $this->extensionManagerConfigurationService->getSettings()['contentEditableWrapperTagName'];
+        $tagName = ConfigurationUtility::getExtensionConfiguration()['contentEditableWrapperTagName'];
         if ($tagName) {
             $this->contentEditableWrapperTagName = $tagName;
         }
@@ -85,11 +81,21 @@ class ContentEditableWrapperService
      * @param string $field
      * @param int $uid
      * @param string $content
+     * @param string|null $tag Optional tag name to use, e.g. "div"
+     * @param array $additionalAttibutes An array of additional arguments for the tag.
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function wrapContentToBeEditable(string $table, string $field, int $uid, string $content): string
-    {
+    public function wrapContentToBeEditable(
+        string $table,
+        string $field,
+        int $uid,
+        string $content,
+        ?string $tag = null,
+        array $additionalAttibutes = []
+    ): string {
+        $tag = $tag ?? $this->contentEditableWrapperTagName;
+
         // Check that data is not empty
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
@@ -110,34 +116,50 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $this->switchToLocalLanguageEquivalent($table, $uid);
+        /** @var TagBuilder $tagBuilder */
+        $tagBuilder = GeneralUtility::makeInstance(
+            TagBuilder::class,
+            $tag,
+            $content
+        );
+        $tagBuilder->forceClosingTag(true);
+        $tagBuilder->ignoreEmptyAttributes(true);
+
+        $tagBuilder->addAttributes($additionalAttibutes);
+
+        // Definition lists are not supported in CKEditor v4.
+        if (strtolower($tag) === 'dl') {
+            $this->logger->error(
+                'Definition lists are not supported in CKEditor v4.',
+                [
+                    'table' => $table,
+                    'field' => $field,
+                    'class' => __CLASS__
+                ]
+            );
+
+            return $tagBuilder->render();
+        }
 
         if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
-            return $content;
+            return $tag === null ? $content : $tagBuilder->render();
         }
 
         $placeholderText = $this->getPlaceholderText($table, $field);
 
-        $content = sprintf(
-            '<%s '
-            . 'contenteditable="true" '
-            . 'data-table="%s" '
-            . 'data-field="%s" '
-            . 'data-uid="%d" '
-            . 'class="%s" '
-            . 'placeholder="%s"'
-            . '>%s</%s>',
-            $this->contentEditableWrapperTagName,
-            $table,
-            $field,
-            $uid,
-            $this->checkIfContentElementIsHidden($table, (int)$uid),
-            htmlspecialchars($placeholderText),
-            $content,
-            $this->contentEditableWrapperTagName
-        );
+        $tagBuilder->addAttributes([
+            'contenteditable' => 'true',
+            'data-table' => $table,
+            'data-field' => $field,
+            'data-uid' => $uid,
+            'class' => trim(
+                $this->getContentElementClass($table, (int)$uid)
+                . ' ' . $tagBuilder->getAttribute('class')
+            ),
+            'placeholder' => $placeholderText,
+        ]);
 
-        return $content;
+        return $tagBuilder->render();
     }
 
     /**
@@ -173,7 +195,7 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $hiddenElementClassName = $this->checkIfContentElementIsHidden($table, (int)$uid);
+        $hiddenElementClassName = $this->getContentElementClass($table, (int)$uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
         $recordTitle = $this->recordTitle($table, $dataArr);
@@ -181,30 +203,43 @@ class ContentEditableWrapperService
         // @TODO: include config as parameter and make cid (columnIdentifier) able to set by combining fields
         // Could make it would make it possible to configure cid for use with extensions that create columns by content
         $class = 't3-frontend-editing__inline-actions';
-        $content = sprintf(
-            '<%s class="t3-frontend-editing__ce %s" title="%s" data-movable="1"' .
-                ' ondragstart="window.parent.F.dragCeStart(event)"' .
-                ' ondragend="window.parent.F.dragCeEnd(event)">' .
-                '<span style="display:none;" class="%s" data-table="%s" data-uid="%d" data-hidden="%s"' .
-                    ' data-cid="%d" data-edit-url="%s" data-new-url="%s">%s</span>' .
-                '%s' .
-            '</%s>',
-            $this->contentEditableWrapperTagName,
-            $hiddenElementClassName,
-            $recordTitle,
-            $class,
-            $table,
-            $uid,
-            (int)$elementIsHidden,
-            $dataArr['colPos'],
-            $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid)),
-            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle),
-            $content,
-            $this->contentEditableWrapperTagName
-        );
 
-        return $content;
+        /** @var TagBuilder $inlineActionTagBuilder */
+        $inlineActionTagBuilder = GeneralUtility::makeInstance(
+            TagBuilder::class,
+            'span',
+            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle)
+        );
+        $inlineActionTagBuilder->forceClosingTag(true);
+
+        $inlineActionTagBuilder->addAttributes([
+            'style' => 'display:none;',
+            'class' => $class,
+            'data-table' => $table,
+            'data-uid' => (int)$uid,
+            'data-hidden' => (int)$elementIsHidden,
+            'data-cid' => $dataArr['colPos'],
+            'data-edit-url' => $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
+            'data-new-url' => $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid))
+        ]);
+
+        /** @var TagBuilder $tagBuilder */
+        $tagBuilder = GeneralUtility::makeInstance(
+            TagBuilder::class,
+            $this->contentEditableWrapperTagName,
+            $inlineActionTagBuilder->render() . $content
+        );
+        $tagBuilder->forceClosingTag(true);
+
+        $tagBuilder->addAttributes([
+            'class' => 't3-frontend-editing__ce ' . $hiddenElementClassName,
+            'title' => $recordTitle,
+            'data-movable' => 1,
+            'ondragstart' => 'window.parent.F.dragCeStart(event)',
+            'ondragend' => 'window.parent.F.dragCeEnd(event)',
+        ]);
+
+        return $tagBuilder->render();
     }
 
     /**
@@ -239,25 +274,32 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $jsFuncOnDrop = 'window.parent.F.dropCe(event)';
-        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
-        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
-        $class = 't3-frontend-editing__dropzone';
-
-        $dropZone = sprintf(
-            '<%s class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-                'data-new-url="%s" data-moveafter="%d" data-colpos="%d" data-defvals="%s"></%s>',
-            $this->contentEditableWrapperTagName,
-            $class,
-            $jsFuncOnDrop,
-            $jsFuncOnDragover,
-            $jsFuncOnDragLeave,
-            $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, (int)$uid, (int)$colPos, $defaultValues)),
-            $uid,
-            $colPos,
-            htmlspecialchars(json_encode($defaultValues)),
+        /** @var TagBuilder $tagBuilder */
+        $tagBuilder = GeneralUtility::makeInstance(
+            TagBuilder::class,
             $this->contentEditableWrapperTagName
         );
+        $tagBuilder->forceClosingTag(true);
+
+        $tagBuilder->addAttributes([
+            'class' => 't3-frontend-editing__dropzone',
+            'ondrop' => 'window.parent.F.dropCe(event)',
+            'ondragover' => 'window.parent.F.dragCeOver(event)',
+            'ondragleave' => 'window.parent.F.dragCeLeave(event)',
+            'data-new-url' => $this->renderEditOnClickReturnUrl(
+                $this->renderNewUrl(
+                    $table,
+                    (int)$uid,
+                    (int)$colPos,
+                    $defaultValues
+                )
+            ),
+            'data-moveafter' => (int)$uid,
+            'data-colpos' => $colPos,
+            'data-defvals' => json_encode($defaultValues),
+        ]);
+
+        $dropZone = $tagBuilder->render();
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);
     }
@@ -286,24 +328,23 @@ class ContentEditableWrapperService
             throw new \InvalidArgumentException('Property "tables" can not to be empty!', 1486163430);
         }
 
-        $jsFuncOnDrop = 'window.parent.F.dropCr(event)';
-        $jsFuncOnDragover = 'window.parent.F.dragCeOver(event)';
-        $jsFuncOnDragLeave = 'window.parent.F.dragCeLeave(event)';
-        $class = 't3-frontend-editing__dropzone';
-
-        $dropZone = sprintf(
-            '<%s class="%s" ondrop="%s" ondragover="%s" ondragleave="%s" ' .
-            'data-tables="%s" data-defvals="%s" data-pid="%s"></%s>',
-            $this->contentEditableWrapperTagName,
-            $class,
-            $jsFuncOnDrop,
-            $jsFuncOnDragover,
-            $jsFuncOnDragLeave,
-            $tables,
-            htmlspecialchars(json_encode($defaultValues)),
-            $pageUid,
+        /** @var TagBuilder $tagBuilder */
+        $tagBuilder = GeneralUtility::makeInstance(
+            TagBuilder::class,
             $this->contentEditableWrapperTagName
         );
+
+        $tagBuilder->addAttributes([
+            'class' => 't3-frontend-editing__dropzone',
+            'ondrop' => 'window.parent.F.dropCe(event)',
+            'ondragover' => 'window.parent.F.dragCeOver(event)',
+            'ondragleave' => 'window.parent.F.dragCeLeave(event)',
+            'data-tables' => $tables,
+            'data-pid' => (int)$pageUid,
+            'data-defvals' => json_encode($defaultValues),
+        ]);
+
+        $dropZone = $tagBuilder->render();
 
         return $prepend ? ($dropZone . $content) : ($content . $dropZone);
     }
@@ -353,14 +394,9 @@ class ContentEditableWrapperService
         /** @var TypoScriptFrontendController $frontendController */
         $frontendController = $GLOBALS['TSFE'];
 
-        if ($typo3VersionNumber < 9004000) {
-            // @extensionScannerIgnoreLine
-            $languageId = $frontendController->sys_language_uid;
-        } else {
-            /** @var LanguageAspect $languageAspect */
-            $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
-            $languageId = $languageAspect->getId();
-        }
+        /** @var LanguageAspect $languageAspect */
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        $languageId = $languageAspect->getId();
 
         if ($languageId !== 0) {
             $translatedRecords = BackendUtility::getRecordLocalization(
@@ -501,7 +537,7 @@ class ContentEditableWrapperService
      * @param int $uid
      * @return string $hiddenClassName
      */
-    public function checkIfContentElementIsHidden(string $table, int $uid): string
+    public function getContentElementClass(string $table, int $uid): string
     {
         $hiddenClassName = '';
         $row = BackendUtility::getRecord($table, $uid);

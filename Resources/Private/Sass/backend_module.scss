@@ -1,0 +1,117 @@
+//
+// Frontend editing, backend module Styles
+// ---------------
+// Description: Backend module styles
+// Requires:    ../Sass/Configuration/Variables/_colors.scss
+// Usage:       This file is compiled to the standalone CSS file:
+//              ../typo3_src/typo3/sysext/frontend_editing/Resources/Public/Css/inline_editing.css
+//
+
+// Include Color Variables
+@import '_colors.scss';
+
+$module-bg-color: #494949;
+$dropdown-bg-color: #292929;
+$dropdown-btn-hover-color: #424242;
+
+.typo3-module-frontendediting {
+    .module {
+        background-color: transparent;
+
+        .t3-frontend-editing__save {
+            &.active {
+                background-color: $color-t3-primary;
+                border-color: $color-t3-primary;
+                color: $color-white;
+            }
+        }
+
+        .t3-frontend-editing__discard {
+            &.active {
+                background-color: $gray-darker;
+                border-color: $gray-darker;
+                color: $color-white;
+            }
+        }
+
+        .full-view-active {
+            background-color: $color-t3-primary;
+            border-color: $color-t3-primary;
+            color: $color-white;
+        }
+
+        // Reset FullyRenderedButton container (hard-coded in TYPO3)
+        span.btn.btn-default {
+            border: 0;
+            background-color: transparent;
+            padding: 2px;
+
+            &.active,
+            &:active {
+                box-shadow: none;
+            }
+        }
+
+        // Hide placeholder icon from preset split button (TYPO3 split button requires an icon)
+        .t3js-change-preset {
+            .icon-miscellaneous-placeholder {
+                display: none;
+            }
+        }
+
+        .dropdown-menu {
+            // Darken background of dropdown buttons
+            .btn:not(.divider) {
+                background-color: $dropdown-bg-color;
+                text-align: left;
+                width: 100%;
+
+                &:hover,
+                &:focus,
+                &.focus {
+                    color: $color-white;
+                    background-color: $dropdown-btn-hover-color;
+                }
+            }
+
+            // Style btn divider (TYPO3 ButtonBar doesn't allow div so I must use btn as divider)
+            .btn.divider {
+                cursor: default;
+                color: $color-white;
+                background-color: $dropdown-bg-color;
+            }
+
+            // Can't use svg with  ButtonBar->makeLinkButton()->setIcon() so I invert them
+            .icon-markup {
+                filter: invert(1);
+
+                .icon-color {
+                    fill: $color-white;
+                }
+            }
+        }
+
+        .module-body {
+            padding: 65px 0 0 !important; // Must use !important because TYPO3 set padding-top via JS
+            overflow: hidden; // Avoid scrollbars when FE iframe is full size
+            text-align: center; // Center the div containing the FE iframe
+
+            .typo3-messages {
+                text-align: left;
+                margin-left: 24px;
+                margin-top: 24px;
+                margin-right: 24px;
+            }
+
+            .frontendediting-resizeable {
+                display: inline-block;
+            }
+
+            #tx_frontendediting_iframe {
+                border: 0;
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+}

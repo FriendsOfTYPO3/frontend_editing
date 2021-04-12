@@ -1,4 +1,5 @@
 <?php
+
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
 /*
@@ -14,7 +15,7 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FrontendEditing\Service\ExtensionManagerConfigurationService;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -46,6 +47,6 @@ class IsPlaceholderEnabledViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ) {
         return FrontendEditingUtility::isEnabled()
-            && ExtensionManagerConfigurationService::getSettings()['enablePlaceholders'];
+            && ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders'];
     }
 }

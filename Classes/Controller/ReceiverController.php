@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Controller;
 
@@ -23,7 +24,8 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\FrontendEditing\RequestPreProcess\RequestPreProcessInterface;
+use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
+use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 
 /**
  * Main class for handling requests sent via Frontend Editing, and providing the information
@@ -63,7 +65,7 @@ class ReceiverController
                     case 'new':
                         $data = [];
                         parse_str($request->getParsedBody()['data'], $data);
-                        $this->newAction($data['edit'], $data['defVals'], (int) $request->getQueryParams()['page']);
+                        $this->newAction($data['edit'], $data['defVals'], (int)$request->getQueryParams()['page']);
                         break;
                     case 'hide':
                         $this->hideAction(
@@ -116,39 +118,24 @@ class ReceiverController
      *
      * @param string $table
      * @param int $uid
-     * @param string $fieldName
+     * @param string $field
      * @param string $content
      * @throws \UnexpectedValueException
      */
-    protected function updateAction(string $table, int $uid, string $fieldName, string $content)
+    protected function updateAction(string $table, int $uid, string $field, string $content)
     {
-        $fieldName = $this->sanitizeFieldName($fieldName);
+        $field = $this->sanitizeFieldName($field);
 
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess'])) {
-            $requestPreProcessArray = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess'];
-            if (is_array($requestPreProcessArray)) {
-                $record = BackendUtility::getRecord($table, $uid);
-                $finished = false;
-                foreach ($requestPreProcessArray as $className) {
-                    $hookObject = GeneralUtility::makeInstance($className);
-                    if (!($hookObject instanceof RequestPreProcessInterface)) {
-                        throw new \UnexpectedValueException(
-                            $className . ' must implement interface ' . RequestPreProcessInterface::class,
-                            1274563547
-                        );
-                    }
-                    $content = $hookObject->preProcess($table, $record, $fieldName, $content, $finished);
-                    if ($finished) {
-                        break;
-                    }
-                }
-            }
-        }
+        $record = BackendUtility::getRecord($table, $uid);
+
+        $content = CompatibilityUtility::dispatchEvent(
+            new PrepareFieldUpdateEvent($table, $field, $content, $record)
+        )->getContent();
 
         $data = [
             $table => [
                 $uid => [
-                    $fieldName => $content
+                    $field => $content
                 ]
             ]
         ];
@@ -233,7 +220,7 @@ class ReceiverController
             );
         }
 
-        if ((int) array_keys($edit[$table])[0] < 0) {
+        if ((int)array_keys($edit[$table])[0] < 0) {
             $defVals[$table]['pid'] = array_keys($edit[$table])[0];
         } else {
             $defVals[$table]['pid'] = $pid;

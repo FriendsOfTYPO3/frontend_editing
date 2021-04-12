@@ -215,7 +215,6 @@ define([
 
             show: function () {
                 log.trace('modal show', this.title);
-
                 var _currentModal = null;
 
                 //copy ready listener cause it gets reset in next func
@@ -257,7 +256,7 @@ define([
                 try {
                     return T3Modal.advanced(this);
                 } catch (error) {
-                    if(error.message !== 'Prevent construct modal') {
+                    if (error.message !== 'Prevent construct modal') {
                         throw error;
                     }
                 }

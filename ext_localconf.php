@@ -1,4 +1,5 @@
 <?php
+
 defined('TYPO3_MODE') or die();
 
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
@@ -7,45 +8,22 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CM
 // Exclude the frontend editing from the cHash calculations
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'frontend_editing';
 
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
-) {
-    // Disable cHash check when browsing the frontend in frontend editing
-    if (TYPO3\CMS\Core\Utility\GeneralUtility::_GET('frontend_editing')) {
-        $GLOBALS['TYPO3_CONF_VARS']['FE']['pageNotFoundOnCHashError'] = false;
+// Copy configuration array so we can have our own.
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'] =
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'];
 
-        $showHiddenItems = TYPO3\CMS\Core\Utility\GeneralUtility::_GET('show_hidden_items');
+// Add processor for frontend-related RTE configuration
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['frontendTcaDatabaseRecord'][
+    \TYPO3\CMS\FrontendEditing\Backend\Form\FormDataProvider\TcaFrontendRichtextConfiguration::class
+] = [
+    'before' => [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaText::class
+    ]
+];
 
-        // Add userTsConfig for displaying certain options
-        // when browsing as 'frontend_editing'
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig('
-            # Activate admin panel
-            admPanel {
-                enable.edit = 1
-                enable.preview = 1
-                enable.cache = 0
-                override.edit = 1
-                override.edit.displayFieldIcons = 1
-                override.edit.displayIcons = 0
-                override.preview = 1
-                override.preview.simulateDate = 0
-                override.preview.simulateUserGroup = 0
-                override.preview.showHiddenPages = ' . $showHiddenItems . '
-                override.preview.showHiddenRecords = ' . $showHiddenItems . '
-                hide = 1
-            }
-        ');
-    }
-}
-
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.4')
-) {
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tstemplate.php']['includeStaticTypoScriptSources'] =
-        '';
-}
+// Add RTE presets for frontend use
+$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['bronly'] = 'EXT:frontend_editing/Configuration/RTE/BrOnly.yaml';
+$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['listonly'] = 'EXT:frontend_editing/Configuration/RTE/ListOnly.yaml';
 
 /**
  * Hooks
@@ -53,6 +31,10 @@ if (TYPO3_MODE === 'FE' &&
 // Register the edit panel view
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] =
     \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
+
+// Register the preHeaderRenderHook for backend document template
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['renderPreProcess']['frontend_editing/pagetree-actions'] =
+    \TYPO3\CMS\FrontendEditing\Hook\Backend\Template\DocumentTemplate::class . '->mainBackendModule';
 
 // Hook to unset page setup before render the toolbars to speed up the render
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
@@ -68,39 +50,16 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObj
     \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
 ];
 
-// Hook to initialize BE user
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/index_ts.php']['postBeUser']['frontend_editing'] =
-    \TYPO3\CMS\FrontendEditing\Hook\PostInitializationBEUserHook::class . '->initializeBackendUser';
-
-// Hook for the rendering for TCA save buttons
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Template\Components\Buttons\SplitButton::class] = [
-    'className' => \TYPO3\CMS\FrontendEditing\Xclass\TcaButtons::class
-];
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][] =
+    \TYPO3\CMS\FrontendEditing\Hook\ModifyTypoLinkConfig::class;
 
 /**
  * Pre processors
  */
-// Save core content element "Bullets"
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-cobjbullets'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeBullets::class;
-
-// Save core content element "Table"
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-cobjtable'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeTable::class;
-
-// Save headers, field header, will also affect field header_layout
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['FrontendEditing']['requestPreProcess']['frontend_editing-CeHeader'] =
-    \TYPO3\CMS\FrontendEditing\RequestPreProcess\CeHeader::class;
-
-// Register BE user avatar provider on FE
-if (TYPO3_MODE === 'FE' &&
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
-) {
-    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['backend']['avatarProviders']['frontendEditingAvatarProvider'] = [
-        'provider' => \TYPO3\CMS\FrontendEditing\Provider\Avatar\FrontendEditingAvatarProvider::class
-    ];
-}
+\TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility::registerEventHandlerAsSignalSlot(
+    \TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent::class,
+    \TYPO3\CMS\FrontendEditing\Controller\Event\Handler\TypoScriptPrepareFieldUpdateEventHandler::class
+);
 
 /**
  * Custom icons

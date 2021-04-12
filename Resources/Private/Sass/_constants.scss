@@ -1,10 +1,12 @@
 // Colors
 $orange-primary: #ff8700;
+$t3-gray: #eee;
+$t3-gray-divider: #c3c3c3;
 $gray-dark: #191919;
 $gray: #4c4c4c;
 $gray-light: #838383;
 $gray-bright: #efefef;
-$gray-mid:#737373;
+$gray-mid: #737373;
 
 $gray-icon-bg: #555f63;
 $black: #0f0f0f;
@@ -16,9 +18,9 @@ $scroll-bar-track: rgba(63, 63, 63, 0.6);
 $transparent-opacity: rgba(30, 30, 30, 0.9);
 
 // Font
-$font-family-base: "Share", Verdana, Helvetica, Arial, sans-serif;
+$font-family-base: Verdana, Arial, Helvetica, sans-serif;
 
-$font-family-user-input: Verdana, Helvetica, Arial, sans-serif;
+$font-family-user-input: $font-family-base;
 
 $font-size-smaller: 12px;
 $font-size-small: 14px;
@@ -33,12 +35,6 @@ $top-bar-height: 55px;
 
 // Right bar
 $right-bar-width: 325px;
-
-// Left bar
-$left-bar-width: 280px;
-
-// Pagetree filter
-$pagetree-filter-height: 50px;
 
 // DropZones
 $drop-zone-bg-color: rgba(167, 215, 255, 1);

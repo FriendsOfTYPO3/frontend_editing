@@ -1,7 +1,6 @@
 <?php
 /**
  * An array consisting of implementations of middlewares for a middleware stack to be registered
- *
  */
 return [
     'frontend' => [
@@ -19,15 +18,6 @@ return [
             ],
             'before' => [
                 'typo3/cms-frontend/prepare-tsfe-rendering',
-            ],
-        ],
-    ],
-
-    'backend' => [
-        'typo3/frontendediting/backeenduser-redirect-to-fe' => [
-            'target' => \TYPO3\CMS\FrontendEditing\Middleware\BackendUserRedirectToFrontend::class,
-            'after' => [
-                'typo3/cms-backend/authentication'
             ],
         ],
     ],

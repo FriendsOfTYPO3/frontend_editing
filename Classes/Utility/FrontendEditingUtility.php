@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Utility;
 
@@ -25,8 +26,7 @@ class FrontendEditingUtility
     {
         if (GeneralUtility::_GET('frontend_editing') &&
             isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication &&
-            $GLOBALS['BE_USER']->uc['frontend_editing'] === 1
+            $GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
         ) {
             return true;
         }

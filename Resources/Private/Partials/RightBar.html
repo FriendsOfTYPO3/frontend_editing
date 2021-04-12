@@ -1,7 +1,7 @@
 {namespace fe=TYPO3\CMS\FrontendEditing\ViewHelpers}
 
-<div class="t3-frontend-editing__right-bar {f:if(condition:overlayOption, then: 't3-frontend-editing__right-overlay')}">
-	<div class="top-right-bar-wrapper {f:if(condition: seoProviderData, then: 'seo-provider')}">
+<div class="t3-frontend-editing__right-bar">
+	<div class="top-right-bar-wrapper">
 		<div class="top-right-relative">
 			<div class="top-right-title">
 				<span class="right-bar-button icons icon-icons-tools-settings" title="{f:translate(key: 'right-bar.tools-properties', extensionName: 'FrontendEditing')}"></span>
@@ -10,23 +10,7 @@
 				</span>
 				<span class="title-icon-right icons icon-icons-tools-settings"></span>
 			</div>
-			<f:if condition="{seoProviderData}">
-				<div class="page-seo">
-					<span class="title-default">
-						<f:translate key="right-bar.page-seo-score" extensionName="FrontendEditing" />
-					</span>
-					<span class="page-seo-score">{seoProviderData.pageScore}</span>
-				</div>
-			</f:if>
 			<div class="devices hidden-elements">
-				<div class="media-devices-wrapper">
-					<div class="media-devices">
-						<span class="media-device-lg-desktop icons icon-icons-lg-desktop active" data-width="100%" data-height="100%"></span>
-						<span class="media-device-desktop icons icon-icons-desktop" data-width="1280px" data-height="100%"></span>
-						<span class="media-device-tablet icons icon-icons-tablet" data-width="960px" data-height="100%"></span>
-						<span class="media-device-phone icons icon-icons-phone" data-width="640px" data-height="100%"></span>
-					</div>
-				</div>
 				<div class="hidden-elements-toggle-wrapper">
 					<button class="hidden-elements-toggle-button t3-frontend-editing__show-hidden-items" title="Hidden elements" data-url="{showHiddenItemsUrl}">
 						<fe:svg source="{f:uri.resource(path: 'Icons/visible_icon.svg', extensionName: 'FrontendEditing')}" width="48" height="48" class="hidden-elements-toggle-icon" />

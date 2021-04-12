@@ -1,0 +1,25 @@
+# Load default processing options
+imports:
+  - { resource: "EXT:rte_ckeditor/Configuration/RTE/Editor/Base.yaml" }
+
+processing:
+  mode: default
+
+  allowTags:
+    - br
+
+  allowAttributes: []
+
+  allowTagsOutside: []
+
+# Minimal configuration for the editor
+editor:
+  config:
+    toolbarGroups:
+      - { name: clipboard, groups: [clipboard, undo] }
+      - { name: editing,   groups: [find, selection, spellchecker] }
+      - { name: specialcharacters,   groups: [ insertcharacters ] }
+
+    enterMode: 2
+    forceEnterMode: true
+    forcePasteAsPlainText: true

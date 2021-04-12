@@ -1,0 +1,19 @@
+#t3-frontend-editing__right-bar + .t3-frontend-editing__right-bar {
+    transition: right 0.2s linear;
+}
+
+#t3-frontend-editing__right-bar:checked + .t3-frontend-editing__right-bar {
+    right: 0;
+}
+
+#t3-frontend-editing__right-bar--open:checked + .t3-frontend-editing__right-bar .top-right-title .right-bar-button {
+    left: 0;
+}
+
+.accordion-collapse-controll:checked ~ .accordion-content {
+    display: block;
+}
+
+.accordion-collapse-controll:checked ~ .accordion .icon-icons-arrow-down:before {
+    content: "\e90f";
+}
