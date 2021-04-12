@@ -21,13 +21,4 @@ return [
             ],
         ],
     ],
-
-    'backend' => [
-        'typo3/frontendediting/backeenduser-redirect-to-fe' => [
-            'target' => \TYPO3\CMS\FrontendEditing\Middleware\BackendUserRedirectToFrontend::class,
-            'after' => [
-                'typo3/cms-backend/authentication'
-            ],
-        ],
-    ],
 ];
