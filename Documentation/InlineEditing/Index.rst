@@ -156,7 +156,7 @@ database.
 
 This is an example list as saved in the database:
 
-.. code-block::
+.. code-block:: html
 
    Item 1
    Item 2
