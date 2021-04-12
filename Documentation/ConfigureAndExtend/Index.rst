@@ -21,3 +21,4 @@ work in your TYPO3 instance, and how to extend the functionality.
    UserTs/Index
    ExtensionConfiguration/Index
    HooksAndEvents/Index
+   JavaScript/Index
