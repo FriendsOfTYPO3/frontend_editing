@@ -53,7 +53,7 @@ a GNU/GPL CMS/Framework available from `www.typo3.org
    Introduction/Index
    Installation/Index
    InlineEditing/Index
-   ConfigureAndCustomize/Index
+   ConfigureAndExtend/Index
    NewContentElements/Index
    ExtensionManagerSettings/Index
    JavaScript/Index
