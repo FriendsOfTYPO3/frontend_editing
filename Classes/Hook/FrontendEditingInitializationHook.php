@@ -502,23 +502,30 @@ class FrontendEditingInitializationHook
         if (is_array($configuration['customRecords'])) {
             /** @var ContentEditableWrapperService $wrapperService */
             $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-            foreach ($configuration['customRecords'] as $record) {
-                $pid = (int)$record['pid'] ?: $this->typoScriptFrontendController->id;
+            foreach ($configuration['customRecords'] as $table => $defaultValues) {
+                $pid = (int)$this->typoScriptFrontendController->id;
+
+                if (isset($record['pid'])) {
+                    $pid = (int)$record['pid'];
+                    unset($record['pid']);
+                }
+
                 $page = BackendUtility::getRecord('pages', $pid);
-                if (is_array($record) &&
-                    $record['table'] &&
-                    isset($GLOBALS['TCA'][$record['table']]) &&
-                    $GLOBALS['BE_USER']->check('tables_modify', $record['table']) &&
-                    $page && $GLOBALS['BE_USER']->doesUserHaveAccess($page, 16)
+
+                if (
+                    $table
+                    && isset($GLOBALS['TCA'][$table])
+                    && $GLOBALS['BE_USER']->check('tables_modify', $table)
+                    && $page && $GLOBALS['BE_USER']->doesUserHaveAccess($page, 16)
                 ) {
                     $records[] = [
                         'title' => $GLOBALS['TCA'][$record['table']]['ctrl']['title'],
-                        'table' => $record['table'],
+                        'table' => $table,
                         'url' => $wrapperService->renderEditOnClickReturnUrl($wrapperService->renderNewUrl(
-                            $record['table'],
-                            (int)$pid,
+                            $table,
+                            $pid,
                             0,
-                            is_array($record['defVals']) ? $record['defVals'] : [],
+                            $defaultValues,
                             true
                         )),
                     ];
@@ -576,8 +583,8 @@ class FrontendEditingInitializationHook
             $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
                 $this->typoScriptFrontendController->tmpl->setup
             );
-            if (is_array($configuration['plugin']['tx_frontendediting'])) {
-                $this->pluginConfiguration = $configuration['plugin']['tx_frontendediting'];
+            if (is_array($configuration['config']['tx_frontendediting'])) {
+                $this->pluginConfiguration = $configuration['config']['tx_frontendediting'];
             }
         }
         return $this->pluginConfiguration;

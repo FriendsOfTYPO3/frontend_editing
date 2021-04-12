@@ -13,4 +13,4 @@ Instructions on how to develop the frontend editing extension
 
    Dependencies/Index
    Workflow/Index
-   Hooks/Index
+   JavaScript/Index

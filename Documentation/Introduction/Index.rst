@@ -11,11 +11,15 @@ Introduction
 
 .. _about-this-document:
 
-About this document
--------------------
+About this extension
+--------------------
 
-This package gives frontend editing capability to TYPO3 CMS,
-the editor used is CKEditor (http://ckeditor.com/).
+This package adds frontend editing capability to TYPO3 CMS, using `CKEditor <http://ckeditor.com/>`, the rich text editor used by the TYPO3 core. The editor appears as a new backend module. When selecting a page in the page tree, the page becomes editable. Editable regions are configured in the templates, using Fluid or TypoScript.
+
+.. figure:: ../Images/FullEditorInBackend.png
+   :alt: Screenshot of the Frontend Editor in the TYPO3 backend.
+
+   Frontend Editing in the TYPO3 Backend.
 
 .. _credits:
 
@@ -35,8 +39,6 @@ Feedback
 
 If you find a bug either in this manual or in the frontend editing /
 extension please use the `bug tracker <https://github.com/FriendsOfTYPO3/frontend_editing/issues>`__.
-
-
 
 .. _contribution:
 

@@ -10,7 +10,6 @@ use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Http\RedirectResponse;
 
 /**
  * Middleware check if backend user allowed to access BE
@@ -30,11 +29,6 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $user = $this->getBackendUser();
-        if (!$user->isAdmin() && $this->isUserDisallowedAccessBackend($user)) {
-            return new RedirectResponse($this->buildFrontendUri($request));
-        }
-
         return $handler->handle($request);
     }
 
@@ -49,17 +43,6 @@ class BackendUserRedirectToFrontend implements MiddlewareInterface
             '/ajax/frontend-editing/editor-configuration',
             '/ajax/frontend-editing/process'
         ];
-    }
-
-    /**
-     * Check if access to BE is disabled by TS config
-     *
-     * @param BackendUserAuthentication $user
-     * @return bool
-     */
-    protected function isUserDisallowedAccessBackend(BackendUserAuthentication $user): bool
-    {
-        return (bool)($user->getTSConfig()['frontend_editing.']['disallow_backend_access'] ?? false);
     }
 
     /**
