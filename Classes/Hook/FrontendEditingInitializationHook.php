@@ -380,7 +380,7 @@ class FrontendEditingInitializationHook
         if ($GLOBALS['TYPO3_CONF_VARS']['FE']['versionNumberInFilename'] === 'embed') {
             $this->pageRenderer->addJsInlineCode(
                 'ckeditor-basepath-config',
-                'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue(PathUtility::getRelativePathTo(
+                'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue(PathUtility::getAbsoluteWebPath(
                     GeneralUtility::getFileAbsFileName(
                         'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
                     )
