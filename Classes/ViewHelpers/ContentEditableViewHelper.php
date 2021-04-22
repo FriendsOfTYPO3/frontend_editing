@@ -153,7 +153,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             $this->arguments['table'],
             $this->arguments['field'],
             (int)$this->arguments['uid'],
-            $content,
+            (string)$content,
             $this->arguments['tag'],
             $filteredArguments
         );
