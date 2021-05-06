@@ -504,12 +504,6 @@ class FrontendEditingInitializationHook
             $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
             foreach ($configuration['customRecords'] as $table => $defaultValues) {
                 $pid = (int)$this->typoScriptFrontendController->id;
-
-                if (isset($record['pid'])) {
-                    $pid = (int)$record['pid'];
-                    unset($record['pid']);
-                }
-
                 $page = BackendUtility::getRecord('pages', $pid);
 
                 if (
@@ -519,7 +513,7 @@ class FrontendEditingInitializationHook
                     && $page && $GLOBALS['BE_USER']->doesUserHaveAccess($page, 16)
                 ) {
                     $records[] = [
-                        'title' => $GLOBALS['TCA'][$record['table']]['ctrl']['title'],
+                        'title' => $GLOBALS['TCA'][$table]['ctrl']['title'],
                         'table' => $table,
                         'url' => $wrapperService->renderEditOnClickReturnUrl($wrapperService->renderNewUrl(
                             $table,
@@ -532,6 +526,7 @@ class FrontendEditingInitializationHook
                 }
             }
         }
+
         return $records;
     }
 
