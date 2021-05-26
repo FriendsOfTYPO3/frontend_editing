@@ -97,7 +97,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
-     * @return string Rendered email link
+     * @return string Rendered HTML markup
      */
     public function render()
     {
@@ -149,16 +149,14 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         );
 
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        $content = $wrapperService->wrapContentToBeEditable(
+        return $wrapperService->wrapContentToBeEditable(
             $this->arguments['table'],
-            $this->arguments['field'],
+            $this->arguments['field'] ?: '',
             (int)$this->arguments['uid'],
             (string)$content,
             $this->arguments['tag'],
             $filteredArguments
         );
-
-        return $content;
     }
 
     /**

@@ -100,9 +100,7 @@ class ContentEditableWrapperService
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
         }
-        if (empty($field)) {
-            throw new \InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
-        }
+
         if (empty($uid)) {
             $this->logger->error(
                 'Property "uid" can not to be empty!',
