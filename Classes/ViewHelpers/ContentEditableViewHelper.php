@@ -149,14 +149,25 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         );
 
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        return $wrapperService->wrapContentToBeEditable(
-            $this->arguments['table'],
-            $this->arguments['field'] ?: '',
-            (int)$this->arguments['uid'],
-            (string)$content,
-            $this->arguments['tag'],
-            $filteredArguments
-        );
+        if (empty($this->arguments['field'])) {
+            $content = $wrapperService->wrapContent(
+                $this->arguments['table'],
+                (int)$this->arguments['uid'],
+                ($record ?: []),
+                (string)$content
+            );
+        } else {
+            $content = $wrapperService->wrapContentToBeEditable(
+                $this->arguments['table'],
+                $this->arguments['field'],
+                (int)$this->arguments['uid'],
+                (string)$content,
+                $this->arguments['tag'],
+                $filteredArguments
+            );
+        }
+
+        return $content;
     }
 
     /**
@@ -164,7 +175,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
      *
      * @param string $content
      */
-    protected function renderAsTag(string $content)
+    protected function renderAsTag(string $content): string
     {
         if ($this->arguments['tag'] !== null) {
             $this->tagName = $this->arguments['tag'];

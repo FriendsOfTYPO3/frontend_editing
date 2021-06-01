@@ -277,40 +277,38 @@ define([
 
           var elementData = data.configurations[data.elementToConfiguration[elementIdentifier]];
 
-          if (typeof elementData !== 'undefined') {
-            // Ensure all plugins / buttons are loaded
-            if (typeof elementData.externalPlugins !== 'undefined') {
-              eval(elementData.externalPlugins);
-            }
-
-            var config = {};
-            if (elementData.hasCkeditorConfiguration) {
-              $.extend(true, config, defaultEditorConfig, elementData.configuration);
-            } else {
-              $.extend(true, config, defaultEditorConfig, elementData.configuration, defaultSimpleEditorConfig);
-            }
-
-            // Initialize CKEditor now, when finished remember any change
-            $(this).ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
-              // This moves the dom instances of ckeditor into the top bar
-              $('.' + editor.id).detach().appendTo($topBar);
-
-              editor.on('change', function (changeEvent) {
-                if (typeof editor.element !== 'undefined') {
-                  var dataSet = editor.element.$.dataset;
-                  storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
-                    'action': 'save',
-                    'table': dataSet.table,
-                    'uid': dataSet.uid,
-                    'field': dataSet.field,
-                    'hasCkeditorConfiguration': elementData.hasCkeditorConfiguration,
-                    'editorInstance': editor.name
-                  });
-                  F.trigger(F.CONTENT_CHANGE);
-                }
-              });
-            });
+          // Ensure all plugins / buttons are loaded
+          if (typeof elementData.externalPlugins !== 'undefined') {
+            eval(elementData.externalPlugins);
           }
+
+          var config = {};
+          if (elementData.hasCkeditorConfiguration) {
+            $.extend(true, config, defaultEditorConfig, elementData.configuration);
+          } else {
+            $.extend(true, config, defaultEditorConfig, elementData.configuration, defaultSimpleEditorConfig);
+          }
+
+          // Initialize CKEditor now, when finished remember any change
+          $(this).ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
+            // This moves the dom instances of ckeditor into the top bar
+            $('.' + editor.id).detach().appendTo($topBar);
+
+            editor.on('change', function (changeEvent) {
+              if (typeof editor.element !== 'undefined') {
+                var dataSet = editor.element.$.dataset;
+                storage.addSaveItem(dataSet.uid + '_' + dataSet.field + '_' + dataSet.table, {
+                  'action': 'save',
+                  'table': dataSet.table,
+                  'uid': dataSet.uid,
+                  'field': dataSet.field,
+                  'hasCkeditorConfiguration': elementData.hasCkeditorConfiguration,
+                  'editorInstance': editor.name
+                });
+                F.trigger(F.CONTENT_CHANGE);
+              }
+            });
+          });
         });
       }).fail(function (response) {
         F.trigger(

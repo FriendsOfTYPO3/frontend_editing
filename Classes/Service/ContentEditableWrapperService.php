@@ -17,6 +17,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -82,7 +83,7 @@ class ContentEditableWrapperService
      * @param int $uid
      * @param string $content
      * @param string|null $tag Optional tag name to use, e.g. "div"
-     * @param array $additionalAttibutes An array of additional arguments for the tag.
+     * @param array $additionalAttributes An array of additional arguments for the tag.
      * @return string
      * @throws \InvalidArgumentException
      */
@@ -92,7 +93,7 @@ class ContentEditableWrapperService
         int $uid,
         string $content,
         ?string $tag = null,
-        array $additionalAttibutes = []
+        array $additionalAttributes = []
     ): string {
         $tag = $tag ?? $this->contentEditableWrapperTagName;
 
@@ -100,7 +101,9 @@ class ContentEditableWrapperService
         if (empty($table)) {
             throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
         }
-
+        if (empty($field)) {
+            throw new \InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
+        }
         if (empty($uid)) {
             $this->logger->error(
                 'Property "uid" can not to be empty!',
@@ -123,7 +126,7 @@ class ContentEditableWrapperService
         $tagBuilder->forceClosingTag(true);
         $tagBuilder->ignoreEmptyAttributes(true);
 
-        $tagBuilder->addAttributes($additionalAttibutes);
+        $tagBuilder->addAttributes($additionalAttributes);
 
         // Definition lists are not supported in CKEditor v4.
         if (strtolower($tag) === 'dl') {
@@ -225,8 +228,9 @@ class ContentEditableWrapperService
         $tagBuilder = GeneralUtility::makeInstance(
             TagBuilder::class,
             $this->contentEditableWrapperTagName,
-            $inlineActionTagBuilder->render() . $content
+            html_entity_decode($inlineActionTagBuilder->render() . $content)
         );
+
         $tagBuilder->forceClosingTag(true);
 
         $tagBuilder->addAttributes([
@@ -367,14 +371,12 @@ class ContentEditableWrapperService
             $this->renderIconWithWrap('moveUp', 'actions-move-up') .
                 $this->renderIconWithWrap('moveDown', 'actions-move-down') : '';
 
-        $inlineIcons =
+        return
             $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
             $this->renderIconWithWrap('deleteItem', 'actions-edit-delete') .
             $this->renderIconWithWrap('newRecordGeneral', 'actions-document-new') .
             $moveIcons;
-
-        return $inlineIcons;
     }
 
     /**
@@ -446,6 +448,7 @@ class ContentEditableWrapperService
      * @param string $table
      * @param string $uid
      * @return string
+     * @throws RouteNotFoundException
      */
     public function renderEditUrl($table, $uid): string
     {
@@ -469,7 +472,7 @@ class ContentEditableWrapperService
      * @param array $defaultValues
      * @param bool $uidAsPid
      * @return string
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @throws RouteNotFoundException
      */
     public function renderNewUrl(
         string $table,
