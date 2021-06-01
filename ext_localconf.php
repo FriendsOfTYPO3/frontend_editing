@@ -50,6 +50,13 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObj
     \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
 ];
 
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClassDefault'] = [
+    'CONTENT',
+    \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
+];
+
+// $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] = My\NameSpace\Hooks\PageGenerateHooks::class . '->contentPostProcAll'
+
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][] =
     \TYPO3\CMS\FrontendEditing\Hook\ModifyTypoLinkConfig::class;
 
