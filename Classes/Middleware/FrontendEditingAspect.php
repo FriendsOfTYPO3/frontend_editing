@@ -48,6 +48,10 @@ class FrontendEditingAspect implements MiddlewareInterface
                 'visibility',
                 GeneralUtility::makeInstance(VisibilityAspect::class, true, $showHiddenItems)
             );
+
+            // Change the sanitizer to allow the attributes used in Frontend Editing.
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['htmlSanitizer']['default'] =
+                \TYPO3\CMS\FrontendEditing\Html\FrontendEditingSanitizerBuilder::class;
         }
         return $handler->handle($request);
     }
