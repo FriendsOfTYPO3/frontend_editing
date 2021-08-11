@@ -46,6 +46,8 @@
       # are avoided.
       pageContentPreProcessing {
         parseFunc {
+          htmlSanitize = 0
+
           tags {
             form = TEXT
             form {
