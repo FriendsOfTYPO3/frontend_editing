@@ -169,5 +169,5 @@
   lib.parseFunc_RTE.tags.a >
 
   # Prevent HTML output for wrapContent to be rendered as string only
-  lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines>
+  lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines >
 [global]
