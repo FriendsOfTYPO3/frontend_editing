@@ -13,4 +13,4 @@ For all kind of documentation which covers install to how to develop the extensi
 
 [Online Documentation](https://docs.typo3.org/p/friendsoftypo3/frontend-editing/master/en-us/)
 
-[Donate to the Frontend Editing for TYPO3 project](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WPXRSUTAJNRES&source=url)
+[Donate to the Frontend Editing for TYPO3 project](https://www.paypal.com/donate/?hosted_button_id=B7YZKNCHTYHRW)
