@@ -19,12 +19,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\TypolinkModifyLinkConfigForPageLinksHookInterface;
 
 /**
- * Hook is for adding the parameter to all links when GET parameter "frontend_editing_enabled" is present
+ * Hook is for adding the parameter to all links when GET parameter "frontend_editing" is present
  */
 class ModifyTypoLinkConfig implements TypolinkModifyLinkConfigForPageLinksHookInterface
 {
     /**
-     * Apply the additionalParams "frontend_editing_enabled"
+     * Apply the additionalParams "frontend_editing"
      *
      * @param array $linkConfiguration
      * @param array $linkDetails
@@ -33,9 +33,9 @@ class ModifyTypoLinkConfig implements TypolinkModifyLinkConfigForPageLinksHookIn
      */
     public function modifyPageLinkConfiguration(array $linkConfiguration, array $linkDetails, array $pageRow): array
     {
-        $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing_enabled');
+        $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing');
         if ((bool)$isFrontendEditingEnabled === true) {
-            $linkConfiguration['additionalParams'] .= '&frontend_editing_enabled=true';
+            $linkConfiguration['additionalParams'] .= '&frontend_editing=true';
         }
 
         return $linkConfiguration;
