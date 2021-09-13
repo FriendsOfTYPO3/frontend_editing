@@ -101,6 +101,7 @@ jobs:
         typo3-version:
           - "^9.5"
           - "^10.4"
+          - "^11.4"
         composer-dependencies:
           - highest
           - lowest
@@ -112,6 +113,8 @@ jobs:
           - typo3-version: "^9.5"
             database-image: mariadb:latest
           - typo3-version: "^10.4"
+            database-image: mariadb:latest
+          - typo3-version: "^11.4"
             database-image: mariadb:latest
 
     services:
