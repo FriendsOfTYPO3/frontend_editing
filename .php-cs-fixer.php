@@ -45,6 +45,7 @@ if (PHP_SAPI !== 'cli') {
 $fixerConfig = new PhpCsFixer\Config();
 
 return $fixerConfig
+    ->exclude('var')
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
