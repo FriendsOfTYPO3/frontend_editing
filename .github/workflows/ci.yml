@@ -110,11 +110,12 @@ jobs:
           - 7.3
           - 7.4
         exclude:
-          - typo3-version: "^11.4"
-            php-version:
-              - 7.2
-              - 7.3
-            composer-version: v1
+          - composer-version: v1
+            typo3-version: "^11.4"
+          - php-version: 7.2
+            typo3-version: "^11.4"
+          - php-version: 7.3
+            typo3-version: "^11.4"
         include:
           - typo3-version: "^9.5"
             database-image: mariadb:latest
