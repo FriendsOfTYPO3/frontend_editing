@@ -114,6 +114,7 @@ jobs:
             php-version:
               - 7.2
               - 7.3
+            composer-version: v1
         include:
           - typo3-version: "^9.5"
             database-image: mariadb:latest
