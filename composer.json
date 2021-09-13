@@ -43,8 +43,8 @@
 	},
 	"scripts": {
 		"ci:php:lint": "find *.php Classes/ Configuration/ Tests/ -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
-		"ci:php:sniff": "php-cs-fixer fix --config=.php_cs -v --dry-run --using-cache=no --diff",
-		"cs:php:fix": "php-cs-fixer fix --config=.php_cs -v --using-cache=no",
+		"ci:php:sniff": "php-cs-fixer fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff",
+		"cs:php:fix": "php-cs-fixer fix --config=.php-cs-fixer.php -v --using-cache=no",
 		"ci:ts:lint": "typoscript-lint -c Configuration/TsLint.yml --ansi -n --fail-on-warnings -vvv Configuration/TypoScript/",
 		"ci:tests:unit": "phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
 		"ci:tests:functional": "phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional",
