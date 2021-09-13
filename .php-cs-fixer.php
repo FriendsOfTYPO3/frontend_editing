@@ -45,7 +45,6 @@ if (PHP_SAPI !== 'cli') {
 $fixerConfig = new PhpCsFixer\Config();
 
 return $fixerConfig
-    ->exclude('var')
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
@@ -121,4 +120,4 @@ return $fixerConfig
         'single_trait_insert_per_statement' => true,
         'whitespace_after_comma_in_array' => true,
     ])
-    ->setFinder(PhpCsFixer\Finder::create()->in(__DIR__));
+    ->setFinder(PhpCsFixer\Finder::create()->exclude('var')->in(__DIR__));
