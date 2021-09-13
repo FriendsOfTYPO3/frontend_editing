@@ -17,10 +17,11 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController as Typo3NewContentElementController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -38,8 +39,10 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
@@ -96,7 +99,7 @@ class FrontendEditingInitializationHook
         $this->pluginConfiguration = [];
 
         // If this is TYPO3 9 and site configuration was found
-        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
+        if (CompatibilityUtility::typo3VersionIsGreaterThan('9.0')
             // @extensionScannerIgnoreLine
             && isset($GLOBALS['TYPO3_REQUEST'])
             // @extensionScannerIgnoreLine
@@ -444,9 +447,9 @@ class FrontendEditingInitializationHook
      * Call registered hooks to manipulate wizard items
      *
      * @param array &$wizardItems
-     * @param NewContentElementController $contentController
+     * @param Typo3NewContentElementController $contentController
      */
-    protected function wizardItemsHook(array &$wizardItems, NewContentElementController $contentController)
+    protected function wizardItemsHook(array &$wizardItems, Typo3NewContentElementController $contentController)
     {
         $newContentElement = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'];
         // Wrapper for wizards
@@ -597,7 +600,7 @@ class FrontendEditingInitializationHook
         if (GeneralUtility::_GET('show_hidden_items')) {
             $showHiddenItems = GeneralUtility::_GET('show_hidden_items');
             if ($showHiddenItems !== $defaultState) {
-                $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+                $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
                 $cacheManager->flushCaches();
             }
         }
@@ -611,18 +614,15 @@ class FrontendEditingInitializationHook
      * Return instance of NewContentElementController
      * For TYPO3 >= 9 init NewContentElementController with given server request
      *
-     * @return NewContentElementController|\TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController
+     * @return Typo3NewContentElementController|NewContentElementController
      */
     protected function getNewContentElementController()
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
+        $contentController = GeneralUtility::makeInstance(
+            NewContentElementController::class
         );
 
-        $contentController = GeneralUtility::makeInstance(
-            \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
-        );
-        if ($typo3VersionNumber > 10000000) {
+        if (CompatibilityUtility::typo3VersionIsGreaterThan('10.0')) {
             $contentController->wizardAction(
                 $this->requestWithSimulatedQueryParams()
             );
