@@ -42,7 +42,7 @@ if (PHP_SAPI !== 'cli') {
 //  - Ensure Concatenation to have at least one whitespace around
 //  - Remove trailing whitespace at the end of blank lines.
 
-$fixerConfig = PhpCsFixer\Config();
+$fixerConfig = new PhpCsFixer\Config();
 
 return $fixerConfig
     ->setRiskyAllowed(true)
