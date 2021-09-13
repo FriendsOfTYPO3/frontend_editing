@@ -41,23 +41,38 @@ if (PHP_SAPI !== 'cli') {
 //  - Remove unused use statements in the PHP source code
 //  - Ensure Concatenation to have at least one whitespace around
 //  - Remove trailing whitespace at the end of blank lines.
-return PhpCsFixer\Config::create()
+
+$fixerConfig = PhpCsFixer\Config();
+
+return $fixerConfig
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
         '@PSR2' => true,
-        'array_syntax' => ['syntax' => 'short'],
+        'array_syntax' => [
+            'syntax' => 'short'
+        ],
         'blank_line_after_opening_tag' => true,
-        'braces' => ['allow_single_line_closure' => true],
-        'cast_spaces' => ['space' => 'none'],
+        'braces' => [
+            'allow_single_line_closure' => true
+        ],
+        'cast_spaces' => [
+            'space' => 'none'
+        ],
         'compact_nullable_typehint' => true,
-        'concat_space' => ['spacing' => 'one'],
-        'declare_equal_normalize' => ['space' => 'none'],
+        'concat_space' => [
+            'spacing' => 'one'
+        ],
+        'declare_equal_normalize' => [
+            'space' => 'none'
+        ],
         'dir_constant' => true,
         'function_typehint_space' => true,
-        'hash_to_slash_comment' => true,
+        'single_line_comment_style' => true,
         'lowercase_cast' => true,
-        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
+        'method_argument_space' => [
+            'on_multiline' => 'ensure_fully_multiline'
+        ],
         'modernize_types_casting' => true,
         'native_function_casing' => true,
         'new_with_braces' => true,
@@ -65,7 +80,7 @@ return PhpCsFixer\Config::create()
         'no_blank_lines_after_phpdoc' => true,
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
-        'no_extra_consecutive_blank_lines' => true,
+        'no_extra_blank_lines' => true,
         'no_leading_import_slash' => true,
         'no_leading_namespace_whitespace' => true,
         'no_null_property_initialization' => true,
@@ -78,7 +93,14 @@ return PhpCsFixer\Config::create()
         'no_useless_else' => true,
         'no_whitespace_in_blank_line' => true,
         'ordered_imports' => true,
-        'php_unit_construct' => ['assertEquals', 'assertSame', 'assertNotEquals', 'assertNotSame'],
+        'php_unit_construct' => [
+            'assertions' => [
+                'assertEquals',
+                'assertSame',
+                'assertNotEquals',
+                'assertNotSame'
+            ]
+        ],
         'php_unit_mock_short_will_return' => true,
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
         'phpdoc_no_access' => true,
@@ -87,8 +109,13 @@ return PhpCsFixer\Config::create()
         'phpdoc_scalar' => true,
         'phpdoc_trim' => true,
         'phpdoc_types' => true,
-        'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
-        'return_type_declaration' => ['space_before' => 'none'],
+        'phpdoc_types_order' => [
+            'null_adjustment' => 'always_last',
+            'sort_algorithm' => 'none'
+        ],
+        'return_type_declaration' => [
+            'space_before' => 'none'
+        ],
         'single_quote' => true,
         'single_trait_insert_per_statement' => true,
         'whitespace_after_comma_in_array' => true,
