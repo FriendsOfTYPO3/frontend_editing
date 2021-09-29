@@ -5,7 +5,7 @@
 .DS_Store
 
 # Composer
-/.Build/*
+/.build/*
 composer.lock
 /vendor
 /var

@@ -9,6 +9,7 @@
 		"typo3/cms-core": "^9.5 || ^10.4 || ^11.4"
 	},
 	"require-dev": {
+		"typo3/minimal": "^9.5 || ^10.4 || ^11.4",
 		"nimut/testing-framework": "^5.0",
 		"squizlabs/php_codesniffer": "^3.3",
 		"phpunit/phpunit": "^7.0",
@@ -30,13 +31,13 @@
 	"autoload-dev": {
 		"psr-4": {
 			"TYPO3\\CMS\\FrontendEditing\\Tests\\": "Tests/",
-			"TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
-			"TYPO3\\CMS\\Fluid\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
+			"TYPO3\\CMS\\Core\\Tests\\": ".build/vendor/typo3/cms/typo3/sysext/core/Tests/",
+			"TYPO3\\CMS\\Fluid\\Tests\\": ".build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
 		}
 	},
 	"config": {
-		"vendor-dir": ".Build/vendor",
-		"bin-dir": ".Build/bin",
+		"vendor-dir": ".build/vendor",
+		"bin-dir": ".build/bin",
 		"preferred-install": {
 			"typo3/cms": "source"
 		}
@@ -46,8 +47,8 @@
 		"ci:php:sniff": "php-cs-fixer fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff",
 		"cs:php:fix": "php-cs-fixer fix --config=.php-cs-fixer.php -v --using-cache=no",
 		"ci:ts:lint": "typoscript-lint -c Configuration/TsLint.yml --ansi -n --fail-on-warnings -vvv Configuration/TypoScript/",
-		"ci:tests:unit": "phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
-		"ci:tests:functional": "phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional",
+		"ci:tests:unit": "phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
+		"ci:tests:functional": "phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional",
 		"ci:tests": [
 			"@ci:tests:unit",
 			"@ci:tests:functional"
@@ -63,12 +64,9 @@
 		"ci": [
 			"@ci:static"
 		],
-		"link-extension": [
-			"@php -r 'is_dir($extFolder=__DIR__.\"/.Build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
-			"@php -r 'file_exists($extFolder=__DIR__.\"/.Build/public/typo3conf/ext/frontend_editing\") || symlink(__DIR__,$extFolder);'"
-		],
-		"post-autoload-dump": [
-			"@link-extension"
+		"pre-autoload-dump": [
+			"mkdir -p .build/public/typo3conf/ext/",
+			"test -L .build/public/typo3conf/ext/frontend_editing || ln -snvf ../../../../. .build/public/typo3conf/ext/frontend_editing"
 		],
 		"docs:generate": [
 			"docker run --rm t3docs/render-documentation show-shell-commands > tempfile.sh; echo 'dockrun_t3rd makehtml' >> tempfile.sh; bash tempfile.sh; rm tempfile.sh"
@@ -81,7 +79,8 @@
 		"typo3/cms": {
 			"extension-key": "frontend_editing",
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
-			"web-dir": ".Build/public"
+			"web-dir": ".build/public",
+			"app-dir": ".build"
 		}
 	}
 }
