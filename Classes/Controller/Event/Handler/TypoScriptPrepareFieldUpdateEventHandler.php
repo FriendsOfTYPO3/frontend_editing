@@ -90,7 +90,7 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
         }
 
         /** @var ContentObjectRenderer $contentObjectRenderer */
-        $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+        $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
 
         $event->setContent(
             $contentObjectRenderer->stdWrap(
