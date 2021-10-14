@@ -378,7 +378,11 @@ class FrontendEditingModuleController
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
 
         // Apply the GET parameter "frontend_editing_enabled"
-        $targetUrl = $targetUrl . '?frontend_editing_enabled=true';
+        if (parse_url($targetUrl, PHP_URL_QUERY)) {
+            $targetUrl = $targetUrl . '&frontend_editing_enabled=true';
+        } else {
+            $targetUrl = $targetUrl . '?frontend_editing_enabled=true';
+        }
 
         // Assign variables to template
         $this->view->assign('icons', $icons);
