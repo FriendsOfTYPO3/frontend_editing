@@ -18,8 +18,6 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Form\Exception\AccessDeniedEditInternalsException;
-use TYPO3\CMS\Backend\Form\Exception\AccessDeniedException;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -27,7 +25,7 @@ use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Form\Exception;
+use TYPO3\CMS\Backend\Form\Exception;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 
 /**
