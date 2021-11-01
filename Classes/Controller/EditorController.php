@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Form\Exception\AccessDeniedEditInternalsException;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -85,7 +86,12 @@ class EditorController
                     'disabledWizards' => true
                 ];
 
-                $this->formData = $formDataCompiler->compile($formDataCompilerInput);
+                try {
+                    $this->formData = $formDataCompiler->compile($formDataCompilerInput);
+                } catch (AccessDeniedEditInternalsException $exception) {
+                    continue;
+                }
+
                 $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
                 $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
                 $hasCkeditorConfiguration = $this->rteConfiguration !== null;

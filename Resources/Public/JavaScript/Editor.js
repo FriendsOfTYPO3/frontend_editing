@@ -277,6 +277,12 @@ define([
 
           var elementData = data.configurations[data.elementToConfiguration[elementIdentifier]];
 
+          console.log(typeof elementData);
+
+          if (typeof elementData === 'undefined') {
+            return;
+          }
+
           // Ensure all plugins / buttons are loaded
           if (typeof elementData.externalPlugins !== 'undefined') {
             eval(elementData.externalPlugins);
