@@ -44,6 +44,7 @@ use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
+use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
@@ -104,7 +105,7 @@ class FrontendEditingInitializationHook
             && isset($GLOBALS['TYPO3_REQUEST'])
             // @extensionScannerIgnoreLine
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
-            && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
+            && FrontendEditingUtility::isEnabled()
         ) {
             $this->isSiteConfigurationFound = true;
 
@@ -162,7 +163,7 @@ class FrontendEditingInitializationHook
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
-        if (!$this->isFrontendEditingEnabled($parentObject)) {
+        if (!FrontendEditingUtility::isEnabled()) {
             /** @var ContentObjectRenderer $contentObjectRenderer */
             $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
             $parentObject->content = $contentObjectRenderer->stdWrap(
@@ -421,7 +422,7 @@ class FrontendEditingInitializationHook
     {
         $contentController = $this->getNewContentElementController();
 
-        $wizardItems = $contentController->getWizards();
+        $wizardItems = $contentController->publicGetWizards();
 
         $this->wizardItemsHook($wizardItems, $contentController);
 
@@ -576,14 +577,7 @@ class FrontendEditingInitializationHook
     protected function getPluginConfiguration(): array
     {
         if (!$this->pluginConfiguration) {
-            /** @var TypoScriptService $typoScriptService */
-            $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-            $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
-                $this->typoScriptFrontendController->tmpl->setup
-            );
-            if (is_array($configuration['config']['tx_frontendediting'])) {
-                $this->pluginConfiguration = $configuration['config']['tx_frontendediting'];
-            }
+            $this->pluginConfiguration = ConfigurationUtility::getTypoScriptConfiguration();
         }
         return $this->pluginConfiguration;
     }
