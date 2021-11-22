@@ -132,6 +132,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         }
 
         if (!$access->isEnabled() || !$isPageContentEditAllowed) {
+            $content = $content ?: '';
             return $this->renderAsTag($content);
         }
 
@@ -174,6 +175,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
      * Render as a non-editable tag or just content if $this->arguments[tag] is not set.
      *
      * @param string $content
+     * @return string
      */
     protected function renderAsTag(string $content): string
     {
