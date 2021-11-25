@@ -92,7 +92,7 @@ $dropdown-btn-hover-color: #424242;
         }
 
         .module-body {
-            padding: 65px 0 0 !important; // Must use !important because TYPO3 set padding-top via JS
+            padding: 0 !important; // Must use !important because TYPO3 set padding-top via JS
             overflow: hidden; // Avoid scrollbars when FE iframe is full size
             text-align: center; // Center the div containing the FE iframe
 

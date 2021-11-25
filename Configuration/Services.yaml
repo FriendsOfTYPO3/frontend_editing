@@ -4,6 +4,12 @@ services:
     autoconfigure: true
     public: false
 
+  TYPO3\CMS\FrontendEditing\Middleware\FrontendEditing:
+    public: true
+    arguments:
+      $responseFactory: '@Psr\Http\Message\ResponseFactoryInterface'
+      $requestFactory: '@Psr\Http\Message\RequestFactoryInterface'
+
   TYPO3\CMS\FrontendEditing\:
     resource: '../Classes/*'
 

@@ -19,6 +19,7 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
 
 use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController as Typo3NewContentElementController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -31,12 +32,12 @@ use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\Aspect\PreviewAspect;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
@@ -53,6 +54,8 @@ use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
  */
 class FrontendEditingInitializationHook
 {
+    const FRONTEND_EDITING_ALREADY_LOADED = 'frontend_editing_already_loaded';
+
     /**
      * @var AccessService
      */
@@ -109,10 +112,10 @@ class FrontendEditingInitializationHook
         ) {
             $this->isSiteConfigurationFound = true;
 
-            $GLOBALS['TSFE']->fePreview = 0;
-
-            // Allow hidden pages for links generation
             $context = GeneralUtility::makeInstance(Context::class);
+            // Set is preview for frontend
+            $context->setAspect('isPreview', GeneralUtility::makeInstance(PreviewAspect::class, false));
+            // Allow hidden pages for links generation
             $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, true));
         }
     }
@@ -163,7 +166,7 @@ class FrontendEditingInitializationHook
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
-        if (!FrontendEditingUtility::isEnabled()) {
+        if (!FrontendEditingUtility::isEnabled() || $parentObject->getPageArguments()->get(self::FRONTEND_EDITING_ALREADY_LOADED) !== null) {
             /** @var ContentObjectRenderer $contentObjectRenderer */
             $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
             $parentObject->content = $contentObjectRenderer->stdWrap(
@@ -190,7 +193,7 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&' . self::FRONTEND_EDITING_ALREADY_LOADED . '=1&no_cache=1';
 
         $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
             VersionNumberUtility::getNumericTypo3Version()
@@ -261,7 +264,6 @@ class FrontendEditingInitializationHook
         $this->loadStylesheets();
         $this->loadJavascriptResources();
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/GUI', 'function(FrontendEditing) {
-
             // The global F object for API calls
             window.F = new FrontendEditing();
             window.F.initGUI({
@@ -306,7 +308,6 @@ class FrontendEditingInitializationHook
         // Assign the content
         $this->pageRenderer->setBodyContent($view->render());
         $parentObject->content = $this->pageRenderer->render();
-        $parentObject->setAbsRefPrefix();
         // Remove any preview info
         // @extensionScannerIgnoreLine
         unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_previewInfo']);
@@ -353,9 +354,7 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->addJsFile(
             'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
         );
-
         $this->pageRenderer->loadRequireJs();
-
         $this->pageRenderer->addRequireJsConfiguration(
             [
                 'shim' => [
@@ -613,10 +612,15 @@ class FrontendEditingInitializationHook
     protected function getNewContentElementController()
     {
         $contentController = GeneralUtility::makeInstance(
-            NewContentElementController::class
+            NewContentElementController::class,
+            $this->iconFactory,
+            GeneralUtility::makeInstance(PageRenderer::class),
+            GeneralUtility::makeInstance(UriBuilder::class),
+            GeneralUtility::makeInstance(ModuleTemplateFactory::class)
         );
 
         if (CompatibilityUtility::typo3VersionIsGreaterThan('10.0')) {
+            $contentController->handleRequest($this->requestWithSimulatedQueryParams());
             $contentController->wizardAction(
                 $this->requestWithSimulatedQueryParams()
             );
