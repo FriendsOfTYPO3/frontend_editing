@@ -1,1 +1,52 @@
-.typo3-module-frontendediting .module{background-color:transparent}.typo3-module-frontendediting .module .t3-frontend-editing__save.active{background-color:#ff8700;border-color:#ff8700;color:#fff}.typo3-module-frontendediting .module .t3-frontend-editing__discard.active{background-color:#1e1e1e;border-color:#1e1e1e;color:#fff}.typo3-module-frontendediting .module .full-view-active{background-color:#ff8700;border-color:#ff8700;color:#fff}.typo3-module-frontendediting .module span.btn.btn-default{border:0;background-color:transparent;padding:2px}.typo3-module-frontendediting .module span.btn.btn-default.active,.typo3-module-frontendediting .module span.btn.btn-default:active{box-shadow:none}.typo3-module-frontendediting .module .t3js-change-preset .icon-miscellaneous-placeholder{display:none}.typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider){background-color:#292929;text-align:left;width:100%}.typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider).focus,.typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):focus,.typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):hover{color:#fff;background-color:#424242}.typo3-module-frontendediting .module .dropdown-menu .btn.divider{cursor:default;color:#fff;background-color:#292929}.typo3-module-frontendediting .module .dropdown-menu .icon-markup{-webkit-filter:invert(1);filter:invert(1)}.typo3-module-frontendediting .module .dropdown-menu .icon-markup .icon-color{fill:#fff}.typo3-module-frontendediting .module .module-body{padding:0!important;overflow:hidden;text-align:center}.typo3-module-frontendediting .module .module-body .typo3-messages{text-align:left;margin-left:24px;margin-top:24px;margin-right:24px}.typo3-module-frontendediting .module .module-body .frontendediting-resizeable{display:inline-block}.typo3-module-frontendediting .module .module-body #tx_frontendediting_iframe{border:0;height:100%;width:100%}
+.typo3-module-frontendediting .module {
+  background-color: transparent; }
+  .typo3-module-frontendediting .module .t3-frontend-editing__save.active {
+    background-color: #ff8700;
+    border-color: #ff8700;
+    color: #fff; }
+  .typo3-module-frontendediting .module .t3-frontend-editing__discard.active {
+    background-color: #1e1e1e;
+    border-color: #1e1e1e;
+    color: #fff; }
+  .typo3-module-frontendediting .module .full-view-active {
+    background-color: #ff8700;
+    border-color: #ff8700;
+    color: #fff; }
+  .typo3-module-frontendediting .module span.btn.btn-default {
+    border: 0;
+    background-color: transparent;
+    padding: 2px; }
+    .typo3-module-frontendediting .module span.btn.btn-default.active, .typo3-module-frontendediting .module span.btn.btn-default:active {
+      box-shadow: none; }
+  .typo3-module-frontendediting .module .t3js-change-preset .icon-miscellaneous-placeholder {
+    display: none; }
+  .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider) {
+    background-color: #292929;
+    text-align: left;
+    width: 100%; }
+    .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):hover, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):focus, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider).focus {
+      color: #fff;
+      background-color: #424242; }
+  .typo3-module-frontendediting .module .dropdown-menu .btn.divider {
+    cursor: default;
+    color: #fff;
+    background-color: #292929; }
+  .typo3-module-frontendediting .module .dropdown-menu .icon-markup {
+    filter: invert(1); }
+    .typo3-module-frontendediting .module .dropdown-menu .icon-markup .icon-color {
+      fill: #fff; }
+  .typo3-module-frontendediting .module .module-body {
+    padding: 0 !important;
+    overflow: hidden;
+    text-align: center; }
+    .typo3-module-frontendediting .module .module-body .typo3-messages {
+      text-align: left;
+      margin-left: 24px;
+      margin-top: 24px;
+      margin-right: 24px; }
+    .typo3-module-frontendediting .module .module-body .frontendediting-resizeable {
+      display: inline-block; }
+    .typo3-module-frontendediting .module .module-body #tx_frontendediting_iframe {
+      border: 0;
+      height: 100%;
+      width: 100%; }

@@ -162,23 +162,23 @@ button.toast-close-button {
 }
 
 .toast {
-    background-color: $black;
+    background-color: $black !important;
 }
 
 .toast-success {
-    background-color: $black;
+    background-color: $black !important;
 }
 
 .toast-error {
-    background-color: $color-t3-red;
+    background-color: $color-t3-red !important;
 }
 
 .toast-info {
-    background-color: $gray;
+    background-color: $gray !important;
 }
 
 .toast-warning {
-    background-color: $color-t3-primary;
+    background-color: $color-t3-primary !important;
 }
 
 .toast-progress {
