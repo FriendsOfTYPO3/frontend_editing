@@ -60,6 +60,12 @@ $dropdown-btn-hover-color: #424242;
         }
 
         .dropdown-menu {
+            width: 200px;
+
+            li {
+                background-color: $dropdown-bg-color;
+            }
+
             // Darken background of dropdown buttons
             .btn:not(.divider) {
                 background-color: $dropdown-bg-color;
@@ -83,8 +89,6 @@ $dropdown-btn-hover-color: #424242;
 
             // Can't use svg with  ButtonBar->makeLinkButton()->setIcon() so I invert them
             .icon-markup {
-                filter: invert(1);
-
                 .icon-color {
                     fill: $color-white;
                 }

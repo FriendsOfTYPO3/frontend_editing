@@ -20,19 +20,21 @@
       box-shadow: none; }
   .typo3-module-frontendediting .module .t3js-change-preset .icon-miscellaneous-placeholder {
     display: none; }
-  .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider) {
-    background-color: #292929;
-    text-align: left;
-    width: 100%; }
-    .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):hover, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):focus, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider).focus {
+  .typo3-module-frontendediting .module .dropdown-menu {
+    width: 200px; }
+    .typo3-module-frontendediting .module .dropdown-menu li {
+      background-color: #292929; }
+    .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider) {
+      background-color: #292929;
+      text-align: left;
+      width: 100%; }
+      .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):hover, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider):focus, .typo3-module-frontendediting .module .dropdown-menu .btn:not(.divider).focus {
+        color: #fff;
+        background-color: #424242; }
+    .typo3-module-frontendediting .module .dropdown-menu .btn.divider {
+      cursor: default;
       color: #fff;
-      background-color: #424242; }
-  .typo3-module-frontendediting .module .dropdown-menu .btn.divider {
-    cursor: default;
-    color: #fff;
-    background-color: #292929; }
-  .typo3-module-frontendediting .module .dropdown-menu .icon-markup {
-    filter: invert(1); }
+      background-color: #292929; }
     .typo3-module-frontendediting .module .dropdown-menu .icon-markup .icon-color {
       fill: #fff; }
   .typo3-module-frontendediting .module .module-body {
