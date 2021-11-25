@@ -15,8 +15,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - 7.2
-          - 7.3
           - 7.4
 
     steps:
@@ -96,31 +94,15 @@ jobs:
     strategy:
       matrix:
         composer-version:
-          - v1
           - v2
         typo3-version:
-          - "^9.5"
-          - "^10.4"
           - "^11.4"
         composer-dependencies:
           - highest
           - lowest
         php-version:
-          - 7.2
-          - 7.3
           - 7.4
-        exclude:
-          - composer-version: v1
-            typo3-version: "^11.4"
-          - php-version: 7.2
-            typo3-version: "^11.4"
-          - php-version: 7.3
-            typo3-version: "^11.4"
         include:
-          - typo3-version: "^9.5"
-            database-image: mariadb:latest
-          - typo3-version: "^10.4"
-            database-image: mariadb:latest
           - typo3-version: "^11.4"
             database-image: mariadb:latest
 
