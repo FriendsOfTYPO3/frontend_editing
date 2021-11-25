@@ -18,12 +18,14 @@ define([
   'jquery',
   './Utils/TranslatorLoader',
   './Utils/Logger',
-  './Modal'
+  './Modal',
+  'TYPO3/CMS/Backend/Modal',
 ], function (
   $,
   TranslatorLoader,
   Logger,
-  Modal
+  Modal,
+  T3Modal
 ) {
   'use strict';
 
@@ -168,19 +170,23 @@ define([
         // Delete action
         that.find('.icon-actions-edit-delete')
           .on('click', function () {
-            Modal.confirm(
+
+            T3Modal.confirm(
               translate(
                 translateKeys.confirmDeleteContentElement
               ),
-              {
-                yes: function () {
-                  F.delete(
-                    that.data('uid'),
-                    that.data('table')
-                  );
-                },
+              translate(
+                translateKeys.confirmDeleteContentElement
+              )
+            ).on('button.clicked', function(evt) {
+              if (evt.target.name === 'ok') {
+                F.delete(
+                  that.data('uid'),
+                  that.data('table')
+                );
               }
-            );
+              T3Modal.dismiss();
+            });
           });
 
         // Hide/Unhide action

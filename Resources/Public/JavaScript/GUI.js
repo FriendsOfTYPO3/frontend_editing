@@ -20,6 +20,7 @@ define([
     './Editor',
     './Notification',
     './Modal',
+    'TYPO3/CMS/Backend/Modal',
     './Utils/TranslatorLoader',
     './Utils/Logger'
 ], function (
@@ -28,6 +29,7 @@ define([
     Editor,
     Notification,
     Modal,
+    T3Modal,
     TranslatorLoader,
     Logger
 ) {
@@ -172,13 +174,17 @@ define([
 
     function discard() {
         if (!storage.isEmpty()) {
-            Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
-                yes: function () {
-                    storage.clear();
-                    F.refreshIframe();
-                    F.trigger(F.CONTENT_CHANGE);
-                }
-            });
+          T3Modal.confirm(
+            translate(translateKeys.confirmDiscardChanges),
+            translate(translateKeys.confirmDiscardChanges)
+          ).on('button.clicked', function(evt) {
+            if (evt.target.name === 'ok') {
+              storage.clear();
+              F.refreshIframe();
+              F.trigger(F.CONTENT_CHANGE);
+            }
+            T3Modal.dismiss();
+          });
         }
     }
 

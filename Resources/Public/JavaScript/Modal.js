@@ -33,7 +33,7 @@ define([
     var log = Logger('FEditing:Component:Widget:Modal');
     log.trace('--> ModalFactory');
 
-    // simple ponyfill
+    // simple polyfill
     var identifiers = T3Modal.identifiers || {
         modal: '.t3js-modal',
         content: '.t3js-modal-content',
@@ -217,7 +217,7 @@ define([
                 log.trace('modal show', this.title);
                 var _currentModal = null;
 
-                //copy ready listener cause it gets reset in next func
+                // Copy ready listener cause it gets reset in next func
                 var ready = readyListener;
                 this.onReady(function prepareListeners (currentModal) {
                     log.trace('modal ready', currentModal);
