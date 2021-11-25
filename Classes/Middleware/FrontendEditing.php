@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
-use TYPO3\CMS\Core\Http\Response;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
-use Psr\Http\Message\ResponseFactoryInterface;
 
 class FrontendEditing implements \Psr\Http\Server\MiddlewareInterface
 {

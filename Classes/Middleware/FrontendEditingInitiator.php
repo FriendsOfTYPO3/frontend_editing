@@ -20,9 +20,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook;
-use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 
 /**
