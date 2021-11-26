@@ -53,7 +53,7 @@ class FrontendEditingPanelTest extends UnitTestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $accessServiceMock = $this->createMock(AccessService::class);
 

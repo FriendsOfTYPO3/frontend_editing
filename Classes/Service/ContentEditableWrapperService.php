@@ -18,6 +18,7 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  */
 
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
+use TYPO3\CMS\Backend\Routing\Router;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -72,7 +73,7 @@ class ContentEditableWrapperService
         if ($tagName) {
             $this->contentEditableWrapperTagName = $tagName;
         }
-        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class, GeneralUtility::makeInstance(Router::class));
     }
 
     /**
