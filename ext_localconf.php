@@ -40,10 +40,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['renderPreProcess
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->unsetPageSetup';
 
-// Hook to render toolbars
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['frontend_editing'] =
-    \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->main';
-
 // Hook content object render. Check if column is empty
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClass']['CONTENT'] = [
     'CONTENT',
