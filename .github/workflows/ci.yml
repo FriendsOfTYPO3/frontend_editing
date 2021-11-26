@@ -16,7 +16,6 @@ jobs:
       matrix:
         php-version:
           - 7.4
-          - 8.0
 
     steps:
       - name: Configure PHP ${{ matrix.php-version }}
@@ -103,7 +102,6 @@ jobs:
           - lowest
         php-version:
           - 7.4
-          - 8.0
         include:
           - typo3-version: "^11.4"
             database-image: mariadb:latest
