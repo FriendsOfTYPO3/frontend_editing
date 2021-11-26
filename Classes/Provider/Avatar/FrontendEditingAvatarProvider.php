@@ -46,7 +46,7 @@ class FrontendEditingAvatarProvider extends DefaultAvatarProvider
                 $size,
                 $size
             );
-        } elseif (!\str_starts_with($image->getUrl(true), '/')) {
+        } elseif (!GeneralUtility::isFirstPartOfStr($image->getUrl(true), '/')) {
             $image = GeneralUtility::makeInstance(
                 Image::class,
                 '//' . $image->getUrl(true),
