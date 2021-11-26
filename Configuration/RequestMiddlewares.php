@@ -1,18 +1,22 @@
 <?php
+
+use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingInitiator;
+use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingAspect;
+use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditing;
 /**
  * An array consisting of implementations of middlewares for a middleware stack to be registered
  */
 return [
     'frontend' => [
         'typo3/frontendediting/initiator' => [
-            'target' => \TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingInitiator::class,
+            'target' => FrontendEditingInitiator::class,
             'after' => [
                 'typo3/cms-adminpanel/initiator',
                 'typo3/cms-frontend/page-resolver',
             ],
         ],
         'typo3/frontendediting/aspect' => [
-            'target' => \TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingAspect::class,
+            'target' => FrontendEditingAspect::class,
             'after' => [
                 'typo3/frontendediting/initiator',
             ],
@@ -21,7 +25,7 @@ return [
             ],
         ],
         'typo3/frontendediting/frontendediting' => [
-            'target' => \TYPO3\CMS\FrontendEditing\Middleware\FrontendEditing::class,
+            'target' => FrontendEditing::class,
             'after' => [
                 'typo3/cms-frontend/prepare-tsfe-rendering',
             ],

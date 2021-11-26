@@ -30,7 +30,6 @@ use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
@@ -388,10 +387,6 @@ class ContentEditableWrapperService
      */
     protected function switchToLocalLanguageEquivalent(string &$table, int &$uid)
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
         /** @var TypoScriptFrontendController $frontendController */
         $frontendController = $GLOBALS['TSFE'];
 
@@ -410,10 +405,6 @@ class ContentEditableWrapperService
                 $translatedRecord = array_pop($translatedRecords);
 
                 if ($translatedRecord) {
-                    if ($typo3VersionNumber < 10000000) {
-                        // @extensionScannerIgnoreLine
-                        $table = BackendUtility::getOriginalTranslationTable($table);
-                    }
                     $uid = $translatedRecord['uid'];
                 }
             }
@@ -548,9 +539,9 @@ class ContentEditableWrapperService
             $tcaCtrl['enablecolumns']['fe_group'] && $GLOBALS['TSFE']->simUserGroup &&
             $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
             $tcaCtrl['enablecolumns']['starttime'] &&
-                $row[$tcaCtrl['enablecolumns']['starttime']] > $GLOBALS['EXEC_TIME'] ||
+                $row[$tcaCtrl['enablecolumns']['starttime']] > GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ||
             $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
-            $row[$tcaCtrl['enablecolumns']['endtime']] < $GLOBALS['EXEC_TIME']
+            $row[$tcaCtrl['enablecolumns']['endtime']] < GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp')
         ) {
             $hiddenClassName = 't3-frontend-editing__hidden-element';
         }

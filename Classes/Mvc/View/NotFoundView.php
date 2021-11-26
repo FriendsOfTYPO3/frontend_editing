@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Mvc\View;
 
+use TYPO3\CMS\Extbase\Mvc\View\EmptyView;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -23,7 +24,7 @@ use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 /**
  * Check access of the user to display only those actions which are allowed and needed
  */
-class NotFoundView extends \TYPO3\CMS\Extbase\Mvc\View\NotFoundView
+class NotFoundView extends EmptyView
 {
 
     /**

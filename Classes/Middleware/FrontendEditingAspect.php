@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
+use TYPO3\CMS\FrontendEditing\Html\FrontendEditingSanitizerBuilder;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -51,7 +52,7 @@ class FrontendEditingAspect implements MiddlewareInterface
 
             // Change the sanitizer to allow the attributes used in Frontend Editing.
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['htmlSanitizer']['default'] =
-                \TYPO3\CMS\FrontendEditing\Html\FrontendEditingSanitizerBuilder::class;
+                FrontendEditingSanitizerBuilder::class;
         }
         return $handler->handle($request);
     }

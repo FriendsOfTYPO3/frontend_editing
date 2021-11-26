@@ -38,10 +38,8 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\UnableToLinkToPageException;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Frontend\Page\PageRepository as DeprecatedPageRepository;
 
 /**
  * Controller for FrontendEditing in the backend as a module
@@ -77,16 +75,7 @@ class FrontendEditingModuleController
         $this->getLanguageService()->includeLLFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
         $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $pageRenderer->addInlineLanguageLabelFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
-
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-        if ($typo3VersionNumber < 10000000) {
-            // @extensionScannerIgnoreLine
-            $pageRepositoryClassName = DeprecatedPageRepository::class;
-        } else {
-            $pageRepositoryClassName = PageRepository::class;
-        }
+        $pageRepositoryClassName = PageRepository::class;
         $this->pageRepository = GeneralUtility::makeInstance($pageRepositoryClassName);
     }
 

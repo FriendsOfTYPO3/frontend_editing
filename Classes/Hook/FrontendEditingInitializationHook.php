@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
+use Psr\Http\Message\ServerRequestInterface;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -34,7 +35,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\Aspect\PreviewAspect;
@@ -43,10 +43,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
-use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -103,9 +101,7 @@ class FrontendEditingInitializationHook
         $this->pluginConfiguration = [];
 
         // If this is TYPO3 9 and site configuration was found
-        if (CompatibilityUtility::typo3VersionIsGreaterThan('9.0')
-            // @extensionScannerIgnoreLine
-            && isset($GLOBALS['TYPO3_REQUEST'])
+        if (isset($GLOBALS['TYPO3_REQUEST'])
             // @extensionScannerIgnoreLine
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
             && FrontendEditingUtility::isEnabled()
@@ -195,18 +191,9 @@ class FrontendEditingInitializationHook
         }
         $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&' . self::FRONTEND_EDITING_ALREADY_LOADED . '=1&no_cache=1';
 
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
-            if ($typo3VersionNumber < 9000000) {
-                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceTypo38::class);
-            } else {
-                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
-            }
-
+            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
             $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
@@ -296,7 +283,7 @@ class FrontendEditingInitializationHook
 
         $view = $this->initializeView();
         $view->assignMultiple([
-            'currentTime' => $GLOBALS['EXEC_TIME'],
+            'currentTime' => GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp'),
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
@@ -619,16 +606,10 @@ class FrontendEditingInitializationHook
             GeneralUtility::makeInstance(ModuleTemplateFactory::class)
         );
 
-        if (CompatibilityUtility::typo3VersionIsGreaterThan('10.0')) {
-            $contentController->handleRequest($this->requestWithSimulatedQueryParams());
-            $contentController->wizardAction(
-                $this->requestWithSimulatedQueryParams()
-            );
-        } else {
-            $contentController->init(
-                $this->requestWithSimulatedQueryParams()
-            );
-        }
+        $contentController->handleRequest($this->requestWithSimulatedQueryParams());
+        $contentController->wizardAction(
+            $this->requestWithSimulatedQueryParams()
+        );
 
         return $contentController;
     }
@@ -638,7 +619,7 @@ class FrontendEditingInitializationHook
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function requestWithSimulatedQueryParams(): \Psr\Http\Message\ServerRequestInterface
+    protected function requestWithSimulatedQueryParams(): ServerRequestInterface
     {
         $languageUid = GeneralUtility::makeInstance(Context::class)->getAspect('language')->getId();
 

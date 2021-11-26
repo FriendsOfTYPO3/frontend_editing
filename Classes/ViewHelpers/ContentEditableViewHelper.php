@@ -18,8 +18,6 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
-use TYPO3\CMS\Frontend\Page\PageRepository as DeprecatedPageRepository;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -108,17 +106,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             return $this->renderAsTag($content);
         }
 
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
-
-        if ($typo3VersionNumber < 10000000) {
-            // @extensionScannerIgnoreLine
-            $pageRepositoryClassName = DeprecatedPageRepository::class;
-        } else {
-            $pageRepositoryClassName = PageRepository::class;
-        }
-
+        $pageRepositoryClassName = PageRepository::class;
         $record = BackendUtility::getRecord($this->arguments['table'], (int)$this->arguments['uid']);
         $isPageContentEditAllowed = false;
         try {

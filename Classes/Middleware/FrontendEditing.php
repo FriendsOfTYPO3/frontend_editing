@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +17,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook;
 
-class FrontendEditing implements \Psr\Http\Server\MiddlewareInterface
+class FrontendEditing implements MiddlewareInterface
 {
     /** @var ResponseFactory */
     private $responseFactory;
