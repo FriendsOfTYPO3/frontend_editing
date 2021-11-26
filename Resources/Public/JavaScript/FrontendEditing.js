@@ -20,7 +20,6 @@ define([
     './Storage',
     './Scroller',
     './Utils/TranslatorLoader',
-    './Modal',
     'TYPO3/CMS/Backend/Modal',
     'TYPO3/CMS/Backend/Severity',
     './Utils/Logger'
@@ -30,7 +29,6 @@ define([
     Scroller,
     TranslatorLoader,
     Modal,
-    T3Modal,
     Severity,
     Logger
 ) {
@@ -224,7 +222,7 @@ define([
 
                     window.location.href = linkUrl;
                 } else {
-                  T3Modal.confirm(
+                  Modal.confirm(
                     t.translate(translateKeys.confirmNavigateWithChange),
                     t.translate(translateKeys.confirmNavigateWithChange),
                     Severity.warning,
@@ -254,7 +252,7 @@ define([
                     } else if (evt.target.name === 'no') {
                       F.hideLoadingScreen();
                     }
-                    T3Modal.dismiss();
+                    Modal.dismiss();
                   });
                 }
             }

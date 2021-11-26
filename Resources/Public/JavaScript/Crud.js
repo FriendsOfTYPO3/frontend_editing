@@ -20,7 +20,7 @@ define([
     './FrontendEditing',
     'TYPO3/CMS/Backend/Modal',
     './Utils/Logger'
-], function createCrudModule ($, FrontendEditing, T3Modal, Logger) {
+], function createCrudModule ($, FrontendEditing, Modal, Logger) {
     'use strict';
 
     var log = Logger('FEditing:CRUD');
@@ -212,7 +212,7 @@ define([
                     //     response.message
                     // );
 
-                    T3Modal.confirm(
+                    Modal.confirm(
                         response.message,
                         response.message
                     )
@@ -222,7 +222,7 @@ define([
                             } else {
                                 canEdit.reject();
                             }
-                            T3Modal.dismiss();
+                            Modal.dismiss();
                         });
 
 

@@ -18,7 +18,6 @@ define([
   'jquery',
   './Utils/TranslatorLoader',
   './Utils/Logger',
-  './Modal',
   'TYPO3/CMS/Backend/Modal',
   'TYPO3/CMS/Backend/Severity',
 ], function (
@@ -26,7 +25,6 @@ define([
   TranslatorLoader,
   Logger,
   Modal,
-  T3Modal,
   Severity
 ) {
   'use strict';
@@ -117,7 +115,7 @@ define([
         // Open/edit|new action
         that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
           if (!storage.isEmpty()) {
-            T3Modal.confirm(
+            Modal.confirm(
               translate(translateKeys.confirmOpenModalWithChange),
               translate(translateKeys.confirmOpenModalWithChange),
               Severity.warning,
@@ -145,7 +143,7 @@ define([
               } else if (evt.target.name === 'yes') {
                 openModal($(this));
               }
-              T3Modal.dismiss();
+              Modal.dismiss();
             });
           } else {
             openModal($(this));
@@ -189,7 +187,7 @@ define([
         that.find('.icon-actions-edit-delete')
           .on('click', function () {
 
-            T3Modal.confirm(
+            Modal.confirm(
               translate(
                 translateKeys.confirmDeleteContentElement
               ),
@@ -203,7 +201,7 @@ define([
                   that.data('table')
                 );
               }
-              T3Modal.dismiss();
+              Modal.dismiss();
             });
           });
 
