@@ -1,7 +1,8 @@
 <?php
 
-use TYPO3\CMS\FrontendEditing\Controller\ReceiverController;
 use TYPO3\CMS\FrontendEditing\Controller\EditorController;
+use TYPO3\CMS\FrontendEditing\Controller\ReceiverController;
+
 /**
  * Definitions for routes provided by EXT:frontend_editing
  * Contains all AJAX-based routes for entry points

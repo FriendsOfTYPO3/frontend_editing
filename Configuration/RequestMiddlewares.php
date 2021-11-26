@@ -1,8 +1,9 @@
 <?php
 
-use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingInitiator;
-use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingAspect;
 use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditing;
+use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingAspect;
+use TYPO3\CMS\FrontendEditing\Middleware\FrontendEditingInitiator;
+
 /**
  * An array consisting of implementations of middlewares for a middleware stack to be registered
  */
