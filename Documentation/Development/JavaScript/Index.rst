@@ -18,7 +18,6 @@ Persist log record on Typo3 server is not implemented yet.
 Loggers available:
 
    * `FEditing:Component:LoadingScreen`
-   * `FEditing:Component:Widget:Modal`
    * `FEditing:Component:Widget:Notification`
    * `FEditing:CRUD`
    * `FEditing:Editor`
