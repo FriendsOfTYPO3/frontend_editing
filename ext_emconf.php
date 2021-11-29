@@ -12,9 +12,9 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '2.1.0-dev',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.4.0-11.4.99',
-            'rte_ckeditor' => '9.4.0-11.4.99',
-            'viewpage' => '9.4.0-11.4.99',
+            'typo3' => '11.5.0-11.5.99',
+            'rte_ckeditor' => '11.5.0-11.5.99',
+            'viewpage' => '11.5.0-11.5.99',
         ],
         'conflicts' => [
             'feedit' => '',
