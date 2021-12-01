@@ -30,8 +30,8 @@ class NewContentElementController extends \TYPO3\CMS\Backend\Controller\ContentE
      *
      * @return array
      */
-    public function getWizards(): array
+    public function publicGetWizards(): array
     {
-        return parent::getWizards();
+        return $this->getWizards();
     }
 }

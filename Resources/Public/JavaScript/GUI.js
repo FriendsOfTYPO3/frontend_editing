@@ -19,7 +19,7 @@ define([
     './Crud',
     './Editor',
     './Notification',
-    './Modal',
+    'TYPO3/CMS/Backend/Modal',
     './Utils/TranslatorLoader',
     './Utils/Logger'
 ], function (
@@ -172,13 +172,17 @@ define([
 
     function discard() {
         if (!storage.isEmpty()) {
-            Modal.confirm(translate(translateKeys.confirmDiscardChanges), {
-                yes: function () {
-                    storage.clear();
-                    F.refreshIframe();
-                    F.trigger(F.CONTENT_CHANGE);
-                }
-            });
+          Modal.confirm(
+            translate(translateKeys.confirmDiscardChanges),
+            translate(translateKeys.confirmDiscardChanges)
+          ).on('button.clicked', function(evt) {
+            if (evt.target.name === 'ok') {
+              storage.clear();
+              F.refreshIframe();
+              F.trigger(F.CONTENT_CHANGE);
+            }
+            Modal.dismiss();
+          });
         }
     }
 
@@ -456,28 +460,6 @@ define([
      */
     function showWarning(message, title) {
         Notification.warning(message, title);
-    }
-
-    /**
-     * Shows a confirm modal. If message is 'notifications.unsaved-changes' a
-     * special "save all" button will be presented.
-     * @param message
-     * @param callbacks
-     * @deprecated
-     */
-    function confirm (message, callbacks) {
-        callbacks = callbacks || {};
-
-        if (message === F.translate('notifications.unsaved-changes')) {
-            Modal.confirmNavigate(message, function save () {
-                if (typeof callbacks.yes === 'function') {
-                    F.saveAll();
-                    callbacks.yes();
-                }
-            }, callbacks);
-        } else {
-            Modal.confirm(message, callbacks);
-        }
     }
 
     function windowOpen(url) {

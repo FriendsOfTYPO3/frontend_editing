@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+defined('TYPO3') or die();
 
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
@@ -32,30 +32,15 @@ $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['listonly'] = 'EXT:frontend_editin
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php']['edit'] =
     \TYPO3\CMS\FrontendEditing\EditingPanel\FrontendEditingPanel::class;
 
-// Register the preHeaderRenderHook for backend document template
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/backend.php']['renderPreProcess']['frontend_editing/pagetree-actions'] =
-    \TYPO3\CMS\FrontendEditing\Hook\Backend\Template\DocumentTemplate::class . '->mainBackendModule';
-
 // Hook to unset page setup before render the toolbars to speed up the render
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->unsetPageSetup';
 
-// Hook to render toolbars
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output']['frontend_editing'] =
-    \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->main';
-
 // Hook content object render. Check if column is empty
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClass']['CONTENT'] = [
-    'CONTENT',
-    \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
-];
-
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClassDefault'] = [
     'CONTENT',
     \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
 ];
-
-// $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] = My\NameSpace\Hooks\PageGenerateHooks::class . '->contentPostProcAll'
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][] =
     \TYPO3\CMS\FrontendEditing\Hook\ModifyTypoLinkConfig::class;

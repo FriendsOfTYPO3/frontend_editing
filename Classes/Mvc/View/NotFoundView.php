@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Mvc\View;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -16,14 +17,14 @@ namespace TYPO3\CMS\FrontendEditing\Mvc\View;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\View\EmptyView;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 
 /**
  * Check access of the user to display only those actions which are allowed and needed
  */
-class NotFoundView extends \TYPO3\CMS\Extbase\Mvc\View\NotFoundView
+class NotFoundView extends EmptyView
 {
 
     /**

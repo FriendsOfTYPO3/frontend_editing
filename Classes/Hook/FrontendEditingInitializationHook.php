@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Hook;
 
+use Psr\Http\Message\ServerRequestInterface;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -17,10 +18,12 @@ namespace TYPO3\CMS\FrontendEditing\Hook;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController as Typo3NewContentElementController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -28,20 +31,21 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\Aspect\PreviewAspect;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
+use TYPO3\CMS\FrontendEditing\Core\Page\PageRenderer;
+use TYPO3\CMS\FrontendEditing\Frontend\ContentObject\ContentObjectRenderer as FrontendEditingContentObjectRenderer;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
-use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
+use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 
 /**
  * Hook class using the "ContentPostProc" hook in TSFE for rendering the panels
@@ -49,6 +53,8 @@ use TYPO3\CMS\Lang\LanguageService as LanguageServiceTypo38;
  */
 class FrontendEditingInitializationHook
 {
+    const FRONTEND_EDITING_ALREADY_LOADED = 'frontend_editing_already_loaded';
+
     /**
      * @var AccessService
      */
@@ -96,19 +102,17 @@ class FrontendEditingInitializationHook
         $this->pluginConfiguration = [];
 
         // If this is TYPO3 9 and site configuration was found
-        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
-            // @extensionScannerIgnoreLine
-            && isset($GLOBALS['TYPO3_REQUEST'])
+        if (isset($GLOBALS['TYPO3_REQUEST'])
             // @extensionScannerIgnoreLine
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
-            && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
+            && FrontendEditingUtility::isEnabled()
         ) {
             $this->isSiteConfigurationFound = true;
 
-            $GLOBALS['TSFE']->fePreview = 0;
-
-            // Allow hidden pages for links generation
             $context = GeneralUtility::makeInstance(Context::class);
+            // Set is preview for frontend
+            $context->setAspect('isPreview', GeneralUtility::makeInstance(PreviewAspect::class, false));
+            // Allow hidden pages for links generation
             $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, true));
         }
     }
@@ -159,9 +163,12 @@ class FrontendEditingInitializationHook
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
-        if (!$this->isFrontendEditingEnabled($parentObject)) {
-            /** @var ContentObjectRenderer $contentObjectRenderer */
-            $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+        if (
+            !FrontendEditingUtility::isEnabled()
+            || $parentObject->getPageArguments()->get(self::FRONTEND_EDITING_ALREADY_LOADED) !== null
+        ) {
+            /** @var FrontendEditingContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = GeneralUtility::makeInstance(FrontendEditingContentObjectRenderer::class, $parentObject);
             $parentObject->content = $contentObjectRenderer->stdWrap(
                 $parentObject->content,
                 $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.']
@@ -186,20 +193,11 @@ class FrontendEditingInitializationHook
         } else {
             $urlSeparator = '?';
         }
-        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&no_cache=1';
-
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        );
+        $requestUrl = $requestUrl . $urlSeparator . 'frontend_editing=true&' . self::FRONTEND_EDITING_ALREADY_LOADED . '=1&no_cache=1';
 
         // If not language service is set then create one
         if ($GLOBALS['LANG'] === null) {
-            if ($typo3VersionNumber < 9000000) {
-                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageServiceTypo38::class);
-            } else {
-                $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
-            }
-
+            $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
             $GLOBALS['LANG']->init($GLOBALS['BE_USER']->uc['lang']);
         }
 
@@ -225,7 +223,7 @@ class FrontendEditingInitializationHook
         );
 
         // Define the window size of the popups within the RTE
-        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
+        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'] ?? [];
 
         if (!empty($rtePopupWindowSize)) {
             list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
@@ -240,7 +238,7 @@ class FrontendEditingInitializationHook
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
 
-        $baseUrl = ($this->getPluginConfiguration()['baseUrl']) ? $this->getPluginConfiguration()['baseUrl'] : '/';
+        $baseUrl = (isset($this->getPluginConfiguration()['baseUrl'])) ? $this->getPluginConfiguration()['baseUrl'] : '/';
 
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
@@ -257,7 +255,6 @@ class FrontendEditingInitializationHook
         $this->loadStylesheets();
         $this->loadJavascriptResources();
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/GUI', 'function(FrontendEditing) {
-
             // The global F object for API calls
             window.F = new FrontendEditing();
             window.F.initGUI({
@@ -290,7 +287,7 @@ class FrontendEditingInitializationHook
 
         $view = $this->initializeView();
         $view->assignMultiple([
-            'currentTime' => $GLOBALS['EXEC_TIME'],
+            'currentTime' => GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp'),
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
             'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
@@ -302,7 +299,6 @@ class FrontendEditingInitializationHook
         // Assign the content
         $this->pageRenderer->setBodyContent($view->render());
         $parentObject->content = $this->pageRenderer->render();
-        $parentObject->setAbsRefPrefix();
         // Remove any preview info
         // @extensionScannerIgnoreLine
         unset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_previewInfo']);
@@ -349,9 +345,7 @@ class FrontendEditingInitializationHook
         $this->pageRenderer->addJsFile(
             'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
         );
-
         $this->pageRenderer->loadRequireJs();
-
         $this->pageRenderer->addRequireJsConfiguration(
             [
                 'shim' => [
@@ -391,7 +385,7 @@ class FrontendEditingInitializationHook
         }
 
         $configuration = $this->getPluginConfiguration();
-        if (is_array($configuration['includeJS'])) {
+        if (isset($configuration['includeJS']) && is_array($configuration['includeJS'])) {
             foreach ($configuration['includeJS'] as $file) {
                 $this->pageRenderer->addJsFile($file);
             }
@@ -418,7 +412,7 @@ class FrontendEditingInitializationHook
     {
         $contentController = $this->getNewContentElementController();
 
-        $wizardItems = $contentController->getWizards();
+        $wizardItems = $contentController->publicGetWizards();
 
         $this->wizardItemsHook($wizardItems, $contentController);
 
@@ -444,9 +438,9 @@ class FrontendEditingInitializationHook
      * Call registered hooks to manipulate wizard items
      *
      * @param array &$wizardItems
-     * @param NewContentElementController $contentController
+     * @param Typo3NewContentElementController $contentController
      */
-    protected function wizardItemsHook(array &$wizardItems, NewContentElementController $contentController)
+    protected function wizardItemsHook(array &$wizardItems, Typo3NewContentElementController $contentController)
     {
         $newContentElement = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'];
         // Wrapper for wizards
@@ -499,7 +493,7 @@ class FrontendEditingInitializationHook
     {
         $records = [];
         $configuration = $this->getPluginConfiguration();
-        if (is_array($configuration['customRecords'])) {
+        if (isset($configuration['customRecords']) && is_array($configuration['customRecords'])) {
             /** @var ContentEditableWrapperService $wrapperService */
             $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
             foreach ($configuration['customRecords'] as $table => $defaultValues) {
@@ -573,14 +567,7 @@ class FrontendEditingInitializationHook
     protected function getPluginConfiguration(): array
     {
         if (!$this->pluginConfiguration) {
-            /** @var TypoScriptService $typoScriptService */
-            $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-            $configuration = $typoScriptService->convertTypoScriptArrayToPlainArray(
-                $this->typoScriptFrontendController->tmpl->setup
-            );
-            if (is_array($configuration['config']['tx_frontendediting'])) {
-                $this->pluginConfiguration = $configuration['config']['tx_frontendediting'];
-            }
+            $this->pluginConfiguration = ConfigurationUtility::getTypoScriptConfiguration();
         }
         return $this->pluginConfiguration;
     }
@@ -597,7 +584,7 @@ class FrontendEditingInitializationHook
         if (GeneralUtility::_GET('show_hidden_items')) {
             $showHiddenItems = GeneralUtility::_GET('show_hidden_items');
             if ($showHiddenItems !== $defaultState) {
-                $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+                $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
                 $cacheManager->flushCaches();
             }
         }
@@ -611,26 +598,22 @@ class FrontendEditingInitializationHook
      * Return instance of NewContentElementController
      * For TYPO3 >= 9 init NewContentElementController with given server request
      *
-     * @return NewContentElementController|\TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController
+     * @return Typo3NewContentElementController|NewContentElementController
      */
     protected function getNewContentElementController()
     {
-        $typo3VersionNumber = VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
+        $contentController = GeneralUtility::makeInstance(
+            NewContentElementController::class,
+            $this->iconFactory,
+            GeneralUtility::makeInstance(PageRenderer::class),
+            GeneralUtility::makeInstance(UriBuilder::class),
+            GeneralUtility::makeInstance(ModuleTemplateFactory::class)
         );
 
-        $contentController = GeneralUtility::makeInstance(
-            \TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController::class
+        $contentController->handleRequest($this->requestWithSimulatedQueryParams());
+        $contentController->wizardAction(
+            $this->requestWithSimulatedQueryParams()
         );
-        if ($typo3VersionNumber > 10000000) {
-            $contentController->wizardAction(
-                $this->requestWithSimulatedQueryParams()
-            );
-        } else {
-            $contentController->init(
-                $this->requestWithSimulatedQueryParams()
-            );
-        }
 
         return $contentController;
     }
@@ -640,7 +623,7 @@ class FrontendEditingInitializationHook
      *
      * @return \Psr\Http\Message\ServerRequestInterface
      */
-    protected function requestWithSimulatedQueryParams(): \Psr\Http\Message\ServerRequestInterface
+    protected function requestWithSimulatedQueryParams(): ServerRequestInterface
     {
         $languageUid = GeneralUtility::makeInstance(Context::class)->getAspect('language')->getId();
 

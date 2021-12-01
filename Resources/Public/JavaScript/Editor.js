@@ -18,12 +18,14 @@ define([
   'jquery',
   './Utils/TranslatorLoader',
   './Utils/Logger',
-  './Modal'
+  'TYPO3/CMS/Backend/Modal',
+  'TYPO3/CMS/Backend/Severity',
 ], function (
   $,
   TranslatorLoader,
   Logger,
-  Modal
+  Modal,
+  Severity
 ) {
   'use strict';
 
@@ -34,6 +36,8 @@ define([
     confirmOpenModalWithChange: 'notifications.unsaved-changes',
     confirmDeleteContentElement: 'notifications.delete-content-element',
     informRequestFailed: 'notifications.request.configuration.fail',
+    yes: 'yes',
+    no: 'no',
   };
 
   var translator = TranslatorLoader
@@ -111,22 +115,36 @@ define([
         // Open/edit|new action
         that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
           if (!storage.isEmpty()) {
-            Modal.confirmNavigate(
+            Modal.confirm(
               translate(translateKeys.confirmOpenModalWithChange),
-              function save () {
+              translate(translateKeys.confirmOpenModalWithChange),
+              Severity.warning,
+              [
+                {
+                  text: translate(translateKeys.confirmOpenModalWithChange)  || 'Save',
+                  btnClass: 'btn-danger',
+                  name: 'save'
+                },
+                {
+                  text: translate(translateKeys.yes)  || 'Yes',
+                  btnClass: 'btn-default',
+                  name: 'yes'
+                },
+                {
+                  text: translate(translateKeys.no) || 'No',
+                  btnClass: 'btn-default',
+                  name: 'no'
+                },
+              ]
+            ).on('button.clicked', function(evt) {
+              if (evt.target.name === 'save') {
                 F.saveAll();
                 openModal($(this));
-              },
-              {
-                yes: function () {
-                  openModal($(this));
-                },
-                no: function () {
-                  // TODO: check if tis was part of discard function
-                  return false;
-                }
+              } else if (evt.target.name === 'yes') {
+                openModal($(this));
               }
-            );
+              Modal.dismiss();
+            });
           } else {
             openModal($(this));
           }
@@ -168,19 +186,23 @@ define([
         // Delete action
         that.find('.icon-actions-edit-delete')
           .on('click', function () {
+
             Modal.confirm(
               translate(
                 translateKeys.confirmDeleteContentElement
               ),
-              {
-                yes: function () {
-                  F.delete(
-                    that.data('uid'),
-                    that.data('table')
-                  );
-                },
+              translate(
+                translateKeys.confirmDeleteContentElement
+              )
+            ).on('button.clicked', function(evt) {
+              if (evt.target.name === 'ok') {
+                F.delete(
+                  that.data('uid'),
+                  that.data('table')
+                );
               }
-            );
+              Modal.dismiss();
+            });
           });
 
         // Hide/Unhide action

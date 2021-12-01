@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
 
 /**
  * View class for the edit panels in frontend editing
@@ -107,7 +106,7 @@ class FrontendEditingPanel
         // this only allows to edit all other tables just per field instead of per element
         $isEditableField = false;
         $isWholeElement = false;
-        if ((int)$conf['beforeLastTag'] === 1) {
+        if (isset($conf['beforeLastTag']) && (int)$conf['beforeLastTag'] === 1) {
             $isEditableField = true;
         } elseif ($table === 'tt_content' || $conf['hasEditableFields'] === 1) {
             $isWholeElement = true;
@@ -120,22 +119,20 @@ class FrontendEditingPanel
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
-        if (CompatibilityUtility::typo3VersionIsGreaterThan('10.0')) {
-            $pluginConfiguration = $this->getPluginConfiguration();
-            // Check if customRecordEditing is present
-            if (isset($pluginConfiguration['customRecordEditing'])
-                && is_array($pluginConfiguration['customRecordEditing'])
-            ) {
-                $pageArguments = $this->frontendController->getPageArguments()->getArguments();
-                foreach ($pluginConfiguration['customRecordEditing'] as $key => $customRecordEditing) {
-                    // Check that params match the custom editing configuration
-                    if (isset($pageArguments[$key])
-                        && $pageArguments[$key]['action'] === $customRecordEditing['actionName']
-                    ) {
-                        if ($dataArr !== null && $dataArr['list_type'] === $customRecordEditing['listTypeName']) {
-                            $table = $customRecordEditing['tableName'];
-                            $editUid = $pageArguments[$key][$customRecordEditing['recordName']];
-                        }
+        $pluginConfiguration = $this->getPluginConfiguration();
+        // Check if customRecordEditing is present
+        if (isset($pluginConfiguration['customRecordEditing'])
+            && is_array($pluginConfiguration['customRecordEditing'])
+        ) {
+            $pageArguments = $this->frontendController->getPageArguments()->getArguments();
+            foreach ($pluginConfiguration['customRecordEditing'] as $key => $customRecordEditing) {
+                // Check that params match the custom editing configuration
+                if (isset($pageArguments[$key])
+                    && $pageArguments[$key]['action'] === $customRecordEditing['actionName']
+                ) {
+                    if ($dataArr !== null && $dataArr['list_type'] === $customRecordEditing['listTypeName']) {
+                        $table = $customRecordEditing['tableName'];
+                        $editUid = $pageArguments[$key][$customRecordEditing['recordName']];
                     }
                 }
             }
@@ -164,8 +161,8 @@ class FrontendEditingPanel
             );
 
             $isWrappedWithDropzone = false;
-            $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'];
-            if (is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
+            $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'] ?? [];
+            if (isset($frontendEditingConfiguration['FrontendEditingPanel']) && is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
                 foreach ($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
                     $hookObject = GeneralUtility::makeInstance($classData);
                     if (!$hookObject instanceof FrontendEditingDropzoneModifier) {

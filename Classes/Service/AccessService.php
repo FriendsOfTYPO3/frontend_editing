@@ -40,7 +40,7 @@ class AccessService implements SingletonInterface
     {
         // Frontend editing needs to be enabled also by admins
         if (isset($GLOBALS['BE_USER'])) {
-            $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing_enabled');
+            $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing');
             if (isset($isFrontendEditingEnabled) && (bool)$isFrontendEditingEnabled === true) {
                 $this->isEnabled = true;
             }

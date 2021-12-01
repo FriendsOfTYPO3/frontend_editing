@@ -1,8 +1,10 @@
 <?php
 
-defined('TYPO3_MODE') or die();
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+defined('TYPO3') or die();
+
+ExtensionManagementUtility::addStaticFile(
     'frontend_editing',
     'Configuration/TypoScript',
     'Frontend Editing'

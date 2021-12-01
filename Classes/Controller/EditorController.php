@@ -93,7 +93,8 @@ class EditorController
                 }
 
                 $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
-                $this->rteConfiguration = $formDataFieldName['config']['richtextConfiguration']['editor'];
+                $this->rteConfiguration = (isset($formDataFieldName['config']['richtextConfiguration']))
+                    ? $formDataFieldName['config']['richtextConfiguration']['editor'] : [];
                 $hasCkeditorConfiguration = $this->rteConfiguration !== null;
 
                 $editorConfiguration = $this->prepareConfigurationForEditor();
@@ -101,6 +102,8 @@ class EditorController
                 $externalPlugins = '';
                 foreach ($this->getExtraPlugins() as $pluginName => $config) {
                     $editorConfiguration[$pluginName] = $config['config'];
+                    $editorConfiguration['extraPlugins'] = (isset($editorConfiguration['extraPlugins']))
+                        ? $editorConfiguration['extraPlugins'] : '';
                     if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
                         $editorConfiguration['extraPlugins'] .= ',';
                     }
@@ -180,7 +183,7 @@ class EditorController
             ];
             unset($configuration['resource']);
 
-            if ($configuration['route']) {
+            if (isset($configuration['route'])) {
                 $configuration['routeUrl'] = (string)$uriBuilder->buildUriFromRoute(
                     $configuration['route'],
                     $urlParameters
@@ -237,7 +240,7 @@ class EditorController
             'customConfig' => '',
         ];
 
-        if (is_array($this->rteConfiguration['config'])) {
+        if (isset($this->rteConfiguration['config']) && is_array($this->rteConfiguration['config'])) {
             $configuration = array_replace_recursive($configuration, $this->rteConfiguration['config']);
         }
         $configuration['contentsLanguage'] = $this->getLanguageIsoCodeOfContent();
@@ -246,13 +249,13 @@ class EditorController
         $configuration = $this->replaceAbsolutePathsToRelativeResourcesPath($configuration);
 
         // there are some places where we define an array, but it needs to be a list in order to work
-        if (is_array($configuration['extraPlugins'])) {
+        if (isset($configuration['extraPlugins']) && is_array($configuration['extraPlugins'])) {
             $configuration['extraPlugins'] = implode(',', array_filter($configuration['extraPlugins']));
         }
-        if (is_array($configuration['removePlugins'])) {
+        if (isset($configuration['removePlugins']) && is_array($configuration['removePlugins'])) {
             $configuration['removePlugins'] = implode(',', array_filter($configuration['removePlugins']));
         }
-        if (is_array($configuration['removeButtons'])) {
+        if (isset($configuration['removeButtons']) && is_array($configuration['removeButtons'])) {
             $configuration['removeButtons'] = implode(',', array_filter($configuration['removeButtons']));
         }
 
@@ -276,8 +279,10 @@ class EditorController
         } else {
             $contentLanguage = $this->rteConfiguration['config']['defaultContentLanguage'] ?? 'en_US';
             $languageCodeParts = explode('_', $contentLanguage);
-            $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1]
-                ? '_' . strtoupper($languageCodeParts[1]) : '');
+            if (isset($languageCodeParts[0]) && isset($languageCodeParts[1])) {
+                $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1]
+                        ? '_' . strtoupper($languageCodeParts[1]) : '');
+            }
             // Find the configured language in the list of localization locales
             $locales = GeneralUtility::makeInstance(Locales::class);
             // If not found, default to 'en'

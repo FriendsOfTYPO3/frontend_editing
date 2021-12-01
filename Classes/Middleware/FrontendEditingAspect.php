@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace TYPO3\CMS\FrontendEditing\Middleware;
 
+use Psr\Http\Message\ResponseInterface;
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -16,7 +17,6 @@ namespace TYPO3\CMS\FrontendEditing\Middleware;
  * The TYPO3 project - inspiring people to share!
  */
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\VisibilityAspect;
 use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\FrontendEditing\Html\FrontendEditingSanitizerBuilder;
 use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 
 /**
@@ -51,7 +52,7 @@ class FrontendEditingAspect implements MiddlewareInterface
 
             // Change the sanitizer to allow the attributes used in Frontend Editing.
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['htmlSanitizer']['default'] =
-                \TYPO3\CMS\FrontendEditing\Html\FrontendEditingSanitizerBuilder::class;
+                FrontendEditingSanitizerBuilder::class;
         }
         return $handler->handle($request);
     }

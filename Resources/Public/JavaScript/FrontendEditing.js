@@ -20,7 +20,8 @@ define([
     './Storage',
     './Scroller',
     './Utils/TranslatorLoader',
-    './Modal',
+    'TYPO3/CMS/Backend/Modal',
+    'TYPO3/CMS/Backend/Severity',
     './Utils/Logger'
 ], function createFrontendEditing (
     $,
@@ -28,6 +29,7 @@ define([
     Scroller,
     TranslatorLoader,
     Modal,
+    Severity,
     Logger
 ) {
     'use strict';
@@ -37,6 +39,8 @@ define([
 
     var translateKeys = {
         confirmNavigateWithChange: 'notifications.unsaved-changes',
+        yes: 'yes',
+        no: 'no',
     };
 
     var t = TranslatorLoader
@@ -218,27 +222,38 @@ define([
 
                     window.location.href = linkUrl;
                 } else {
-                    Modal.confirmNavigate(
-                        t.translate(translateKeys.confirmNavigateWithChange),
-                        function save () {
-                            F.saveAll();
-
-                            //TODO wait until finished save items!!!
-
-                            log.debug('navigate away', linkUrl);
-
-                            window.location.href = linkUrl;
-                        },
-                        {
-                            yes: function () {
-                                log.debug('navigate away', linkUrl);
-
-                                window.location.href = linkUrl;
-                            },
-                            no: function () {
-                                F.hideLoadingScreen();
-                            }
-                        });
+                  Modal.confirm(
+                    t.translate(translateKeys.confirmNavigateWithChange),
+                    t.translate(translateKeys.confirmNavigateWithChange),
+                    Severity.warning,
+                    [
+                      {
+                        text: t.translate(translateKeys.confirmNavigateWithChange),
+                        btnClass: 'btn-danger',
+                        name: 'save'
+                      },
+                      {
+                        text: t.translate(translateKeys.yes)  || 'Yes',
+                        btnClass: 'btn-default',
+                        name: 'yes'
+                      },
+                      {
+                        text: t.translate(translateKeys.no) || 'No',
+                        btnClass: 'btn-default',
+                        name: 'no'
+                      },
+                    ]
+                  ).on('button.clicked', function(evt) {
+                    if (evt.target.name === 'save') {
+                      F.saveAll();
+                      window.location.href = linkUrl;
+                    } else if (evt.target.name === 'yes') {
+                      window.location.href = linkUrl;
+                    } else if (evt.target.name === 'no') {
+                      F.hideLoadingScreen();
+                    }
+                    Modal.dismiss();
+                  });
                 }
             }
         },

@@ -19,6 +19,7 @@ namespace TYPO3\CMS\FrontendEditing\Utility;
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 
 /**
  * Convenience methods related to configuration
@@ -39,5 +40,15 @@ class ConfigurationUtility
         }
 
         return [];
+    }
+
+    public static function getTypoScriptConfiguration()
+    {
+        /** @var ConfigurationManager $configurationManager */
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+
+        return $configurationManager->getConfiguration(
+            ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+        )['config.']['tx_frontendediting.'];
     }
 }

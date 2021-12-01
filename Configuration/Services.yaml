@@ -10,6 +10,9 @@ services:
   TYPO3\CMS\FrontendEditing\Controller\ReceiverController:
     public: true
 
+  TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController:
+    public: true
+
   TYPO3\CMS\FrontendEditing\Controller\Event\Handler\TypoScriptPrepareFieldUpdateEventHandler:
     tags:
       - name: event.listener

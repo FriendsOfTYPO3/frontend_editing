@@ -10,17 +10,15 @@
 		"Frontend Editing"
 	],
 	"require": {
-		"php": "^7.2",
-		"typo3/cms-core": "^9.5 || ^10.4",
-		"typo3/cms-rte-ckeditor": "^9.5 || ^10.4",
-		"typo3/cms-viewpage": "^9.5 || ^10.4",
-		"ext-json": "*"
+		"typo3/cms-core": "^11.5",
+		"typo3/cms-rte-ckeditor": "^11.5",
+		"typo3/cms-viewpage": "^11.5"
 	},
 	"require-dev": {
-		"typo3/minimal": "^9.5 || ^10.4",
-		"nimut/testing-framework": "^5.0",
+		"typo3/minimal": "^11.5",
+		"nimut/testing-framework": "^6.0",
 		"squizlabs/php_codesniffer": "^3.3",
-		"phpunit/phpunit": "^6.0",
+		"phpunit/phpunit": "^8.5",
 		"friendsofphp/php-cs-fixer": "^2.15",
 		"helmich/typo3-typoscript-lint": "^2.0"
 	},
@@ -52,8 +50,8 @@
 	},
 	"scripts": {
 		"ci:php:lint": "find *.php Classes/ Configuration/ Tests/ -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
-		"ci:php:sniff": "php-cs-fixer fix --config=.php_cs -v --dry-run --using-cache=no --diff",
-		"cs:php:fix": "php-cs-fixer fix --config=.php_cs -v --using-cache=no",
+		"ci:php:sniff": "php-cs-fixer fix --config=.php-cs-fixer.php -v --dry-run --using-cache=no --diff",
+		"cs:php:fix": "php-cs-fixer fix --config=.php-cs-fixer.php -v --using-cache=no",
 		"ci:ts:lint": "typoscript-lint -c Configuration/TsLint.yml --ansi -n --fail-on-warnings -vvv Configuration/TypoScript/",
 		"ci:tests:unit": "phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
 		"ci:tests:functional": "phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional",
@@ -75,6 +73,12 @@
 		"pre-autoload-dump": [
 			"mkdir -p .build/public/typo3conf/ext/",
 			"test -L .build/public/typo3conf/ext/frontend_editing || ln -snvf ../../../../. .build/public/typo3conf/ext/frontend_editing"
+		],
+		"post-autoload-dump": [
+			"@prepare-extension-test-structure"
+		],
+		"prepare-extension-test-structure": [
+			"Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
 		],
 		"docs:generate": [
 			"docker run --rm t3docs/render-documentation show-shell-commands > tempfile.sh; echo 'dockrun_t3rd makehtml' >> tempfile.sh; bash tempfile.sh; rm tempfile.sh"

@@ -18,7 +18,7 @@
 define([
     'jquery',
     './FrontendEditing',
-    './Modal',
+    'TYPO3/CMS/Backend/Modal',
     './Utils/Logger'
 ], function createCrudModule ($, FrontendEditing, Modal, Logger) {
     'use strict';
@@ -212,12 +212,20 @@ define([
                     //     response.message
                     // );
 
-                    Modal.confirm(response.message, {
-                        yes: function () {
-                            canEdit.resolve(item);
-                        },
-                        no: canEdit.reject
-                    });
+                    Modal.confirm(
+                        response.message,
+                        response.message
+                    )
+                        .on('button.clicked', function(evt) {
+                            if (evt.target.name === 'ok') {
+                                canEdit.resolve(item);
+                            } else {
+                                canEdit.reject();
+                            }
+                            Modal.dismiss();
+                        });
+
+
                 } else {
                     canEdit.resolve(item);
                 }
