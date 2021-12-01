@@ -117,12 +117,12 @@
                 <source>Refresh page</source>
             </trans-unit>
 
-			<trans-unit id="yes" resname="yes">
-				<source>Yes</source>
-			</trans-unit>
-			<trans-unit id="no" resname="no">
-				<source>No</source>
-			</trans-unit>
+            <trans-unit id="yes" resname="yes">
+                <source>Yes</source>
+            </trans-unit>
+            <trans-unit id="no" resname="no">
+                <source>No</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
