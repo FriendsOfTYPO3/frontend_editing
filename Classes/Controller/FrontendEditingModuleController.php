@@ -240,7 +240,7 @@ class FrontendEditingModuleController
             ]);
         $presetSplitButtonElement->addItem($maximizeButton);
         // Custom button
-        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
+        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom']))
             ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
         $custom['width'] = (isset($custom['width']) && (int)$custom['width'] >= 300 ? (int)$custom['width'] : 320);
         $custom['height'] = (isset($custom['height']) && (int)$custom['height'] >= 300 ? (int)$custom['height'] : 480);
@@ -365,7 +365,7 @@ class FrontendEditingModuleController
         $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
         $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : null);
         $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : null);
-        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
+        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom']))
             ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
