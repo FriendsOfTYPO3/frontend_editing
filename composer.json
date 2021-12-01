@@ -2,10 +2,17 @@
 	"name": "friendsoftypo3/frontend-editing",
 	"type": "typo3-cms-extension",
 	"description": "Enable editors to work with the content in the most intuitive way possible",
-	"license": ["GPL-2.0-or-later"],
-	"keywords": ["TYPO3 CMS", "Frontend Editing"],
+	"license": [
+		"GPL-2.0-or-later"
+	],
+	"keywords": [
+		"TYPO3 CMS",
+		"Frontend Editing"
+	],
 	"require": {
-		"typo3/cms-core": "^11.5"
+		"typo3/cms-core": "^11.5",
+		"typo3/cms-rte-ckeditor": "^11.5",
+		"typo3/cms-viewpage": "^11.5"
 	},
 	"require-dev": {
 		"typo3/minimal": "^11.5",
