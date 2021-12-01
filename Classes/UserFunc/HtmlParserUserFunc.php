@@ -36,7 +36,7 @@ class HtmlParserUserFunc
     {
         $parsedUrl = parse_url($url);
 
-        if ($parsedUrl['query'] !== null) {
+        if (isset($parsedUrl['query']) && $parsedUrl['query'] !== null) {
             $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
 
             if (isset($queryArguments['frontend_editing'])) {

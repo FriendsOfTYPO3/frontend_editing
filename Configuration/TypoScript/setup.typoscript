@@ -38,7 +38,7 @@
 
     tx_extbase {
       objects {
-        TYPO3\CMS\Extbase\Mvc\View\NotFoundView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
+        TYPO3\CMS\FrontendEditing\Mvc\View\EmptyView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
       }
     }
     tx_frontendediting {

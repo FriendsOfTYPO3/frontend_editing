@@ -34,7 +34,7 @@ class ModifyTypoLinkConfig implements TypolinkModifyLinkConfigForPageLinksHookIn
     public function modifyPageLinkConfiguration(array $linkConfiguration, array $linkDetails, array $pageRow): array
     {
         $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing');
-        if ((bool)$isFrontendEditingEnabled === true) {
+        if ((bool)$isFrontendEditingEnabled === true && isset($linkConfiguration['additionalParams'])) {
             $linkConfiguration['additionalParams'] .= '&frontend_editing=true';
         }
 

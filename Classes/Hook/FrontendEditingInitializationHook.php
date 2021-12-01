@@ -219,7 +219,7 @@ class FrontendEditingInitializationHook
         );
 
         // Define the window size of the popups within the RTE
-        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'];
+        $rtePopupWindowSize = $GLOBALS['BE_USER']->getTSConfig()['options.']['rte.']['popupWindowSize'] ?? [];
 
         if (!empty($rtePopupWindowSize)) {
             list(, $rtePopupWindowHeight) = GeneralUtility::trimExplode('x', $rtePopupWindowSize);
@@ -234,7 +234,7 @@ class FrontendEditingInitializationHook
         // so it has to be loaded before
         $availableContentElementTypes = $this->getContentItems();
 
-        $baseUrl = ($this->getPluginConfiguration()['baseUrl']) ? $this->getPluginConfiguration()['baseUrl'] : '/';
+        $baseUrl = (isset($this->getPluginConfiguration()['baseUrl'])) ? $this->getPluginConfiguration()['baseUrl'] : '/';
 
         // PageRenderer needs to be completely reinitialized
         // Thus, this hack is necessary for now
@@ -381,7 +381,7 @@ class FrontendEditingInitializationHook
         }
 
         $configuration = $this->getPluginConfiguration();
-        if (is_array($configuration['includeJS'])) {
+        if (isset($configuration['includeJS']) && is_array($configuration['includeJS'])) {
             foreach ($configuration['includeJS'] as $file) {
                 $this->pageRenderer->addJsFile($file);
             }
@@ -489,7 +489,7 @@ class FrontendEditingInitializationHook
     {
         $records = [];
         $configuration = $this->getPluginConfiguration();
-        if (is_array($configuration['customRecords'])) {
+        if (isset($configuration['customRecords']) && is_array($configuration['customRecords'])) {
             /** @var ContentEditableWrapperService $wrapperService */
             $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
             foreach ($configuration['customRecords'] as $table => $defaultValues) {

@@ -50,8 +50,8 @@ class ReceiverController
     {
         $this->response = new Response();
 
-        $table = $request->getParsedBody()['table'];
-        $uid = (int)$request->getParsedBody()['uid'];
+        $table = isset($request->getParsedBody()['table']) ? $request->getParsedBody()['table'] : '';
+        $uid = isset($request->getParsedBody()['uid']) ? (int)$request->getParsedBody()['uid'] : 0;
 
         switch ($request->getMethod()) {
             case 'DELETE':
@@ -60,7 +60,7 @@ class ReceiverController
 
             // modifying existing or creating new records
             case 'POST':
-                $action = $request->getQueryParams()['action'];
+                $action = (isset($request->getQueryParams()['action'])) ? $request->getQueryParams()['action'] : '';
                 switch ($action) {
                     case 'new':
                         $data = [];

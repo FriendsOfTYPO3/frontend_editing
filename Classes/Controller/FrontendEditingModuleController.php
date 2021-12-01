@@ -204,7 +204,8 @@ class FrontendEditingModuleController
         // Add preset menu to module docheader
         $presetSplitButtonElement = $buttonBar->makeSplitButton();
         // Current state
-        $current = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?: []);
+        $current = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
+            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] : [];
         $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:custom'));
         $maximizeButtonLabel = $this->getLanguageService()->getLL('maximized');
         if ($current['label'] !== $maximizeButtonLabel) {
@@ -239,7 +240,8 @@ class FrontendEditingModuleController
             ]);
         $presetSplitButtonElement->addItem($maximizeButton);
         // Custom button
-        $custom = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?: []);
+        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
+            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
         $custom['width'] = (isset($custom['width']) && (int)$custom['width'] >= 300 ? (int)$custom['width'] : 320);
         $custom['height'] = (isset($custom['height']) && (int)$custom['height'] >= 300 ? (int)$custom['height'] : 480);
         $customButtonLabel = $this->getLanguageService()->getLL('custom');
@@ -357,12 +359,14 @@ class FrontendEditingModuleController
         $icons['mobile'] = $iconFactory->getIcon('actions-device-mobile', Icon::SIZE_SMALL)->render('inline');
         $icons['unidentified'] = $iconFactory->getIcon('actions-device-unidentified', Icon::SIZE_SMALL)->render('inline');
 
-        $current = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?: []);
+        $current = (isset($this->getBackendUser()->uc['moduleData']['web_view'])) ?
+            $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] : [];
 
         $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
         $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : null);
         $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : null);
-        $custom = ($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?: []);
+        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
+            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
 
@@ -461,7 +465,7 @@ class FrontendEditingModuleController
     {
         $languages = [];
         $modSharedTSconfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['SHARED.'] ?? [];
-        if ($modSharedTSconfig['view.']['disableLanguageSelector'] === '1') {
+        if (isset($modSharedTSconfig['view.']) && $modSharedTSconfig['view.']['disableLanguageSelector'] === '1') {
             return $languages;
         }
 
@@ -497,7 +501,7 @@ class FrontendEditingModuleController
     {
         $languageId = (int)$languageParam;
         if ($languageParam === null) {
-            $states = $this->getBackendUser()->uc['moduleData']['web_frontendediting']['States'];
+            $states = $this->getBackendUser()->uc['moduleData']['web_frontendediting']['States'] ?? [];
             $languages = $this->getPreviewLanguages($pageId);
             if (isset($states['languageSelectorValue']) && isset($languages[$states['languageSelectorValue']])) {
                 $languageId = (int)$states['languageSelectorValue'];

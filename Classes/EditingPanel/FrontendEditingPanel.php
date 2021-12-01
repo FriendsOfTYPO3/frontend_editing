@@ -107,7 +107,7 @@ class FrontendEditingPanel
         // this only allows to edit all other tables just per field instead of per element
         $isEditableField = false;
         $isWholeElement = false;
-        if ((int)$conf['beforeLastTag'] === 1) {
+        if (isset($conf['beforeLastTag']) && (int)$conf['beforeLastTag'] === 1) {
             $isEditableField = true;
         } elseif ($table === 'tt_content' || $conf['hasEditableFields'] === 1) {
             $isWholeElement = true;
@@ -164,8 +164,8 @@ class FrontendEditingPanel
             );
 
             $isWrappedWithDropzone = false;
-            $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'];
-            if (is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
+            $frontendEditingConfiguration = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['frontend_editing'] ?? [];
+            if (isset($frontendEditingConfiguration['FrontendEditingPanel']) && is_array($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'])) {
                 foreach ($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
                     $hookObject = GeneralUtility::makeInstance($classData);
                     if (!$hookObject instanceof FrontendEditingDropzoneModifier) {

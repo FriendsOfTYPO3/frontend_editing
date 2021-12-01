@@ -536,11 +536,12 @@ class ContentEditableWrapperService
         $row = BackendUtility::getRecord($table, $uid);
         $tcaCtrl = $GLOBALS['TCA'][$table]['ctrl'];
         if ($tcaCtrl['enablecolumns']['disabled'] && $row[$tcaCtrl['enablecolumns']['disabled']] ||
-            $tcaCtrl['enablecolumns']['fe_group'] && $GLOBALS['TSFE']->simUserGroup &&
+            isset($tcaCtrl['enablecolumns']['fe_group']) && $tcaCtrl['enablecolumns']['fe_group'] &&
+            $GLOBALS['TSFE']->simUserGroup &&
             $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
-            $tcaCtrl['enablecolumns']['starttime'] &&
+            isset($tcaCtrl['enablecolumns']['starttime']) && $tcaCtrl['enablecolumns']['starttime'] &&
                 $row[$tcaCtrl['enablecolumns']['starttime']] > GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ||
-            $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
+            isset($tcaCtrl['enablecolumns']['endtime']) && $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
             $row[$tcaCtrl['enablecolumns']['endtime']] < GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp')
         ) {
             $hiddenClassName = 't3-frontend-editing__hidden-element';
@@ -573,7 +574,7 @@ class ContentEditableWrapperService
     protected function getPlaceholderText(string $table, string $field): string
     {
         $placeholderText = $GLOBALS['LANG']->sL(
-            $GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder']
+            $GLOBALS['TCA'][$table]['columns'][$field]['frontendEditingPlaceholder'] ?? ''
         );
 
         if ($placeholderText === '') {

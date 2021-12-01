@@ -55,13 +55,18 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
         $typeValue = BackendUtility::getTCAtypeValue($event->getTable(), $event->getRecord());
 
         if (
-            !is_array($setup[$event->getTable() . '.'][$typeValue . '.'])
+            isset($setup[$event->getTable() . '.'][$typeValue . '.'])
+            && !is_array($setup[$event->getTable() . '.'][$typeValue . '.'])
             && is_array($setup[$event->getTable()]['*.'])
         ) {
             $typeValue = '*';
         }
 
-        if (is_array($setup[$event->getTable() . '.'][$typeValue . '.'])) {
+        $stdWrapConfiguration = '';
+        if (
+            isset($setup[$event->getTable() . '.'][$typeValue . '.'])
+            && is_array($setup[$event->getTable() . '.'][$typeValue . '.'])
+        ) {
             $stdWrapConfiguration = $setup[$event->getTable() . '.'][$typeValue . '.'][$event->getField() . '.'];
         }
 
@@ -74,8 +79,10 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
                 $tableTca['types'][$typeValue]['columnsOverrides'][$event->getField()]['config'] ?? []
             );
 
-            $rteEnabled = (bool)$fieldConfig['enableFrontendRichtext'] ?? $fieldConfig['enableRichtext'];
-            $rtePreset = $fieldConfig['frontendRichtextConfiguration'] ?? $fieldConfig['richtextConfiguration'];
+            $isFrontendRichTextEnabled = isset($fieldConfig['enableFrontendRichtext']) && (bool)$fieldConfig['enableFrontendRichtext'];
+            $rteEnabled = $isFrontendRichTextEnabled ?? $fieldConfig['enableRichtext'];
+            $rtePreset = $fieldConfig['frontendRichtextConfiguration'] ?? (isset($fieldConfig['richtextConfiguration']))
+                    ? $fieldConfig['richtextConfiguration'] : [];
 
             if (!$rteEnabled || !$rtePreset) {
                 return;
