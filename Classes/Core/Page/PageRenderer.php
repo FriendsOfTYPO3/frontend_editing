@@ -18,6 +18,11 @@ namespace TYPO3\CMS\FrontendEditing\Core\Page;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 
+/**
+ * A class for being able to load RequireJs in combination with Frontend Editing and TYPO3 11.
+ * The $accessService->isEnabled() have been added to enforce the backend simulation
+ * for Frontend Editing requests.
+ */
 class PageRenderer extends \TYPO3\CMS\Core\Page\PageRenderer
 {
     /**

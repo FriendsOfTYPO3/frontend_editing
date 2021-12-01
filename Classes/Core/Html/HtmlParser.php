@@ -16,7 +16,15 @@
 namespace TYPO3\CMS\FrontendEditing\Core\Html;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
+/**
+ * A class for being able to use Frontend Editing with TYPO3 11 and PHP 8.
+ * The only modification in this file is on line 220 and check for if
+ * userFunc is set.
+ *
+ * if (isset($params['userFunc.']) && is_array($params['userFunc.'])) {
+ */
 class HtmlParser extends \TYPO3\CMS\Core\Html\HtmlParser
 {
     /**
@@ -211,6 +219,7 @@ class HtmlParser extends \TYPO3\CMS\Core\Html\HtmlParser
                                                 }
                                             }
                                             if ($params['userFunc'] ?? false) {
+                                                // Added a check for if userFunc is set for PHP 8
                                                 if (isset($params['userFunc.']) && is_array($params['userFunc.'])) {
                                                     $params['userFunc.']['attributeValue'] = $tagAttrib[0][$attr];
                                                 } else {
