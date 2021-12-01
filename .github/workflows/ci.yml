@@ -99,7 +99,6 @@ jobs:
           - "^11.4"
         composer-dependencies:
           - highest
-          - lowest
         php-version:
           - 7.4
         include:
@@ -143,12 +142,6 @@ jobs:
         run: |
           composer --version
           composer require typo3/minimal:"${{ matrix.typo3-version }}"
-          composer show
-
-      - name: Install lowest dependencies with composer
-        if: matrix.composer-dependencies == 'lowest'
-        run: |
-          composer update --no-ansi --no-interaction --no-progress --no-suggest --prefer-lowest
           composer show
 
       - name: Install highest dependencies with composer
