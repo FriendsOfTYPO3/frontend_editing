@@ -41,6 +41,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
 use TYPO3\CMS\FrontendEditing\Core\Page\PageRenderer;
+use TYPO3\CMS\FrontendEditing\Frontend\ContentObject\ContentObjectRenderer as FrontendEditingContentObjectRenderer;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
@@ -162,9 +163,12 @@ class FrontendEditingInitializationHook
      */
     public function main(array $params, TypoScriptFrontendController $parentObject)
     {
-        if (!FrontendEditingUtility::isEnabled() || $parentObject->getPageArguments()->get(self::FRONTEND_EDITING_ALREADY_LOADED) !== null) {
-            /** @var ContentObjectRenderer $contentObjectRenderer */
-            $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class, $parentObject);
+        if (
+            !FrontendEditingUtility::isEnabled()
+            || $parentObject->getPageArguments()->get(self::FRONTEND_EDITING_ALREADY_LOADED) !== null
+        ) {
+            /** @var FrontendEditingContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = GeneralUtility::makeInstance(FrontendEditingContentObjectRenderer::class, $parentObject);
             $parentObject->content = $contentObjectRenderer->stdWrap(
                 $parentObject->content,
                 $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.']

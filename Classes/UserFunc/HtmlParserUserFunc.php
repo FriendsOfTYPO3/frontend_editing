@@ -16,9 +16,9 @@ namespace TYPO3\CMS\FrontendEditing\UserFunc;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Html\HtmlParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\FrontendEditing\Core\Html\HtmlParser;
 
 /**
  * Functions for assisting HtmlParser
