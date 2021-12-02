@@ -20,10 +20,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * A class for being able to use Frontend Editing with TYPO3 11 and PHP 8.
- * The only modification in this file is on line 220 and check for if
- * userFunc is set.
+ * The modifications in this file is:
  *
+ * Line 220 and check for if userFunc is set.
  * if (isset($params['userFunc.']) && is_array($params['userFunc.'])) {
+ *
+ * Another if check is added to line 188: isset($params['casesensitiveComp'])
  */
 class HtmlParser extends \TYPO3\CMS\Core\Html\HtmlParser
 {
@@ -185,7 +187,7 @@ class HtmlParser extends \TYPO3\CMS\Core\Html\HtmlParser
                                                         $tagAttrib[0][$attr] = $params['list'][0];
                                                     }
                                                 } else {
-                                                    if (!in_array($this->caseShift($tagAttrib[0][$attr], $params['casesensitiveComp'] ?? false), (array)$this->caseShift($params['list'], $params['casesensitiveComp'], $tagName))) {
+                                                    if (isset($params['casesensitiveComp']) && !in_array($this->caseShift($tagAttrib[0][$attr], $params['casesensitiveComp'] ?? false), (array)$this->caseShift($params['list'], $params['casesensitiveComp'], $tagName))) {
                                                         $tagAttrib[0][$attr] = $params['list'][0];
                                                     }
                                                 }
