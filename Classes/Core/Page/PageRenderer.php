@@ -22,6 +22,9 @@ use TYPO3\CMS\FrontendEditing\Service\AccessService;
  * A class for being able to load RequireJs in combination with Frontend Editing and TYPO3 11.
  * The $accessService->isEnabled() have been added to enforce the backend simulation
  * for Frontend Editing requests.
+ *
+ * An additional if is also present to check if javaScriptRenderer is not null on line 58.
+ * (isset($this->javaScriptRenderer) && $this->javaScriptRenderer !== null)
  */
 class PageRenderer extends \TYPO3\CMS\Core\Page\PageRenderer
 {
@@ -50,7 +53,10 @@ class PageRenderer extends \TYPO3\CMS\Core\Page\PageRenderer
         if ($assignments === []) {
             return '';
         }
-        if ($this->getApplicationType() === 'BE' || $accessService->isEnabled()) {
+        if (
+            ($this->getApplicationType() === 'BE' || $accessService->isEnabled())
+            && isset($this->javaScriptRenderer) && $this->javaScriptRenderer !== null
+        ) {
             $this->javaScriptRenderer->addGlobalAssignment(['TYPO3' => $assignments]);
             $out .= $this->javaScriptRenderer->render();
         } else {
