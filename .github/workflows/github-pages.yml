@@ -12,6 +12,11 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.17
+
       - name: Configure PHP 7.4
         uses: shivammathur/setup-php@v2
         with:
