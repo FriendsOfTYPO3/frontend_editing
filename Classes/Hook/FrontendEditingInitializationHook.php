@@ -568,6 +568,8 @@ class FrontendEditingInitializationHook
     {
         if (!$this->pluginConfiguration) {
             $this->pluginConfiguration = ConfigurationUtility::getTypoScriptConfiguration();
+        } else {
+            $this->pluginConfiguration = [];
         }
         return $this->pluginConfiguration;
     }
