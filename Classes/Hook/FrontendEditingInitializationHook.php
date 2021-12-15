@@ -442,7 +442,8 @@ class FrontendEditingInitializationHook
      */
     protected function wizardItemsHook(array &$wizardItems, Typo3NewContentElementController $contentController)
     {
-        $newContentElement = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'];
+        $newContentElement = isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms'])
+            ? $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'] : [];
         // Wrapper for wizards
         // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
         if (is_array($newContentElement['wizardItemsHook'])) {
