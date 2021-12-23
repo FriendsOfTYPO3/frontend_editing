@@ -96,10 +96,10 @@ class FrontendEditingInitializationHook
         $this->pluginConfiguration = [];
 
         // If this is TYPO3 9 and site configuration was found
-        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
-            // @extensionScannerIgnoreLine
+        if (
+            isset($GLOBALS['TSFE'])
+            && VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) > 9000000
             && isset($GLOBALS['TYPO3_REQUEST'])
-            // @extensionScannerIgnoreLine
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
             && $this->isFrontendEditingEnabled($GLOBALS['TSFE'])
         ) {
