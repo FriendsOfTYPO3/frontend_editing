@@ -101,9 +101,9 @@ class FrontendEditingInitializationHook
         $this->iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
         $this->pluginConfiguration = [];
 
-        // If this is TYPO3 9 and site configuration was found
-        if (isset($GLOBALS['TYPO3_REQUEST'])
-            // @extensionScannerIgnoreLine
+        // If a site configuration was found
+        if (
+            isset($GLOBALS['TYPO3_REQUEST'])
             && $GLOBALS['TYPO3_REQUEST']->getAttribute('site') instanceof Site
             && FrontendEditingUtility::isEnabled()
         ) {
