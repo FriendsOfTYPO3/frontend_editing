@@ -165,7 +165,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
      * @param string $content
      * @return string
      */
-    protected function renderAsTag(string $content): string
+    protected function renderAsTag(?string $content): string
     {
         if ($this->arguments['tag'] !== null) {
             $this->tagName = $this->arguments['tag'];
@@ -173,6 +173,8 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             $this->tag->setContent($content);
 
             $content = $this->tag->render();
+        } else if ($content === null) {
+            $content = '';
         }
 
         return $content;
