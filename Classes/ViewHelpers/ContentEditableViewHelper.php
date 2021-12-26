@@ -173,7 +173,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             $this->tag->setContent($content);
 
             $content = $this->tag->render();
-        } else if ($content === null) {
+        } elseif ($content === null) {
             $content = '';
         }
 
