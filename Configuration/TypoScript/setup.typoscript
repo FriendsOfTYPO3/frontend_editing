@@ -77,7 +77,7 @@
             }
 
             form.fixAttrib {
-              action.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
+              action.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->handleFormSubmission
               target.list = _self
             }
           }

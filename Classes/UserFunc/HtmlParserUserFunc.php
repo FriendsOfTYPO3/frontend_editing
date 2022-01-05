@@ -75,4 +75,20 @@ class HtmlParserUserFunc
 
         return $url;
     }
+
+    /**
+     * Adds the URL parameter "frontend_editing" (e.g. "?frontend_editing=true") from the supplied url
+     * and makes sure to "suppress" form submit inceptions.
+     *
+     * @param $url
+     * @param HtmlParser $htmlParser
+     * @return string
+     */
+    public function handleFormSubmission($url, HtmlParser $htmlParser)
+    {
+        $url = $this->addFrontendEditingInUrl($url, $htmlParser);
+        $url = str_replace('?&', '?', $url);
+
+        return $url;
+    }
 }
