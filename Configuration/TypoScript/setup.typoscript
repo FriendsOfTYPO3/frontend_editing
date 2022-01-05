@@ -72,7 +72,7 @@
 
           tags {
             a.fixAttrib {
-              href.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->removeFrontendEditingInUrl
+              href.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
               target.list = _self
             }
 
