@@ -16,6 +16,7 @@ jobs:
       matrix:
         php-version:
           - 7.4
+          - 8.0
 
     steps:
       - name: Configure PHP ${{ matrix.php-version }}
@@ -37,11 +38,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version:
+          - 7.4
+          - 8.0
+
     steps:
-      - name: Configure PHP 7.4
+      - name: Configure PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:${{ matrix.composer-version }}
 
       - name: Checkout
         uses: actions/checkout@v1
@@ -53,6 +62,7 @@ jobs:
           key: php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             php${{ matrix.php-version }}-composer-
+
       - name: Install Composer dependencies
         run: composer install --no-progress
 
@@ -64,11 +74,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        php-version:
+          - 7.4
+          - 8.0
+
     steps:
-      - name: Configure PHP 7.4
+      - name: Configure PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:${{ matrix.composer-version }}
 
       - name: Checkout
         uses: actions/checkout@v1
@@ -80,6 +98,7 @@ jobs:
           key: php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             php${{ matrix.php-version }}-composer-
+
       - name: Install Composer dependencies
         run: composer install --no-progress
 
@@ -101,6 +120,7 @@ jobs:
           - highest
         php-version:
           - 7.4
+          - 8.0
         include:
           - typo3-version: "^11.4"
             database-image: mariadb:latest
