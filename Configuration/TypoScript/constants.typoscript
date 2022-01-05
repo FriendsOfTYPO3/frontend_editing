@@ -1,0 +1,3 @@
+plugin.tx_frontendediting {
+  addFrontendEditingQueryParameter = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
+}
