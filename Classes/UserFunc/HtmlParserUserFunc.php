@@ -67,11 +67,29 @@ class HtmlParserUserFunc
             $queryArguments = GeneralUtility::explodeUrl2Array($parsedUrl['query']);
         }
 
-        $queryArguments['frontend_editing'] = 'true';
+        if (!isset($queryArguments['frontend_editing'])) {
+            $queryArguments['frontend_editing'] = 'true';
+        }
 
         $parsedUrl['query'] = GeneralUtility::implodeArrayForUrl('', $queryArguments);
 
         $url = HttpUtility::buildUrl($parsedUrl);
+
+        return $url;
+    }
+
+    /**
+     * Adds the URL parameter "frontend_editing" (e.g. "?frontend_editing=true") from the supplied url
+     * and makes sure to "suppress" form submit inceptions.
+     *
+     * @param $url
+     * @param HtmlParser $htmlParser
+     * @return string
+     */
+    public function handleFormSubmission($url, HtmlParser $htmlParser)
+    {
+        $url = $this->addFrontendEditingInUrl($url, $htmlParser);
+        $url = str_replace('?&', '?', $url);
 
         return $url;
     }

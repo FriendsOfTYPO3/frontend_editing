@@ -72,12 +72,12 @@
 
           tags {
             a.fixAttrib {
-              href.userFunc = {$plugin.tx_frontendediting.addFrontendEditingQueryParameter}
+              href.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
               target.list = _self
             }
 
             form.fixAttrib {
-              action.userFunc = {$plugin.tx_frontendediting.addFrontendEditingQueryParameter}
+              action.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->handleFormSubmission
               target.list = _self
             }
           }
