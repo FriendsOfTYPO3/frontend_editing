@@ -169,9 +169,11 @@ class FrontendEditingInitializationHook
         ) {
             /** @var FrontendEditingContentObjectRenderer $contentObjectRenderer */
             $contentObjectRenderer = GeneralUtility::makeInstance(FrontendEditingContentObjectRenderer::class, $parentObject);
+            $pageContentPreProcessing = isset($parentObject->config['config']['tx_frontendediting.']) ?
+                $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.'] : [];
             $parentObject->content = $contentObjectRenderer->stdWrap(
                 $parentObject->content,
-                $parentObject->config['config']['tx_frontendediting.']['pageContentPreProcessing.']
+                $pageContentPreProcessing
             );
 
             return;
