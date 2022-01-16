@@ -339,7 +339,7 @@ class FrontendEditingModuleController
             );
 
             // Check for what protocol to use
-            $targetUrl = str_replace('http', $this->getProtocol(), $targetUrl);
+            $targetUrl = str_replace('/https|http/', $this->getProtocol(), $targetUrl);
         } catch (UnableToLinkToPageException $e) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
