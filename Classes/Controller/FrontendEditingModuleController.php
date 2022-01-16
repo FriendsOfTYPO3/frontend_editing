@@ -339,7 +339,7 @@ class FrontendEditingModuleController
             );
 
             // Check for what protocol to use
-            $targetUrl = str_replace(['https', 'http'], $this->getProtocol(), $targetUrl);
+            $targetUrl = str_replace(['https://', 'http://'], $this->getProtocol(), $targetUrl);
         } catch (UnableToLinkToPageException $e) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
@@ -552,7 +552,7 @@ class FrontendEditingModuleController
     {
         return isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)
             || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO']
-            === 'https' ? 'https' : 'http';
+            === 'https' ? 'https://' : 'http://';
     }
 
     /**
