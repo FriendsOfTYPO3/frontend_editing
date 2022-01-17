@@ -219,7 +219,7 @@ class ContentEditableWrapperService
             'data-table' => $table,
             'data-uid' => (int)$uid,
             'data-hidden' => (int)$elementIsHidden,
-            'data-cid' => $dataArr['colPos'],
+            'data-cid' => $dataArr['colPos'] ?? 0,
             'data-edit-url' => $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
             'data-new-url' => $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid))
         ]);
@@ -535,13 +535,13 @@ class ContentEditableWrapperService
         $hiddenClassName = '';
         $row = BackendUtility::getRecord($table, $uid);
         $tcaCtrl = $GLOBALS['TCA'][$table]['ctrl'];
-        if ($tcaCtrl['enablecolumns']['disabled'] && $row[$tcaCtrl['enablecolumns']['disabled']] ||
+        if (isset($tcaCtrl) && isset($tcaCtrl['enablecolumns']['disabled']) && isset($row[$tcaCtrl['enablecolumns']['disabled']]) ||
             isset($tcaCtrl['enablecolumns']['fe_group']) && $tcaCtrl['enablecolumns']['fe_group'] &&
             $GLOBALS['TSFE']->simUserGroup &&
             $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
             isset($tcaCtrl['enablecolumns']['starttime']) && $tcaCtrl['enablecolumns']['starttime'] &&
-                $row[$tcaCtrl['enablecolumns']['starttime']] > GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ||
-            isset($tcaCtrl['enablecolumns']['endtime']) && $tcaCtrl['enablecolumns']['endtime'] && $row[$tcaCtrl['enablecolumns']['endtime']] &&
+                isset($row[$tcaCtrl['enablecolumns']['starttime']]) && $row[$tcaCtrl['enablecolumns']['starttime']] > GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ||
+            isset($tcaCtrl['enablecolumns']['endtime']) && isset($row[$tcaCtrl['enablecolumns']['endtime']]) &&
             $row[$tcaCtrl['enablecolumns']['endtime']] < GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp')
         ) {
             $hiddenClassName = 't3-frontend-editing__hidden-element';
