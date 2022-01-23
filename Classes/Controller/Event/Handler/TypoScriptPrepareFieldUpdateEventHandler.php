@@ -42,7 +42,7 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
      *
      * `config.tx_frontendediting.contentPersistPreProcessingPatterns` will be used if no configuration matches are
      * found in `contentPersistPreProcessing`.
-     * `contentPersistPreProcessingPatterns.<rte-preset>` accepts any stdWrap configuratoion property.
+     * `contentPersistPreProcessingPatterns.<rte-preset>` accepts any stdWrap configuration property.
      * `<rte-preset>` is any RTE preset string, as set in a field's TCA configuration `frontendConfiguration` or
      * `frontendRichtextConfiguration`.
      *
