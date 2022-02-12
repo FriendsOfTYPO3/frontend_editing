@@ -11,7 +11,7 @@ defined('TYPO3_MODE') or die();
         'routeTarget' => \TYPO3\CMS\FrontendEditing\Controller\FrontendEditingModuleController::class . '::showAction',
         'access' => 'user,group',
         'name' => 'web_FrontendEditing',
-        'icon' => 'EXT:frontend_editing/ext_icon.png',
+        'icon' => 'EXT:frontend_editing/Resources/Public/Icons/ext_icon.png',
         'labels' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang_mod.xlf',
     ]
 );
