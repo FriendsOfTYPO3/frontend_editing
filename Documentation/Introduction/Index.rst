@@ -26,7 +26,7 @@ This package adds frontend editing capability to TYPO3 CMS, using `CKEditor <htt
 Credits
 -------
 
-Initial parts of this manual was based on :ref:`Inside TYPO3 <t3inside:start>`. It was adjusted and
+Initial parts of this manual was based on :doc:`Inside TYPO3 <t3inside:Index>`. It was adjusted and
 updated to fit with the frontend_editing modules as found in current versions.
 
 The :ref:`placeholder feature <extension-manager-settings-features>` makes use of the `confighelper <https://github.com/AlfonsoML/confighelper>`__ CKEditor plugin by AlfonsoML. The plugin is released under `Mozilla Public License 2.0 <https://www.mozilla.org/en-US/MPL/2.0/>`__.
