@@ -199,13 +199,13 @@ Example
 
 .. code-block:: html
 
-    <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
-    </core:customDropZone>
+   <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
+   </core:customDropZone>
 
 The result will look like this:
 
-  .. figure:: ../../Images/CustomRecordsDropzone.png
-     :alt: Custom records for dropzones
+.. figure:: ../../Images/CustomRecordsDropzone.png
+   :alt: Custom records for dropzones
 
 
 .. _viewhelpers-isfrontendeditingactive:

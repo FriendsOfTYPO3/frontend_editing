@@ -179,18 +179,18 @@ Solution
 To ensure the data is persisted to the database in the expected format, we must
 transform it. This can be done using one of two TypoScript properties:
 
-   * :ref:`typoscript-contentpersistpreprocessing`, which allows you to
-     configure a specific transformation for a specific field.
-   * :ref:`typoscript-contentpersistpreprocessingpatterns`, which allows you to
-     configure a transformation for any field using a specific RTE preset.
+*  :ref:`typoscript-contentpersistpreprocessing`, which allows you to
+   configure a specific transformation for a specific field.
+*  :ref:`typoscript-contentpersistpreprocessingpatterns`, which allows you to
+   configure a transformation for any field using a specific RTE preset.
 
 :ref:`typoscript-contentpersistpreprocessingpatterns` is especially handy if the
 field doesn't have any rich-rext editing in the backend. Frontend Editing comes
 with two presets for this particular use case:
 
-   * :ref:`tca-enablefrontendrichtext` for RTE only in Frontend Editing.
-   * :ref:`tca-frontendrichtextconfiguration` for specifying an RTE preset that
-     will only be used in Frontend Editing.
+*  :ref:`tca-enablefrontendrichtext` for RTE only in Frontend Editing.
+*  :ref:`tca-frontendrichtextconfiguration` for specifying an RTE preset that
+   will only be used in Frontend Editing.
 
 Here's an example of how we use a Frontend Editing-only RTE preset:
 
@@ -207,10 +207,10 @@ Frontend Editing ships with two RTE presets and
 :ref:`typoscript-contentpersistpreprocessingpatterns` configurations for solving
 the two most common use cases.
 
-   * **bronly** for handling text that should only accept line breaks, but no
-     other formatting.
-   * **listonly** for handling lists that are stored as plain text in the
-     database.
+*  **bronly** for handling text that should only accept line breaks, but no
+   other formatting.
+*  **listonly** for handling lists that are stored as plain text in the
+   database.
 
 Here's an example of a Fluid template rendering a list:
 
