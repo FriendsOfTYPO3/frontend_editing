@@ -1,6 +1,9 @@
 # Exclude PHPStorm indexing files
 /.idea
 
+# Exclude rendered documentation
+/Documentation-GENERATED-temp/
+
 # Exclude OSX index files
 .DS_Store
 

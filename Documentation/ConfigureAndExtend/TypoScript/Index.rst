@@ -82,8 +82,8 @@ This property consists of nested arrays.
    to any type not explicitly defined.
 
 :aspect:`<field>`
-   The field name. Add any :tsref:`stdwrap` configurations to modify the data.
-   You can also use the :tsref:`userfunc` property to modify data using PHP.
+   The field name. Add any :t3tsref:`stdwrap` configurations to modify the data.
+   You can also use the :t3tsref:`userfunc` property to modify data using PHP.
 
 Example
 -------
@@ -132,7 +132,7 @@ modify the data to better suit the way it should be persisted.
 :aspect:`<preset>`
    An RTE preset defined in
    :php:`$GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']`. Add any
-   :tsref:`stdwrap` configurations to modify the data. The modification is
+   :t3tsref:`stdwrap` configurations to modify the data. The modification is
    applied to any field where `[config][enableRichtext]` or
    `[config][enableFrontendRichtext]` is set and
    `[config][frontendRichtextConfiguration]` or
@@ -164,7 +164,7 @@ pageContentPreProcessing
 ========================
 
 :aspect:`DataType`
-   :tsref:`stdwrap`
+   :t3tsref:`stdwrap`
 
 Transformations applied to the page being edited before it is sent to the user.
 This is used to ensure features work as expected and inceptions are avoided.
