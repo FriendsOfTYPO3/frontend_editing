@@ -1,4 +1,4 @@
-.. include:: ../Includes.txt
+.. include:: /Includes.rst.txt
 
 
 
@@ -64,10 +64,12 @@ It's possible to add drop zones for new content elements in a custom content ele
 
 .. _custom-dropzone-modifier:
 
-Custom Dropzone modifier (using frontend editing together with Gridelements)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Custom Dropzone modifier (using frontend editing together with Grid Elements)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Here is a full example of how to use the hook (wrapWithDropZone) together with
-Gridelements (https://github.com/TYPO3-extensions/gridelements) and multi column splitters:
+`Grid Elements`_ and multi column splitters:
+
+.. _Grid Elements: https://extensions.typo3.org/extension/gridelements
 
 https://gist.github.com/joekolade/674ecba5c2615901581d6c4e4c272b4a

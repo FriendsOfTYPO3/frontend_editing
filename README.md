@@ -1,16 +1,18 @@
-# TYPO3 frontend editing
+[![Latest Stable Version](https://poser.pugx.org/friendsoftypo3/frontend-editing/v/stable.svg)](https://extensions.typo3.org/extension/frontend_editing/)
+[![TYPO3](https://img.shields.io/badge/TYPO3-11-orange.svg?style=flat-square)](https://get.typo3.org/version/11)
+[![Total Downloads](https://poser.pugx.org/friendsoftypo3/frontend-editing/d/total.svg)](https://packagist.org/packages/friendsoftypo3/frontend-editing)
+[![Monthly Downloads](https://poser.pugx.org/friendsoftypo3/frontend-editing/d/monthly)](https://packagist.org/packages/friendsoftypo3/frontend-editing)
+[![Build Status](https://travis-ci.org/FriendsOfTYPO3/frontend_editing.svg?branch=master)](https://travis-ci.org/FriendsOfTYPO3/frontend_editing)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=B7YZKNCHTYHRW)
 
-[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg?style=flat-square)](https://typo3.org/) [![TYPO3](https://img.shields.io/badge/TYPO3-9.5.0-orange.svg?style=flat-square)](https://typo3.org/) [![TYPO3](https://img.shields.io/badge/TYPO3-10.4.0-orange.svg?style=flat-square)](https://typo3.org/) [![Build Status](https://travis-ci.org/FriendsOfTYPO3/frontend_editing.svg?branch=master)](https://travis-ci.org/FriendsOfTYPO3/frontend_editing) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=B7YZKNCHTYHRW)
+# TYPO3 extension `frontend_editing`
 
-## TYPO3 frontend editing (frontend_editing)
-This package gives frontend editing capability to TYPO3 CMS, the editor used is [Ckeditor](http://ckeditor.com/).
+This extension enhances the TYPO3 CMS with the possibility of frontend editing
+with [CKeditor](http://ckeditor.com/), the rich text editor of the TYPO3
+backend.
 
-## Documentation
-
-For all kind of documentation which covers install to how to develop the extension:
-
-[Local Documentation](Documentation/Index.rst)
-
-[Online Documentation](https://docs.typo3.org/p/friendsoftypo3/frontend-editing/master/en-us/)
-
-[Donate to the Frontend Editing for TYPO3 project](https://www.paypal.com/donate/?hosted_button_id=B7YZKNCHTYHRW)
+|                  | URL                                                                  |
+|------------------|----------------------------------------------------------------------|
+| **Repository:**  | https://github.com/FriendsOfTYPO3/frontend_editing                   |
+| **Read online:** | https://docs.typo3.org/p/friendsoftypo3/frontend-editing/main/en-us/ |
+| **TER:**         | https://extensions.typo3.org/extension/frontend_editing/             |

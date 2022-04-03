@@ -1,4 +1,4 @@
-.. include:: ../Includes.txt
+.. include:: /Includes.rst.txt
 
 .. _viewhelpers:
 
@@ -176,8 +176,8 @@ customDropZone
 Inserts a custom drop zone, for example to drop news directly into the news
 list.
 
-Default values are defined in TypoScript. See
-:def:`typoscript-customrecords` for more information.
+Default values are defined in TypoScript. See :ref:`typoscript-customrecords`
+for more information.
 
 Arguments
 ---------
@@ -199,13 +199,13 @@ Example
 
 .. code-block:: html
 
-    <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
-    </core:customDropZone>
+   <core:customDropZone tables="{0:'tx_news_domain_model_news'}">
+   </core:customDropZone>
 
 The result will look like this:
 
-  .. figure:: ../../Images/CustomRecordsDropzone.png
-     :alt: Custom records for dropzones
+.. figure:: ../../Images/CustomRecordsDropzone.png
+   :alt: Custom records for dropzones
 
 
 .. _viewhelpers-isfrontendeditingactive:
