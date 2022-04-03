@@ -87,7 +87,7 @@ and email addresses editable.
 		stdWrap.editIcons.hasEditableFields = 1
 	}
 
-.. _tip::
+.. tip::
 
    Are you using :typoscript:`editIcons.beforeLastTag = 1` or
    :typoscript:`editIcons.beforeLastTag = 0`? Used wrong, you may set the entire
@@ -135,7 +135,7 @@ any kind of records.
    Note that the headline, teaser and description are inline editable.
 
 
-.. _inline-editing-nonstandard
+.. _inline-editing-nonstandard:
 
 Handling fields with non-standard rendering
 ===========================================

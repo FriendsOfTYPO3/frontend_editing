@@ -16,7 +16,7 @@ The following steps are required to use frontend editing in a TYPO3 installation
 * Install the extension
 
    #. **Using Composer** (recommended): `composer req friendsoftypo3/frontend-editing` or by downloading the extension
-   #. **Using the Extension Manager** in *Admin Tools > Extensions* as explained in the :ref:`Extension Installation <t3install:extension-installation>` chapter of the official TYPO3 documentation.
+   #. **Using the Extension Manager** in *Admin Tools > Extensions* as explained in the :ref:`Extension Installation <t3start:extensions_legacy_management>` chapter of the official TYPO3 documentation.
 
 * Add the static TypoScript template *Frontend Editing* to the site roots where the features should be activated
 

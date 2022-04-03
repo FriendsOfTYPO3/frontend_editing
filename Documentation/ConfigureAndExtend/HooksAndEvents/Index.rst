@@ -26,7 +26,7 @@ PSR-14-compatible event handler classes. The same class is used both for Events
 in TYPO3 v10 and Signals and Slots in TYPO3 v9.
 
 PSR-14 in TYPO3 v10 events are registered the usual way, in
-`Configuration/Services.yaml`. See :ref:`t3coreapi:registering-the-event-listener`.
+`Configuration/Services.yaml`. See :ref:`t3coreapi:eventdispatcherregistration`.
 
 For registering the same event handler as a Slot in TYPO3 v9, we recommend using
 the convenience method :php:`\TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility::registerEventHandlerAsSignalSlot`.

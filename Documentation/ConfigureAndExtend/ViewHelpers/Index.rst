@@ -176,8 +176,8 @@ customDropZone
 Inserts a custom drop zone, for example to drop news directly into the news
 list.
 
-Default values are defined in TypoScript. See
-:def:`typoscript-customrecords` for more information.
+Default values are defined in TypoScript. See :ref:`typoscript-customrecords`
+for more information.
 
 Arguments
 ---------
