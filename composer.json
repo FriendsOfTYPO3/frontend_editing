@@ -2,6 +2,12 @@
 	"name": "friendsoftypo3/frontend-editing",
 	"type": "typo3-cms-extension",
 	"description": "Enable editors to work with the content in the most intuitive way possible",
+	"homepage": "https://extensions.typo3.org/extension/frontend_editing/",
+	"support": {
+		"issues": "https://github.com/FriendsOfTYPO3/frontend_editing/issues",
+		"source": "https://github.com/FriendsOfTYPO3/frontend_editing",
+		"docs": "https://docs.typo3.org/p/friendsoftypo3/frontend-editing/main/en-us/"
+	},
 	"license": [
 		"GPL-2.0-or-later"
 	],
