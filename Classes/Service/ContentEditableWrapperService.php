@@ -544,7 +544,11 @@ class ContentEditableWrapperService
             isset($tcaCtrl['enablecolumns']['endtime']) && isset($row[$tcaCtrl['enablecolumns']['endtime']]) &&
             $row[$tcaCtrl['enablecolumns']['endtime']] < GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp')
         ) {
-            $hiddenClassName = 't3-frontend-editing__hidden-element';
+            if ($row['hidden'] == 0 || $row['endtime'] == 0) {
+                $hiddenClassName = '';
+            } else {
+                $hiddenClassName = 't3-frontend-editing__hidden-element';
+            }
         }
         return $hiddenClassName;
     }
