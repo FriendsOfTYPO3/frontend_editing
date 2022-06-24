@@ -335,6 +335,7 @@ class ContentEditableWrapperService
             TagBuilder::class,
             $this->contentEditableWrapperTagName
         );
+        $tagBuilder->forceClosingTag(true);
 
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__dropzone',
