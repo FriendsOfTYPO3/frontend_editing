@@ -448,7 +448,11 @@ class FrontendEditingInitializationHook
             ? $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'] : [];
         // Wrapper for wizards
         // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
-        if (is_array($newContentElement['wizardItemsHook'])) {
+        if (
+            is_array($newContentElement)
+            && !empty($newContentElement)
+            && array_key_exists('wizardItemsHook', $newContentElement)
+        ) {
             foreach ($newContentElement['wizardItemsHook'] as $classData) {
                 $hookObject = GeneralUtility::makeInstance($classData);
                 if (!$hookObject instanceof NewContentElementWizardHookInterface) {
