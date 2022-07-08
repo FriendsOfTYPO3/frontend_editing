@@ -123,6 +123,10 @@
             <trans-unit id="no" resname="no">
                 <source>No</source>
             </trans-unit>
+
+            <trans-unit id="otherDomain" resname="otherDomain">
+                <source>To edit the current page, you need to log in to</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
