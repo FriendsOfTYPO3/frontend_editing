@@ -126,7 +126,6 @@
 
             <trans-unit id="otherDomain" resname="otherDomain">
                 <source>To edit the current page, you need to log in to</source>
-
             </trans-unit>
         </body>
     </file>
