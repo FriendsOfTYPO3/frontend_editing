@@ -9,7 +9,7 @@
                 <iframe id="tx_frontendediting_iframe" src="{url}"></iframe>
             </div>
         </f:then>
-        <f:else>
+        <f:else if="{url} && {otherDomain} == true">
             <br />
             <h2><f:translate key="otherDomain" extensionName="FrontendEditing" /> <a href="{protocol}://{url}/typo3" target="_blank">{url}/typo3</a></h2>
         </f:else>
