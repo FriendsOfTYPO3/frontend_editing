@@ -345,6 +345,14 @@ class ContentEditableWrapperService
             'data-tables' => $tables,
             'data-pid' => (int)$pageUid,
             'data-defvals' => json_encode($defaultValues),
+            'data-new-url' => $this->renderEditOnClickReturnUrl(
+                $this->renderNewUrl(
+                    $tables,
+                    0,
+                    0,
+                    $defaultValues
+                )
+            ),
         ]);
 
         $dropZone = $tagBuilder->render();
