@@ -336,6 +336,8 @@ class ContentEditableWrapperService
             $this->contentEditableWrapperTagName
         );
 
+        $tagBuilder->forceClosingTag(true);
+
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__dropzone',
             'ondrop' => 'window.parent.F.dropCe(event)',
@@ -344,6 +346,14 @@ class ContentEditableWrapperService
             'data-tables' => $tables,
             'data-pid' => (int)$pageUid,
             'data-defvals' => json_encode($defaultValues),
+            'data-new-url' => $this->renderEditOnClickReturnUrl(
+                $this->renderNewUrl(
+                    $tables,
+                    0,
+                    0,
+                    $defaultValues
+                )
+            ),
         ]);
 
         $dropZone = $tagBuilder->render();
