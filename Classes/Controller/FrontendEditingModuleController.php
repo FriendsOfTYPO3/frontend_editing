@@ -376,11 +376,11 @@ class FrontendEditingModuleController
         $otherDomain = false;
         // Check if the domain I am logged into are the same as the one I try edit for
         if (strpos($targetUrl, $request->getUri()->getHost()) !== false) {
-            // Apply the GET parameter "frontend_editing_enabled"
+            // Apply the GET parameter "frontend_editing"
             if (parse_url($targetUrl, PHP_URL_QUERY)) {
-                $targetUrl = $targetUrl . '&frontend_editing_enabled=true';
+                $targetUrl = $targetUrl . '&frontend_editing=true';
             } else {
-                $targetUrl = $targetUrl . '?frontend_editing_enabled=true';
+                $targetUrl = $targetUrl . '?frontend_editing=true';
             }
         } else {
             $targetUrl = parse_url($targetUrl)['host'];
