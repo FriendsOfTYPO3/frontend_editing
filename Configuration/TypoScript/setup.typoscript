@@ -1,6 +1,5 @@
-[backend.user.isLoggedIn && (request.getQueryParams()['frontend_editing'] == true || request.getQueryParams()['route'] matches '#^/ajax/frontend-editing/#')]
-
-  lib.fluidContent {
+[backend.user.isLoggedIn && (traverse(request.getQueryParams(), 'frontend_editing') == true || traverse(request.getQueryParams(), 'route') matches '#^/ajax/frontend-editing/#')]
+lib.fluidContent {
     stdWrap {
       editIcons = tt_content:header
     }
