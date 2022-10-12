@@ -53,7 +53,7 @@ use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
  */
 class FrontendEditingInitializationHook
 {
-    const FRONTEND_EDITING_ALREADY_LOADED = 'frontend_editing_already_loaded';
+    const FRONTEND_EDITING_ALREADY_LOADED = 'fe_editing_already_loaded';
 
     /**
      * @var AccessService
