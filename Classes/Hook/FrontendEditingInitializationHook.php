@@ -581,7 +581,6 @@ class FrontendEditingInitializationHook
             $this->pluginConfiguration = [];
         }
 
-
         return $this->pluginConfiguration;
     }
 
