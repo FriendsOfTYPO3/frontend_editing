@@ -65,7 +65,9 @@ class ReceiverController
                     case 'new':
                         $data = [];
                         parse_str($request->getParsedBody()['data'], $data);
-                        $this->newAction($data['edit'], $data['defVals'], (int)$request->getQueryParams()['page']);
+                        if (isset($data['defVals'])) {
+                            $this->newAction($data['edit'], $data['defVals'], (int)$request->getQueryParams()['page']);
+                        }
                         break;
                     case 'hide':
                         $this->hideAction(
