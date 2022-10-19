@@ -574,10 +574,13 @@ class FrontendEditingInitializationHook
     protected function getPluginConfiguration(): array
     {
         if (!$this->pluginConfiguration) {
-            $this->pluginConfiguration = ConfigurationUtility::getTypoScriptConfiguration();
+            $this->pluginConfiguration = GeneralUtility::removeDotsFromTS(
+                ConfigurationUtility::getTypoScriptConfiguration()
+            );
         } else {
             $this->pluginConfiguration = [];
         }
+
         return $this->pluginConfiguration;
     }
 
