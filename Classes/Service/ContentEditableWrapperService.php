@@ -623,7 +623,7 @@ class ContentEditableWrapperService
     {
         $notEditable = false;
         if (!$user->isAdmin() &&
-            $user->getTSConfig()['frontend_editing.']['disallow_content_editing'] &&
+            is_string($user->getTSConfig()['frontend_editing.']['disallow_content_editing'] ?? null) &&
             GeneralUtility::inList($user->getTSConfig()['frontend_editing.']['disallow_content_editing'], $contentUid)
         ) {
             $notEditable = true;
