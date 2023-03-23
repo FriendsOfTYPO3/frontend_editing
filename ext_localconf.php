@@ -2,6 +2,11 @@
 
 defined('TYPO3') or die();
 
+if (TYPO3_MODE === 'BE') {
+    $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+    $pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/ParentWindow');
+}
+
 // Extend the <core:contentEditable> viewhelper by the one from EXT:frontend_editing
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['core'][] = 'TYPO3\\CMS\\FrontendEditing\\ViewHelpers';
 
