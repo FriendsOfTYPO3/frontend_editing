@@ -9,3 +9,9 @@ ExtensionManagementUtility::addStaticFile(
     'Configuration/TypoScript',
     'Frontend Editing'
 );
+
+ExtensionManagementUtility::addStaticFile(
+    'frontend_editing',
+    'Configuration/TypoScript/FluidStyledContent9',
+    'Editable Fluid Styled Content v9'
+);
