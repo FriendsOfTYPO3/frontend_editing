@@ -15,9 +15,3 @@ defined('TYPO3') or die();
         'labels' => 'LLL:EXT:frontend_editing/Resources/Private/Language/locallang_mod.xlf',
     ]
 );
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-    'frontend_editing',
-    'Configuration/TypoScript/FluidStyledContent9',
-    'Editable Fluid Styled Content v9'
-);
