@@ -18,3 +18,9 @@ services:
       - name: event.listener
         identifier: typoScriptPrepareFieldUpdate
         event: TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent
+
+  TYPO3\CMS\FrontendEditing\Controller\Event\Handler\BootCompletedEventHandler:
+    tags:
+      - name: event.listener
+        identifier: bootCompletedEventHandler
+        event: TYPO3\CMS\Core\Core\Event\BootCompletedEvent
