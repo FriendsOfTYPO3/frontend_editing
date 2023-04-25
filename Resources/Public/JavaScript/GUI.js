@@ -214,7 +214,7 @@ define([
             t = ++t % 2;
             $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
 
-            $('.t3-frontend-editing__ckeditor-bar').stop().animate({right: t ? 325 : 45}, pushDuration, pushEasing);
+            $('.t3-frontend-editing__ckeditor-bar').stop().animate({'margin-right': t ? 325 : 45}, pushDuration, pushEasing);
 
             updateRightPanelState();
         });

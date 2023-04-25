@@ -73,7 +73,7 @@
 }
 
 body {
-    &:has(.t3-frontend-editing__ckeditor-bar__wrapper) {
+    &.t3-frontend-editing__body {
         overflow: hidden;
     }
 
@@ -118,6 +118,7 @@ body {
     width: auto;
     left: 0;
     right: 325px;
+    margin-right: 325px;
 
     > .cke {
         position: relative !important;
@@ -141,5 +142,6 @@ body {
 
     &.right-closed {
         right: 45px;
+        margin-right: 45px;
     }
 }
