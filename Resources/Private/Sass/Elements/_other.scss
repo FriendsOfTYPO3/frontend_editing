@@ -4,6 +4,7 @@
     margin-right: $right-bar-width;
     position: relative;
     width: 100%;
+    flex: 1;
 
     &.push-toleft-iframe {
         transition: width $push-duration $push-timing;
@@ -17,7 +18,7 @@
 
     iframe {
         width: 100%;
-        height: calc(100vh - #{$top-bar-height});
+        height: 100%;
         margin: 0 auto;
         display: block;
         box-shadow: 0 0 15px 0 $gray;
@@ -75,6 +76,8 @@
 body {
     &.t3-frontend-editing__body {
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     margin: 0;
