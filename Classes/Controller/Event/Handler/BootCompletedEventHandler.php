@@ -14,7 +14,7 @@ final class BootCompletedEventHandler
         $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(PageRenderer::class);
         $path = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
-        if ('/typo3/wizard/record/browse' === $path) {
+        if (str_ends_with($path, '/browse')) {
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/ParentWindow');
         }
     }
