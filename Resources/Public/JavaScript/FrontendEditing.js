@@ -150,6 +150,21 @@ define([
 
             // LocalStorage for changes in editors
             storage = new Storage('TYPO3:FrontendEditing');
+
+            // Add spacing so inline actions aren't buried under the toolbar 
+            $iframe.on('load', function () {
+                let $spacer = $iframe.contents().find('.t3-frontend-editing__spacer');
+                if (!$spacer.length) {
+                    $spacer = $('<div/>').addClass('t3-frontend-editing__spacer');
+                    const $body = $iframe.contents().find('body');
+                    $body.prepend($spacer);
+                    $body.find('.t3-frontend-editing__inline-actions').first().each((index, div) => {
+                        if (div.offsetTop < 26) {
+                            $spacer.css({height: '26px', width: '100%'});
+                        }
+                    });
+                }
+            });
         },
 
         /**
