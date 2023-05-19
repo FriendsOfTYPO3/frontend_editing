@@ -1,9 +1,10 @@
 .t3-frontend-editing__iframe-wrapper {
     transition: width $push-duration $push-timing;
-    margin-top: $top-bar-height;
+    margin-top: 0;
     margin-right: $right-bar-width;
     position: relative;
     width: 100%;
+    flex: 1;
 
     &.push-toleft-iframe {
         transition: width $push-duration $push-timing;
@@ -17,7 +18,7 @@
 
     iframe {
         width: 100%;
-        height: calc(100vh - #{$top-bar-height});
+        height: 100%;
         margin: 0 auto;
         display: block;
         box-shadow: 0 0 15px 0 $gray;
@@ -31,6 +32,10 @@
             height: 100vh;
         }
     }
+}
+
+.t3-frontend-editing__toolbars-wrapper {
+    position: relative;
 }
 
 .t3-frontend-editing__loading-screen {
@@ -69,6 +74,12 @@
 }
 
 body {
+    &.t3-frontend-editing__body {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
     margin: 0;
     overflow-x: hidden;
     -webkit-font-smoothing: subpixel-antialiased;
@@ -85,8 +96,9 @@ body {
 
 .t3-frontend-editing__ckeditor-bar__wrapper {
     background: $t3-gray;
-    height: $top-bar-height;
-    position: absolute;
+    min-height: $top-bar-height;
+    height: auto;
+    position: relative;
     top: 0;
     z-index: 1;
     margin: 0 auto;
@@ -102,15 +114,17 @@ body {
 .t3-frontend-editing__ckeditor-bar {
     background: $t3-gray;
     color: #fff;
-    height: $top-bar-height;
-    position: absolute;
+    height: auto;
+    position: relative;
     z-index: 10998;
     margin: 0 auto;
     width: auto;
     left: 0;
     right: 325px;
+    margin-right: 325px;
 
     > .cke {
+        position: relative !important;
         top: -1px !important;
         left: 0 !important;
         right: auto !important;
@@ -131,5 +145,6 @@ body {
 
     &.right-closed {
         right: 45px;
+        margin-right: 45px;
     }
 }

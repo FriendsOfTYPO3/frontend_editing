@@ -4,7 +4,7 @@
     <f:if condition="{url} && {otherDomain} == false">
         <f:then>
             <f:variable name="width">{f:if(condition: current.width, then: '{current.width}px', else: '100%')}</f:variable>
-            <f:variable name="height">{f:if(condition: current.height, then: '{current.height}px', else: '100vh')}</f:variable>
+            <f:variable name="height">{f:if(condition: current.height, then: '{current.height}px', else: '100%')}</f:variable>
             <div class="frontendediting-resizeable t3js-frontendediting-resizeable" style="width:{width};height:{height};">
                 <iframe id="tx_frontendediting_iframe" src="{url}"></iframe>
             </div>
