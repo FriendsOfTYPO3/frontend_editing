@@ -95,7 +95,7 @@ class EditorController
                 $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
                 $this->rteConfiguration = (isset($formDataFieldName['config']['richtextConfiguration']))
                     ? $formDataFieldName['config']['richtextConfiguration']['editor'] : [];
-                $hasCkeditorConfiguration = $this->rteConfiguration !== null;
+                $hasCkeditorConfiguration = !empty($this->rteConfiguration);
 
                 $editorConfiguration = $this->prepareConfigurationForEditor();
 
