@@ -15,6 +15,7 @@ final class BootCompletedEventHandler
 {
     public function __invoke(BootCompletedEvent $event): void
     {
+        // Load JS ParentWindow when user opens the element browser (file selector)
         $requestUri = GeneralUtility::getIndpEnv('REQUEST_URI');
         if ($requestUri !== '') {
             $phpUrlPath = parse_url($requestUri, PHP_URL_PATH);
