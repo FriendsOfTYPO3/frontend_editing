@@ -395,7 +395,9 @@ class FrontendEditingModuleController
                 $targetUrl = $targetUrl . '?frontend_editing=true';
             }
         } else {
-            $targetUrl = parse_url($targetUrl)['host'];
+            if ($targetUrl) {
+                $targetUrl = parse_url($targetUrl)['host'];
+            }
             $otherDomain = true;
         }
 
