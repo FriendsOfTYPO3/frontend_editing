@@ -203,15 +203,27 @@ class FrontendEditingModuleController
     {
         // Add preset menu to module docheader
         $presetSplitButtonElement = $buttonBar->makeSplitButton();
-        // Current state
-        $current = (isset($this->getBackendUser()->uc['moduleData']['web_view']))
-            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] : [];
-        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:viewpage/Resources/Private/Language/locallang.xlf:custom'));
+
         $maximizeButtonLabel = $this->getLanguageService()->getLL('maximized');
+
+        // Current web_view state of the BE user
+        $current = $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?? null;
+
+        // If BE user never changed the web_view state then default to maximized
+        if (!isset($current)) {
+            $current['key'] = 'maximized';
+            $current['label'] = $maximizeButtonLabel;
+            $current['width'] = '';
+            $current['height'] = '';
+        }
+
+        // If the current web_view state is not maximized then set the current width & height used later in width & height inputs
         if ($current['label'] !== $maximizeButtonLabel) {
             $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
             $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : 480);
         }
+
+        // Add the current button to the preset select
         $currentButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3js-preset-current t3js-change-preset')
@@ -225,7 +237,8 @@ class FrontendEditingModuleController
                 'height' => ''
             ]);
         $presetSplitButtonElement->addItem($currentButton, true);
-        // Maximize button
+
+        // Add the maximize button to the preset select
         $maximizeButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3js-preset-maximized t3js-change-preset')
@@ -239,9 +252,9 @@ class FrontendEditingModuleController
                 'height' => ''
             ]);
         $presetSplitButtonElement->addItem($maximizeButton);
-        // Custom button
-        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom']))
-            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
+
+        // Add the custom button to the preset select
+        $custom = $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?? [];
         $custom['width'] = (isset($custom['width']) && (int)$custom['width'] >= 300 ? (int)$custom['width'] : 320);
         $custom['height'] = (isset($custom['height']) && (int)$custom['height'] >= 300 ? (int)$custom['height'] : 480);
         $customButtonLabel = $this->getLanguageService()->getLL('custom');
@@ -258,7 +271,8 @@ class FrontendEditingModuleController
                 'height' => $custom['height']
             ]);
         $presetSplitButtonElement->addItem($customButton);
-        // Presets buttons
+
+        // Add the presets buttons to the preset select
         $presetGroups = $this->getPreviewPresets($pageId);
         foreach ($presetGroups as $presetGroup => $presets) {
             $separatorButton = $buttonBar->makeLinkButton()
@@ -288,7 +302,7 @@ class FrontendEditingModuleController
         }
         $buttonBar->addButton($presetSplitButtonElement, ButtonBar::BUTTON_POSITION_LEFT, 20);
 
-        // Add width & height input to module docheader
+        // Add width & height inputs to module docheader
         $sizeButtons = new FullyRenderedButton();
         $sizeButtons->setHtmlSource('
             <input class="t3js-frontendediting-input-width" type="number" name="width" min="300" max="9999" value="' . $current['width'] . '">
@@ -362,14 +376,12 @@ class FrontendEditingModuleController
         $icons['mobile'] = $iconFactory->getIcon('actions-device-mobile', Icon::SIZE_SMALL)->render('inline');
         $icons['unidentified'] = $iconFactory->getIcon('actions-device-unidentified', Icon::SIZE_SMALL)->render('inline');
 
-        $current = (isset($this->getBackendUser()->uc['moduleData']['web_view'])) ?
-            $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] : [];
+        $current = $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?? [];
 
         $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
         $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : null);
         $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : null);
-        $custom = (isset($this->getBackendUser()->uc['moduleData']['web_view']['States']['custom']))
-            ? $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] : [];
+        $custom = $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?? [];
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
 
