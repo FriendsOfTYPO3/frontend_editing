@@ -2,22 +2,6 @@
 
 <div class="t3-frontend-editing__right-bar">
 	<div class="top-right-bar-wrapper">
-		<div class="top-right-relative">
-			<div class="top-right-title">
-				<span class="right-bar-button icons icon-icons-tools-settings" title="{f:translate(key: 'right-bar.tools-properties', extensionName: 'FrontendEditing')}"></span>
-				<span class="title-right">
-					<f:translate key="right-bar.tools-properties" extensionName="FrontendEditing" />
-				</span>
-				<span class="title-icon-right icons icon-icons-tools-settings"></span>
-			</div>
-			<div class="devices hidden-elements">
-				<div class="hidden-elements-toggle-wrapper">
-					<button class="hidden-elements-toggle-button t3-frontend-editing__show-hidden-items" title="Hidden elements" data-url="{showHiddenItemsUrl}">
-						<fe:svg source="{f:uri.resource(path: 'Icons/visible_icon.svg', extensionName: 'FrontendEditing')}" width="48" height="48" class="hidden-elements-toggle-icon" />
-					</button>
-				</div>
-			</div>
-		</div>
 		<div class="elements-wrapper">
 			<div class="elements">
 				<f:render partial="WizardElementTabs" arguments="{_all}"></f:render>

@@ -46,7 +46,9 @@ define([
 
     discardSelector: '.t3-frontend-editing__discard',
 
-    fullViewSelector: '.t3-frontend-editing__full-view',
+    toggleContentsToolbarSelector: '.t3-frontend-editing__toggle-contents-toolbar',
+
+    hiddenItemsToggleButtonSelector: '.t3-frontend-editing__show-hidden-items',
 
     changePresetSelector: '.t3js-change-preset',
 
@@ -202,10 +204,16 @@ define([
       window[0].F.discard();
     });
 
-    // Full view button
-    $(document).on('click', FrontedEditing.fullViewSelector, function() {
-      // Use the fullView function in TYPO3/CMS/FrontendEditing/GUI
-      window[0].F.fullView();
+    // Toggle contents toolbar button
+    $(document).on('click', FrontedEditing.toggleContentsToolbarSelector, function() {
+      // Use the toggleContentsToolbar function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.toggleContentsToolbar();
+    });
+
+    // Toggle hidden items button
+    $(document).on('click', FrontedEditing.hiddenItemsToggleButtonSelector, function() {
+      // Use the toggleHiddenItems function in TYPO3/CMS/FrontendEditing/GUI
+      window[0].F.toggleHiddenItems();
     });
 
     // On change

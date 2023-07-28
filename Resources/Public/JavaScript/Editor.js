@@ -255,7 +255,8 @@ define([
     });
 
 
-    var $topBar = $('.t3-frontend-editing__ckeditor-bar');
+    var $topBar = $('.t3-frontend-editing__ckeditor-bar'),
+        $topBarWrapper = $('.t3-frontend-editing__ckeditor-bar__wrapper');
 
     // Add custom configuration to ckeditor
     var $contenteditable = $iframeContents.find('[contenteditable=\'true\']');
@@ -319,6 +320,10 @@ define([
           $(this).ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
             // This moves the dom instances of ckeditor into the top bar
             $('.' + editor.id).detach().appendTo($topBar);
+
+            // Show/hide the topBar wrapper that contains the ckeditors when the editor gains/looses focus
+            editor.on('focus', function() { $topBarWrapper.show(); });
+            editor.on('blur', function() { $topBarWrapper.hide(); });
 
             editor.on('change', function (changeEvent) {
               if (typeof editor.element !== 'undefined') {

@@ -124,7 +124,7 @@
 
     .element-title {
         display: inline-block;
-        font-size: 16px;
+        font-size: var(--bs-body-font-size);
         padding: 3px 0;
         max-width: 205px;
         cursor: pointer;
