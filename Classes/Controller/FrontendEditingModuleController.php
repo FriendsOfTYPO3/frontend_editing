@@ -19,11 +19,14 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\FullyRenderedButton;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendLayoutView;
+use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
@@ -37,6 +40,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\UnableToLinkToPageException;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -47,6 +51,14 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class FrontendEditingModuleController
 {
+    /**
+     * Page Id for which to make the listing
+     *
+     * @var int
+     * @internal
+     */
+    public $id;
+
     /**
      * ModuleTemplate object
      *
@@ -65,6 +77,19 @@ class FrontendEditingModuleController
      * Page Repository
      */
     protected $pageRepository;
+
+    /**
+     * Current ids page record
+     *
+     * @var array|bool
+     * @internal
+     */
+    public $pageinfo;
+
+    /**
+     * @var PageLayoutContext|null
+     */
+    protected $context;
 
     /**
      * Initialize module template and language service
@@ -97,14 +122,14 @@ class FrontendEditingModuleController
     /**
      * Registers the docheader
      *
-     * @param int $pageId
+     * @param ServerRequestInterface $request
      * @param int $languageId
      * @param string $targetUrl
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @throws RouteNotFoundException
      */
-    protected function registerDocHeader(int $pageId, int $languageId, string $targetUrl)
+    protected function registerDocHeader(ServerRequestInterface $request, int $languageId, string $targetUrl)
     {
-        $languages = $this->getPreviewLanguages($pageId);
+        $languages = $this->getPreviewLanguages();
         if (count($languages) > 1) {
             $languageMenu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
             $languageMenu->setIdentifier('_langSelector');
@@ -114,7 +139,7 @@ class FrontendEditingModuleController
                 $href = (string)$uriBuilder->buildUriFromRoute(
                     'web_FrontendEditing',
                     [
-                        'id' => $pageId,
+                        'id' => $this->id,
                         'language' => (int)$value
                     ]
                 );
@@ -131,16 +156,37 @@ class FrontendEditingModuleController
 
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
 
-        $this->addActionsUI($pageId, $buttonBar);
+        $this->addActionsUI($buttonBar);
 
-        $this->addResponsiveUI($pageId, $buttonBar);
+        $this->addResponsiveUI($buttonBar);
 
+        // Add view page button
         $showButton = $buttonBar->makeLinkButton()
             ->setHref($targetUrl)
             ->setOnClick('window.open(this.href, \'newTYPO3frontendWindow\').focus();return false;')
             ->setTitle($this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.showPage'))
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-view-page', Icon::SIZE_SMALL));
-        $buttonBar->addButton($showButton);
+        $buttonBar->addButton($showButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+
+        // Add edit page properties button
+        if ($this->isPageEditable(0)) {
+            $url = (string)$uriBuilder->buildUriFromRoute(
+                'record_edit',
+                [
+                    'edit' => [
+                        'pages' => [
+                            $this->id => 'edit',
+                        ],
+                    ],
+                    'returnUrl' => $request->getAttribute('normalizedParams')->getRequestUri(),
+                ]
+            );
+            $editPageButton = $buttonBar->makeLinkButton()
+                ->setHref($url)
+                ->setTitle($this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editPageProperties'))
+                ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-page-open', Icon::SIZE_SMALL));
+            $buttonBar->addButton($editPageButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
+        }
 
         $refreshButton = $buttonBar->makeLinkButton()
             ->setHref('javascript:document.getElementById(\'tx_frontendediting_iframe\').contentWindow.location.reload(true);')
@@ -163,10 +209,9 @@ class FrontendEditingModuleController
     /**
      * Add action buttons to UI
      *
-     * @param int $pageId
      * @param ButtonBar $buttonBar
      */
-    private function addActionsUI(int $pageId, ButtonBar $buttonBar)
+    private function addActionsUI(ButtonBar $buttonBar)
     {
         $saveAllButton = $buttonBar->makeLinkButton()
             ->setHref('#')
@@ -184,22 +229,29 @@ class FrontendEditingModuleController
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-close', Icon::SIZE_SMALL));
         $buttonBar->addButton($discardButton, ButtonBar::BUTTON_POSITION_LEFT, -9);
 
-        $fullScreenButton = $buttonBar->makeLinkButton()
+        $contentsToolbarToggleButton = $buttonBar->makeLinkButton()
             ->setHref('#')
-            ->setClasses('t3-frontend-editing__full-view')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.full-view'))
+            ->setClasses('t3-frontend-editing__toggle-contents-toolbar')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.toggle-contents-toolbar'))
             ->setShowLabelText(true)
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-fullscreen', Icon::SIZE_SMALL));
-        $buttonBar->addButton($fullScreenButton, ButtonBar::BUTTON_POSITION_LEFT, -8);
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-document-add', Icon::SIZE_SMALL));
+        $buttonBar->addButton($contentsToolbarToggleButton, ButtonBar::BUTTON_POSITION_LEFT, -8);
+
+        $hiddenItemsToggleButton = $buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setClasses('t3-frontend-editing__show-hidden-items')
+            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.toggle-hidden-items'))
+            ->setShowLabelText(true)
+            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-eye', Icon::SIZE_SMALL));
+        $buttonBar->addButton($hiddenItemsToggleButton, ButtonBar::BUTTON_POSITION_LEFT, -7);
     }
 
     /**
      * Add responsive UI to module docheader
      *
-     * @param int $pageId
      * @param ButtonBar $buttonBar
      */
-    private function addResponsiveUI(int $pageId, ButtonBar $buttonBar)
+    private function addResponsiveUI(ButtonBar $buttonBar)
     {
         // Add preset menu to module docheader
         $presetSplitButtonElement = $buttonBar->makeSplitButton();
@@ -273,7 +325,7 @@ class FrontendEditingModuleController
         $presetSplitButtonElement->addItem($customButton);
 
         // Add the presets buttons to the preset select
-        $presetGroups = $this->getPreviewPresets($pageId);
+        $presetGroups = $this->getPreviewPresets();
         foreach ($presetGroups as $presetGroup => $presets) {
             $separatorButton = $buttonBar->makeLinkButton()
                 ->setHref('#')
@@ -321,14 +373,26 @@ class FrontendEditingModuleController
      */
     public function showAction(ServerRequestInterface $request): ResponseInterface
     {
-        $pageId = (int)($request->getParsedBody()['id'] ?? $request->getQueryParams()['id'] ?? 0);
+        // Setting module configuration / page select clause
+        $this->id = (int)($request->getParsedBody()['id'] ?? $request->getQueryParams()['id'] ?? 0);
+
+        // Load page info array
+        $this->pageinfo = BackendUtility::readPageAccess($this->id, $this->getBackendUser()->getPagePermsClause(Permission::PAGE_SHOW));
+        if ($this->pageinfo !== false) {
+            // If page info is not resolved, user has no access or the ID parameter was malformed.
+            $this->context = GeneralUtility::makeInstance(
+                PageLayoutContext::class,
+                $this->pageinfo,
+                GeneralUtility::makeInstance(BackendLayoutView::class)->getBackendLayoutForPage($this->id)
+            );
+        }
 
         $this->initializeView('show');
         $this->moduleTemplate->setBodyTag('<body class="typo3-module-frontendediting">');
         $this->moduleTemplate->setModuleName('typo3-module-frontendediting');
         $this->moduleTemplate->setModuleId('typo3-module-frontendediting');
 
-        if (!$this->isValidDoktype($pageId)) {
+        if (!$this->isValidDoktype()) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $this->getLanguageService()->getLL('noValidPageSelected'),
@@ -339,17 +403,16 @@ class FrontendEditingModuleController
         }
 
         $languageId = $this->getCurrentLanguage(
-            $pageId,
             $request->getParsedBody()['language'] ?? $request->getQueryParams()['language'] ?? null
         );
         try {
             $targetUrl = BackendUtility::getPreviewUrl(
-                $pageId,
+                $this->id,
                 '',
                 null,
                 '',
                 '',
-                $this->getTypeParameterIfSet($pageId) . '&L=' . $languageId
+                $this->getTypeParameterIfSet() . '&L=' . $languageId
             );
 
             // Check for what protocol to use
@@ -364,7 +427,7 @@ class FrontendEditingModuleController
             return $this->renderFlashMessage($flashMessage);
         }
 
-        $this->registerDocHeader($pageId, $languageId, $targetUrl);
+        $this->registerDocHeader($request, $languageId, $targetUrl);
 
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $icons = [];
@@ -405,7 +468,7 @@ class FrontendEditingModuleController
         $this->view->assign('icons', $icons);
         $this->view->assign('current', $current);
         $this->view->assign('custom', $custom);
-        $this->view->assign('presetGroups', $this->getPreviewPresets($pageId));
+        $this->view->assign('presetGroups', $this->getPreviewPresets());
         $this->view->assign('url', $targetUrl);
         $this->view->assign('protocol', $request->getUri()->getScheme());
         $this->view->assign('otherDomain', $otherDomain);
@@ -429,13 +492,12 @@ class FrontendEditingModuleController
      * for a page id or a page tree.
      * The method checks if a type is set for the given id and returns the additional GET string.
      *
-     * @param int $pageId
      * @return string
      */
-    protected function getTypeParameterIfSet(int $pageId): string
+    protected function getTypeParameterIfSet(): string
     {
         $typeParameter = '';
-        $typeId = (int)(BackendUtility::getPagesTSconfig($pageId)['mod.']['web_view.']['type'] ?? 0);
+        $typeId = (int)(BackendUtility::getPagesTSconfig($this->id)['mod.']['web_view.']['type'] ?? 0);
         if ($typeId > 0) {
             $typeParameter = '&type=' . $typeId;
         }
@@ -445,10 +507,9 @@ class FrontendEditingModuleController
     /**
      * Get available presets for page id
      *
-     * @param int $pageId
      * @return array
      */
-    protected function getPreviewPresets(int $pageId): array
+    protected function getPreviewPresets(): array
     {
         $presetGroups = [
             'desktop' => [],
@@ -456,7 +517,7 @@ class FrontendEditingModuleController
             'mobile' => [],
             'unidentified' => []
         ];
-        $previewFrameWidthConfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['web_view.']['previewFrameWidths.'] ?? [];
+        $previewFrameWidthConfig = BackendUtility::getPagesTSconfig($this->id)['mod.']['web_view.']['previewFrameWidths.'] ?? [];
         foreach ($previewFrameWidthConfig as $item => $conf) {
             $data = [
                 'key' => substr($item, 0, -1),
@@ -488,25 +549,24 @@ class FrontendEditingModuleController
     /**
      * Returns the preview languages
      *
-     * @param int $pageId
      * @return array
      */
-    protected function getPreviewLanguages(int $pageId): array
+    protected function getPreviewLanguages(): array
     {
         $languages = [];
-        $modSharedTSconfig = BackendUtility::getPagesTSconfig($pageId)['mod.']['SHARED.'] ?? [];
+        $modSharedTSconfig = BackendUtility::getPagesTSconfig($this->id)['mod.']['SHARED.'] ?? [];
         if (isset($modSharedTSconfig['view.']) && $modSharedTSconfig['view.']['disableLanguageSelector'] === '1') {
             return $languages;
         }
 
         try {
-            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
-            $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $pageId);
+            $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($this->id);
+            $siteLanguages = $site->getAvailableLanguages($this->getBackendUser(), false, $this->id);
 
             foreach ($siteLanguages as $siteLanguage) {
                 $languageAspectToTest = LanguageAspectFactory::createFromSiteLanguage($siteLanguage);
                 $page = $this->pageRepository->getPageOverlay(
-                    $this->pageRepository->getPage($pageId),
+                    $this->pageRepository->getPage($this->id),
                     $siteLanguage->getLanguageId()
                 );
 
@@ -523,16 +583,15 @@ class FrontendEditingModuleController
     /**
      * Returns the current language
      *
-     * @param int $pageId
      * @param string $languageParam
      * @return int
      */
-    protected function getCurrentLanguage(int $pageId, string $languageParam = null): int
+    protected function getCurrentLanguage(string $languageParam = null): int
     {
         $languageId = (int)$languageParam;
         if ($languageParam === null) {
             $states = $this->getBackendUser()->uc['moduleData']['web_frontendediting']['States'] ?? [];
-            $languages = $this->getPreviewLanguages($pageId);
+            $languages = $this->getPreviewLanguages();
             if (isset($states['languageSelectorValue']) && isset($languages[$states['languageSelectorValue']])) {
                 $languageId = (int)$states['languageSelectorValue'];
             }
@@ -544,18 +603,43 @@ class FrontendEditingModuleController
     }
 
     /**
-     * Verifies if doktype of given page is valid
+     * Check if page can be edited by current user
      *
-     * @param int $pageId
+     * @param int $languageId
      * @return bool
      */
-    protected function isValidDoktype(int $pageId = 0): bool
+    protected function isPageEditable(int $languageId): bool
     {
-        if ($pageId === 0) {
+        if ($GLOBALS['TCA']['pages']['ctrl']['readOnly'] ?? false) {
+            return false;
+        }
+        $backendUser = $this->getBackendUser();
+        if ($backendUser->isAdmin()) {
+            return true;
+        }
+        if ($GLOBALS['TCA']['pages']['ctrl']['adminOnly'] ?? false) {
             return false;
         }
 
-        $page = BackendUtility::getRecord('pages', $pageId);
+        return $this->pageinfo !== []
+            && !(bool)($this->pageinfo[$GLOBALS['TCA']['pages']['ctrl']['editlock'] ?? null] ?? false)
+            && $backendUser->doesUserHaveAccess($this->pageinfo, Permission::PAGE_EDIT)
+            && $backendUser->checkLanguageAccess($languageId)
+            && $backendUser->check('tables_modify', 'pages');
+    }
+
+    /**
+     * Verifies if doktype of given page is valid
+     *
+     * @return bool
+     */
+    protected function isValidDoktype(): bool
+    {
+        if ($this->id === 0) {
+            return false;
+        }
+
+        $page = BackendUtility::getRecord('pages', $this->id);
         $pageType = (int)($page['doktype'] ?? 0);
 
         return $pageType !== 0

@@ -77,7 +77,8 @@ define([
     FrontendEditing.prototype.initCustomLoadedContent = initCustomLoadedContent;
     FrontendEditing.prototype.save = save;
     FrontendEditing.prototype.discard = discard;
-    FrontendEditing.prototype.fullView = fullView;
+    FrontendEditing.prototype.toggleContentsToolbar = toggleContentsToolbar;
+    FrontendEditing.prototype.toggleHiddenItems = toggleHiddenItems;
 
     var CLASS_HIDDEN = 'hidden';
 
@@ -89,7 +90,8 @@ define([
     var loadingScreenLevel = 0;
     var $saveButton;
     var $discardButton;
-    var $fullViewButton;
+    var $toggleContentsToolbarButton;
+    var $toggleHiddenItemsButton;
     var iframeUrl;
     var storage;
     var editorConfigurationUrl;
@@ -101,7 +103,8 @@ define([
         $loadingScreen = $('.t3-frontend-editing__loading-screen');
         $saveButton = window.parent.window.$('.t3-frontend-editing__save');
         $discardButton = window.parent.window.$('.t3-frontend-editing__discard');
-        $fullViewButton = window.parent.window.$('.t3-frontend-editing__full-view');
+        $toggleContentsToolbarButton = window.parent.window.$('.t3-frontend-editing__toggle-contents-toolbar');
+        $toggleHiddenItemsButton = window.parent.window.$('.t3-frontend-editing__show-hidden-items');
         editorConfigurationUrl = options.editorConfigurationUrl;
         resourcePath = options.resourcePath;
 
@@ -156,6 +159,12 @@ define([
             initEditorInIframe(editorConfigurationUrl);
 
             iframeUrl = getIframe()[0].src;
+
+            // Hide contents toolbar if the user clicks somewhere inside the website frontend (use mousedown to work on drag start too)
+            getIframe().contents().on('mousedown', function() {
+              $toggleContentsToolbarButton.removeClass('module-button-active');
+              $('.t3-frontend-editing__right-bar').stop().animate({right: -325}, pushDuration, pushEasing);
+            });
         });
     }
 
@@ -186,59 +195,43 @@ define([
         }
     }
 
-    function fullView() {
-        t = ++t % 2;
+    function toggleContentsToolbar() {
+        $toggleContentsToolbarButton.toggleClass('module-button-active');
 
-        $('.t3-frontend-editing__iframe-wrapper').toggleClass('full-view');
-        $fullViewButton.toggleClass('full-view-active');
-        $('.t3-frontend-editing__ckeditor-bar').toggleClass('full-view-active');
-        $('.t3-frontend-editing__ckeditor-bar__wrapper').toggleClass('full-view-active');
-
-        if ($('.t3-frontend-editing__right-bar').hasClass('open')) {
-            $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
-        } else if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
-            $('.t3-frontend-editing__right-bar').toggleClass('closed');
-        } else {
-            $('.t3-frontend-editing__right-bar').toggleClass('closed');
+        var right = 0;
+        if (!$toggleContentsToolbarButton.hasClass('module-button-active')) {
+            right = -325;
         }
-        F.getStorage().addItem('fullScreenState', {
-            isActive: $fullViewButton.hasClass('full-view-active')
-        });
+
+        $('.t3-frontend-editing__right-bar').stop().animate({right: right}, pushDuration, pushEasing);
+    }
+
+    function toggleHiddenItems() {
+        $toggleHiddenItemsButton.toggleClass('module-button-active');
+
+        var iFrameUrl = $iframe.attr('src');
+
+        var $showHiddenItems = 0;
+        if ($toggleHiddenItemsButton.hasClass('module-button-active')) {
+            $showHiddenItems = 1;
+        }
+
+        // Remove the show_hidden_items parameter if present in the iFrame url
+        const urlObject = new URL(iFrameUrl);
+        const params = new URLSearchParams(urlObject.search);
+        params.delete('show_hidden_items');
+
+        // If user wants to display hidden items then add the show_hidden_items=1 to the iFrame url
+        if ($showHiddenItems) { params.append('show_hidden_items', '1'); }
+
+        urlObject.search = params.toString();
+        iFrameUrl = urlObject.toString();
+
+        // Loads the new url into the iFrame
+        loadPageIntoIframe(iFrameUrl, editorConfigurationUrl);
     }
 
     function bindActions() {
-        $('.top-right-title').on('click', function () {
-            $('.right-bar-button').toggleClass('icon-icons-tools-settings icon-icons-arrow-double');
-            $('.t3-frontend-editing__iframe-wrapper').toggleClass('push-toleft-iframe');
-            $('.t3-frontend-editing__right-bar').toggleClass('open');
-            t = ++t % 2;
-            $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
-
-            $('.t3-frontend-editing__ckeditor-bar').stop().animate({'margin-right': t ? 325 : 45}, pushDuration, pushEasing);
-
-            updateRightPanelState();
-        });
-
-        $( document ).ready(function() {
-            if (!$('.t3-frontend-editing__right-bar').hasClass('open')) {
-                $('.t3-frontend-editing__ckeditor-bar').addClass('right-closed');
-            }
-        });
-
-        $('.t3-frontend-editing__show-hidden-items').click(function () {
-            var url = $(this).data('url');
-            loadPageIntoIframe(url, editorConfigurationUrl);
-            // Change the state of visible/hidden GET parameter
-            var changedUrlState = '';
-            if (url.indexOf('show_hidden_items=1') >= 0) {
-                changedUrlState = url.replace('show_hidden_items=1', 'show_hidden_items=0');
-            } else if (url.indexOf('show_hidden_items=0') >= 0) {
-                changedUrlState = url.replace('show_hidden_items=0', 'show_hidden_items=1');
-            }
-            $(this).data('url', changedUrlState);
-            $('.t3-frontend-editing__show-hidden-items').toggleClass('active');
-        });
-
         $('.accordion .trigger, .accordion .element-title').on('click', function () {
             $(this).toggleClass('active');
             $(this).closest('.accordion-container').find('.accordion-content').slideToggle(pushDuration, pushEasing);
@@ -258,8 +251,6 @@ define([
                 .addClass('accordion-list');
             updateRightPanelState();
         });
-
-        $('.t3-frontend-editing__right-bar').stop().animate({right: t ? 0 : -325}, pushDuration, pushEasing);
 
         // Allow external scripts to iframeUrl when main window url is updated by script (history.pushState)
         $iframe.on('update-url', function (e, url) {
@@ -290,12 +281,6 @@ define([
                         }
                     }
                 }
-            }
-        }
-
-        if (typeof states.fullScreenState !== 'undefined') {
-            if (states.fullScreenState.isActive) {
-                $fullViewButton.trigger('click');
             }
         }
     }

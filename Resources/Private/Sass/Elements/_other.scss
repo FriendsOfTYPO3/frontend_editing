@@ -6,12 +6,6 @@
     width: 100%;
     flex: 1;
 
-    &.push-toleft-iframe {
-        transition: width $push-duration $push-timing;
-        width: calc(100% - #{$right-bar-width});
-        position: relative;
-    }
-
     &.inactive {
         margin-right: 0;
     }
@@ -98,17 +92,13 @@ body {
     background: $t3-gray;
     min-height: $top-bar-height;
     height: auto;
-    position: relative;
+    position: absolute;
     top: 0;
     z-index: 1;
     margin: 0 auto;
     width: auto;
     left: 0;
     right: 0;
-
-    &.full-view-active {
-        display: none;
-    }
 }
 
 .t3-frontend-editing__ckeditor-bar {
@@ -120,8 +110,6 @@ body {
     margin: 0 auto;
     width: auto;
     left: 0;
-    right: 325px;
-    margin-right: 325px;
 
     > .cke {
         position: relative !important;
@@ -129,22 +117,5 @@ body {
         left: 0 !important;
         right: auto !important;
         box-shadow: unset;
-
-        &.left-open {
-            left: 290px !important;
-        }
-    }
-
-    &.full-view-active {
-        display: none;
-    }
-
-    &.left-closed {
-        left: 45px;
-    }
-
-    &.right-closed {
-        right: 45px;
-        margin-right: 45px;
     }
 }

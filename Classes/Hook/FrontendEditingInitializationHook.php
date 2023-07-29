@@ -112,8 +112,10 @@ class FrontendEditingInitializationHook
             $context = GeneralUtility::makeInstance(Context::class);
             // Set is preview for frontend
             $context->setAspect('isPreview', GeneralUtility::makeInstance(PreviewAspect::class, false));
-            // Allow hidden pages for links generation
-            $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, true));
+
+            $showHiddenPages = true; // Allow hidden pages for links generation
+            $showHiddenItems = (bool)(GeneralUtility::_GET('show_hidden_items') ?? false); // Show hidden contents if user wants (show_hidden_items=1)
+            $context->setAspect('visibility', GeneralUtility::makeInstance(VisibilityAspect::class, $showHiddenPages, $showHiddenItems));
         }
     }
 

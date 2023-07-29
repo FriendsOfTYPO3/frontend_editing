@@ -390,6 +390,8 @@ define([
                     .addClass('t3-frontend-editing__dropzone-hidden');
             }
 
+            $('.t3-frontend-editing__right-bar').fadeOut('fast');
+
             var $iframe = F.iframe();
             $iframe.contents()
                 .find('.t3-frontend-editing__dropzone[data-tables]')
@@ -414,6 +416,8 @@ define([
                 $currentTarget.next('.t3-frontend-editing__dropzone')
                     .removeClass('t3-frontend-editing__dropzone-hidden');
             }
+
+          $('.t3-frontend-editing__right-bar').fadeIn('fast');
 
             var $iframe = F.iframe();
             $iframe.contents()
@@ -470,6 +474,10 @@ define([
 
         dropNewCe: function (ev) {
             log.debug('create Ce drop');
+
+            // Hide contents toolbar if the user drops a new content element
+            window.parent.window.$('.t3-frontend-editing__toggle-contents-toolbar').removeClass('module-button-active');
+            $('.t3-frontend-editing__right-bar').stop().animate({right: -325}, 200, 'linear');
 
             // Merge drop zone query string with new CE query string
             // without override any parameter

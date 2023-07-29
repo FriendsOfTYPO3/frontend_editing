@@ -10,12 +10,12 @@
             <trans-unit id="top-bar.discard-all">
                 <source>Discard</source>
             </trans-unit>
-			<trans-unit id="top-bar.full-view">
-				<source>Full view</source>
+			<trans-unit id="top-bar.toggle-contents-toolbar">
+				<source>Add content</source>
 			</trans-unit>
-            <trans-unit id="right-bar.tools-properties">
-                <source>Tools &amp; Properties</source>
-            </trans-unit>
+			<trans-unit id="top-bar.toggle-hidden-items">
+				<source>Show hidden</source>
+			</trans-unit>
             <trans-unit id="right-bar.page-edit">
                 <source>Edit page properties</source>
             </trans-unit>
