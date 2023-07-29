@@ -85,7 +85,7 @@ define([
     };
 
     // Scroll function when dragging content elements to top or bottom of window
-    var scrollSpeed = 4;
+    var scrollSpeed = 8;
     var $iframe = $('iframe');
     var $iframeWrapper = $('.t3-frontend-editing__iframe-wrapper');
     var scrollAreaBaseClasses = 'scrollarea scrollarea--arrow';
