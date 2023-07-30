@@ -128,9 +128,17 @@ define([
             scroller.startScrolling(scrollSpeed);
         });
 
+    // Display scroller when user drags a new CE from the right bar
     $('[draggable]')
         .on('dragstart', scroller.enable)
         .on('dragend', scroller.disable);
+
+    // Display scroller when user drags an existing CE from the website page
+    $iframe.on('load', function() {
+        $(this).contents().find('[draggable]')
+            .on('dragstart', scroller.enable)
+            .on('dragend', scroller.disable);
+    });
 
     // Public API
     FrontendEditing.prototype = {
@@ -373,20 +381,44 @@ define([
             log.info('start drag Ce', ev.currentTarget);
 
             ev.stopPropagation();
-            var movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
+            var $dragHandle = $(ev.currentTarget),
+                $draggedCE = $dragHandle.closest('.t3-frontend-editing__ce'),
+                movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
+            // Disable :hover of all CEs because when user starts to drag a CE
+            // the drop areas appear moving the CEs down so usually the previous CE is unintentionally hovered
+            // making its inline action toolbar and outline to appear and so creating confusion in the user
+            const documentOfDraggedElement = ev.target.ownerDocument;
+            const parentInlineActions = ev.target.closest('.t3-frontend-editing__inline-actions');
+            documentOfDraggedElement.querySelectorAll('.t3-frontend-editing__inline-actions').forEach(action => {
+                if (action !== parentInlineActions) {
+                    action.classList.add('hover-disabled'); // Disable hover for inline action toolber
+                    const ce = action.closest('.t3-frontend-editing__ce');
+                    ce.classList.add('hover-disabled'); // Disable hover for the CE
+                    const editableChildElements = ce.querySelectorAll('[contenteditable=true]');
+                    editableChildElements.forEach(child => {
+                        child.classList.add('hover-disabled'); // Disable hover for editable child of CE
+                    });
+                }
+            });
 
             ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
             ev.dataTransfer.setData('movable', movable);
-            ev.dataTransfer.setData('movableUid', $(ev.currentTarget)
-                .find('span.t3-frontend-editing__inline-actions')
+            ev.dataTransfer.setData('movableUid', $dragHandle
+                .parent('span.t3-frontend-editing__inline-actions')
                 .data('uid'));
 
             if (movable === 1) {
-                var $currentTarget = $(ev.currentTarget);
-
-                $currentTarget.prev('.t3-frontend-editing__dropzone')
+                // Hide drop zones adjacent to the content being moved
+                $draggedCE.prev('.t3-frontend-editing__dropzone')
                     .addClass('t3-frontend-editing__dropzone-hidden');
-                $currentTarget.next('.t3-frontend-editing__dropzone')
+                $draggedCE.next('.t3-frontend-editing__dropzone')
+                    .addClass('t3-frontend-editing__dropzone-hidden');
+
+                // Hide drop zones childrens of the content being moved
+                // because we don't want to drop a CE inside itself (eg: grid; container)
+                $draggedCE.find('.t3-frontend-editing__dropzone')
                     .addClass('t3-frontend-editing__dropzone-hidden');
             }
 
@@ -406,18 +438,39 @@ define([
             log.debug('Ce drop', ev.currentTarget, ev.dataTransfer);
 
             ev.stopPropagation();
-            var movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
+            var $dragHandle = $(ev.currentTarget),
+                $draggedCE = $dragHandle.closest('.t3-frontend-editing__ce'),
+                movable = parseInt(ev.currentTarget.dataset.movable, 10);
+
+            // Re-enable :hover of all CEs, disabled in dragCeStart
+            const documentOfDraggedElement = ev.target.ownerDocument;
+            const parentInlineActions = ev.target.closest('.t3-frontend-editing__inline-actions');
+            documentOfDraggedElement.querySelectorAll('.t3-frontend-editing__inline-actions').forEach(action => {
+                if (action !== parentInlineActions) {
+                    action.classList.remove('hover-disabled'); // Re-enable hover for inline action toolber
+                    const ce = action.closest('.t3-frontend-editing__ce');
+                    ce.classList.remove('hover-disabled'); // Re-enable hover for the CE
+                    const editableChildElements = ce.querySelectorAll('[contenteditable=true]');
+                    editableChildElements.forEach(child => {
+                        child.classList.remove('hover-disabled'); // Re-enable hover for editable child of CE
+                    });
+                }
+            });
 
             if (movable === 1) {
-                var $currentTarget = $(ev.currentTarget);
-
-                $currentTarget.prev('.t3-frontend-editing__dropzone')
+                // Display again drop zones adjacent to the content being moved
+                $draggedCE.prev('.t3-frontend-editing__dropzone')
                     .removeClass('t3-frontend-editing__dropzone-hidden');
-                $currentTarget.next('.t3-frontend-editing__dropzone')
+                $draggedCE.next('.t3-frontend-editing__dropzone')
+                    .removeClass('t3-frontend-editing__dropzone-hidden');
+
+                // Display again drop zones childrens of the content being moved
+                $draggedCE.find('.t3-frontend-editing__dropzone')
                     .removeClass('t3-frontend-editing__dropzone-hidden');
             }
 
-          $('.t3-frontend-editing__right-bar').fadeIn('fast');
+            $('.t3-frontend-editing__right-bar').fadeIn('fast');
 
             var $iframe = F.iframe();
             $iframe.contents()
