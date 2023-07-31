@@ -236,9 +236,6 @@ class ContentEditableWrapperService
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__ce ' . $hiddenElementClassName,
             'title' => $recordTitle,
-            'data-movable' => 1,
-            'ondragstart' => 'window.parent.F.dragCeStart(event)',
-            'ondragend' => 'window.parent.F.dragCeEnd(event)',
         ]);
 
         return $tagBuilder->render();
@@ -372,6 +369,12 @@ class ContentEditableWrapperService
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
+        $dragAndDropHandleIcon = '<span '
+            . 'class="t3-frontend-editing__handle" '
+            . 'title="' . $GLOBALS['LANG']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:move') . ' \'' . $recordTitle . '\'" '
+            . 'data-movable="1" draggable="true" ondragstart="window.parent.F.dragCeStart(event)" ondragend="window.parent.F.dragCeEnd(event)"'
+            . '>' . $this->iconFactory->getIcon('actions-move', Icon::SIZE_SMALL)->render() . '</span>';
+
         $visibilityIcon = ($elementIsHidden === true) ?
             $this->renderIconWithWrap('unHide', 'actions-edit-unhide') :
                 $this->renderIconWithWrap('hide', 'actions-edit-hide');
@@ -381,6 +384,7 @@ class ContentEditableWrapperService
                 $this->renderIconWithWrap('moveDown', 'actions-move-down') : '';
 
         return
+            $dragAndDropHandleIcon .
             $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
             $this->renderIconWithWrap('deleteItem', 'actions-edit-delete') .

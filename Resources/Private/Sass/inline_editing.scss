@@ -19,7 +19,7 @@
         content: none !important;
     }
 
-    &:hover {
+    &:hover:not(.hover-disabled) {
         outline: 1px dotted transparentize($color-t3-primary, 0.7);
     }
 
@@ -72,7 +72,7 @@
     position: relative !important;
     min-height: 35px;
 
-    &:hover {
+    &:hover:not(.hover-disabled) {
         outline: 1px dotted transparentize($color-t3-gray, 0.5);
     }
 
@@ -130,11 +130,16 @@
         &:hover {
             background-color: transparentize($gray-light, 0.4);
         }
+
+        &.icon-actions-move {
+            background-color: $brand-primary;
+            cursor: grab;
+        }
     }
 }
 
 // show inline actions when hovering
 
-.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions {
+.t3-frontend-editing__ce:hover .t3-frontend-editing__inline-actions:not(.hover-disabled) {
     display: inline-block !important;   // overrides inline styling
 }
