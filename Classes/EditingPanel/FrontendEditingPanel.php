@@ -190,7 +190,9 @@ class FrontendEditingPanel
                 );
 
                 // If it's first content element for this column wrap with dropzone before content too
-                if (!GeneralUtility::inList(self::$columnsWithContentList, $dataArr['colPos'])) {
+                $parentOfCeUidField = $pluginConfiguration['parentOfCeUidField'];
+                $colPosInParent = ($dataArr[$parentOfCeUidField] ?? '') . '|' . $dataArr['colPos'];
+                if (!GeneralUtility::inList(self::$columnsWithContentList, $colPosInParent)) {
                     $content = $wrapperService->wrapContentWithDropzone(
                         $table,
                         0,
@@ -199,7 +201,7 @@ class FrontendEditingPanel
                         [],
                         true
                     );
-                    self::$columnsWithContentList .= ',' . $dataArr['colPos'];
+                    self::$columnsWithContentList .= ',' . $colPosInParent;
                 }
             }
         }
