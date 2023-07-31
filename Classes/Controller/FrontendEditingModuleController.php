@@ -130,11 +130,11 @@ class FrontendEditingModuleController
     protected function registerDocHeader(ServerRequestInterface $request, int $languageId, string $targetUrl)
     {
         $languages = $this->getPreviewLanguages();
+        /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         if (count($languages) > 1) {
             $languageMenu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
             $languageMenu->setIdentifier('_langSelector');
-            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             foreach ($languages as $value => $label) {
                 $href = (string)$uriBuilder->buildUriFromRoute(
                     'web_FrontendEditing',
