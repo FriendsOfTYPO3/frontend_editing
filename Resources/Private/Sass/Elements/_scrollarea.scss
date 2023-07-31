@@ -35,7 +35,7 @@
     margin: auto;
     position: relative;
     border: $scroll-area-arrow-width solid $scroll-area-arrow-color;
-    transform: $scroll-area-arrow-scale rotate(45deg);
+    transform: rotate(45deg);
     transition:
         border-color $scroll-area-arrow-transition-time $scroll-area-arrow-transition-function,
         transform $scroll-area-arrow-transition-time $scroll-area-arrow-transition-function;
@@ -55,6 +55,11 @@
 
 .scrollarea--arrow__mouseover:before,
 .scrollarea--arrow:hover:before {
-    transform: $scroll-area-arrow-scale--hover rotate(45deg);
+    transform: translateY(-5px) rotate(45deg);
     border-color: $scroll-area-arrow-color--hover;
+}
+
+.scrollarea--arrow-down:hover:before,
+.scrollarea--arrow-down.scrollarea--arrow__mouseover:before {
+    transform: translateY(5px) rotate(45deg);
 }
