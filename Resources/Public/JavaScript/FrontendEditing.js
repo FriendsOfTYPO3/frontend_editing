@@ -424,13 +424,15 @@ define([
 
             $('.t3-frontend-editing__right-bar').fadeOut('fast');
 
-            var $iframe = F.iframe();
-            $iframe.contents()
-                .find('.t3-frontend-editing__dropzone[data-tables]')
-                .addClass('t3-frontend-editing__dropzone-hidden');
-            $iframe.contents()
-                .find('body')
-                .addClass('dropzones-enabled');
+            setTimeout(function displayDropZones() {
+                var $iframe = F.iframe();
+                $iframe.contents()
+                    .find('.t3-frontend-editing__dropzone[data-tables]')
+                    .addClass('t3-frontend-editing__dropzone-hidden');
+                $iframe.contents()
+                    .find('body')
+                    .addClass('dropzones-enabled');
+            }, 10);
         },
 
         dragCeEnd: function (ev) {
