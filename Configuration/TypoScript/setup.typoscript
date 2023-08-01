@@ -162,6 +162,11 @@
           listTypeName = news_pi1
         }
       }
+
+      # Name of the field that stores the uid of the parent of nested CEs
+      # used to add a drop zone before the first nested CEs in a column of a container.
+      # Configured as default for EXT:container
+      parentOfCeUidField = tx_container_parent
     }
   }
 
