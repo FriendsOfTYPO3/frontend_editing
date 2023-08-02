@@ -54,6 +54,7 @@
 
 .dropzones-enabled .t3-frontend-editing__dropzone {
     height: 25px;
+    border: solid 1px white;
 
     &.active {
         border: dashed 1px $gray;
