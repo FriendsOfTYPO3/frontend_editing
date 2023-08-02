@@ -545,25 +545,24 @@ class ContentEditableWrapperService
      */
     public function getContentElementClass(string $table, int $uid): string
     {
-        $hiddenClassName = '';
         $row = BackendUtility::getRecord($table, $uid);
-        $tcaCtrl = $GLOBALS['TCA'][$table]['ctrl'];
-        if (isset($tcaCtrl) && isset($tcaCtrl['enablecolumns']['disabled']) && isset($row[$tcaCtrl['enablecolumns']['disabled']]) ||
-            isset($tcaCtrl['enablecolumns']['fe_group']) && $tcaCtrl['enablecolumns']['fe_group'] &&
-            $GLOBALS['TSFE']->simUserGroup &&
-            $row[$tcaCtrl['enablecolumns']['fe_group']] == $GLOBALS['TSFE']->simUserGroup ||
-            isset($tcaCtrl['enablecolumns']['starttime']) && $tcaCtrl['enablecolumns']['starttime'] &&
-                isset($row[$tcaCtrl['enablecolumns']['starttime']]) && $row[$tcaCtrl['enablecolumns']['starttime']] > GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp') ||
-            isset($tcaCtrl['enablecolumns']['endtime']) && isset($row[$tcaCtrl['enablecolumns']['endtime']]) &&
-            $row[$tcaCtrl['enablecolumns']['endtime']] < GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp')
-        ) {
-            if ($row['hidden'] == 0 || $row['endtime'] == 0) {
-                $hiddenClassName = '';
-            } else {
-                $hiddenClassName = 't3-frontend-editing__hidden-element';
-            }
-        }
-        return $hiddenClassName;
+        return $this->isDisabled($table, $row) ? 't3-frontend-editing__hidden-element' : '';
+    }
+
+    /**
+     * Returns TRUE if the input table/row would be hidden in the frontend (according to the current time and simulate user group)
+     *
+     * @param string $table The table name
+     * @param array $row The data record
+     * @return bool
+     */
+    public function isDisabled(string $table, array $row): bool
+    {
+        $enablecolumns = $GLOBALS['TCA'][$table]['ctrl']['enablecolumns'] ?? null;
+        return ($enablecolumns['disabled'] && $row[$enablecolumns['disabled']])
+            || ($enablecolumns['fe_group'] && $GLOBALS['TSFE']->simUserGroup && (int)$row[$enablecolumns['fe_group']] === (int)$GLOBALS['TSFE']->simUserGroup)
+            || ($enablecolumns['starttime'] && $row[$enablecolumns['starttime']] > $GLOBALS['EXEC_TIME'])
+            || ($enablecolumns['endtime'] && $row[$enablecolumns['endtime']] && $row[$enablecolumns['endtime']] < $GLOBALS['EXEC_TIME']);
     }
 
     /**
