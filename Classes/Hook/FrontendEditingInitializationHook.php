@@ -297,7 +297,6 @@ class FrontendEditingInitializationHook
             'currentTime' => GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('date', 'timestamp'),
             'currentPage' => $this->typoScriptFrontendController->id,
             'contentItems' => $availableContentElementTypes,
-            'contentElementsOnPage' => $this->getContentElementsOnPage((int)$this->typoScriptFrontendController->id),
             'customRecords' => $this->getCustomRecords(),
             'loadingIcon' => $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render(),
             'showHiddenItemsUrl' => $requestUrl . '&show_hidden_items=' . $this->showHiddenItems(),
@@ -470,30 +469,6 @@ class FrontendEditingInitializationHook
                 $hookObject->manipulateWizardItems($wizardItems, $contentController);
             }
         }
-    }
-
-    /**
-     * Get the content elements on the page
-     *
-     * @param int $pageId The page id to fetch content elements from
-     * @return array
-     */
-    protected function getContentElementsOnPage(int $pageId): array
-    {
-        if (!$this->typoScriptFrontendController->cObj instanceof ContentObjectRenderer) {
-            $this->typoScriptFrontendController->newCObj();
-        }
-        $contentElements = $this->typoScriptFrontendController->cObj->getRecords(
-            'tt_content',
-            [
-                'pidInList' => $pageId,
-                'orderBy' => 'sorting'
-            ]
-        );
-        foreach ($contentElements as &$contentElement) {
-            $contentElement['_recordTitle'] = BackendUtility::getRecordTitle('tt_content', $contentElement);
-        }
-        return $contentElements;
     }
 
     /**

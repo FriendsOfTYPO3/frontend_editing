@@ -90,12 +90,6 @@
             <trans-unit id="right-bar.element-title">
                 <source>Drag and drop on page to create a new '%s' content element.</source>
             </trans-unit>
-            <trans-unit id="right-bar.on-page.changed">
-                <source>Modified:</source>
-            </trans-unit>
-            <trans-unit id="right-bar.on-page.title">
-                <source>Elements on page</source>
-            </trans-unit>
             <trans-unit id="right-bar.custom-record.title">
                 <source>Custom records</source>
             </trans-unit>
