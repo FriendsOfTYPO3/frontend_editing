@@ -73,9 +73,6 @@ define([
         this.init();
     };
 
-    // TimeoutId used in indicateCeStart()
-    var indicateCeScrollTimeoutId = null;
-
     // Add default events and a function to add other events
     FrontendEditing.events = events;
     FrontendEditing.addEvent = function addEvent (key, value) {
@@ -561,50 +558,6 @@ define([
             } else {
                 F.loadInModal(newUrlParts[0] + '?' + fullUrlQueryString);
             }
-        },
-
-        indicateCeStart: function (ev) {
-            log.debug('start indicate ce', ev.currentTarget);
-
-            var $iframe = F.iframe();
-            var uid = ev.currentTarget.dataset.uid;
-            $iframe.contents()
-                .find('#c' + uid)
-                .parent()
-                .addClass('indicate-element');
-            window.clearTimeout(indicateCeScrollTimeoutId);
-
-            indicateCeScrollTimeoutId = window.setTimeout(function scrollCe () {
-                log.info('scroll to Ce', uid);
-
-                var $iframe = F.iframe();
-                var offset = $iframe.contents()
-                    .find('#c' + uid)
-                    .parent()
-                    .offset();
-
-                $iframe.contents()
-                    .find('body, html')
-                    .animate({
-                        scrollTop: offset
-                            ? offset.top - scrollToIndicateCeOffsetTop
-                            : offset
-                    }, scrollToIndicateCeSpeed);
-            }, scrollToIndicateCeDelay);
-        },
-
-        indicateCeEnd: function (ev) {
-            log.debug('end indicate ce', ev.currentTarget);
-
-            var $iframe = F.iframe();
-            var uid = ev.currentTarget.dataset.uid;
-
-            $iframe.contents()
-                .find('#c' + uid)
-                .parent()
-                .removeClass('indicate-element');
-
-            window.clearTimeout(indicateCeScrollTimeoutId);
         },
 
         dropCr: function (ev) {

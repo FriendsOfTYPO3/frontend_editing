@@ -81,17 +81,6 @@
         display: inline;
     }
 
-    // colored frame when hovering content element in right-column list
-
-    &.indicate-element {
-        &:before,
-        &:after {
-            content: none !important;
-        }
-
-        outline: 1px solid $color-t3-primary;
-    }
-
     &[draggable="true"]:hover {
         cursor: pointer;
     }
