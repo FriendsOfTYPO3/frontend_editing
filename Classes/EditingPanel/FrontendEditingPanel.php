@@ -185,6 +185,7 @@ class FrontendEditingPanel
                 $content = $wrapperService->wrapContentWithDropzone(
                     $table,
                     (int)$editUid,
+                    $dataArr['pid'],
                     $content,
                     (int)$dataArr['colPos']
                 );
@@ -196,6 +197,7 @@ class FrontendEditingPanel
                     $content = $wrapperService->wrapContentWithDropzone(
                         $table,
                         0,
+                        $dataArr['pid'],
                         $content,
                         (int)$dataArr['colPos'],
                         [],

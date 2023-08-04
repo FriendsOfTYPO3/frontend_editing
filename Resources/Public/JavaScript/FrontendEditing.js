@@ -405,6 +405,7 @@ define([
 
             ev.dataTransfer.setData('params', ev.currentTarget.dataset.params);
             ev.dataTransfer.setData('movable', movable);
+            ev.dataTransfer.setData('lang', ev.currentTarget.dataset.lang);
             ev.dataTransfer.setData('movableUid', $dragHandle
                 .parent('span.t3-frontend-editing__inline-actions')
                 .data('uid'));
@@ -509,17 +510,25 @@ define([
             if (movable === 1) {
                 var $currentTarget = $(ev.currentTarget);
                 var ceUid = parseInt(ev.dataTransfer.getData('movableUid'), 10);
+
                 var moveAfter = parseInt($currentTarget.data('moveafter'), 10);
+                // If the CE is dropped after an exising CE (moveAfter > 0), then 'target' is -uid of the existing CE
+                // If the CE is dropped as first in a column, then 'target' is the page uid
+                moveAfter = (moveAfter > 0) ? -moveAfter : parseInt($currentTarget.data('pid'), 10);
+
                 var colPos = parseInt($currentTarget.data('colpos'), 10);
-                var defVals = $currentTarget.data('defvals');
+                // If the target drop area is descendant of another CE, then append the uid of this CE
+                var $parentCE = $currentTarget.closest('.t3-frontend-editing__ce');
+                if ($parentCE.length) {
+                    colPos = parseInt($parentCE.data('uid'), 10) + '-' + colPos;
+                }
 
                 if (ceUid !== moveAfter) {
                     F.moveContent(
                         ceUid,
-                        'tt_content',
                         moveAfter,
                         colPos,
-                        defVals
+                        ev.dataTransfer.getData('lang')
                     );
                 }
             } else {
