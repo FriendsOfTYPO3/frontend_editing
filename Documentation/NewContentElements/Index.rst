@@ -48,6 +48,7 @@ It's possible to add drop zones for new content elements in a custom content ele
 
                     $content = $wrapperService->wrapContentWithDropzone(
                          'tt_content', // table name
+                         $uid, // CE uid
                          -1, // page uid, pid
                          $content,
                          0, // colPos

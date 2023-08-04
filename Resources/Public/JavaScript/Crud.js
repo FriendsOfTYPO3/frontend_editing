@@ -54,6 +54,7 @@ define([
     FrontendEditing.prototype.setBESessionId = setBESessionId;
     FrontendEditing.prototype.getEndpointUrl = getEndpointUrl;
     FrontendEditing.prototype.setEndpointUrl = setEndpointUrl;
+    FrontendEditing.prototype.setAjaxRecordProcessEndpointUrl = setAjaxRecordProcessEndpointUrl;
 
     var numberOfRequestsLeft;
 
@@ -69,6 +70,12 @@ define([
         log.log('setEndpointUrl', url);
 
         this._endpointUrl = url;
+    }
+
+    function setAjaxRecordProcessEndpointUrl (url) {
+        log.log('setAjaxRecordProcessEndpointUrl', url);
+
+        this._ajaxRecordProcessEndpointUrl = url;
     }
 
     function getBESessionId () {
@@ -292,36 +299,29 @@ define([
         appendTriggers(jqxhr);
     }
 
-    function moveRecord (uid, table, beforeUid, colPos, defVals) {
-        var moveEndpoint = getEndpointUrl('move');
+    function moveRecord (uid, beforeUid, colPos, languageUid) {
+        var moveEndpoint = F._ajaxRecordProcessEndpointUrl;
 
         log.info(
-            'move record [moveEndpoint, uid, table, beforeUid, colPos, defVals]',
+            'move record [moveEndpoint, uid, beforeUid, colPos, languageUid]',
             moveEndpoint,
             uid,
-            table,
             beforeUid,
             colPos,
-            defVals
+            languageUid
         );
 
         this.trigger(F.REQUEST_START);
 
-        var data = {
-            uid: uid,
-            table: table,
-            beforeUid: beforeUid,
-            defVals: defVals
-        };
-
-        if (typeof colPos !== 'undefined') {
-            data.colPos = colPos;
-        }
+        moveEndpoint = moveEndpoint
+            + '&cmd[tt_content][' + uid + '][move][action]=paste'
+            + '&cmd[tt_content][' + uid + '][move][target]=' + beforeUid
+            + '&cmd[tt_content][' + uid + '][move][update][colPos]=' + colPos
+            + '&cmd[tt_content][' + uid + '][move][update][sys_language_uid]=' + languageUid
+        ;
 
         var jqxhr = $.ajax({
-            url: moveEndpoint,
-            method: 'POST',
-            data: data
+            url: moveEndpoint
         });
 
         appendTriggers(jqxhr);

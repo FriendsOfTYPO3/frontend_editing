@@ -210,7 +210,9 @@ class FrontendEditingInitializationHook
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $endpointUrl = $uriBuilder->buildUriFromRoute(
             'ajax_frontendediting_process',
-            ['page' => $this->typoScriptFrontendController->id]
+        );
+        $ajaxRecordProcessEndpointUrl = $uriBuilder->buildUriFromRoute(
+            'ajax_record_process',
         );
         $configurationEndpointUrl = $uriBuilder->buildUriFromRoute(
             'ajax_frontendediting_editorconfiguration',
@@ -268,6 +270,7 @@ class FrontendEditingInitializationHook
                 editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
             });
             window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
+            window.F.setAjaxRecordProcessEndpointUrl(' . GeneralUtility::quoteJSvalue($ajaxRecordProcessEndpointUrl) . ');
             window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
             window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
             window.F.setDisableModalOnNewCe(' .

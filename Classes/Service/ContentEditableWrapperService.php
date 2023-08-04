@@ -209,7 +209,7 @@ class ContentEditableWrapperService
         $inlineActionTagBuilder = GeneralUtility::makeInstance(
             TagBuilder::class,
             'span',
-            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle)
+            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle, $dataArr['sys_language_uid'] ?? 0)
         );
         $inlineActionTagBuilder->forceClosingTag(true);
 
@@ -217,7 +217,7 @@ class ContentEditableWrapperService
             'style' => 'display:none;',
             'class' => $class,
             'data-table' => $table,
-            'data-uid' => (int)$uid,
+            'data-uid' => $uid,
             'data-hidden' => (int)$elementIsHidden,
             'data-cid' => $dataArr['colPos'] ?? 0,
             'data-edit-url' => $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
@@ -236,6 +236,7 @@ class ContentEditableWrapperService
         $tagBuilder->addAttributes([
             'class' => 't3-frontend-editing__ce ' . $hiddenElementClassName,
             'title' => $recordTitle,
+            'data-uid' => $uid,
         ]);
 
         return $tagBuilder->render();
@@ -256,6 +257,7 @@ class ContentEditableWrapperService
     public function wrapContentWithDropzone(
         string $table,
         int $uid,
+        int $pid,
         string $content,
         int $colPos = 0,
         array $defaultValues = [],
@@ -288,12 +290,13 @@ class ContentEditableWrapperService
             'data-new-url' => $this->renderEditOnClickReturnUrl(
                 $this->renderNewUrl(
                     $table,
-                    (int)$uid,
-                    (int)$colPos,
+                    $uid,
+                    $colPos,
                     $defaultValues
                 )
             ),
-            'data-moveafter' => (int)$uid,
+            'data-moveafter' => $uid,
+            'data-pid' => $pid,
             'data-colpos' => $colPos,
             'data-defvals' => json_encode($defaultValues),
         ]);
@@ -365,13 +368,14 @@ class ContentEditableWrapperService
      * @param string $recordTitle
      * @return string
      */
-    public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = ''): string
+    public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = '', int $langUid = 0): string
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
         $dragAndDropHandleIcon = '<span '
             . 'class="t3-frontend-editing__handle" '
             . 'title="' . $GLOBALS['LANG']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:move') . ' \'' . $recordTitle . '\'" '
+            . 'data-lang="' . $langUid . '"'
             . 'data-movable="1" draggable="true" ondragstart="window.parent.F.dragCeStart(event)" ondragend="window.parent.F.dragCeEnd(event)"'
             . '>' . $this->iconFactory->getIcon('actions-move', Icon::SIZE_SMALL)->render() . '</span>';
 
