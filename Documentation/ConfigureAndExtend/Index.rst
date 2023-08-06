@@ -17,6 +17,7 @@ work in your TYPO3 instance, and how to extend the functionality.
 
    ViewHelpers/Index
    TypoScript/Index
+   EmptyColumns/Index
    TCA/Index
    UserTs/Index
    ExtensionConfiguration/Index

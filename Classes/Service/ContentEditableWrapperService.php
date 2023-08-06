@@ -247,19 +247,18 @@ class ContentEditableWrapperService
      *
      * @param string $table
      * @param int $uid
+     * @param int $pid
      * @param string $content
-     * @return string
-     * @param int $colPos
      * @param array $defaultValues
      * @param bool $prepend
-     * @throws \InvalidArgumentException
+     * @return string
+     * @throws RouteNotFoundException
      */
     public function wrapContentWithDropzone(
         string $table,
         int $uid,
         int $pid,
         string $content,
-        int $colPos = 0,
         array $defaultValues = [],
         bool $prepend = false
     ): string {
@@ -291,14 +290,13 @@ class ContentEditableWrapperService
                 $this->renderNewUrl(
                     $table,
                     $uid,
-                    $colPos,
                     $defaultValues
                 )
             ),
-            'data-moveafter' => $uid,
+            'data-allowed-tables' => 'tt_content',
             'data-pid' => $pid,
-            'data-colpos' => $colPos,
             'data-defvals' => json_encode($defaultValues),
+            'data-moveafter' => $uid,
         ]);
 
         $dropZone = $tagBuilder->render();
@@ -338,21 +336,20 @@ class ContentEditableWrapperService
         $tagBuilder->forceClosingTag(true);
 
         $tagBuilder->addAttributes([
-            'class' => 't3-frontend-editing__dropzone',
+            'class' => 't3-frontend-editing__dropzone t3-frontend-editing__custom-dropzone',
             'ondrop' => 'window.parent.F.dropCe(event)',
             'ondragover' => 'window.parent.F.dragCeOver(event)',
             'ondragleave' => 'window.parent.F.dragCeLeave(event)',
-            'data-tables' => $tables,
-            'data-pid' => (int)$pageUid,
-            'data-defvals' => json_encode($defaultValues),
             'data-new-url' => $this->renderEditOnClickReturnUrl(
                 $this->renderNewUrl(
                     $tables,
                     0,
-                    0,
                     $defaultValues
                 )
             ),
+            'data-allowed-tables' => $tables,
+            'data-pid' => $pageUid,
+            'data-defvals' => json_encode($defaultValues),
         ]);
 
         $dropZone = $tagBuilder->render();
@@ -375,7 +372,7 @@ class ContentEditableWrapperService
         $dragAndDropHandleIcon = '<span '
             . 'class="t3-frontend-editing__handle" '
             . 'title="' . $GLOBALS['LANG']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:move') . ' \'' . $recordTitle . '\'" '
-            . 'data-lang="' . $langUid . '"'
+            . 'data-lang="' . $langUid . '" '
             . 'data-movable="1" draggable="true" ondragstart="window.parent.F.dragCeStart(event)" ondragend="window.parent.F.dragCeEnd(event)"'
             . '>' . $this->iconFactory->getIcon('actions-move', Icon::SIZE_SMALL)->render() . '</span>';
 
@@ -477,7 +474,6 @@ class ContentEditableWrapperService
      *
      * @param string $table
      * @param int $uid
-     * @param int $colPos
      * @param array $defaultValues
      * @param bool $uidAsPid
      * @return string
@@ -486,7 +482,6 @@ class ContentEditableWrapperService
     public function renderNewUrl(
         string $table,
         int $uid = 0,
-        int $colPos = 0,
         array $defaultValues = [],
         bool $uidAsPid = false
     ): string {
@@ -508,10 +503,6 @@ class ContentEditableWrapperService
             'feEdit' => 1
         ];
 
-        // If there is no any content in drop zone we need to set colPos
-        if ($colPos !== 0) {
-            $urlParameters['defVals'][$table]['colPos'] = $colPos;
-        }
         // If there are any fields to set
         if (!empty($defaultValues)) {
             $urlParameters['defVals'][$table] = array_merge($urlParameters['defVals'][$table] ?? [], $defaultValues);

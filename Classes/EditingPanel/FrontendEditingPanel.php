@@ -186,8 +186,7 @@ class FrontendEditingPanel
                     $table,
                     (int)$editUid,
                     $dataArr['pid'],
-                    $content,
-                    (int)$dataArr['colPos']
+                    $content
                 );
 
                 // If it's first content element for this column wrap with dropzone before content too
@@ -199,7 +198,6 @@ class FrontendEditingPanel
                         0,
                         $dataArr['pid'],
                         $content,
-                        (int)$dataArr['colPos'],
                         [],
                         true
                     );
