@@ -43,12 +43,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/classes/class.frontendedit.php'
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['configArrayPostProc']['frontend_editing'] =
     \TYPO3\CMS\FrontendEditing\Hook\FrontendEditingInitializationHook::class . '->unsetPageSetup';
 
-// Hook content object render. Check if column is empty
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['cObjTypeAndClassDefault'] = [
-    'CONTENT',
-    \TYPO3\CMS\FrontendEditing\Hook\ContentObjectRendererHook::class
-];
-
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][] =
     \TYPO3\CMS\FrontendEditing\Hook\ModifyTypoLinkConfig::class;
 

@@ -499,7 +499,6 @@ class FrontendEditingInitializationHook
                         'url' => $wrapperService->renderEditOnClickReturnUrl($wrapperService->renderNewUrl(
                             $table,
                             $pid,
-                            0,
                             $defaultValues,
                             true
                         )),

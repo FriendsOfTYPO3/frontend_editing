@@ -425,7 +425,8 @@ define([
             setTimeout(function displayDropZones() {
                 var $iframe = F.iframe();
                 $iframe.contents()
-                    .find('.t3-frontend-editing__dropzone[data-tables]')
+                    .find('.t3-frontend-editing__dropzone')
+                    .not('[data-allowed-tables~="tt_content"]')
                     .addClass('t3-frontend-editing__dropzone-hidden');
                 $iframe.contents()
                     .find('body')
@@ -510,10 +511,13 @@ define([
 
                 var moveAfter = parseInt($currentTarget.data('moveafter'), 10);
                 // If the CE is dropped after an exising CE (moveAfter > 0), then 'target' is -uid of the existing CE
-                // If the CE is dropped as first in a column, then 'target' is the page uid
+                // If the CE is dropped as first in a column, then 'target' is the page/parent uid
                 moveAfter = (moveAfter > 0) ? -moveAfter : parseInt($currentTarget.data('pid'), 10);
 
-                var colPos = parseInt($currentTarget.data('colpos'), 10);
+                const dataDefvals = ev.currentTarget.getAttribute('data-defvals');
+                const parsedData = JSON.parse(dataDefvals);
+                var colPos = parsedData.colPos;
+
                 // If the target drop area is descendant of another CE, then append the uid of this CE
                 var $parentCE = $currentTarget.closest('.t3-frontend-editing__ce');
                 if ($parentCE.length) {
@@ -611,7 +615,7 @@ define([
 
             $iframe.contents()
                 .find('.t3-frontend-editing__dropzone')
-                .not('[data-tables~="' + table + '"]')
+                .not('[data-allowed-tables~="' + table + '"]')
                 .addClass('t3-frontend-editing__dropzone-hidden');
             $iframe.contents()
                 .find('body')
@@ -627,7 +631,7 @@ define([
 
             $iframe.contents()
                 .find('.t3-frontend-editing__dropzone')
-                .not('[data-tables~="' + table + '"]')
+                .not('[data-allowed-tables~="' + table + '"]')
                 .removeClass('t3-frontend-editing__dropzone-hidden');
             $iframe.contents()
                 .find('body')

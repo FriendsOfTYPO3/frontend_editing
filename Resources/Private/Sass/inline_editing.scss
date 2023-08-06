@@ -50,6 +50,12 @@
     transition: height 0.2s;
     margin: 0;
     padding: 0;
+
+    // Use case:
+    // An admin could want to add a custom drop zone to allow the editors to drop a CE also inside empty page or container columns.
+    // This will result in 2 adjacent drop zones when there are already CEs inside the column (one custom and one of the first CE).
+    // This CSS rule will hide the second adjacent drop zone.
+    + div.t3-frontend-editing__dropzone { display: none !important; }
 }
 
 .dropzones-enabled .t3-frontend-editing__dropzone {

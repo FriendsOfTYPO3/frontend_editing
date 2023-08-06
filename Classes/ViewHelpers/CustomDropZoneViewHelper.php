@@ -26,18 +26,20 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  * View helper to enable frontend editing for records in fluid
  *
  * Example:
- *
- * <core:customDropZone tables="{0:'tx_news_domain_model_news',1:'tx_whatever'}">
+ * <core:customDropZone tables="{0:'tx_news_domain_model_news',1:'tx_whatever'}" pageUid="{data.uid}" defVals="{colPos: 101, tx_container_parent: data.uid}">
  *     <p>some content</p>
  * </core:customDropZone>
  *
  * Output:
  * <p>some content</p>
- * <div class="t3-frontend-editing__dropzone"
- *      ondrop="window.parent.F.dropCr(event)"
+ * <div class="t3-frontend-editing__dropzone t3-frontend-editing__custom-dropzone"
+ *      ondrop="window.parent.F.dropCe(event)"
  *      ondragover="window.parent.F.dragCeOver(event)"
  *      ondragleave="window.parent.F.dragCeLeave(event)"
- *      data-tables="tx_news_domain_model_news,tx_whatever" data-defvals="{}"></div>
+ *      data-new-url="/typo3/record/edit..."
+ *      data-allowed-tables="tx_news_domain_model_news,tx_whatever"
+ *      data-pid="378"
+ *      data-defvals="{&quot;colPos&quot;:101,&quot;tx_container_parent&quot;:378}"></div>
  */
 class CustomDropZoneViewHelper extends AbstractViewHelper
 {
@@ -70,7 +72,7 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
             true
         );
         $this->registerArgument(
-            'fields',
+            'defVals',
             'array',
             'Default value for new record droped in zone',
             false
@@ -111,14 +113,8 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
 
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
-        $defaultValues = [];
-        if (is_array($arguments['fields'])) {
-            foreach ($arguments['fields'] as $field => $value) {
-                foreach ($arguments['tables'] as $table) {
-                    $defaultValues['defVals[' . $table . '][' . $field . ']'] = $value;
-                }
-            }
-        }
+
+        $defaultValues = is_array($arguments['defVals']) ? $arguments['defVals'] : [];
 
         $content = $wrapperService->wrapContentWithCustomDropzone(
             implode(',', $arguments['tables']),
