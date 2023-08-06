@@ -51,7 +51,7 @@ class ContentObjectRenderer extends \TYPO3\CMS\Frontend\ContentObject\ContentObj
             return $content;
         }
 
-        $editUid = isset($dataArray['_LOCALIZED_UID']) ?: $currentRecordUID;
+        $editUid = $dataArray['_LOCALIZED_UID'] ?? $currentRecordUID;
         // Edit icons imply that the editing action is generally allowed, assuming page and content element permissions permit it.
         if (!array_key_exists('allow', $conf)) {
             $conf['allow'] = 'edit';
