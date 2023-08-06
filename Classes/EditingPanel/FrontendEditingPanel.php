@@ -181,24 +181,34 @@ class FrontendEditingPanel
             }
             if (!$isWrappedWithDropzone) {
                 // @TODO: should there be a config for dropzones like "if ((int)$conf['addDropzone'] > 0)"
+
+                // Set defVals if this CE is inside a container
+                $defVals = [];
+                $parentOfCeUidField = $pluginConfiguration['parentOfCeUidField'];
+                $parentOfCeUid = $dataArr[$parentOfCeUidField] ?? 0;
+                if ($parentOfCeUid > 0) {
+                    $defVals['colPos'] = $dataArr['colPos'];
+                    $defVals[$parentOfCeUidField] = $parentOfCeUid;
+                }
+
                 // Add a dropzone after content
                 $content = $wrapperService->wrapContentWithDropzone(
                     $table,
                     (int)$editUid,
                     $dataArr['pid'],
-                    $content
+                    $content,
+                    $defVals
                 );
 
                 // If it's first content element for this column wrap with dropzone before content too
-                $parentOfCeUidField = $pluginConfiguration['parentOfCeUidField'];
-                $colPosInParent = ($dataArr[$parentOfCeUidField] ?? '') . '|' . $dataArr['colPos'];
+                $colPosInParent = $parentOfCeUid . '|' . $dataArr['colPos'];
                 if (!GeneralUtility::inList(self::$columnsWithContentList, $colPosInParent)) {
                     $content = $wrapperService->wrapContentWithDropzone(
                         $table,
                         0,
                         $dataArr['pid'],
                         $content,
-                        [],
+                        $defVals,
                         true
                     );
                     self::$columnsWithContentList .= ',' . $colPosInParent;
