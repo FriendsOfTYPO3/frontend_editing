@@ -120,11 +120,11 @@
     @include inline-action-icon;
 
     .icon {
-        background-color: transparentize($color-white, 0.4);
+        background-color: transparentize($color-white, 0.7);
         cursor: pointer;
 
         &:hover {
-            background-color: transparentize($gray-light, 0.4);
+            background-color: transparentize($gray-light, 0.3);
         }
 
         &.icon-actions-move {
