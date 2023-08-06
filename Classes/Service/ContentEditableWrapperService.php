@@ -295,7 +295,7 @@ class ContentEditableWrapperService
             ),
             'data-allowed-tables' => 'tt_content',
             'data-pid' => $pid,
-            'data-defvals' => json_encode($defaultValues),
+            'data-defvals' => htmlspecialchars(json_encode($defaultValues)),
             'data-moveafter' => $uid,
         ]);
 
