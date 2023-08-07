@@ -516,7 +516,7 @@ define([
 
                 const dataDefvals = ev.currentTarget.getAttribute('data-defvals');
                 const parsedData = JSON.parse(dataDefvals);
-                var colPos = parsedData.colPos;
+                var colPos = parsedData.colPos ?? 0;
 
                 // If the target drop area is descendant of another CE, then append the uid of this CE
                 var $parentCE = $currentTarget.closest('.t3-frontend-editing__ce');
