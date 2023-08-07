@@ -374,6 +374,25 @@ define([
             return stringArray.join('&');
         },
 
+        decodeHtmlspecialChars: function (text) {
+            var map = {
+                '&amp;': '&',
+                '&#038;': "&",
+                '&lt;': '<',
+                '&gt;': '>',
+                '&quot;': '"',
+                '&#039;': "'",
+                '&#8217;': "’",
+                '&#8216;': "‘",
+                '&#8211;': "–",
+                '&#8212;': "—",
+                '&#8230;': "…",
+                '&#8221;': '”'
+            };
+
+            return text.replace(/\&[\w\d\#]{2,5}\;/g, function(m) { return map[m]; });
+        },
+
         dragCeStart: function (ev) {
             log.info('start drag Ce', ev.currentTarget);
 
@@ -514,7 +533,7 @@ define([
                 // If the CE is dropped as first in a column, then 'target' is the page/parent uid
                 moveAfter = (moveAfter > 0) ? -moveAfter : parseInt($currentTarget.data('pid'), 10);
 
-                const dataDefvals = ev.currentTarget.getAttribute('data-defvals');
+                const dataDefvals = F.decodeHtmlspecialChars(ev.currentTarget.getAttribute('data-defvals'));
                 const parsedData = JSON.parse(dataDefvals);
                 var colPos = parsedData.colPos;
 

@@ -46,7 +46,3 @@ The needed argument in this case are:
 * the page uid
 * the colPos of the column of the container in which the element will be placed as default value (defVals)
 * in the case of EXT:container, the uid of the parent (field: tx_container_parent) as default value (defVals)
-
-.. tip::
-
-   The Frontend Editing extension uses json_encode for defVals viewhelper argument. Depending on your template setup it could be necessary to wrap the core:customDropZone viewhelper with a f:format.htmlentities viewhelper.
