@@ -349,7 +349,7 @@ class ContentEditableWrapperService
             ),
             'data-allowed-tables' => $tables,
             'data-pid' => $pageUid,
-            'data-defvals' => json_encode($defaultValues),
+            'data-defvals' => htmlspecialchars(json_encode($defaultValues)),
         ]);
 
         $dropZone = $tagBuilder->render();
