@@ -269,6 +269,10 @@ class FrontendEditingModuleController
             $current['height'] = '';
         }
 
+        // If BE user visited view module and set a custom size then web_view state is set but not its label,
+        // so we set it to 'Custom'
+        $current['label'] = $current['label'] ?? 'Custom';
+
         // If the current web_view state is not maximized then set the current width & height used later in width & height inputs
         if ($current['label'] !== $maximizeButtonLabel) {
             $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
