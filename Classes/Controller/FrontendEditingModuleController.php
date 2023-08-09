@@ -269,6 +269,10 @@ class FrontendEditingModuleController
             $current['height'] = '';
         }
 
+        // If BE user visited view module and set a custom size then web_view state is set but not its label,
+        // so we set it to 'Custom'
+        $current['label'] = $current['label'] ?? 'Custom';
+
         // If the current web_view state is not maximized then set the current width & height used later in width & height inputs
         if ($current['label'] !== $maximizeButtonLabel) {
             $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : 320);
@@ -448,22 +452,6 @@ class FrontendEditingModuleController
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
 
-        $otherDomain = false;
-        // Check if the domain I am logged into are the same as the one I try edit for
-        if (strpos($targetUrl, $request->getUri()->getHost()) !== false) {
-            // Apply the GET parameter "frontend_editing"
-            if (parse_url($targetUrl, PHP_URL_QUERY)) {
-                $targetUrl = $targetUrl . '&frontend_editing=true';
-            } else {
-                $targetUrl = $targetUrl . '?frontend_editing=true';
-            }
-        } else {
-            if ($targetUrl) {
-                $targetUrl = parse_url($targetUrl)['host'];
-            }
-            $otherDomain = true;
-        }
-
         // Assign variables to template
         $this->view->assign('icons', $icons);
         $this->view->assign('current', $current);
@@ -471,7 +459,6 @@ class FrontendEditingModuleController
         $this->view->assign('presetGroups', $this->getPreviewPresets());
         $this->view->assign('url', $targetUrl);
         $this->view->assign('protocol', $request->getUri()->getScheme());
-        $this->view->assign('otherDomain', $otherDomain);
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
