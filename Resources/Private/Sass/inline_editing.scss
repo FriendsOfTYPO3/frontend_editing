@@ -83,10 +83,6 @@
         outline: 1px dotted transparentize($color-t3-gray, 0.5);
     }
 
-    .cke_editable {
-        display: inline;
-    }
-
     &[draggable="true"]:hover {
         cursor: pointer;
     }
