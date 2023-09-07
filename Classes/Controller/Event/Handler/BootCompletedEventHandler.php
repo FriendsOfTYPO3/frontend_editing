@@ -13,6 +13,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 final class BootCompletedEventHandler
 {
+    /**
+     * @param BootCompletedEvent $event
+     * @return void
+     */
     public function __invoke(BootCompletedEvent $event): void
     {
         // Load JS ParentWindow when user opens the element browser (file selector)

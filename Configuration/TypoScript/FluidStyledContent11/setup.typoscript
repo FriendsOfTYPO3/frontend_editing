@@ -1,0 +1,13 @@
+lib.contentElement {
+  templateRootPaths {
+    3001 = EXT:frontend_editing/Resources/Private/Templates/FluidStyledContent11/
+  }
+
+  partialRootPaths {
+    3001 = EXT:frontend_editing/Resources/Private/Partials/FluidStyledContent11/
+  }
+
+  layoutRootPaths {
+    2001 = EXT:frontend_editing/Resources/Private/Layouts/FluidStyledContent11/
+  }
+}

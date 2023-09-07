@@ -15,16 +15,16 @@
  * Module: TYPO3/CMS/FrontendEditing/Utils/IndexedDB
  * Initialize dexie (IndexedDB wrapper) and returns opened dexie
  */
-define(['../Contrib/dexie.min'], function createIndexedDB (Dexie) {
-    'use strict';
+define(['../Contrib/dexie.min'], function createIndexedDB(Dexie) {
+  'use strict';
 
-    var db = new Dexie('FrontendEditing');
-    db.version(1)
-        .stores({
-            logs: '++id, timestamp, name, url, level, channel, message, stack'
-        });
+  var db = new Dexie('FrontendEditing');
+  db.version(1)
+    .stores({
+      logs: '++id, timestamp, name, url, level, channel, message, stack'
+    });
 
-    db.open();
+  db.open();
 
-    return db;
+  return db;
 });

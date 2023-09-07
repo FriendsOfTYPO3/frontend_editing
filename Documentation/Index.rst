@@ -17,7 +17,7 @@ Frontend Editing
    en
 
 :Author:
-   Pixelant.net & contributors
+   TYPO3 Community
 
 :License:
    This document is published under the

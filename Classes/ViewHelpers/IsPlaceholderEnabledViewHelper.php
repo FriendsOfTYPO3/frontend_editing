@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
@@ -15,8 +16,9 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Closure;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
-use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -39,14 +41,18 @@ class IsPlaceholderEnabledViewHelper extends AbstractViewHelper
     /**
      * Returns true if the frontend editor is active and the placeholder feature is enabled
      *
+     * @param array $arguments
+     * @param Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
      * @return bool|string
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function renderStatic(
         array $arguments,
-        \Closure $renderChildrenClosure,
+        Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
-        return FrontendEditingUtility::isEnabled()
+    ): bool|string {
+        return AccessService::isEnabled()
             && ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders'];
     }
 }

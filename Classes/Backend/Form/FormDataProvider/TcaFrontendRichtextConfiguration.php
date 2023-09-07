@@ -18,7 +18,7 @@ class TcaFrontendRichtextConfiguration implements FormDataProviderInterface
      * @param array $result Given result array
      * @return array Modified result array
      */
-    public function addData(array $result)
+    public function addData(array $result): array
     {
         foreach ($result['processedTca']['columns'] as $fieldName => $fieldConfig) {
             if (

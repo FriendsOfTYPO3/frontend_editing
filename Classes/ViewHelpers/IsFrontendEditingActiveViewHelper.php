@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
@@ -15,13 +16,14 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\FrontendEditing\Utility\FrontendEditingUtility;
+use Closure;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
- * View helper useful to determine whether or not frontend editing is active
+ * View helper useful to determine whether frontend editing is active
  *
  * Use in conditions to hide or show content for editors.
  *
@@ -38,13 +40,17 @@ class IsFrontendEditingActiveViewHelper extends AbstractViewHelper
     /**
      * Returns true if the frontend editor is active
      *
+     * @param array $arguments
+     * @param Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
      * @return bool|string
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function renderStatic(
         array $arguments,
-        \Closure $renderChildrenClosure,
+        Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
-        return FrontendEditingUtility::isEnabled();
+    ): bool|string {
+        return AccessService::isEnabled();
     }
 }

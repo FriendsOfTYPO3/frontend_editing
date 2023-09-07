@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\Controller;
@@ -17,15 +16,17 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
-use TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility;
+use UnexpectedValueException;
 
 /**
  * Main class for handling requests sent via Frontend Editing, and providing the information
@@ -37,7 +38,7 @@ class ReceiverController
     /**
      * @var ResponseInterface
      */
-    protected $response;
+    protected ResponseInterface $response;
 
     /**
      * Main entrypoint, dispatches to the appropriate methods
@@ -62,36 +63,11 @@ class ReceiverController
             case 'POST':
                 $action = (isset($request->getQueryParams()['action'])) ? $request->getQueryParams()['action'] : '';
                 switch ($action) {
-                    case 'new':
-                        $data = [];
-                        parse_str($request->getParsedBody()['data'], $data);
-                        if (isset($data['defVals'])) {
-                            $this->newAction($data['edit'], $data['defVals'], (int)$request->getQueryParams()['page']);
-                        }
-                        break;
                     case 'hide':
                         $this->hideAction(
                             $table,
                             $uid,
                             (bool)$request->getParsedBody()['hide']
-                        );
-                        break;
-                    case 'move':
-                        // Check if colPos is set
-                        $colPos = isset($request->getParsedBody()['colPos']) ?
-                            (int)$request->getParsedBody()['colPos'] : -2;
-
-                        // Check if page is set
-                        $page = isset($request->getQueryParams()['page']) ?
-                            (int)$request->getQueryParams()['page'] : 0;
-
-                        $this->moveAction(
-                            $table,
-                            $uid,
-                            (int)$request->getParsedBody()['beforeUid'],
-                            $page,
-                            $colPos,
-                            $request->getParsedBody()['defVals'] ?? []
                         );
                         break;
                     case 'lockedRecord':
@@ -122,15 +98,17 @@ class ReceiverController
      * @param int $uid
      * @param string $field
      * @param string $content
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
-    protected function updateAction(string $table, int $uid, string $field, string $content)
+    protected function updateAction(string $table, int $uid, string $field, string $content): void
     {
         $field = $this->sanitizeFieldName($field);
 
         $record = BackendUtility::getRecord($table, $uid);
 
-        $content = CompatibilityUtility::dispatchEvent(
+        /** @var EventDispatcher $eventDispatcher */
+        $eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
+        $content = $eventDispatcher->dispatch(
             new PrepareFieldUpdateEvent($table, $field, $content, $record)
         )->getContent();
 
@@ -146,7 +124,7 @@ class ReceiverController
             $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
             $dataHandler->start($data, []);
             $dataHandler->process_datamap();
-        } catch (\Exception $exception) {
+        } catch (Exception) {
             // If editing a Site root the DataHandler is loading additional configuration which
             // may be faulty. So suppress the Exception and continue because the update action is valid
         }
@@ -176,7 +154,7 @@ class ReceiverController
      * @param string $table
      * @param int $uid
      */
-    protected function deleteAction(string $table, int $uid)
+    protected function deleteAction(string $table, int $uid): void
     {
         $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->BE_USER = $GLOBALS['BE_USER'];
@@ -190,79 +168,13 @@ class ReceiverController
     }
 
     /**
-     * Create a new record.
-     *
-     * Submitted info is based on a query string as described at
-     * https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Examples/EditLinks/Index.html
-     *
-     * @param array $edit A an array as parsed from `tt_content[-1]=new`
-     * @param array $defVals Default content as an array parsed from `tt_content[title]=title`
-     * @param int $pid Page ID
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function newAction(array $edit, array $defVals, int $pid)
-    {
-        /** @var DataHandler $dataHandler */
-        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-
-        if (count($edit) === 0) {
-            throw new \InvalidArgumentException(
-                'Missing element information (zero items in $edit)',
-                1579267630
-            );
-        }
-
-        $table = array_keys($edit)[0];
-
-        if (count($edit[$table]) === 0) {
-            throw new \InvalidArgumentException(
-                'Missing element information (zero items in $edit[' . $table . '])',
-                1579267718
-            );
-        }
-
-        if ((int)array_keys($edit[$table])[0] < 0) {
-            $defVals[$table]['pid'] = array_keys($edit[$table])[0];
-        } else {
-            $defVals[$table]['pid'] = $pid;
-        }
-        $uid = 'NEW' . uniqid();
-
-        $data = [
-            $table => [
-                $uid => $defVals[$table]
-            ]
-        ];
-
-        $dataHandler->start($data, []);
-        $dataHandler->process_datamap();
-
-        if (empty($dataHandler->errorLog)) {
-            $this->writeSuccessMessage(
-                LocalizationUtility::translate(
-                    'notifications.new.content.success',
-                    'FrontendEditing'
-                )
-            );
-        } else {
-            $this->writeErrorMessage(
-                LocalizationUtility::translate(
-                    'notifications.new.content.fail',
-                    'FrontendEditing'
-                )
-            );
-        }
-    }
-
-    /**
      * Hide a record through the data handler
      *
      * @param string $table
      * @param int $uid
      * @param bool $hide
      */
-    protected function hideAction(string $table, int $uid, bool $hide)
+    protected function hideAction(string $table, int $uid, bool $hide): void
     {
         $tcaCtrl = $GLOBALS['TCA'][$table]['ctrl'];
         if (isset($tcaCtrl['enablecolumns']['disabled'])) {
@@ -290,66 +202,11 @@ class ReceiverController
      * @param string $table
      * @param int $uid
      */
-    protected function lockedRecordAction(string $table, int $uid)
+    protected function lockedRecordAction(string $table, int $uid): void
     {
         if (BackendUtility::isRecordLocked($table, $uid)) {
             $this->writeSuccessMessage('The content "' . $uid .
                 '" is currently edited by someone else. Do you want to save this?');
-        }
-    }
-
-    /**
-     * Move a content to another position (columnPosition, colpos)
-     * Will probably only work on tt_content (due to the special handling of colPos)
-     *
-     * @param string $table
-     * @param int $uid
-     * @param int $beforeUid
-     * @param int $pid
-     * @param int $columnPosition
-     * @param int $container
-     */
-    public function moveAction(
-        string $table,
-        int $uid,
-        int $beforeUid = 0,
-        int $pid = 0,
-        int $columnPosition = -2,
-        array $defaultValues = [],
-        int $container = 0
-    ) {
-        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
-        $command = [];
-        $data = [];
-
-        // Add mapping for which id is should be move to
-        if ($beforeUid) {
-            $command[$table][$uid]['move'] = '-' . $beforeUid;
-        } else {
-            // Otherwise to another page (pid)
-            $command[$table][$uid]['move'] = $pid;
-        }
-
-        if ($columnPosition > -2) {
-            $data[$table][$uid]['colPos'] = $columnPosition;
-        }
-
-        if ($container) {
-            $data[$table][$uid]['colPos'] = $container;
-        }
-
-        // Add default values to datamap array
-        $data[$table][$uid] = isset($data[$table][$uid])
-            ? array_merge($data[$table][$uid], $defaultValues) : $defaultValues;
-
-        $dataHandler->start($data, $command);
-        $dataHandler->process_cmdmap();
-        $dataHandler->process_datamap();
-
-        if (empty($dataHandler->errorLog)) {
-            $this->writeSuccessMessage('Content moved (uid: ' . $uid . ')');
-        } else {
-            $this->writeErrorMessage('Content could not be moved (uid: ' . $uid . ')');
         }
     }
 
@@ -377,7 +234,7 @@ class ReceiverController
      *
      * @param string $message
      */
-    protected function writeSuccessMessage(string $message)
+    protected function writeSuccessMessage(string $message): void
     {
         $message = [
             'success' => true,
@@ -391,7 +248,7 @@ class ReceiverController
      *
      * @param string $message
      */
-    protected function writeErrorMessage(string $message)
+    protected function writeErrorMessage(string $message): void
     {
         $message = [
             'success' => false,

@@ -16,11 +16,13 @@ namespace TYPO3\CMS\FrontendEditing\EditingPanel;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use UnexpectedValueException;
 
 /**
  * View class for the edit panels in frontend editing
@@ -32,15 +34,15 @@ class FrontendEditingPanel
      *
      * @var TypoScriptFrontendController
      */
-    protected $frontendController;
+    protected mixed $frontendController;
 
     /**
-     * Keep list of columns (colPos) which has content
+     * Keep list of columns (colPos) which has content,
      * so we know if element is first for this column or no
      *
      * @var string
      */
-    public static $columnsWithContentList = '';
+    public static string $columnsWithContentList = '';
 
     /**
      * Constructor for the edit panel
@@ -71,7 +73,7 @@ class FrontendEditingPanel
     /**
      * Adds an edit icon to the content string. The edit icon links to EditDocumentController
      * with proper parameters for editing the table/fields of the context.
-     * This implements TYPO3 context sensitive editing facilities.
+     * This implements TYPO3 context-sensitive editing facilities.
      * Only backend users will have access (if properly configured as well).
      * See TYPO3\CMS\Core\FrontendEditing\FrontendEditingController
      *
@@ -85,6 +87,7 @@ class FrontendEditingPanel
      * @param string $editUid
      * @param string $fieldList
      * @return string
+     * @throws RouteNotFoundException
      */
     public function editIcons(
         $content,
@@ -97,10 +100,7 @@ class FrontendEditingPanel
         $editUid,
         $fieldList
     ): string {
-        $access = GeneralUtility::makeInstance(AccessService::class);
-        if (!$access->isEnabled()) {
-            return $content;
-        }
+        if (!AccessService::isEnabled()) { return $content; }
 
         // We need to determine if we are having whole element or just one field for element
         // this only allows to edit all other tables just per field instead of per element
@@ -119,8 +119,8 @@ class FrontendEditingPanel
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
-        $pluginConfiguration = $this->getPluginConfiguration();
         // Check if customRecordEditing is present
+        $pluginConfiguration = $this->getPluginConfiguration();
         if (isset($pluginConfiguration['customRecordEditing'])
             && is_array($pluginConfiguration['customRecordEditing'])
         ) {
@@ -130,7 +130,7 @@ class FrontendEditingPanel
                 if (isset($pageArguments[$key])
                     && $pageArguments[$key]['action'] === $customRecordEditing['actionName']
                 ) {
-                    if ($dataArr !== null && $dataArr['list_type'] === $customRecordEditing['listTypeName']) {
+                    if (isset($dataArr) && ($dataArr['list_type'] ?? null) === $customRecordEditing['listTypeName']) {
                         $table = $customRecordEditing['tableName'];
                         $editUid = $pageArguments[$key][$customRecordEditing['recordName']];
                     }
@@ -139,7 +139,7 @@ class FrontendEditingPanel
         }
 
         if ($isEditableField) {
-            $fields = GeneralUtility::trimexplode(',', $fieldList);
+            $fields = GeneralUtility::trimExplode(',', $fieldList);
             $content = $wrapperService->wrapContentToBeEditable(
                 $table,
                 trim($fields[0]),
@@ -149,9 +149,6 @@ class FrontendEditingPanel
         }
 
         if ($isWholeElement) {
-            // Special content is about to be shown, so the cache must be disabled.
-            $this->frontendController->set_no_cache('Display frontend edit icons', true);
-
             // wrap content with controls
             $content = $wrapperService->wrapContent(
                 $table,
@@ -166,7 +163,7 @@ class FrontendEditingPanel
                 foreach ($frontendEditingConfiguration['FrontendEditingPanel']['dropzoneModifiers'] as $classData) {
                     $hookObject = GeneralUtility::makeInstance($classData);
                     if (!$hookObject instanceof FrontendEditingDropzoneModifier) {
-                        throw new \UnexpectedValueException(
+                        throw new UnexpectedValueException(
                             $classData . ' must implement interface ' . FrontendEditingDropzoneModifier::class,
                             1493980015
                         );
@@ -201,7 +198,7 @@ class FrontendEditingPanel
                 );
 
                 // If it's first content element for this column wrap with dropzone before content too
-                $colPosInParent = $parentOfCeUid . '|' . $dataArr['colPos'];
+                $colPosInParent = $parentOfCeUid . '|' . ($dataArr['colPos'] ?? 0);
                 if (!GeneralUtility::inList(self::$columnsWithContentList, $colPosInParent)) {
                     $content = $wrapperService->wrapContentWithDropzone(
                         $table,

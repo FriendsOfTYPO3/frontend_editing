@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
@@ -15,6 +16,8 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Closure;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
@@ -62,7 +65,7 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
     /**
      * Initialize arguments
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument(
@@ -74,20 +77,17 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'defVals',
             'array',
-            'Default value for new record droped in zone',
-            false
+            'Default value for new record droped in zone'
         );
         $this->registerArgument(
             'pageUid',
             'string',
-            'Override storage page uid for new record droped in zone',
-            false
+            'Override storage page uid for new record droped in zone'
         );
         $this->registerArgument(
             'prepend',
             'bool',
-            'Prepend the zone to the content',
-            false
+            'Prepend the zone to the content'
         );
     }
 
@@ -95,35 +95,32 @@ class CustomDropZoneViewHelper extends AbstractViewHelper
      * Add a content-editable div around the content
      *
      * @param array $arguments
-     * @param \Closure $renderChildrenClosure
+     * @param Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
      *
-     * @return string Rendered email link
+     * @return mixed Rendered result
+     * @throws RouteNotFoundException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public static function renderStatic(
         array $arguments,
-        \Closure $renderChildrenClosure,
+        Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
+    ): mixed {
         $content = $renderChildrenClosure();
-        $access = GeneralUtility::makeInstance(AccessService::class);
-        if (!$access->isEnabled()) {
-            return $content;
-        }
+        if (!AccessService::isEnabled()) { return $content; }
 
         /** @var ContentEditableWrapperService $wrapperService */
         $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
         $defaultValues = is_array($arguments['defVals']) ? $arguments['defVals'] : [];
 
-        $content = $wrapperService->wrapContentWithCustomDropzone(
+        return $wrapperService->wrapContentWithCustomDropzone(
             implode(',', $arguments['tables']),
             (string)$content,
             $defaultValues,
             (int)$arguments['pageUid'],
             (bool)$arguments['prepend']
         );
-
-        return $content;
     }
 }

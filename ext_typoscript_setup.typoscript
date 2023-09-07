@@ -1,0 +1,8 @@
+module.tx_frontendediting {
+  settings {
+    customRecords {
+      tx_news_domain_model_news {
+      }
+    }
+  }
+}

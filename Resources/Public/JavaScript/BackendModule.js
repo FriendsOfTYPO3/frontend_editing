@@ -10,25 +10,27 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 /**
  * Module: TYPO3/CMS/FrontendEditing/BackendModule
  * Main logic for resizing the view of the frame
  */
 define([
+  'require',
+  'exports',
   'jquery',
   'TYPO3/CMS/Backend/Storage/Persistent',
   'jquery-ui/resizable'
-], function($, PersistentStorage) {
+], function(require, exports, $, PersistentStorage) {
   'use strict';
 
   /**
-   * @type {{<resizableContainerIdentifier: string, sizeIdentifier: string, moduleBodySelector: string, storagePrefix: string, $iframe: null, $resizableContainer: null, $sizeSelector: null}}
+   * @type {{resizableContainerIdentifier: string, moduleBodySelector: string, storagePrefix: string, $iframe: null, $resizableContainer: null}}
    * @exports TYPO3/CMS/FrontendEditing/BackendModule
    */
   var FrontedEditing = {
 
     resizableContainerIdentifier: '.t3js-frontendediting-resizeable',
-    sizeIdentifier: ' .t3js-frontendediting-size',
     moduleBodySelector: '.t3js-module-body',
 
     defaultLabel: 'Custom',
@@ -38,7 +40,6 @@ define([
     storagePrefix: 'moduleData.web_view.States.',
     $iframe: null,
     $resizableContainer: null,
-    $sizeSelector: null,
 
     customSelector: '.t3js-preset-custom',
 
@@ -164,8 +165,9 @@ define([
 
     var newCustomLabel = 'Custom (' + data.width + 'x' + data.height + ')';
     $(FrontedEditing.customSelector).attr("title", newCustomLabel);
-    $(FrontedEditing.customSelector).contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(newCustomLabel);
+    $(FrontedEditing.customSelector).contents().filter(function(){ return this.nodeType === 3; }).first().replaceWith(newCustomLabel);
 
+    FrontedEditing.addToQueue(FrontedEditing.storagePrefix + 'current', data);
     FrontedEditing.addToQueue(FrontedEditing.storagePrefix + 'custom', data);
   }
 
@@ -173,7 +175,6 @@ define([
     clearTimeout(FrontedEditing.queueDelayTimer);
     FrontedEditing.queueDelayTimer = setTimeout(function() {
       FrontedEditing.persistCustomPreset();
-      FrontedEditing.persistCurrentPreset();
     }, 1000);
   };
 
@@ -186,7 +187,6 @@ define([
 
     FrontedEditing.$iframe = $('#tx_frontendediting_iframe');
     FrontedEditing.$resizableContainer = $(FrontedEditing.resizableContainerIdentifier);
-    FrontedEditing.$sizeSelector = $(FrontedEditing.sizeIdentifier);
 
     // Set current preset button data with current state
     $(FrontedEditing.currentButtonSelector).data('width', $(FrontedEditing.inputWidthSelector).val());
@@ -195,25 +195,25 @@ define([
     // Save All button
     $(document).on('click', FrontedEditing.saveAllSelector, function() {
       // Use the save function in TYPO3/CMS/FrontendEditing/GUI
-      window[0].F.save();
+      F.save();
     });
 
     // Discard button
     $(document).on('click', FrontedEditing.discardSelector, function() {
       // Use the discard function in TYPO3/CMS/FrontendEditing/GUI
-      window[0].F.discard();
+      F.discard();
     });
 
     // Toggle contents toolbar button
     $(document).on('click', FrontedEditing.toggleContentsToolbarSelector, function() {
       // Use the toggleContentsToolbar function in TYPO3/CMS/FrontendEditing/GUI
-      window[0].F.toggleContentsToolbar();
+      F.toggleContentsToolbar();
     });
 
     // Toggle hidden items button
     $(document).on('click', FrontedEditing.hiddenItemsToggleButtonSelector, function() {
       // Use the toggleHiddenItems function in TYPO3/CMS/FrontendEditing/GUI
-      window[0].F.toggleHiddenItems();
+      F.toggleHiddenItems();
     });
 
     // On change

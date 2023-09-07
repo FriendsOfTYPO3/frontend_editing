@@ -1,30 +1,23 @@
+:root{
+    --scroll-area-background: #{transparentize(black, 0.2)};
+}
 .scrollarea {
     contain: strict;
     position: absolute;
     left: 0;
     right: 0;
-    background: $scroll-area-background;
+    background: var(--scroll-area-background);
     min-height: $scroll-area-min-height;
     max-height: $scroll-area-max-height;
     height: $scroll-area-height;
-    display: flex;
-}
-
-@supports (backdrop-filter: $scroll-area-backdrop) {
-    .scrollarea {
-        background: $scroll-area-backdrop-background;
-        backdrop-filter: $scroll-area-backdrop;
-    }
 }
 
 .scrollarea-top {
     top: 0;
-    border-bottom: $scroll-area-border;
 }
 
 .scrollarea-bottom {
     bottom: 0;
-    border-top: $scroll-area-border;
 }
 
 .scrollarea--arrow:before {
@@ -32,7 +25,9 @@
     display: block;
     width: $scroll-area-arrow-size;
     height: $scroll-area-arrow-size;
+    top: 50%;
     margin: auto;
+    margin-top: -($scroll-area-arrow-size / 2);
     position: relative;
     border: $scroll-area-arrow-width solid $scroll-area-arrow-color;
     transform: rotate(45deg);
@@ -42,13 +37,11 @@
 }
 
 .scrollarea--arrow-up:before {
-    top: $scroll-area-arrow-offset;
     border-bottom-width: 0;
     border-right-width: 0;
 }
 
 .scrollarea--arrow-down:before {
-    top: -$scroll-area-arrow-offset;
     border-top-width: 0;
     border-left-width: 0;
 }

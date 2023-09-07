@@ -3,11 +3,11 @@
 
 .. _typoscript:
 
-========================
-TypoScript Configuration
-========================
+====================
+Module Configuration
+====================
 
-Each section refers to property names within `config.tx_frontendediting`.
+Each section refers to property names within `module.tx_frontendediting`.
 
 
 .. _typoscript-customrecords:
@@ -23,9 +23,11 @@ Default values for records created with the
 
 .. code-block:: typoscript
 
-   customRecords {
-     tx_news_domain_model_news {
-       pid = 6
+   module.tx_frontendediting.settings {
+     customRecords {
+       tx_news_domain_model_news {
+         pid = 6
+       }
      }
    }
 
@@ -39,14 +41,22 @@ Configure :ref:`typoscript-custom-record-editing`.
 
 .. code-block:: typoscript
 
-   customRecordEditing {
-     tx_news_pi1 {
-       actionName = detail
-       recordName = news
-       tableName = tx_news_domain_model_news
-       listTypeName = news_pi1
+   config.tx_frontendediting {
+     customRecordEditing {
+       tx_news_pi1 {
+         actionName = detail
+         recordName = news
+         tableName = tx_news_domain_model_news
+         listTypeName = news_pi1
+       }
      }
    }
+
+========================
+TypoScript Configuration
+========================
+
+Each section refers to property names within `config.tx_frontendediting`.
 
 
 .. _typoscript-contentpersistpreprocessing:
@@ -54,8 +64,8 @@ Configure :ref:`typoscript-custom-record-editing`.
 contentPersistPreProcessing
 ===========================
 
-Modify data for a specific table, field, and record type whe saved in Frontend
-Editing before the data it is persisted to the database. This allows you to
+Modify data for a specific table, field, and record type when saved in Frontend
+Editing before the data is persisted to the database. This allows you to
 remove any (or all) HTML tags or modify the data to better suit the way it
 should be persisted.
 
@@ -63,11 +73,13 @@ This property consists of nested arrays.
 
 .. code-block:: typoscript
 
-   contentPersistPreProcessing {
-     <tableName> {
-       <type> {
-         <field> {
-           # Any stdWrap property
+   config.tx_frontendediting {
+     contentPersistPreProcessing {
+       <tableName> {
+         <type> {
+           <field> {
+             # Any stdWrap property
+           }
          }
        }
      }
@@ -86,19 +98,48 @@ This property consists of nested arrays.
    modify the data. You can also use the :ref:`userFunc <t3tsref:parsefunc-userFunc>`
    property to modify data using PHP.
 
-Example
--------
+Example 1
+---------
 
 Strip all HTML tags from the `bodytext` field in the `tt_content` table if the
 record type (e.g. the `CType` field for content elements) is "bullets".
 
 .. code-block:: typoscript
 
-   contentPersistPreProcessing {
-     tt_content {
-       bullets {
-         bodytext {
-           stripHtml = 1
+   config.tx_frontendediting {
+     contentPersistPreProcessing {
+       tt_content {
+         bullets {
+           bodytext {
+             stripHtml = 1
+           }
+         }
+       }
+     }
+   }
+
+Example 2
+---------
+
+Convert the date of a news item from the frontend display format dd/mm/yyyy
+to the ISO 8601 format YYYY-MM-DDT00:00:00Z, so that it can be saved correctly
+in the database when the editor changes it.
+
+.. code-block:: typoscript
+
+   config.tx_frontendediting {
+     contentPersistPreProcessing {
+       tx_news_domain_model_news {
+         0 {
+           datetime {
+             replacement {
+               10 {
+                 search = /([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})/
+                 replace = \3-\2-\1T00:00:00Z
+                 useRegExp = 1
+               }
+             }
+           }
          }
        }
      }
@@ -112,19 +153,21 @@ See also :ref:`typoscript-contentpersistpreprocessingpatterns`.
 contentPersistPreProcessingPatterns
 ===================================
 
-Modify data for any field with a specific RTE preset before the data it is
+Modify data for any field with a specific RTE preset before the data is
 persisted to the database. This allows you to remove any (or all) HTML tags or
 modify the data to better suit the way it should be persisted.
 
 .. code-block:: typoscript
 
-   contentPersistPreProcessingPatterns {
-     <preset> {
-       replacement {
-         10 {
-           search = #<br\s*\/?>#i
-           replace.char = 10
-           useRegExp = 1
+   config.tx_frontendediting {
+     contentPersistPreProcessingPatterns {
+       <preset> {
+         replacement {
+           10 {
+             search = #<br\s*\/?>#i
+             replace.char = 10
+             useRegExp = 1
+           }
          }
        }
      }
@@ -148,54 +191,14 @@ data in Frontend Editing.
 
 .. code-block:: typoscript
 
-   contentPersistPreProcessing {
-     default {
-       stripHtml = 1
+   config.tx_frontendediting {
+     contentPersistPreProcessing {
+       default {
+         stripHtml = 1
+       }
      }
    }
 
 
 See also :ref:`typoscript-contentpersistpreprocessing`. This property is only
 applied if no match was found there.
-
-
-.. _typoscript-pagecontentpreprocessing:
-
-pageContentPreProcessing
-========================
-
-:aspect:`DataType`
-   :ref:`stdwrap <t3tsref:stdwrap>`
-
-Transformations applied to the page being edited before it is sent to the user.
-This is used to ensure features work as expected and inceptions are avoided.
-
-Example
--------
-
-This example from Frontend Editing's default TypoScript configuration modifies
-forms so submitting a form produces an editable page. You might have to submit a
-form to reach some editabe records through Frontend Editing.
-
-.. code-block:: typoscript
-
-   pageContentPreProcessing {
-     parseFunc {
-       tags {
-         form = TEXT
-         form {
-           current = 1
-           # Add frontend_editing=true if this is a GET form (rather than POST)
-           innerWrap = <input type="hidden" name="frontend_editing" value="true">|
-           innerWrap.if {
-             value {
-               data = parameters : method
-               case = lower
-             }
-             equals = get
-           }
-           dataWrap = <form { parameters : allParams }>|</form>
-         }
-       }
-     }
-   }

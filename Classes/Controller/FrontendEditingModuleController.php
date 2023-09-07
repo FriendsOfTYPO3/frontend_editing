@@ -19,31 +19,50 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Controller\ContentElement\NewContentElementController as Typo3NewContentElementController;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\FullyRenderedButton;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\View\BackendLayoutView;
 use TYPO3\CMS\Backend\View\PageLayoutContext;
+use TYPO3\CMS\Backend\Wizard\NewContentElementWizardHookInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Context\LanguageAspectFactory;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LocalizationFactory;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Routing\UnableToLinkToPageException;
+use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\FrontendEditing\Backend\Controller\ContentElement\NewContentElementController;
+use TYPO3\CMS\FrontendEditing\Service\AccessService;
+use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
+use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
+use UnexpectedValueException;
 
 /**
  * Controller for FrontendEditing in the backend as a module
@@ -52,31 +71,12 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class FrontendEditingModuleController
 {
     /**
-     * Page Id for which to make the listing
+     * Page ID
      *
      * @var int
      * @internal
      */
-    public $id;
-
-    /**
-     * ModuleTemplate object
-     *
-     * @var ModuleTemplate
-     */
-    protected $moduleTemplate;
-
-    /**
-     * View
-     *
-     * @var ViewInterface
-     */
-    protected $view;
-
-    /**
-     * Page Repository
-     */
-    protected $pageRepository;
+    public int $id;
 
     /**
      * Current ids page record
@@ -84,24 +84,73 @@ class FrontendEditingModuleController
      * @var array|bool
      * @internal
      */
-    public $pageinfo;
+    public array|bool $pageinfo;
+
+    /**
+     * The name of the module
+     *
+     * @var string
+     */
+    protected string $moduleName = 'web_FrontendEditing';
+
+    /**
+     * @var ModuleTemplate
+     */
+    protected ModuleTemplate $moduleTemplate;
+
+    /**
+     * @var ButtonBar
+     */
+    protected ButtonBar $buttonBar;
+
+    /**
+     * @var SiteLanguage[]
+     */
+    protected array $availableLanguages;
 
     /**
      * @var PageLayoutContext|null
      */
-    protected $context;
+    protected ?PageLayoutContext $context;
+
+    /**
+     * @var array|null $settings
+     */
+    private array|null $settings;
+
+    protected IconFactory $iconFactory;
+    protected PageRenderer $pageRenderer;
+    protected UriBuilder $uriBuilder;
+    protected PageRepository $pageRepository;
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+
+    protected SiteFinder $siteFinder;
+
+    protected StandaloneView $view;
 
     /**
      * Initialize module template and language service
+     * @throws InvalidConfigurationTypeException
      */
-    public function __construct()
-    {
-        $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplate::class);
-        $this->getLanguageService()->includeLLFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
-        $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $pageRenderer->addInlineLanguageLabelFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
-        $pageRepositoryClassName = PageRepository::class;
-        $this->pageRepository = GeneralUtility::makeInstance($pageRepositoryClassName);
+    public function __construct(
+        IconFactory $iconFactory,
+        PageRenderer $pageRenderer,
+        UriBuilder $uriBuilder,
+        PageRepository $pageRepository,
+        ModuleTemplateFactory $moduleTemplateFactory,
+        SiteFinder $siteFinder
+    ) {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+        $this->iconFactory = $iconFactory;
+        $this->pageRenderer = $pageRenderer;
+        $this->uriBuilder = $uriBuilder;
+        $this->pageRepository = $pageRepository;
+
+        $this->siteFinder = $siteFinder;
+        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        $this->settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Frontendediting');
     }
 
     /**
@@ -109,9 +158,8 @@ class FrontendEditingModuleController
      *
      * @param string $templateName
      */
-    protected function initializeView(string $templateName)
+    protected function initializeView(string $templateName): void
     {
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->view->getRequest()->setControllerExtensionName('FrontendEditing');
         $this->view->setTemplate($templateName);
         $this->view->setTemplateRootPaths(['EXT:frontend_editing/Resources/Private/Templates/FrontendEditingModule']);
@@ -127,10 +175,11 @@ class FrontendEditingModuleController
      * @param string $targetUrl
      * @throws RouteNotFoundException
      */
-    protected function registerDocHeader(ServerRequestInterface $request, int $languageId, string $targetUrl)
+    protected function registerDocHeader(ServerRequestInterface $request, int $languageId, string $targetUrl): void
     {
+        $lang = $this->getLanguageService();
         $languages = $this->getPreviewLanguages();
-        /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+        /** @var UriBuilder $uriBuilder */
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         if (count($languages) > 1) {
             $languageMenu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
@@ -156,16 +205,23 @@ class FrontendEditingModuleController
 
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
 
-        $this->addActionsUI($buttonBar);
+        $this->addActionsUI($buttonBar, $languageId);
 
         $this->addResponsiveUI($buttonBar);
 
         // Add view page button
         $showButton = $buttonBar->makeLinkButton()
             ->setHref($targetUrl)
-            ->setOnClick('window.open(this.href, \'newTYPO3frontendWindow\').focus();return false;')
+            ->setDataAttributes([
+                'dispatch-action' => 'TYPO3.WindowManager.localOpen',
+                'dispatch-args' => GeneralUtility::jsonEncodeForHtmlAttribute([
+                    $targetUrl,
+                    true, // switchFocus
+                    'newTYPO3frontendWindow', // windowName,
+                ]),
+            ])
             ->setTitle($this->getLanguageService()->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.showPage'))
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-view-page', Icon::SIZE_SMALL));
+            ->setIcon($this->iconFactory->getIcon('actions-view-page', Icon::SIZE_SMALL));
         $buttonBar->addButton($showButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
 
         // Add edit page properties button
@@ -188,11 +244,14 @@ class FrontendEditingModuleController
             $buttonBar->addButton($editPageButton, ButtonBar::BUTTON_POSITION_LEFT, 3);
         }
 
-        $refreshButton = $buttonBar->makeLinkButton()
-            ->setHref('javascript:document.getElementById(\'tx_frontendediting_iframe\').contentWindow.location.reload(true);')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:refreshPage'))
-            ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-refresh', Icon::SIZE_SMALL));
-        $buttonBar->addButton($refreshButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
+        // Cache
+        $clearCacheButton = $this->buttonBar->makeLinkButton()
+            ->setHref('#')
+            ->setDataAttributes(['id' => $this->pageinfo['uid']])
+            ->setClasses('t3js-clear-page-cache')
+            ->setTitle($lang->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.clear_cache'))
+            ->setIcon($this->iconFactory->getIcon('actions-system-cache-clear', Icon::SIZE_SMALL));
+        $this->buttonBar->addButton($clearCacheButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
 
         // Shortcut
         $mayMakeShortcut = $this->getBackendUser()->mayMakeShortcut();
@@ -204,19 +263,22 @@ class FrontendEditingModuleController
                 ->setGetVariables($getVars);
             $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
         }
+
     }
 
     /**
      * Add action buttons to UI
      *
      * @param ButtonBar $buttonBar
+     * @param int $languageId
      */
-    private function addActionsUI(ButtonBar $buttonBar)
+    private function addActionsUI(ButtonBar $buttonBar, int $languageId): void
     {
+        $lang = $this->getLanguageService();
         $saveAllButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3-frontend-editing__save')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.save-all'))
+            ->setTitle($lang->getLL('top-bar.save-all'))
             ->setShowLabelText(true)
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-document-save', Icon::SIZE_SMALL));
         $buttonBar->addButton($saveAllButton, ButtonBar::BUTTON_POSITION_LEFT, -10);
@@ -224,15 +286,20 @@ class FrontendEditingModuleController
         $discardButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3-frontend-editing__discard')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.discard-all'))
+            ->setTitle($lang->getLL('top-bar.discard-all'))
             ->setShowLabelText(true)
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-close', Icon::SIZE_SMALL));
         $buttonBar->addButton($discardButton, ButtonBar::BUTTON_POSITION_LEFT, -9);
 
+        // If the page is a translation in connected-mode, disable the new CEs button
+        // because the editor must first create a new CE in the default language
+        $translationMode = AccessService::getTranslationMode($this->id, $languageId);
+        $disableNewCEButton = $languageId > 0 || $translationMode === 'connected';
         $contentsToolbarToggleButton = $buttonBar->makeLinkButton()
+            ->setDisabled($disableNewCEButton)
             ->setHref('#')
             ->setClasses('t3-frontend-editing__toggle-contents-toolbar')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.toggle-contents-toolbar'))
+            ->setTitle($lang->getLL('top-bar.toggle-contents-toolbar'))
             ->setShowLabelText(true)
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-document-add', Icon::SIZE_SMALL));
         $buttonBar->addButton($contentsToolbarToggleButton, ButtonBar::BUTTON_POSITION_LEFT, -8);
@@ -240,7 +307,7 @@ class FrontendEditingModuleController
         $hiddenItemsToggleButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3-frontend-editing__show-hidden-items')
-            ->setTitle($this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:top-bar.toggle-hidden-items'))
+            ->setTitle($lang->getLL('top-bar.toggle-hidden-items'))
             ->setShowLabelText(true)
             ->setIcon($this->moduleTemplate->getIconFactory()->getIcon('actions-eye', Icon::SIZE_SMALL));
         $buttonBar->addButton($hiddenItemsToggleButton, ButtonBar::BUTTON_POSITION_LEFT, -7);
@@ -251,12 +318,15 @@ class FrontendEditingModuleController
      *
      * @param ButtonBar $buttonBar
      */
-    private function addResponsiveUI(ButtonBar $buttonBar)
+    private function addResponsiveUI(ButtonBar $buttonBar): void
     {
+        $lang = $this->getLanguageService();
+
         // Add preset menu to module docheader
         $presetSplitButtonElement = $buttonBar->makeSplitButton();
 
-        $maximizeButtonLabel = $this->getLanguageService()->getLL('maximized');
+        $maximizeButtonLabel = $lang->getLL('maximized');
+
 
         // Current web_view state of the BE user
         $current = $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?? null;
@@ -313,7 +383,7 @@ class FrontendEditingModuleController
         $custom = $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?? [];
         $custom['width'] = (isset($custom['width']) && (int)$custom['width'] >= 300 ? (int)$custom['width'] : 320);
         $custom['height'] = (isset($custom['height']) && (int)$custom['height'] >= 300 ? (int)$custom['height'] : 480);
-        $customButtonLabel = $this->getLanguageService()->getLL('custom');
+        $customButtonLabel = $lang->getLL('custom');
         $customButton = $buttonBar->makeLinkButton()
             ->setHref('#')
             ->setClasses('t3js-preset-custom t3js-change-preset')
@@ -373,10 +443,15 @@ class FrontendEditingModuleController
      *
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws \TYPO3\CMS\Core\Exception
+     * @throws AspectNotFoundException
+     * @throws RouteNotFoundException|Exception
      */
     public function showAction(ServerRequestInterface $request): ResponseInterface
     {
+        $lang = $this->getLanguageService();
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($request);
+        $this->buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $this->getLanguageService()->includeLLFile('EXT:frontend_editing/Resources/Private/Language/locallang.xlf');
         // Setting module configuration / page select clause
         $this->id = (int)($request->getParsedBody()['id'] ?? $request->getQueryParams()['id'] ?? 0);
 
@@ -391,44 +466,60 @@ class FrontendEditingModuleController
             );
         }
 
+        /** @var SiteInterface $currentSite */
+        $currentSite = $request->getAttribute('site');
+        $this->availableLanguages = $currentSite->getAvailableLanguages($this->getBackendUser(), false, $this->id);
+
         $this->initializeView('show');
         $this->moduleTemplate->setBodyTag('<body class="typo3-module-frontendediting">');
-        $this->moduleTemplate->setModuleName('typo3-module-frontendediting');
         $this->moduleTemplate->setModuleId('typo3-module-frontendediting');
 
         if (!$this->isValidDoktype()) {
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
-                $this->getLanguageService()->getLL('noValidPageSelected'),
+                $lang->getLL('noValidPageSelected'),
                 '',
-                FlashMessage::INFO
+                AbstractMessage::INFO
             );
             return $this->renderFlashMessage($flashMessage);
+        }
+
+        // Set meta info to display page path in module doc header
+        if ($this->id && is_array($this->pageinfo)) {
+            $this->moduleTemplate->getDocHeaderComponent()->setMetaInformation($this->pageinfo);
         }
 
         $languageId = $this->getCurrentLanguage(
             $request->getParsedBody()['language'] ?? $request->getQueryParams()['language'] ?? null
         );
-        try {
-            $targetUrl = BackendUtility::getPreviewUrl(
-                $this->id,
-                '',
-                null,
-                '',
-                '',
-                $this->getTypeParameterIfSet() . '&L=' . $languageId
-            );
 
-            // Check for what protocol to use
-            $targetUrl = str_replace(['https://', 'http://'], $this->getProtocol(), $targetUrl);
-        } catch (UnableToLinkToPageException $e) {
-            $flashMessage = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                $this->getLanguageService()->getLL('noSiteConfiguration'),
-                '',
-                FlashMessage::WARNING
-            );
-            return $this->renderFlashMessage($flashMessage);
+        // If the module is called with fe_url query param, then use that URL in Frontend Editing iFrame
+        // else get the FE URL from the page UID
+        $feUrl = $request->getQueryParams()['fe_url'] ?? false;
+        if ($feUrl) {
+            $targetUrl = $feUrl;
+        } else {
+            try {
+                $targetUrl = BackendUtility::getPreviewUrl(
+                    $this->id,
+                    '',
+                    null,
+                    '',
+                    '',
+                    $this->getTypeParameterIfSet() . '&L=' . $languageId
+                );
+
+                // Check for what protocol to use
+                $targetUrl = str_replace(['https://', 'http://'], $this->getProtocol(), $targetUrl);
+            } catch (UnableToLinkToPageException) {
+                $flashMessage = GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    $lang->getLL('noSiteConfiguration'),
+                    '',
+                    AbstractMessage::WARNING
+                );
+                return $this->renderFlashMessage($flashMessage);
+            }
         }
 
         $this->registerDocHeader($request, $languageId, $targetUrl);
@@ -445,42 +536,120 @@ class FrontendEditingModuleController
 
         $current = $this->getBackendUser()->uc['moduleData']['web_view']['States']['current'] ?? [];
 
-        $current['label'] = ($current['label'] ?? $this->getLanguageService()->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:custom'));
+        $current['label'] = ($current['label'] ?? $lang->getLL('custom'));
         $current['width'] = (isset($current['width']) && (int)$current['width'] >= 300 ? (int)$current['width'] : null);
         $current['height'] = (isset($current['height']) && (int)$current['height'] >= 300 ? (int)$current['height'] : null);
         $custom = $this->getBackendUser()->uc['moduleData']['web_view']['States']['custom'] ?? [];
         $custom['width'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 320);
         $custom['height'] = (isset($current['custom']) && (int)$current['custom'] >= 300 ? (int)$current['custom'] : 480);
 
-        $otherDomain = false;
-        // Check if the domain I am logged into are the same as the one I try edit for
-        if (strpos($targetUrl, $request->getUri()->getHost()) !== false) {
-            // Apply the GET parameter "frontend_editing"
-            if (parse_url($targetUrl, PHP_URL_QUERY)) {
-                $targetUrl = $targetUrl . '&frontend_editing=true';
-            } else {
-                $targetUrl = $targetUrl . '?frontend_editing=true';
-            }
-        } else {
-            if ($targetUrl) {
-                $targetUrl = parse_url($targetUrl)['host'];
-            }
-            $otherDomain = true;
-        }
-
         // Assign variables to template
         $this->view->assign('icons', $icons);
         $this->view->assign('current', $current);
         $this->view->assign('custom', $custom);
         $this->view->assign('presetGroups', $this->getPreviewPresets());
-        $this->view->assign('url', $targetUrl);
+        $this->view->assign('url', $this->addFrontendEditingParameter($targetUrl));
         $this->view->assign('protocol', $request->getUri()->getScheme());
-        $this->view->assign('otherDomain', $otherDomain);
+        $this->view->assign('contentItems', $this->getContentItems());
+        $this->view->assign('customRecords', $this->getCustomRecords());
+        $this->view->assign('loadingIcon', $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render());
+
+        $this->initFrontendEditingGui();
 
         $this->moduleTemplate->setContent($this->view->render());
         return new HtmlResponse($this->moduleTemplate->renderContent());
     }
 
+    /**
+     * @throws RouteNotFoundException
+     */
+    private function initFrontendEditingGui(): void
+    {
+        $endpointUrl = $this->uriBuilder->buildUriFromRoute(
+            'ajax_frontendediting_process',
+        );
+        $ajaxRecordProcessEndpointUrl = $this->uriBuilder->buildUriFromRoute(
+            'ajax_record_process',
+        );
+        $configurationEndpointUrl = $this->uriBuilder->buildUriFromRoute(
+            'ajax_frontendediting_editorconfiguration',
+            ['page' => $this->id]
+        );
+        $this->loadJavascriptResources();
+
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/ContextMenu');
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Recordlist/ClearCache');
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/FrontendEditing/GUI', 'function(FrontendEditing) {
+            // The global F object for API calls
+            window.F = new FrontendEditing();
+            window.F.initGUI({
+                resourcePath: ' . GeneralUtility::quoteJSvalue($this->getAbsolutePath('EXT:frontend_editing/Resources/Public/')) . ',
+                editorConfigurationUrl: ' . GeneralUtility::quoteJSvalue($configurationEndpointUrl) . '
+            });
+            window.F.setEndpointUrl(' . GeneralUtility::quoteJSvalue($endpointUrl) . ');
+            window.F.setAjaxRecordProcessEndpointUrl(' . GeneralUtility::quoteJSvalue($ajaxRecordProcessEndpointUrl) . ');
+            window.F.setBESessionId(' . GeneralUtility::quoteJSvalue($this->getBeSessionKey()) . ');
+            window.F.setTranslationLabels(' . json_encode($this->getLocalizedFrontendLabels()) . ');
+            window.F.setDisableModalOnNewCe(' .
+                (int)ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders'] .
+            ');
+            window.FrontendEditingMode = true;
+        }');
+    }
+
+    /**
+     * Helper method to get the file name relative to the URL
+     *
+     * @param string $path
+     * @return string
+     */
+    protected function getAbsolutePath(string $path): string
+    {
+        return PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName($path));
+    }
+
+    /**
+     * Generate Be user session key to transfer between domains
+     *
+     * @return string
+     */
+    protected function getBeSessionKey(): string
+    {
+        return rawurlencode(
+            $GLOBALS['BE_USER']->id .
+            '-' .
+            md5(
+                $GLOBALS['BE_USER']->id .
+                '/' .
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']
+            )
+        );
+    }
+
+    /**
+     * Returns an array with labels from translation file
+     *
+     * @return array
+     */
+    protected function getLocalizedFrontendLabels(): array
+    {
+        $languageFactory = GeneralUtility::makeInstance(LocalizationFactory::class);
+        $parsedLocallang = $languageFactory->getParsedData(
+            'EXT:frontend_editing/Resources/Private/Language/locallang.xlf',
+            'default'
+        );
+        $localizedLabels = [];
+        foreach (array_keys($parsedLocallang['default']) as $key) {
+            $localizedLabels[$key] = LocalizationUtility::translate($key, 'FrontendEditing');
+        }
+        return $localizedLabels;
+    }
+
+    /**
+     * @param FlashMessage $flashMessage
+     * @return HtmlResponse
+     * @throws Exception
+     */
     protected function renderFlashMessage(FlashMessage $flashMessage): HtmlResponse
     {
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
@@ -578,7 +747,7 @@ class FrontendEditingModuleController
                     $languages[$siteLanguage->getLanguageId()] = $siteLanguage->getTitle();
                 }
             }
-        } catch (SiteNotFoundException $e) {
+        } catch (SiteNotFoundException) {
             // do nothing
         }
         return $languages;
@@ -587,7 +756,7 @@ class FrontendEditingModuleController
     /**
      * Returns the current language
      *
-     * @param string $languageParam
+     * @param string|null $languageParam
      * @return int
      */
     protected function getCurrentLanguage(string $languageParam = null): int
@@ -626,7 +795,7 @@ class FrontendEditingModuleController
         }
 
         return $this->pageinfo !== []
-            && !(bool)($this->pageinfo[$GLOBALS['TCA']['pages']['ctrl']['editlock'] ?? null] ?? false)
+            && !($this->pageinfo[$GLOBALS['TCA']['pages']['ctrl']['editlock'] ?? null] ?? false)
             && $backendUser->doesUserHaveAccess($this->pageinfo, Permission::PAGE_EDIT)
             && $backendUser->checkLanguageAccess($languageId)
             && $backendUser->check('tables_modify', 'pages');
@@ -648,9 +817,9 @@ class FrontendEditingModuleController
 
         return $pageType !== 0
             && !in_array($pageType, [
-                $this->pageRepository::DOKTYPE_SPACER,
-                $this->pageRepository::DOKTYPE_SYSFOLDER,
-                $this->pageRepository::DOKTYPE_RECYCLER
+                PageRepository::DOKTYPE_SPACER,
+                PageRepository::DOKTYPE_SYSFOLDER,
+                PageRepository::DOKTYPE_RECYCLER
             ], true);
     }
 
@@ -667,6 +836,113 @@ class FrontendEditingModuleController
     }
 
     /**
+     * Get the available content elements from TYPO3 backend
+     *
+     * @return array
+     */
+    protected function getContentItems(): array
+    {
+        $contentController = GeneralUtility::makeInstance(
+            NewContentElementController::class,
+            $this->iconFactory,
+            $this->pageRenderer,
+            $this->uriBuilder,
+            $this->moduleTemplateFactory
+        );
+
+        $wizardItems = $contentController->publicGetWizards();
+
+        $this->wizardItemsHook($wizardItems, $contentController);
+
+        $contentItems = [];
+        $wizardTabKey = '';
+        foreach ($wizardItems as $wizardKey => $wizardItem) {
+            if (isset($wizardItem['header'])) {
+                $wizardTabKey = $wizardKey;
+                $contentItems[$wizardTabKey]['description'] = $wizardItem['header'];
+            } else {
+                $contentItems[$wizardTabKey]['items'][] = array_merge(
+                    $wizardItem,
+                    [
+                        'iconHtml' => $this->iconFactory->getIcon($wizardItem['iconIdentifier'])->render()
+                    ]
+                );
+            }
+        }
+        return $contentItems;
+    }
+
+    /**
+     * Get custom records defined in TypoScript
+     *
+     * @return array
+     * @throws RouteNotFoundException
+     */
+    protected function getCustomRecords(): array
+    {
+        $records = [];
+        if (isset($this->settings['customRecords']) && is_array($this->settings['customRecords'])) {
+            /** @var ContentEditableWrapperService $wrapperService */
+            $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
+            foreach ($this->settings['customRecords'] as $table => $defaultValues) {
+                $pid = $this->id;
+                $page = BackendUtility::getRecord('pages', $pid);
+
+                if (
+                    $table
+                    && isset($GLOBALS['TCA'][$table])
+                    && $GLOBALS['BE_USER']->check('tables_modify', $table)
+                    && $page && $GLOBALS['BE_USER']->doesUserHaveAccess($page, 16)
+                ) {
+                    $records[] = [
+                        'title' => $GLOBALS['TCA'][$table]['ctrl']['title'],
+                        'table' => $table,
+                        'url' => $wrapperService->renderEditOnClickReturnUrl($wrapperService->renderNewUrl(
+                            $table,
+                            $pid,
+                            $defaultValues,
+                            true
+                        )),
+                    ];
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    /**
+     * Call registered hooks to manipulate wizard items
+     *
+     * @param array &$wizardItems
+     * @param Typo3NewContentElementController $contentController
+     */
+    protected function wizardItemsHook(array &$wizardItems, Typo3NewContentElementController $contentController): void
+    {
+        $newContentElement = isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms'])
+            ? $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms']['db_new_content_el'] : [];
+        // Wrapper for wizards
+        // Hook for manipulating wizardItems, wrapper, onClickEvent etc.
+        if (
+            is_array($newContentElement)
+            && !empty($newContentElement)
+            && array_key_exists('wizardItemsHook', $newContentElement)
+        ) {
+            foreach ($newContentElement['wizardItemsHook'] as $classData) {
+                $hookObject = GeneralUtility::makeInstance($classData);
+                if (!$hookObject instanceof NewContentElementWizardHookInterface) {
+                    throw new UnexpectedValueException(
+                        $classData . ' must implement interface ' . NewContentElementWizardHookInterface::class,
+                        1227834741
+                    );
+                }
+
+                $hookObject->manipulateWizardItems($wizardItems, $contentController);
+            }
+        }
+    }
+
+    /**
      * @return BackendUserAuthentication
      */
     protected function getBackendUser(): BackendUserAuthentication
@@ -680,5 +956,62 @@ class FrontendEditingModuleController
     protected function getLanguageService(): LanguageService
     {
         return $GLOBALS['LANG'];
+    }
+
+    /**
+     * @param string $originalUrl
+     * @return string
+     */
+    private function addFrontendEditingParameter(string $originalUrl): string
+    {
+        $urlParts = parse_url($originalUrl);
+        parse_str($urlParts['query'] ?? '', $queryParams);
+        $queryParams['fe_edit'] = 1;
+        $newQueryString = http_build_query($queryParams);
+        return $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'] . '?' . $newQueryString;
+    }
+
+    /**
+     * Load the necessary Javascript-resources for the toolbars
+     */
+    protected function loadJavascriptResources(): void
+    {
+        $this->pageRenderer->addJsFile(
+            'EXT:core/Resources/Public/JavaScript/Contrib/jquery/jquery.js'
+        );
+        $this->pageRenderer->addRequireJsConfiguration(
+            [
+                'shim' => [
+                    'ckeditor' => ['exports' => 'CKEDITOR'],
+                    'ckeditor-jquery-adapter' => ['jquery', 'ckeditor'],
+                ],
+                'paths' => [
+                    'TYPO3/CMS/FrontendEditing/Contrib/toastr' => PathUtility::getAbsoluteWebPath(
+                            ExtensionManagementUtility::extPath('frontend_editing', 'Resources/Public/JavaScript/Contrib/')
+                        ) . 'toastr',
+                    'TYPO3/CMS/FrontendEditing/Contrib/immutable' => PathUtility::getAbsoluteWebPath(
+                            ExtensionManagementUtility::extPath('frontend_editing', 'Resources/Public/JavaScript/Contrib/')
+                        ) . 'immutable'
+                ]
+            ]
+        );
+
+        // Load CKEDITOR and CKEDITOR jQuery adapter independent for global access
+        $this->pageRenderer->addJsFooterFile('EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/ckeditor.js');
+        $this->pageRenderer->addJsFooterFile(
+            'EXT:frontend_editing/Resources/Public/JavaScript/Contrib/ckeditor-jquery-adapter.js'
+        );
+
+        // Fixes issue #377, where CKEditor dependencies fail to load if the version number is added to the file name
+        $this->pageRenderer->addJsInlineCode(
+            'ckeditor-basepath-config',
+            'window.CKEDITOR_BASEPATH = ' . GeneralUtility::quoteJSvalue(PathUtility::getAbsoluteWebPath(
+                GeneralUtility::getFileAbsFileName(
+                    'EXT:rte_ckeditor/Resources/Public/JavaScript/Contrib/'
+                )
+            )) . ';',
+            true,
+            true
+        );
     }
 }

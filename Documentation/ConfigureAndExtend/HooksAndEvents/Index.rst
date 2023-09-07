@@ -15,35 +15,6 @@ Hooks and events
 PSR-14 Events
 =============
 
-.. _events-register:
-
-Registering event handlers
---------------------------
-
-For compatibility with TYPO3 v9, PSR-14 events are also supported through
-Signals and Slots. In our implementation the slots are actually implemented as
-PSR-14-compatible event handler classes. The same class is used both for Events
-in TYPO3 v10 and Signals and Slots in TYPO3 v9.
-
-PSR-14 in TYPO3 v10 events are registered the usual way, in
-`Configuration/Services.yaml`. See :ref:`t3coreapi:eventdispatcherregistration`.
-
-For registering the same event handler as a Slot in TYPO3 v9, we recommend using
-the convenience method :php:`\TYPO3\CMS\FrontendEditing\Utility\CompatibilityUtility::registerEventHandlerAsSignalSlot`.
-
-Example
-~~~~~~~
-
-Registering an event handler as a signal slot in TYPO3 v9. (Added to
-`ext_localconf.php`.)
-
-.. code-block:: php
-
-   CompatibilityUtility::registerEventHandlerAsSignalSlot(
-       \TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent::class,
-       \Foo\Bar\EventHandler\RemoveUtf8CharactersPrepareFieldUpdateEventHandler::class
-   );
-
 .. _events-preparefieldupdateevent:
 
 PrepareFieldUpdateEvent
@@ -76,7 +47,7 @@ Example event handler
    {
        public function __invoke(PrepareFieldUpdateEvent $event): void
        {
-         $event->setContent(utf8_decode($event->getContent()))
+         $event->setContent(utf8_decode($event->getContent()));
        }
    }
 

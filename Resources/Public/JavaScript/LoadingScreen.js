@@ -15,47 +15,47 @@
  * Module: TYPO3/CMS/FrontendEditing/LoadingScreen
  * Fade in and out the loading screen
  */
-define(['jquery', './Utils/Logger'], function LoadingScreenFactory ($, Logger) {
-    'use strict';
+define(['jquery', './Utils/Logger'], function LoadingScreenFactory($, Logger) {
+  'use strict';
 
-    var log = Logger('FEditing:Component:LoadingScreen');
-    log.trace('--> LoadingScreenFactory');
+  var log = Logger('FEditing:Component:LoadingScreen');
+  log.trace('--> LoadingScreenFactory');
 
-    return function LoadingScreen (element) {
-        log.trace('LoadingScreen', element);
+  return function LoadingScreen(element) {
+    log.trace('LoadingScreen', element);
 
-        var $loadingScreen = $(element);
-        var loadingScreenLevel = 0;
+    var $loadingScreen = $(element);
+    var loadingScreenLevel = 0;
 
-        return {
-            showLoadingScreen: function () {
-                log.trace('showLoadingScreen', loadingScreenLevel);
+    return {
+      showLoadingScreen: function () {
+        log.trace('showLoadingScreen', loadingScreenLevel);
 
-                if (loadingScreenLevel === 0) {
-                    log.info('show loading screen');
+        if (loadingScreenLevel === 0) {
+          log.info('show loading screen');
 
-                    $loadingScreen.fadeIn('fast');
-                }
+          $loadingScreen.fadeIn('fast');
+        }
 
-                loadingScreenLevel++;
-                log.debug('new loadingScreenLevel', loadingScreenLevel);
-            },
-            hideLoadingScreen: function () {
-                log.trace('--> LoadingScreenFactory');
-                loadingScreenLevel--;
+        loadingScreenLevel++;
+        log.debug('new loadingScreenLevel', loadingScreenLevel);
+      },
+      hideLoadingScreen: function () {
+        log.trace('--> LoadingScreenFactory');
+        loadingScreenLevel--;
 
-                log.debug('new loadingScreenLevel', loadingScreenLevel);
+        log.debug('new loadingScreenLevel', loadingScreenLevel);
 
-                if (loadingScreenLevel <= 0) {
-                    log.info('hide loading screen');
+        if (loadingScreenLevel <= 0) {
+          log.info('hide loading screen');
 
-                    loadingScreenLevel = 0;
-                    $loadingScreen.fadeOut('slow');
-                }
-            },
-            getLoadingScreenLevel: function () {
-                return loadingScreenLevel;
-            }
-        };
+          loadingScreenLevel = 0;
+          $loadingScreen.fadeOut('slow');
+        }
+      },
+      getLoadingScreenLevel: function () {
+        return loadingScreenLevel;
+      }
     };
+  };
 });
