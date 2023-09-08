@@ -3,7 +3,6 @@
         box-shadow: none !important;
         background-image: none !important;
         background-color: $t3-gray !important;
-        padding: 13px 8px 10px !important;
         border: 0 !important;
     }
 }
@@ -23,8 +22,4 @@
     background-image: none !important;
     color: $black !important;
     text-shadow: 0 1px 0 lighten($gray-light, 10%) !important;
-}
-
-.cke_toolbar_break {
-    display: none !important;
 }

@@ -7,6 +7,9 @@ services:
   TYPO3\CMS\FrontendEditing\:
     resource: '../Classes/*'
 
+  TYPO3\CMS\FrontendEditing\Controller\FrontendEditingModuleController:
+    tags: ['backend.controller']
+
   TYPO3\CMS\FrontendEditing\Controller\ReceiverController:
     public: true
 

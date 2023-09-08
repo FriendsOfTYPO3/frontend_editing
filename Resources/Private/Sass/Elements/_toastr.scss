@@ -166,19 +166,19 @@ button.toast-close-button {
 }
 
 .toast-success {
-    background-color: $color-t3-green !important;
+    background-color: $brand-success !important;
 }
 
 .toast-error {
-    background-color: $color-t3-red !important;
+    background-color: $brand-danger !important;
 }
 
 .toast-info {
-    background-color: $gray !important;
+    background-color: $brand-info !important;
 }
 
 .toast-warning {
-    background-color: $color-t3-primary !important;
+    background-color: $brand-warning !important;
 }
 
 .toast-progress {

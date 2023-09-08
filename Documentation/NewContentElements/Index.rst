@@ -43,7 +43,7 @@ It's possible to add drop zones for new content elements in a custom content ele
           */
           public function wrapWithDropZone($content, $conf)
           {
-               if (GeneralUtility::_GET('frontend_editing') && GeneralUtility::makeInstance(AccessService::class)->isEnabled()) {
+               if (AccessService::isEnabled()) {
                     $wrapperService = GeneralUtility::makeInstance(ContentEditableWrapperService::class);
 
                     $content = $wrapperService->wrapContentWithDropzone(

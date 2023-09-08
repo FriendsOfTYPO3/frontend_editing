@@ -1,42 +1,16 @@
-.t3-frontend-editing__iframe-wrapper {
-    transition: width $push-duration $push-timing;
-    margin-top: 0;
-    margin-right: $right-bar-width;
-    position: relative;
+#tx_frontendediting_iframe {
     width: 100%;
-    flex: 1;
-
-    &.inactive {
-        margin-right: 0;
-    }
-
-    iframe {
-        width: 100%;
-        height: 100%;
-        margin: 0 auto;
-        display: block;
-        box-shadow: 0 0 15px 0 $gray;
-    }
-
-    &.full-view {
-        margin-top: 0;
-        width: 100%;
-
-        iframe {
-            height: 100vh;
-        }
-    }
-}
-
-.t3-frontend-editing__toolbars-wrapper {
-    position: relative;
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 0 15px 0 $gray;
 }
 
 .t3-frontend-editing__loading-screen {
     position: absolute;
     left: 0;
     top: 0;
-    bottom: -$top-bar-height;
+    bottom: 0;
     right: 0;
     background: transparentize($color-t3-gray-dark, 0.2);
 
@@ -89,8 +63,10 @@ body {
 }
 
 .t3-frontend-editing__ckeditor-bar__wrapper {
+    padding: 0 18px;
     background: $t3-gray;
-    min-height: $top-bar-height;
+    border-bottom: 1px solid $t3-gray-divider;
+    min-height: calc(100% + 1px); // 100% of module-docheader + 1px to overlay module-docheader bottom border with its own border
     height: auto;
     position: absolute;
     top: 0;

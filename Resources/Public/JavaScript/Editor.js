@@ -17,12 +17,14 @@
 define([
   'jquery',
   './Utils/TranslatorLoader',
+  './Notification',
   './Utils/Logger',
   'TYPO3/CMS/Backend/Modal',
   'TYPO3/CMS/Backend/Severity',
 ], function (
   $,
   TranslatorLoader,
+  Notification,
   Logger,
   Modal,
   Severity
@@ -33,11 +35,13 @@ define([
   log.trace('--> createEditorControl');
 
   var translateKeys = {
-    confirmOpenModalWithChange: 'notifications.unsaved-changes',
+    confirmOpenModalWithChangeTitle: 'notifications.unsaved-changes-title',
+    confirmOpenModalWithChangeMessage: 'notifications.unsaved-changes-message',
+    confirmOpenModalSaveChanges: 'notifications.unsaved-changes-save-and-go-ahead',
+    confirmOpenModalDiscardChanges: 'notifications.unsaved-changes-discard-changes',
+    confirmOpenModalAbort: 'notifications.unsaved-changes-continue-editing',
     confirmDeleteContentElement: 'notifications.delete-content-element',
-    informRequestFailed: 'notifications.request.configuration.fail',
-    yes: 'yes',
-    no: 'no',
+    informRequestFailed: 'notifications.request.configuration.fail'
   };
 
   var translator = TranslatorLoader
@@ -92,8 +96,23 @@ define([
       )
     );
 
-    // Suppress a tags (links) to redirect the normal way
+    // Links in editable CE are not navigable directly on click.
+    // This is made to allow the editor to edit the link text.
+    // To navigate, the editor must hold down CTRL when clicking on a link.
+    // To maintain uniform behavior even in non-editable content,
+    // the editor must still hold down CTRL to navigate.
     $iframeContents.find('a').click(function (event) {
+      if (!event.ctrlKey) {
+        event.preventDefault();
+        // Don't display notification if link is a placeholder link
+        if (!(this.getAttribute('href').includes('#') || this.href === "javascript:void(0)")) {
+          Notification.info(
+            translate(translateKeys.informNavigateWithCtrl)
+          );
+        }
+        return;
+      }
+
       var linkUrl = $(this).attr('href');
       if (!event.isDefaultPrevented() && linkUrl.indexOf('#') !== 0) {
         event.preventDefault();
@@ -112,48 +131,44 @@ define([
           return false;
         });
 
-        // Open/edit|new action
-        that.find('.icon-actions-open, .icon-actions-document-new').on('click', function () {
-          if (!storage.isEmpty()) {
+        // Open/edit action
+        that.find('.icon-actions-open').on('click', function () {
+          if (storage.isEmpty()) {
+            openModal();
+          } else {
             Modal.confirm(
-              translate(translateKeys.confirmOpenModalWithChange),
-              translate(translateKeys.confirmOpenModalWithChange),
+              translate(translateKeys.confirmOpenModalWithChangeTitle),
+              translate(translateKeys.confirmOpenModalWithChangeMessage),
               Severity.warning,
               [
                 {
-                  text: translate(translateKeys.confirmOpenModalWithChange)  || 'Save',
-                  btnClass: 'btn-danger',
-                  name: 'save'
+                  text: translate(translateKeys.confirmOpenModalAbort) || 'No',
+                  btnClass: 'btn-default',
+                  name: 'no'
                 },
                 {
-                  text: translate(translateKeys.yes)  || 'Yes',
+                  text: translate(translateKeys.confirmOpenModalDiscardChanges)  || 'Yes',
                   btnClass: 'btn-default',
                   name: 'yes'
                 },
                 {
-                  text: translate(translateKeys.no) || 'No',
-                  btnClass: 'btn-default',
-                  name: 'no'
-                },
+                  text: translate(translateKeys.confirmOpenModalSaveChanges)  || 'Save',
+                  btnClass: 'btn-warning',
+                  name: 'save'
+                }
               ]
             ).on('button.clicked', function(evt) {
               if (evt.target.name === 'save') {
                 F.saveAll();
-                openModal($(this));
+                openModal();
               } else if (evt.target.name === 'yes') {
-                openModal($(this));
+                openModal();
               }
               Modal.dismiss();
             });
-          } else {
-            openModal($(this));
           }
 
-          function openModal(button) {
-            var url = that.data('edit-url');
-            if (button.data('identifier') === 'actions-document-new') {
-              url = that.data('new-url');
-            }
+          function openModal() {
             require([
               'jquery',
               'TYPO3/CMS/Backend/Modal',
@@ -163,7 +178,7 @@ define([
               Modal.advanced({
                 type: Modal.types.iframe,
                 title: '',
-                content: url,
+                content: that.data('edit-url'),
                 size: Modal.sizes.large,
                 callback: function (currentModal) {
                   var modalIframe = currentModal.find(Modal.types.iframe);
@@ -214,35 +229,6 @@ define([
           F.hideContent(that.data('uid'), that.data('table'), hide);
         });
 
-        if (typeof $inlineActions[index - 1] !== 'undefined' &&
-          $inlineActions[index - 1].dataset.cid == that.data('cid')
-        ) {
-          // Move up action
-          that.find('.icon-actions-move-up').on('click', function () {
-            // Find the previous editor instance element
-            var previousDomElementUid = $inlineActions[index - 1].dataset.uid;
-            var currentDomElementUid = that.data('uid');
-            var currentDomElementTable = that.data('table');
-            F.moveContent(previousDomElementUid, currentDomElementTable, currentDomElementUid)
-          });
-        } else {
-          that.find('.icon-actions-move-up').hide();
-        }
-
-        if (typeof $inlineActions[index + 1] !== 'undefined' &&
-          $inlineActions[index + 1].dataset.cid == that.data('cid')
-        ) {
-          // Move down action
-          that.find('.icon-actions-move-down').on('click', function () {
-            // Find the next editor instance element
-            var nextDomElementUid = $inlineActions[index + 1].dataset.uid;
-            var currentDomElementUid = that.data('uid');
-            var currentDomElementTable = that.data('table');
-            F.moveContent(currentDomElementUid, currentDomElementTable, nextDomElementUid)
-          });
-        } else {
-          that.find('.icon-actions-move-down').hide();
-        }
         that.data('t3-frontend-editing-initialized', true);
       }
     };
@@ -255,19 +241,19 @@ define([
     });
 
 
-    var $topBar = $('.t3-frontend-editing__ckeditor-bar'),
-        $topBarWrapper = $('.t3-frontend-editing__ckeditor-bar__wrapper');
+    var $ckeditorBar = $('.t3-frontend-editing__ckeditor-bar'),
+        $ckeditorBarWrapper = $('.t3-frontend-editing__ckeditor-bar__wrapper');
+
+    // Move CKEditor bar inside module doc header
+    // to make CKEditor bar overlap module doc header buttons when the editor edits a content element
+    // TODO: find a way to place the bar inside doc header in FrontendEditingModuleController (not possible AFAIK)
+    $ckeditorBarWrapper.appendTo('div.module-docheader');
 
     // Add custom configuration to ckeditor
     var $contenteditable = $iframeContents.find('[contenteditable=\'true\']');
     var configurableEditableElements = [];
     $contenteditable.each(function () {
       var $el = $(this);
-      var $parent = $el.parent();
-      // Prevent linked content element to be clickable in the frontend editing mode
-      if ($parent.is('a')) {
-        $parent.attr('href', 'javascript:;');
-      }
 
       if (!CKEDITOR.dtd.$editable[$el.prop('tagName').toLowerCase()]) {
         CKEDITOR.dtd.$editable[$el.prop('tagName').toLowerCase()] = 1;
@@ -318,12 +304,12 @@ define([
 
           // Initialize CKEditor now, when finished remember any change
           $(this).ckeditor(config).on('instanceReady.ckeditor', function (event, editor) {
-            // This moves the dom instances of ckeditor into the top bar
-            $('.' + editor.id).detach().appendTo($topBar);
+            // This moves the dom instances of ckeditor into the ckeditor bar
+            $('.' + editor.id).detach().appendTo($ckeditorBar);
 
-            // Show/hide the topBar wrapper that contains the ckeditors when the editor gains/looses focus
-            editor.on('focus', function() { $topBarWrapper.show(); });
-            editor.on('blur', function() { $topBarWrapper.hide(); });
+            // Show/hide the CKEditor bar wrapper that contains the ckeditors when the editor gains/looses focus
+            editor.on('focus', function() { $ckeditorBarWrapper.show(); });
+            editor.on('blur', function() { $ckeditorBarWrapper.hide(); });
 
             editor.on('change', function (changeEvent) {
               if (typeof editor.element !== 'undefined') {

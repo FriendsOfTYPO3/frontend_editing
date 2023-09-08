@@ -12,22 +12,22 @@ class PrepareFieldUpdateEvent
     /**
      * @var string
      */
-    protected $table;
+    protected string $table;
 
     /**
      * @var array
      */
-    protected $record;
+    protected array $record;
 
     /**
      * @var string
      */
-    protected $field;
+    protected string $field;
 
     /**
      * @var string
      */
-    protected $content;
+    protected string $content;
 
     /**
      * @param string $table The table being updated
@@ -86,7 +86,7 @@ class PrepareFieldUpdateEvent
     /**
      * @param string $content
      */
-    public function setContent(string $content)
+    public function setContent(string $content): void
     {
         $this->content = $content;
     }

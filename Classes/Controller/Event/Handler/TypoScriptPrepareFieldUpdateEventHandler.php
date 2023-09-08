@@ -8,7 +8,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\FrontendEditing\Configuration\BackendConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEvent;
 use TYPO3\CMS\FrontendEditing\Controller\Event\PrepareFieldUpdateEventHandlerInterface;
 
@@ -20,7 +20,7 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
     /**
      * @var BackendConfigurationManager
      */
-    protected $configurationManager;
+    protected BackendConfigurationManager $configurationManager;
 
     /**
      * @param BackendConfigurationManager $configurationManager
@@ -79,8 +79,12 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
                 $tableTca['types'][$typeValue]['columnsOverrides'][$event->getField()]['config'] ?? []
             );
 
-            $isFrontendRichTextEnabled = isset($fieldConfig['enableFrontendRichtext']) && (bool)$fieldConfig['enableFrontendRichtext'];
-            $rteEnabled = $isFrontendRichTextEnabled ?? $fieldConfig['enableRichtext'];
+            if (isset($fieldConfig['enableFrontendRichtext']) && (bool)$fieldConfig['enableFrontendRichtext'] === true) {
+                $rteEnabled = true;
+            } else {
+                $rteEnabled = (bool)($fieldConfig['enableRichtext'] ?? false);
+            }
+
             $rtePreset = $fieldConfig['frontendRichtextConfiguration'] ?? (isset($fieldConfig['richtextConfiguration']))
                     ? $fieldConfig['richtextConfiguration'] : [];
 
@@ -89,7 +93,7 @@ class TypoScriptPrepareFieldUpdateEventHandler implements PrepareFieldUpdateEven
             }
 
             $stdWrapConfiguration =
-                $this->getTypoScriptSetup()['contentPersistPreProcessingPatterns.'][$rtePreset . '.'];
+                $this->getTypoScriptSetup()['contentPersistPreProcessingPatterns.'][$rtePreset . '.'] ?? null;
 
             if (!is_array($stdWrapConfiguration)) {
                 return;

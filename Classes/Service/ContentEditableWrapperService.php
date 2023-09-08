@@ -17,20 +17,18 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use InvalidArgumentException;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\Router;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Context\LanguageAspect;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\FrontendEditing\Utility\ConfigurationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
@@ -39,7 +37,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
  */
 class ContentEditableWrapperService
 {
-    const DEFAULT_WRAPPER_TAG_NAME = 'div';
+    public const DEFAULT_WRAPPER_TAG_NAME = 'div';
 
     /**
      * @var IconFactory
@@ -85,7 +83,7 @@ class ContentEditableWrapperService
      * @param string|null $tag Optional tag name to use, e.g. "div"
      * @param array $additionalAttributes An array of additional arguments for the tag.
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function wrapContentToBeEditable(
         string $table,
@@ -99,10 +97,10 @@ class ContentEditableWrapperService
 
         // Check that data is not empty
         if (empty($table)) {
-            throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
+            throw new InvalidArgumentException('Property "table" can not to be empty!', 1486163277);
         }
         if (empty($field)) {
-            throw new \InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
+            throw new InvalidArgumentException('Property "field" can not to be empty!', 1486163282);
         }
         if (empty($uid)) {
             $this->logger->error(
@@ -154,7 +152,7 @@ class ContentEditableWrapperService
             'data-field' => $field,
             'data-uid' => $uid,
             'class' => trim(
-                $this->getContentElementClass($table, (int)$uid)
+                $this->getContentElementClass($table, $uid)
                 . ' ' . $tagBuilder->getAttribute('class')
             ),
             'placeholder' => $placeholderText,
@@ -171,13 +169,13 @@ class ContentEditableWrapperService
      * @param array $dataArr
      * @param string $content
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException|RouteNotFoundException
      */
     public function wrapContent(string $table, int $uid, array $dataArr, string $content): string
     {
         // Check that data is not empty
         if (empty($table)) {
-            throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163297);
+            throw new InvalidArgumentException('Property "table" can not to be empty!', 1486163297);
         }
         if (empty($uid)) {
             $this->logger->error(
@@ -196,7 +194,7 @@ class ContentEditableWrapperService
             return $content;
         }
 
-        $hiddenElementClassName = $this->getContentElementClass($table, (int)$uid);
+        $hiddenElementClassName = $this->getContentElementClass($table, $uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
         $recordTitle = $this->recordTitle($table, $dataArr);
@@ -209,7 +207,7 @@ class ContentEditableWrapperService
         $inlineActionTagBuilder = GeneralUtility::makeInstance(
             TagBuilder::class,
             'span',
-            $this->renderInlineActionIcons($table, $elementIsHidden, $recordTitle, $dataArr['sys_language_uid'] ?? 0)
+            $this->renderInlineActionIcons($elementIsHidden, $recordTitle, $dataArr['sys_language_uid'] ?? 0)
         );
         $inlineActionTagBuilder->forceClosingTag(true);
 
@@ -220,8 +218,7 @@ class ContentEditableWrapperService
             'data-uid' => $uid,
             'data-hidden' => (int)$elementIsHidden,
             'data-cid' => $dataArr['colPos'] ?? 0,
-            'data-edit-url' => $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid)),
-            'data-new-url' => $this->renderEditOnClickReturnUrl($this->renderNewUrl($table, $uid))
+            'data-edit-url' => $this->renderEditOnClickReturnUrl($this->renderEditUrl($table, $uid))
         ]);
 
         /** @var TagBuilder $tagBuilder */
@@ -264,10 +261,10 @@ class ContentEditableWrapperService
     ): string {
         // Check that data is not empty
         if (empty($table)) {
-            throw new \InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
+            throw new InvalidArgumentException('Property "table" can not to be empty!', 1486163430);
         }
         if ($uid < 0) {
-            throw new \InvalidArgumentException('Property "uid" is not valid!', 1486163439);
+            throw new InvalidArgumentException('Property "uid" is not valid!', 1486163439);
         }
 
         if ($this->isUserDisallowedEditingOfContentElement($this->getBackendUser(), $uid)) {
@@ -314,7 +311,7 @@ class ContentEditableWrapperService
      * @param bool $prepend
      *
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException|RouteNotFoundException
      */
     public function wrapContentWithCustomDropzone(
         string $tables,
@@ -325,7 +322,7 @@ class ContentEditableWrapperService
     ): string {
         // Check that data is not empty
         if (empty($tables)) {
-            throw new \InvalidArgumentException('Property "tables" can not to be empty!', 1486163430);
+            throw new InvalidArgumentException('Property "tables" can not to be empty!', 1486163430);
         }
 
         /** @var TagBuilder $tagBuilder */
@@ -360,69 +357,56 @@ class ContentEditableWrapperService
     /**
      * Renders the inline action icons
      *
-     * @param string $table
      * @param bool $elementIsHidden
      * @param string $recordTitle
+     * @param int $langUid
      * @return string
      */
-    public function renderInlineActionIcons(string $table, bool $elementIsHidden, string $recordTitle = '', int $langUid = 0): string
+    public function renderInlineActionIcons(bool $elementIsHidden, string $recordTitle = '', int $langUid = 0): string
     {
         $this->iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-        $dragAndDropHandleIcon = '<span '
-            . 'class="t3-frontend-editing__handle" '
-            . 'title="' . $GLOBALS['LANG']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:move') . ' \'' . $recordTitle . '\'" '
-            . 'data-lang="' . $langUid . '" '
-            . 'data-movable="1" draggable="true" ondragstart="window.parent.F.dragCeStart(event)" ondragend="window.parent.F.dragCeEnd(event)"'
-            . '>' . $this->iconFactory->getIcon('actions-move', Icon::SIZE_SMALL)->render() . '</span>';
+        // If the page is a translation in connected-mode, don't render the drag&drop handle
+        // because the editor must move the CEs in the default language
+        $dragAndDropHandleIcon = '';
+        $frontendController = $GLOBALS['TSFE'];
+        $pageLanguageId = $frontendController->page['sys_language_uid'];
+        $translationMode = AccessService::getTranslationMode($frontendController->id, $pageLanguageId);
+        if (
+            $frontendController->page['sys_language_uid'] === 0
+            || $translationMode !== 'connected'
+        ) {
+            $dragAndDropHandleIcon = '<span '
+                . 'class="t3-frontend-editing__handle" '
+                . 'title="' . $GLOBALS['LANG']->sL('LLL:EXT:frontend_editing/Resources/Private/Language/locallang.xlf:move') . ' \'' . $recordTitle . '\'" '
+                . 'data-lang="' . $langUid . '" '
+                . 'data-movable="1" draggable="true" ondragstart="window.parent.F.dragCeStart(event)" ondragend="window.parent.F.dragCeEnd(event)"'
+                . '>' . $this->iconFactory->getIcon('actions-move', Icon::SIZE_SMALL)->render() . '</span>';
+        }
 
         $visibilityIcon = ($elementIsHidden === true) ?
             $this->renderIconWithWrap('unHide', 'actions-edit-unhide') :
                 $this->renderIconWithWrap('hide', 'actions-edit-hide');
 
-        $moveIcons = ($table === 'tt_content') ?
-            $this->renderIconWithWrap('moveUp', 'actions-move-up') .
-                $this->renderIconWithWrap('moveDown', 'actions-move-down') : '';
+        // If website has more than 1 language, add language icon to inline actions
+        // so the editor doesn't get confused when editing translated pages
+        $languageIcon = '';
+        $siteLanguages = $frontendController->getSite()->getAllLanguages();
+        if (count($siteLanguages) > 1) {
+            $siteLanguage = $siteLanguages[$langUid];
+            $title = htmlspecialchars($siteLanguage->getTitle());
+            if ($siteLanguage->getFlagIdentifier()) {
+                $icon = $this->iconFactory->getIcon($siteLanguage->getFlagIdentifier(), Icon::SIZE_SMALL)->render();
+                $languageIcon = '<span title="' . $title . '" class="t3js-flag">' . $icon . '</span>';
+            }
+        }
 
         return
             $dragAndDropHandleIcon .
             $this->renderIconWithWrap('edit', 'actions-open', $recordTitle) .
             $visibilityIcon .
             $this->renderIconWithWrap('deleteItem', 'actions-edit-delete') .
-            $this->renderIconWithWrap('newRecordGeneral', 'actions-document-new') .
-            $moveIcons;
-    }
-
-    /**
-     * Changes the $table and $uid into the record's equivalent in the current language.
-     *
-     * @param string $table
-     * @param int $uid
-     */
-    protected function switchToLocalLanguageEquivalent(string &$table, int &$uid)
-    {
-        /** @var TypoScriptFrontendController $frontendController */
-        $frontendController = $GLOBALS['TSFE'];
-
-        /** @var LanguageAspect $languageAspect */
-        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
-        $languageId = $languageAspect->getId();
-
-        if ($languageId !== 0) {
-            $translatedRecords = BackendUtility::getRecordLocalization(
-                $table,
-                $uid,
-                $languageId
-            );
-
-            if (is_array($translatedRecords) && count($translatedRecords) > 0) {
-                $translatedRecord = array_pop($translatedRecords);
-
-                if ($translatedRecord) {
-                    $uid = $translatedRecord['uid'];
-                }
-            }
-        }
+            $languageIcon;
     }
 
     /**
@@ -449,14 +433,14 @@ class ContentEditableWrapperService
     }
 
     /**
-     * Render a edit url to the backend content wizard
+     * Render an edit url to the backend content wizard
      *
      * @param string $table
-     * @param string $uid
+     * @param int $uid
      * @return string
      * @throws RouteNotFoundException
      */
-    public function renderEditUrl($table, $uid): string
+    public function renderEditUrl(string $table, int $uid): string
     {
         $newUrl = $this->uriBuilder->buildUriFromRoute(
             'record_edit',
@@ -553,11 +537,41 @@ class ContentEditableWrapperService
      */
     public function isDisabled(string $table, array $row): bool
     {
-        $enablecolumns = $GLOBALS['TCA'][$table]['ctrl']['enablecolumns'] ?? null;
-        return ($enablecolumns['disabled'] && $row[$enablecolumns['disabled']])
-            || ($enablecolumns['fe_group'] && $GLOBALS['TSFE']->simUserGroup && (int)$row[$enablecolumns['fe_group']] === (int)$GLOBALS['TSFE']->simUserGroup)
-            || ($enablecolumns['starttime'] && $row[$enablecolumns['starttime']] > $GLOBALS['EXEC_TIME'])
-            || ($enablecolumns['endtime'] && $row[$enablecolumns['endtime']] && $row[$enablecolumns['endtime']] < $GLOBALS['EXEC_TIME']);
+        $isDisabled = false;
+
+        $enablecolumns = $GLOBALS['TCA'][$table]['ctrl']['enablecolumns'] ?? false;
+        if ($enablecolumns) {
+            // Check 'disabled' field
+            if (($enablecolumns['disabled'] ?? false) && ($row[$enablecolumns['disabled']] ?? false)) {
+                $isDisabled = true;
+            }
+            // Check FE group field
+            if (
+                ($enablecolumns['fe_group'] ?? false)
+                && $GLOBALS['TSFE']->simUserGroup
+                && (int)$row[$enablecolumns['fe_group']] === (int)$GLOBALS['TSFE']->simUserGroup
+            ) {
+                $isDisabled = true;
+            }
+            // Check start time
+            if (
+                ($enablecolumns['starttime'] ?? false)
+                && $row[$enablecolumns['starttime']]
+                && $row[$enablecolumns['starttime']] > $GLOBALS['EXEC_TIME']
+            ) {
+                $isDisabled = true;
+            }
+            // Check end time
+            if (
+                ($enablecolumns['endtime'] ?? false)
+                && $row[$enablecolumns['endtime']]
+                && $row[$enablecolumns['endtime']] < $GLOBALS['EXEC_TIME']
+            ) {
+                $isDisabled = true;
+            }
+        }
+
+        return $isDisabled;
     }
 
     /**
@@ -590,7 +604,7 @@ class ContentEditableWrapperService
 
         if ($placeholderText === '') {
             $placeholderText = $GLOBALS['LANG']->sL(
-                $GLOBALS['TCA'][$table]['columns'][$field]['label']
+                $GLOBALS['TCA'][$table]['columns'][$field]['label'] ?? ''
             );
         }
 

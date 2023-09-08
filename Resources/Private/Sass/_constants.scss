@@ -31,7 +31,6 @@ $font-size-large: 18px;
 
 // Header top
 $header-top-bg-color: $black;
-$top-bar-height: 55px;
 
 // Right bar
 $right-bar-width: 325px;
@@ -60,17 +59,10 @@ $focus-shadow: 0 0 0 2px transparentize($gray-darker, 0.1);
 $focus-shadow-sm: 0 0 0 1px transparentize($gray-darker, 0.1);
 
 // scroll area
-$scroll-area-background: rgba(0, 0, 0, 0.7);
-$scroll-area-backdrop-background: transparent;
-$scroll-area-backdrop: blur(1px) brightness(0.4);
 $scroll-area-max-height: 100px;
 $scroll-area-min-height: 50px;
 $scroll-area-height: 8%;
 
-$scroll-area-border: 1px solid rgba(255, 255, 255, 0.4);
-$scroll-area-border: 1px solid rgba(255, 255, 255, 0.4);
-
-$scroll-area-arrow-offset: 5px;
 $scroll-area-arrow-size: 20px;
 $scroll-area-arrow-color: rgba(255, 255, 255, 0.8);
 $scroll-area-arrow-width: 8px;

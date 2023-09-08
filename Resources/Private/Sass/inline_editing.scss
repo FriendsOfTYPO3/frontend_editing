@@ -50,13 +50,13 @@
     transition: height 0.2s;
     margin: 0;
     padding: 0;
-
-    // Use case:
-    // An admin could want to add a custom drop zone to allow the editors to drop a CE also inside empty page or container columns.
-    // This will result in 2 adjacent drop zones when there are already CEs inside the column (one custom and one of the first CE).
-    // This CSS rule will hide the second adjacent drop zone.
-    + div.t3-frontend-editing__dropzone { display: none !important; }
 }
+
+// Use case:
+// An admin could want to add a custom drop zone to allow the editors to drop a CE also inside empty page or container columns.
+// This will result in 2 adjacent drop zones when there are already CEs inside the column (one custom and one of the first CE).
+// This CSS rule will hide the second adjacent drop zone if they are both dropzones for tt_content CE.
+.t3-frontend-editing__dropzone[data-allowed-tables="tt_content"] + .t3-frontend-editing__dropzone[data-allowed-tables="tt_content"] { display: none !important; }
 
 .dropzones-enabled .t3-frontend-editing__dropzone {
     height: 25px;
@@ -117,14 +117,16 @@
 
     .icon {
         background-color: transparentize($color-white, 0.7);
-        cursor: pointer;
+
+        // Cursor ponter for any icon except the flag icons
+        &:not([class*="icon-flags"]) { cursor: pointer; }
 
         &:hover {
             background-color: transparentize($gray-light, 0.3);
         }
 
         &.icon-actions-move {
-            background-color: $brand-primary;
+            background-color: $color-t3-primary;
             cursor: grab;
         }
     }

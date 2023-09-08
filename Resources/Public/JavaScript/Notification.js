@@ -16,36 +16,42 @@
  * Notification: Notification (toastr) wrapper
  */
 define([
-    'TYPO3/CMS/FrontendEditing/Contrib/toastr',
-    './Utils/Logger'
-], function NotificationFactory (toastr, Logger) {
-    'use strict';
+  './Contrib/toastr',
+  './Utils/Logger'
+], function NotificationFactory(toastr, Logger) {
+  'use strict';
 
-    var log = Logger('FEditing:Component:Widget:Notification');
-    log.trace('--> NotificationFactory');
+  var log = Logger('FEditing:Component:Widget:Notification');
+  log.trace('--> NotificationFactory');
 
-    var toastrOptions = {
-        'positionClass': 'toast-top-left',
-        'preventDuplicates': true
-    };
+  var toastrOptions = {
+    'positionClass': 'toast-top-right',
+    'preventDuplicates': true
+  };
 
-    return {
-        success: function (message, title) {
-            log.debug('success', title, message);
+  return {
+    success: function (message, title) {
+      log.debug('success', title, message);
 
-            toastr.success(message, title, toastrOptions);
-        },
+      toastr.success(message, title, toastrOptions);
+    },
 
-        error: function (message, title) {
-            log.debug('error', title, message);
+    error: function (message, title) {
+      log.debug('error', title, message);
 
-            toastr.error(message, title, toastrOptions);
-        },
+      toastr.error(message, title, toastrOptions);
+    },
 
-        warning: function (message, title) {
-            log.debug('warning', title, message);
+    warning: function (message, title) {
+      log.debug('warning', title, message);
 
-            toastr.warning(message, title, toastrOptions);
-        },
-    };
+      toastr.warning(message, title, toastrOptions);
+    },
+
+    info: function (message, title) {
+      log.debug('info', title, message);
+
+      toastr.info(message, title, toastrOptions);
+    },
+  };
 });

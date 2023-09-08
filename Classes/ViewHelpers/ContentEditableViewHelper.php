@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 
@@ -15,12 +16,13 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use Exception;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
 use TYPO3\CMS\FrontendEditing\Service\ContentEditableWrapperService;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
@@ -56,7 +58,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
     /**
      * Initialize arguments
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
 
@@ -71,8 +73,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument(
             'field',
             'string',
-            'The database table field name to be used for saving the content',
-            false
+            'The database table field name to be used for saving the content'
         );
         $this->registerArgument(
             'uid',
@@ -83,43 +84,38 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         $this->registerArgument(
             'tag',
             'string',
-            'An optional tag name, e.g. "div" or "span".',
-            false
+            'An optional tag name, e.g. "div" or "span".'
         );
     }
 
     /**
      * Add a content-editable tag around the content.
      *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     *
      * @return string Rendered HTML markup
+     * @throws RouteNotFoundException
+     * @noinspection PhpMissingParentCallCommonInspection
      */
-    public function render()
+    public function render(): string
     {
         $content = $this->renderChildren();
-        $access = GeneralUtility::makeInstance(AccessService::class);
 
-        if (!$access->isBackendContext()) {
+        if (!AccessService::isBackendContext()) {
             return $this->renderAsTag($content);
         }
 
         $pageRepositoryClassName = PageRepository::class;
         $record = BackendUtility::getRecord($this->arguments['table'], (int)$this->arguments['uid']);
-        $isPageContentEditAllowed = false;
         try {
-            $isPageContentEditAllowed = $access->isPageContentEditAllowed(
+            $isPageContentEditAllowed = AccessService::isPageContentEditAllowed(
                 GeneralUtility::makeInstance($pageRepositoryClassName)
                     ->getPage_noCheck($record['pid'])
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             // Suppress Exception and no database access
             $isPageContentEditAllowed = true;
         }
 
-        if (!$access->isEnabled() || !$isPageContentEditAllowed) {
+        if (!AccessService::isEnabled() || !$isPageContentEditAllowed) {
             $content = $content ?: '';
             return $this->renderAsTag($content);
         }
@@ -162,7 +158,7 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
     /**
      * Render as a non-editable tag or just content if $this->arguments[tag] is not set.
      *
-     * @param string $content
+     * @param string|null $content
      * @return string
      */
     protected function renderAsTag(?string $content): string

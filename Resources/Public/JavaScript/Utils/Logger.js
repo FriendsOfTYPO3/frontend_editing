@@ -15,8 +15,8 @@
  * Module: TYPO3/CMS/FrontendEditing/Utils/Logger
  * Simple logger implementation as a thin anylog (ulog) layer
  */
-define(['../Contrib/ulog/ulog'], function createLogger (ulog) {
-    'use strict';
+define(['../Contrib/ulog/ulog'], function createLogger(ulog) {
+  'use strict';
 
-    return ulog;
+  return ulog;
 });

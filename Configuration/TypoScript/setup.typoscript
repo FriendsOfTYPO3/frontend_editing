@@ -1,4 +1,4 @@
-[backend.user.isLoggedIn && (traverse(request.getQueryParams(), 'frontend_editing') == true || traverse(request.getQueryParams(), 'route') matches '#^/ajax/frontend-editing/#')]
+[backend.user.isLoggedIn && (traverse(request.getQueryParams(), 'fe_edit') == 1 || traverse(request.getQueryParams(), 'route') matches '#^/ajax/frontend-editing/#')]
   lib.fluidContent {
     stdWrap {
       editIcons = tt_content:header
@@ -35,55 +35,7 @@
     # Disable spam protection
     spamProtectEmailAddresses = 0
 
-    tx_extbase {
-      objects {
-        TYPO3\CMS\FrontendEditing\Mvc\View\EmptyView.className = TYPO3\CMS\FrontendEditing\Mvc\View\NotFoundView
-      }
-    }
     tx_frontendediting {
-      # These transformations are applied to the page being edited to ensure features work as expected and inceptions
-      # are avoided.
-      pageContentPreProcessing {
-        parseFunc {
-          htmlSanitize = 0
-
-          tags {
-            form = TEXT
-            form {
-              current = 1
-              # Add frontend_editing=true if this is a GET form (rather than POST)
-              innerWrap = <input type="hidden" name="frontend_editing" value="true">|
-              innerWrap.if {
-                value {
-                  data = parameters : method
-                  case = lower
-                  ifNull =
-                }
-                equals = get
-              }
-              dataWrap = <form { parameters : allParams }>|</form>
-            }
-          }
-        }
-
-        HTMLparser = 1
-        HTMLparser {
-          keepNonMatchedTags = 1
-
-          tags {
-            a.fixAttrib {
-              href.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->addFrontendEditingInUrl
-              target.list = _self
-            }
-
-            form.fixAttrib {
-              action.userFunc = TYPO3\CMS\FrontendEditing\UserFunc\HtmlParserUserFunc->handleFormSubmission
-              target.list = _self
-            }
-          }
-        }
-      }
-
       # Catch-all processing before a field value is persisted to database. Key (e.g. "bronly") is the RTE configuration
       # name, set in a field's TCA config (richtextConfiguration or frontendRichtextConfiguration).
       contentPersistPreProcessingPatterns {
@@ -169,9 +121,6 @@
       parentOfCeUidField = tx_container_parent
     }
   }
-
-  # Prevent links from being parsed to FE url
-  lib.parseFunc_RTE.tags.a >
 
   # Prevent HTML output for wrapContent to be rendered as string only
   lib.parseFunc_RTE.nonTypoTagStdWrap.encapsLines >

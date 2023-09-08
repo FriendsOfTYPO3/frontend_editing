@@ -188,7 +188,7 @@ class ContentEditableFixtures
                     $this->uid
                 )
             ),
-            $this->contentEditableWrapperService->renderInlineActionIcons($this->table, false),
+            $this->contentEditableWrapperService->renderInlineActionIcons(false),
             $this->content
         );
 

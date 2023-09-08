@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-namespace TYPO3\CMS\FrontendEditing\Service;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,91 +15,38 @@ namespace TYPO3\CMS\FrontendEditing\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\SingletonInterface;
+namespace TYPO3\CMS\FrontendEditing\Service;
+
+use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendLayout\ContentFetcher;
+use TYPO3\CMS\Backend\View\BackendLayoutView;
+use TYPO3\CMS\Backend\View\PageLayoutContext;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Check access of the user to display only those actions which are allowed and needed
+ * Service that tells if Frontend Editing is enabled or not
  */
-class AccessService implements SingletonInterface
+class AccessService
 {
     /**
-     * Frontend editing is enabled
-     *
-     * @var bool
-     */
-    protected $isEnabled = false;
-
-    /**
-     * Checks if frontend editing is enabled, checking UserTsConfig and TS
-     */
-    public function __construct()
-    {
-        // Frontend editing needs to be enabled also by admins
-        if (isset($GLOBALS['BE_USER'])) {
-            $isFrontendEditingEnabled = GeneralUtility::_GET('frontend_editing');
-            if (isset($isFrontendEditingEnabled) && (bool)$isFrontendEditingEnabled === true) {
-                $this->isEnabled = true;
-            }
-        }
-
-        // Determine if page is loaded from the TYPO3 BE
-        if ($this->isEnabled && !empty(GeneralUtility::getIndpEnv('HTTP_REFERER'))) {
-            $parsedReferer = parse_url(GeneralUtility::getIndpEnv('HTTP_REFERER'));
-            $pathArray = explode('/', $parsedReferer['path']);
-            $viewPageView = isset($parsedReferer['query'])
-                && preg_match('/web_ViewpageView/i', $parsedReferer['query']);
-            $refererFromBackend = strtolower($pathArray[1]) === 'typo3' && $viewPageView;
-            if ($refererFromBackend) {
-                $this->isEnabled = false;
-            }
-        }
-    }
-
-    /**
-     * Is frontend editing enabled or disabled
+     * Is Frontend Editing enabled or not?
      *
      * @return bool
      */
-    public function isEnabled(): bool
+    public static function isEnabled(): bool
     {
-        return $this->isEnabled;
-    }
-
-    /**
-     * Has the user edit rights for page? (works with current page by default)
-     *
-     * @param array $page
-     *
-     * @return bool
-     */
-    public function isPageEditAllowed($page = []): bool
-    {
-        if (!($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)) {
-            return false;
+        $isEnabled = false;
+        if (
+            isset($GLOBALS['BE_USER'])
+            && $GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
+            && GeneralUtility::_GET('fe_edit')
+        ) {
+            $isEnabled = true;
         }
 
-        if (!$page) {
-            $page = $GLOBALS['TSFE']->page;
-        }
-
-        return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::PAGE_EDIT);
-    }
-
-    /**
-     * Has the user create rights under current page?
-     *
-     * @return bool
-     */
-    public function isPageCreateAllowed(): bool
-    {
-        if (!($GLOBALS['BE_USER'] instanceof BackendUserAuthentication)) {
-            return false;
-        }
-
-        return $GLOBALS['BE_USER']->doesUserHaveAccess($GLOBALS['TSFE']->page, Permission::PAGE_NEW);
+        return $isEnabled;
     }
 
     /**
@@ -110,7 +56,7 @@ class AccessService implements SingletonInterface
      *
      * @return bool
      */
-    public function isPageContentEditAllowed(array $page): bool
+    public static function isPageContentEditAllowed(array $page): bool
     {
         return $GLOBALS['BE_USER']->doesUserHaveAccess($page, Permission::CONTENT_EDIT);
     }
@@ -120,8 +66,38 @@ class AccessService implements SingletonInterface
      *
      * @return bool
      */
-    public function isBackendContext(): bool
+    public static function isBackendContext(): bool
     {
-        return (isset($GLOBALS['BE_USER'])) ? true : false;
+        return isset($GLOBALS['BE_USER']);
+    }
+
+    /**
+     * @param int $pageId
+     * @param int $pageLanguageId
+     * @return string
+     */
+    public static function getTranslationMode(int $pageId, int $pageLanguageId): string
+    {
+        $translationMode = '';
+
+        // Get translation mode only in BE context and for not default language
+        if (AccessService::isBackendContext() && $pageLanguageId > 0) {
+            $pageinfo = BackendUtility::readPageAccess($pageId, $GLOBALS['BE_USER']->getPagePermsClause(Permission::PAGE_SHOW));
+            $context = GeneralUtility::makeInstance(
+                PageLayoutContext::class,
+                $pageinfo,
+                GeneralUtility::makeInstance(BackendLayoutView::class)->getBackendLayoutForPage($pageId)
+            );
+            $contentFetcher = GeneralUtility::makeInstance(ContentFetcher::class, $context);
+
+            $translationInfo = $contentFetcher->getTranslationData(
+                $contentFetcher->getFlatContentRecords($pageLanguageId),
+                $pageLanguageId
+            );
+
+            $translationMode = $translationInfo['mode'] ?? '';
+        }
+
+        return $translationMode;
     }
 }

@@ -16,12 +16,6 @@
 			<trans-unit id="top-bar.toggle-hidden-items">
 				<source>Show hidden</source>
 			</trans-unit>
-            <trans-unit id="right-bar.page-edit">
-                <source>Edit page properties</source>
-            </trans-unit>
-            <trans-unit id="right-bar.page-new">
-                <source>Create new Page</source>
-            </trans-unit>
             <trans-unit id="notifications.save-title">
                 <source>Content saved</source>
             </trans-unit>
@@ -40,8 +34,20 @@
             <trans-unit id="notifications.remove-all-changes">
                 <source>Are you sure you want to remove all unsaved changes?</source>
             </trans-unit>
-            <trans-unit id="notifications.unsaved-changes">
-                <source>You have some unsaved changes. They will disappear if you navigate away!</source>
+            <trans-unit id="notifications.unsaved-changes-title">
+                <source>Do you want to continue without saving?</source>
+            </trans-unit>
+            <trans-unit id="notifications.unsaved-changes-message">
+                <source>You currently have unsaved changes. Are you sure you want to go ahead and discard these changes?</source>
+            </trans-unit>
+            <trans-unit id="notifications.unsaved-changes-save-and-go-ahead">
+                <source>Save and go ahead</source>
+            </trans-unit>
+            <trans-unit id="notifications.unsaved-changes-discard-changes">
+                <source>Yes, Discard my changes</source>
+            </trans-unit>
+            <trans-unit id="notifications.unsaved-changes-continue-editing">
+                <source>No, I will continue editing</source>
             </trans-unit>
             <trans-unit id="notifications.delete-content-element">
                 <source>Are you sure you want to delete the content element?</source>
@@ -78,6 +84,9 @@
             </trans-unit>
             <trans-unit id="notifications.request.configuration.fail">
                 <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
+            </trans-unit>
+            <trans-unit id="notifications.navigate-with-ctrl">
+                <source>To navigate, hold down the CTRL key and click on the link</source>
             </trans-unit>
 
             <trans-unit id="placeholder.label-wrap">

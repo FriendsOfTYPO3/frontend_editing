@@ -43,6 +43,6 @@ Optional steps
 
      plugin.tx_frontendediting.baseUrl = /
 
-* Include the static template *Editable Fluid Styled Content v9*, to include basic editable templates for Fluid Styled Content in TYPO3 v9.
+* Include the static template *Editable Fluid Styled Content v11*, to include basic editable templates for Fluid Styled Content in TYPO3 v11.
 
 * Disable the :ref:`placeholder feature <extension-manager-settings-features>` in the extension configuration. By disabling this feature, empty editable content areas will no longer with placeholders. When creating a new content element by dragging and dropping onto the page, a modal pop-up with a backend form will appear so that you can fill in the initial content.

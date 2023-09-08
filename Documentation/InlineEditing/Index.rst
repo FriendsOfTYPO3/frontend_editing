@@ -20,8 +20,8 @@ Fluid Styled Content
 
 Basic Fluid Styled Content override templates with frontend editing enabled are
 included in the extension. To use them, include the static TypoScript template
-"Editable Fluid Styled Content v9". The templates are based on Fluid Styled
-Content for TYPO3 v9. Templates for other versions may be included in the
+"Editable Fluid Styled Content v11". The templates are based on Fluid Styled
+Content for TYPO3 v11. Templates for other versions may be included in the
 future.
 
 .. _custom-fluid-templates:
@@ -216,8 +216,8 @@ Here's an example of a Fluid template rendering a list:
 
 .. code-block:: html
 
-   <t3kit:contentEditable tag="ul" table="tt_content" field="bodytext" uid="{data.uid}">
+   <core:contentEditable tag="ul" table="tt_content" field="bodytext" uid="{data.uid}">
      <f:for each="{bullets}" as="bullet">
        <li>{bullet}</li>
      </f:for>
-   </t3kit:contentEditable>
+   </core:contentEditable>

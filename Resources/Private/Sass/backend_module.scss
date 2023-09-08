@@ -10,6 +10,20 @@
 // Include Color Variables
 @import '_colors.scss';
 
+@import '_constants.scss';
+@import '_icons.scss';
+@import 'Partials/_inputs.scss';
+@import 'Partials/_titles.scss';
+@import 'Partials/_accordion.scss';
+@import 'Partials/_wrappers.scss';
+@import 'Partials/_elements.scss';
+@import 'Elements/_content-elements-toolbar.scss';
+@import 'Elements/_other.scss';
+@import 'Elements/_ckeditor.scss';
+@import 'Elements/_toastr.scss';
+@import 'Elements/_modal.scss';
+@import 'Elements/_scrollarea.scss';
+
 $module-bg-color: #494949;
 $dropdown-bg-color: #292929;
 $dropdown-btn-hover-color: #424242;
@@ -25,6 +39,7 @@ $dropdown-btn-hover-color: #424242;
                 background-color: $color-t3-primary;
                 border-color: $color-t3-primary;
                 color: $color-white;
+                box-shadow: none; // Remove default TYPO3 shadow for active btns
             }
         }
 
@@ -33,6 +48,7 @@ $dropdown-btn-hover-color: #424242;
                 background-color: $gray-darker;
                 border-color: $gray-darker;
                 color: $color-white;
+                box-shadow: none; // Remove default TYPO3 shadow for active btns
             }
         }
 
@@ -98,6 +114,7 @@ $dropdown-btn-hover-color: #424242;
         }
 
         .module-body {
+            background-color: $module-bg-color;
             padding: 0 !important; // Must use !important because TYPO3 set padding-top via JS
             overflow: hidden; // Avoid scrollbars when FE iframe is full size
             text-align: center; // Center the div containing the FE iframe

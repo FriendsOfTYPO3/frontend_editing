@@ -18,9 +18,9 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Form\Exception;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Localization\Locales;
@@ -38,22 +38,24 @@ class EditorController
      * Processed values from FormEngine
      * @var array
      */
-    protected $formData;
+    protected array $formData;
 
     /**
      * @var array
      */
-    protected $rteConfiguration;
+    protected array $rteConfiguration;
 
     /**
      * Loads the CKEditor configuration for a specific field of a record
      * kicks FormEngine in since this is used to resolve the proper record type
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
+     * @param ResponseInterface|null $response
+     * @return Response|ResponseInterface|null
+     * @throws RouteNotFoundException
+     * @noinspection PhpUnused
      */
-    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response = null)
+    public function getConfigurationAction(ServerRequestInterface $request, ResponseInterface $response = null): Response|ResponseInterface|null
     {
         if ($response === null) {
             $response = new Response();
@@ -79,20 +81,16 @@ class EditorController
                 $fieldName = $element['field'];
 
                 $formDataCompilerInput = [
-                    'vanillaUid' => (int)$uid,
+                    'vanillaUid' => $uid,
                     'tableName' => $table,
                     'command' => 'edit',
                     // done intentionally to speed up the compilation of the processedTca
                     'disabledWizards' => true
                 ];
 
-                try {
-                    $this->formData = $formDataCompiler->compile($formDataCompilerInput);
-                } catch (/* Form exception */ Exception $exception) {
-                    continue;
-                }
+                $this->formData = $formDataCompiler->compile($formDataCompilerInput);
 
-                $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName];
+                $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName] ?? null;
                 $this->rteConfiguration = (isset($formDataFieldName['config']['richtextConfiguration']))
                     ? $formDataFieldName['config']['richtextConfiguration']['editor'] : [];
                 $hasCkeditorConfiguration = !empty($this->rteConfiguration);
@@ -150,6 +148,7 @@ class EditorController
      * Get configuration of external/additional plugins
      *
      * @return array
+     * @throws RouteNotFoundException
      */
     protected function getExtraPlugins(): array
     {
@@ -167,6 +166,11 @@ class EditorController
             || !is_array($this->rteConfiguration['externalPlugins'])) {
             $this->rteConfiguration['externalPlugins'] = [];
         }
+
+        // Register CKEditor openlink plugin used to handle frontend links navigation
+        $this->rteConfiguration['externalPlugins']['openlink'] = [
+            'resource' => 'EXT:frontend_editing/Resources/Public/JavaScript/Plugins/openlink/plugin.js'
+        ];
 
         if (ConfigurationUtility::getExtensionConfiguration()['enablePlaceholders']) {
             $this->rteConfiguration['externalPlugins']['confighelper'] = [
@@ -269,7 +273,7 @@ class EditorController
      */
     protected function getLanguageIsoCodeOfContent(): string
     {
-        $currentLanguageUid = $this->formData['databaseRow']['sys_language_uid'];
+        $currentLanguageUid = $this->formData['databaseRow']['sys_language_uid'] ?? 0;
         if (is_array($currentLanguageUid)) {
             $currentLanguageUid = $currentLanguageUid[0];
         }
