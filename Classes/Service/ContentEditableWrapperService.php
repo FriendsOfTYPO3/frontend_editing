@@ -393,10 +393,16 @@ class ContentEditableWrapperService
         $languageIcon = '';
         $siteLanguages = $frontendController->getSite()->getAllLanguages();
         if (count($siteLanguages) > 1) {
-            $siteLanguage = $siteLanguages[$langUid];
-            $title = htmlspecialchars($siteLanguage->getTitle());
-            if ($siteLanguage->getFlagIdentifier()) {
-                $icon = $this->iconFactory->getIcon($siteLanguage->getFlagIdentifier(), Icon::SIZE_SMALL)->render();
+            if ($langUid >= 0) { // Specific language CE
+                $siteLanguage = $siteLanguages[$langUid];
+                $title = htmlspecialchars($siteLanguage->getTitle());
+                if ($siteLanguage->getFlagIdentifier()) {
+                    $icon = $this->iconFactory->getIcon($siteLanguage->getFlagIdentifier(), Icon::SIZE_SMALL)->render();
+                    $languageIcon = '<span title="' . $title . '" class="t3js-flag">' . $icon . '</span>';
+                }
+            } else { // All languages CE
+                $title = htmlspecialchars($GLOBALS['LANG']->sL('LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages'));
+                $icon = $this->iconFactory->getIcon('flags-multiple', Icon::SIZE_SMALL)->render();
                 $languageIcon = '<span title="' . $title . '" class="t3js-flag">' . $icon . '</span>';
             }
         }
