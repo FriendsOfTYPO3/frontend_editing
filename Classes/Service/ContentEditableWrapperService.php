@@ -225,7 +225,7 @@ class ContentEditableWrapperService
         $tagBuilder = GeneralUtility::makeInstance(
             TagBuilder::class,
             $this->contentEditableWrapperTagName,
-            html_entity_decode($inlineActionTagBuilder->render() . $content)
+            $inlineActionTagBuilder->render() . $content
         );
 
         $tagBuilder->forceClosingTag(true);
