@@ -76,21 +76,3 @@ Use the following command to copy all necessary node_modules into Public/Resourc
 ::
 
    npm run build:extension
-
-
-Storybook
----------
-
-The extension is using Storybook (https://storybook.js.org/) for component testing.
-
-Use the following commands to build the Storybook and url is http://localhost:6006/
-
-::
-
-   npm run build:storybook
-
-Use the following to watch and build the Storybook:
-
-::
-
-   npm run watch:storybook

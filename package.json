@@ -15,9 +15,6 @@
     "postcss:css": "postcss -r Resources/Public/Css/*.css",
     "build:css": "npm run check:css && npm run compile:css && npm run postcss:css",
     "build:suite": "npm run build:css",
-    "watch:storybook": "start-storybook -p 6006 -c storybook/.storybook",
-    "build:storybook": "build-storybook -c storybook/.storybook",
-    "resources:storybook": "mkdir .build/public/typo3/sysext/backend/Resources/Public/img && cp .build/public/typo3/sysext/backend/Resources/Public/Images/Logo.png .build/public/typo3/sysext/backend/Resources/Public/img/bg.png",
     "test:js": "jest",
     "browserslist": "browserslist"
   },
@@ -32,11 +29,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@storybook/addon-essentials": "^6.1.14",
-    "@storybook/addon-links": "^6.1.14",
-    "@storybook/addon-storyshots": "^6.1.14",
-    "@storybook/addon-storyshots-puppeteer": "^6.1.14",
-    "@storybook/react": "^6.1.14",
     "autoprefixer": "^7.2.3",
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
