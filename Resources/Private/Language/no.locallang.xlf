@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns:t3="http://typo3.org/schemas/xliff" version="1.0">
+  <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing" target-language="no">
+    <header/>
+    <body>
+      <trans-unit id="top-bar.save-all" approved="yes">
+        <source>Save All</source>
+        <target state="final">Lagre alt</target>
+      </trans-unit>
+      <trans-unit id="top-bar.discard-all" approved="yes">
+        <source>Discard</source>
+        <target state="final">Forkast</target>
+      </trans-unit>
+      <trans-unit id="top-bar.full-view" approved="yes">
+        <source>Full view</source>
+        <target state="final">Full visning</target>
+      </trans-unit>
+      <trans-unit id="right-bar.tools-properties" approved="yes">
+        <source>Tools &amp; Properties</source>
+        <target state="final">Verktøy &amp; egenskaper</target>
+      </trans-unit>
+      <trans-unit id="right-bar.page-edit" approved="yes">
+        <source>Edit page properties</source>
+        <target state="final">Rediger sideoppsett</target>
+      </trans-unit>
+      <trans-unit id="right-bar.page-new" approved="yes">
+        <source>Create new Page</source>
+        <target state="final">Opprett ny side</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-title" approved="yes">
+        <source>Content saved</source>
+        <target state="final">Innhold lagret</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-description" approved="yes">
+        <source>Saved the content with identifier:</source>
+        <target state="final">Lagret innhold med identifikator:</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-went-wrong" approved="yes">
+        <source>Something went wrong</source>
+        <target state="final">Noe gikk galt</target>
+      </trans-unit>
+      <trans-unit id="notifications.no-changes-title" approved="yes">
+        <source>No changes made</source>
+        <target state="final">Ingen endringer er gjort</target>
+      </trans-unit>
+      <trans-unit id="notifications.no-changes-description" approved="yes">
+        <source>There are currently no changes made to the content on the page!</source>
+        <target state="final">Det er for øyeblikket ingen endringer i innholdet på siden!</target>
+      </trans-unit>
+      <trans-unit id="notifications.remove-all-changes" approved="yes">
+        <source>Are you sure you want to remove all unsaved changes?</source>
+        <target state="final">Er du sikker på at du vil forkaste alle endringer som ikke er lagret?</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes" approved="yes">
+        <source>You have some unsaved changes. They will disappear if you navigate away!</source>
+        <target state="final">Du har noen endringer som ikke er lagret. De vil forsvinne hvis du navigerer i vekk!</target>
+      </trans-unit>
+      <trans-unit id="notifications.delete-content-element" approved="yes">
+        <source>Are you sure you want to delete the content element?</source>
+        <target state="final">Er du sikker på at du vil slette dette innholdselementet?</target>
+      </trans-unit>
+      <trans-unit id="notifications.add-content-element" approved="yes">
+        <source>You would have the option to add an element now, if this feature was implemented.</source>
+        <target state="final">Du ville hatt muligheten til å legge til et element nå, hvis denne funksjonen var implementert.</target>
+      </trans-unit>
+      <trans-unit id="notifications.content-locked" approved="yes">
+        <source>The content is currently locked, do you still want to save?</source>
+        <target state="final">Innholdet er låst, vil du fortsatt lagre?</target>
+      </trans-unit>
+      <trans-unit id="notifications.change_site_root" approved="yes">
+        <source>You are going to switch to another site. Are you sure ?</source>
+        <target state="final">Du kommer til å bytte til et annet nettsted. Er du sikker?</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-pages-title" approved="yes">
+        <source>Page saved</source>
+        <target state="final">Siden er lagret</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.content.success" approved="yes">
+        <source>Content updated (%s)</source>
+        <target state="final">Innhold oppdatert (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.pages.success" approved="yes">
+        <source>Page title updated (%s)</source>
+        <target state="final">Sidetittel oppdatert (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.content.fail" approved="yes">
+        <source>Content could not be updated (%s)</source>
+        <target state="final">Innholdet kunne ikke oppdateres (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.pages.fail" approved="yes">
+        <source>Page could not be updated (%s)</source>
+        <target state="final">Siden kunne ikke oppdateres (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.new.content.success" approved="yes">
+        <source>The content element was created</source>
+        <target state="final">Innholdselementet ble opprettet</target>
+      </trans-unit>
+      <trans-unit id="notifications.new.content.fail" approved="yes">
+        <source>The content element could not be created</source>
+        <target state="final">Innholdselementet kunne ikke opprettes</target>
+      </trans-unit>
+      <trans-unit id="notifications.request.configuration.fail" approved="yes">
+        <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
+        <target state="final">Kunne ikke hente tekstbehandlerkonfigurasjoner på grunn av en forespørselsfeil. ({0}, "{1}")</target>
+      </trans-unit>
+      <trans-unit id="placeholder.label-wrap" approved="yes">
+        <source>Enter %s here</source>
+        <target state="final">Skriv %s her</target>
+      </trans-unit>
+      <trans-unit id="placeholder.default-label" approved="yes">
+        <source>Enter text here</source>
+        <target state="final">Skriv tekst her</target>
+      </trans-unit>
+      <trans-unit id="right-bar.element-title" approved="yes">
+        <source>Drag and drop on page to create a new '%s' content element.</source>
+        <target state="final">Trekk og slipp på siden for å opprette et nytt '%s'-innholdselement.</target>
+      </trans-unit>
+      <trans-unit id="right-bar.on-page.changed" approved="yes">
+        <source>Modified:</source>
+        <target state="final">Endret:</target>
+      </trans-unit>
+      <trans-unit id="right-bar.on-page.title" approved="yes">
+        <source>Elements on page</source>
+        <target state="final">Elementer på siden</target>
+      </trans-unit>
+      <trans-unit id="right-bar.custom-record.title" approved="yes">
+        <source>Custom records</source>
+        <target state="final">Egendefinerte</target>
+      </trans-unit>
+      <trans-unit id="noValidPageSelected" resname="noValidPageSelected" approved="yes">
+        <source>Please select a page with a valid page type in the page tree on the left to preview the selected page.</source>
+        <target state="final">Vennligst velg en side med en gyldig sidetype i sidetreet til venstre for å forhåndsvise den valgte siden.</target>
+      </trans-unit>
+      <trans-unit id="noSiteConfiguration" resname="noSiteConfiguration" approved="yes">
+        <source>The requested page is missing a valid site configuration.</source>
+        <target state="final">Den forespurte siden mangler en gyldig nettstedskonfigurasjon.</target>
+      </trans-unit>
+      <trans-unit id="maximized" resname="maximized" approved="yes">
+        <source>Maximized</source>
+        <target state="final">Maksimert</target>
+      </trans-unit>
+      <trans-unit id="custom" resname="custom" approved="yes">
+        <source>Custom</source>
+        <target state="final">Egendefinert</target>
+      </trans-unit>
+      <trans-unit id="refreshPage" resname="refreshPage" approved="yes">
+        <source>Refresh page</source>
+        <target state="final">Last inn siden på nytt</target>
+      </trans-unit>
+      <trans-unit id="yes" resname="yes" approved="yes">
+        <source>Yes</source>
+        <target state="final">Ja</target>
+      </trans-unit>
+      <trans-unit id="no" resname="no" approved="yes">
+        <source>No</source>
+        <target state="final">Nei</target>
+      </trans-unit>
+      <trans-unit id="otherDomain" resname="otherDomain">
+        <source>To edit the current page, you need to log in to</source>
+        <target state="needs-translation">To edit the current page, you need to log in to</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
