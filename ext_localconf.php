@@ -25,11 +25,6 @@ $boot = static function (): void {
         ]
     ];
 
-    // XCLass
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class] = [
-        'className' => TYPO3\CMS\FrontendEditing\Xclass\ContentObject\ContentObjectRenderer::class
-    ];
-
     // Add RTE presets for frontend use
     $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['bronly'] = 'EXT:frontend_editing/Configuration/RTE/BrOnly.yaml';
     $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['listonly'] = 'EXT:frontend_editing/Configuration/RTE/ListOnly.yaml';
