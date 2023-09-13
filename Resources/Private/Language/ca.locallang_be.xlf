@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns:t3="http://typo3.org/schemas/xliff" version="1.0">
+  <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing" target-language="ca">
+    <header/>
+    <body>
+      <trans-unit id="extension_management.seo_provider">
+        <source>SEO provider</source>
+        <target state="translated">Proveïdor de SEO</target>
+      </trans-unit>
+      <trans-unit id="extension_management.content_editable_wrapper_tag_name">
+        <source>The tag name that will be used for the Content editable wrapper</source>
+        <target state="translated">El nom de l'etiqueta que s'utilitzarà per a l'embolcall editable de contingut</target>
+      </trans-unit>
+      <trans-unit id="extension_management.placeholders">
+        <source>Enable placeholders and direct drop-to-edit without modal.</source>
+        <target state="translated">Habilitar marcadors de posició i edita directament sense modal.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
