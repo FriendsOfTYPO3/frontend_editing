@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns:t3="http://typo3.org/schemas/xliff" version="1.0">
+  <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing" target-language="vi">
+    <header/>
+    <body>
+      <trans-unit id="top-bar.save-all">
+        <source>Save All</source>
+        <target state="needs-translation">Save All</target>
+      </trans-unit>
+      <trans-unit id="top-bar.discard-all">
+        <source>Discard</source>
+        <target state="needs-translation">Discard</target>
+      </trans-unit>
+      <trans-unit id="top-bar.full-view">
+        <source>Full view</source>
+        <target state="needs-translation">Full view</target>
+      </trans-unit>
+      <trans-unit id="right-bar.tools-properties">
+        <source>Tools &amp; Properties</source>
+        <target state="needs-translation">Tools &amp; Properties</target>
+      </trans-unit>
+      <trans-unit id="right-bar.page-edit">
+        <source>Edit page properties</source>
+        <target state="needs-translation">Edit page properties</target>
+      </trans-unit>
+      <trans-unit id="right-bar.page-new">
+        <source>Create new Page</source>
+        <target state="needs-translation">Create new Page</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-title">
+        <source>Content saved</source>
+        <target state="needs-translation">Content saved</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-description">
+        <source>Saved the content with identifier:</source>
+        <target state="needs-translation">Saved the content with identifier:</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-went-wrong">
+        <source>Something went wrong</source>
+        <target state="needs-translation">Something went wrong</target>
+      </trans-unit>
+      <trans-unit id="notifications.no-changes-title">
+        <source>No changes made</source>
+        <target state="needs-translation">No changes made</target>
+      </trans-unit>
+      <trans-unit id="notifications.no-changes-description">
+        <source>There are currently no changes made to the content on the page!</source>
+        <target state="needs-translation">There are currently no changes made to the content on the page!</target>
+      </trans-unit>
+      <trans-unit id="notifications.remove-all-changes">
+        <source>Are you sure you want to remove all unsaved changes?</source>
+        <target state="needs-translation">Are you sure you want to remove all unsaved changes?</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes">
+        <source>You have some unsaved changes. They will disappear if you navigate away!</source>
+        <target state="needs-translation">You have some unsaved changes. They will disappear if you navigate away!</target>
+      </trans-unit>
+      <trans-unit id="notifications.delete-content-element">
+        <source>Are you sure you want to delete the content element?</source>
+        <target state="needs-translation">Are you sure you want to delete the content element?</target>
+      </trans-unit>
+      <trans-unit id="notifications.add-content-element">
+        <source>You would have the option to add an element now, if this feature was implemented.</source>
+        <target state="needs-translation">You would have the option to add an element now, if this feature was implemented.</target>
+      </trans-unit>
+      <trans-unit id="notifications.content-locked">
+        <source>The content is currently locked, do you still want to save?</source>
+        <target state="needs-translation">The content is currently locked, do you still want to save?</target>
+      </trans-unit>
+      <trans-unit id="notifications.change_site_root">
+        <source>You are going to switch to another site. Are you sure ?</source>
+        <target state="needs-translation">You are going to switch to another site. Are you sure ?</target>
+      </trans-unit>
+      <trans-unit id="notifications.save-pages-title">
+        <source>Page saved</source>
+        <target state="needs-translation">Page saved</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.content.success">
+        <source>Content updated (%s)</source>
+        <target state="needs-translation">Content updated (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.pages.success">
+        <source>Page title updated (%s)</source>
+        <target state="needs-translation">Page title updated (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.content.fail">
+        <source>Content could not be updated (%s)</source>
+        <target state="needs-translation">Content could not be updated (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.update.pages.fail">
+        <source>Page could not be updated (%s)</source>
+        <target state="needs-translation">Page could not be updated (%s)</target>
+      </trans-unit>
+      <trans-unit id="notifications.new.content.success">
+        <source>The content element was created</source>
+        <target state="needs-translation">The content element was created</target>
+      </trans-unit>
+      <trans-unit id="notifications.new.content.fail">
+        <source>The content element could not be created</source>
+        <target state="needs-translation">The content element could not be created</target>
+      </trans-unit>
+      <trans-unit id="notifications.request.configuration.fail">
+        <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
+        <target state="needs-translation">Could not fetch editor configurations due to a request error. ({0}, "{1}")</target>
+      </trans-unit>
+      <trans-unit id="placeholder.label-wrap">
+        <source>Enter %s here</source>
+        <target state="needs-translation">Enter %s here</target>
+      </trans-unit>
+      <trans-unit id="placeholder.default-label">
+        <source>Enter text here</source>
+        <target state="needs-translation">Enter text here</target>
+      </trans-unit>
+      <trans-unit id="right-bar.element-title">
+        <source>Drag and drop on page to create a new '%s' content element.</source>
+        <target state="needs-translation">Drag and drop on page to create a new '%s' content element.</target>
+      </trans-unit>
+      <trans-unit id="right-bar.on-page.changed">
+        <source>Modified:</source>
+        <target state="needs-translation">Modified:</target>
+      </trans-unit>
+      <trans-unit id="right-bar.on-page.title">
+        <source>Elements on page</source>
+        <target state="needs-translation">Elements on page</target>
+      </trans-unit>
+      <trans-unit id="right-bar.custom-record.title">
+        <source>Custom records</source>
+        <target state="needs-translation">Custom records</target>
+      </trans-unit>
+      <trans-unit id="noValidPageSelected" resname="noValidPageSelected">
+        <source>Please select a page with a valid page type in the page tree on the left to preview the selected page.</source>
+        <target state="needs-translation">Please select a page with a valid page type in the page tree on the left to preview the selected page.</target>
+      </trans-unit>
+      <trans-unit id="noSiteConfiguration" resname="noSiteConfiguration">
+        <source>The requested page is missing a valid site configuration.</source>
+        <target state="needs-translation">The requested page is missing a valid site configuration.</target>
+      </trans-unit>
+      <trans-unit id="maximized" resname="maximized">
+        <source>Maximized</source>
+        <target state="needs-translation">Maximized</target>
+      </trans-unit>
+      <trans-unit id="custom" resname="custom">
+        <source>Custom</source>
+        <target state="needs-translation">Custom</target>
+      </trans-unit>
+      <trans-unit id="refreshPage" resname="refreshPage">
+        <source>Refresh page</source>
+        <target state="needs-translation">Refresh page</target>
+      </trans-unit>
+      <trans-unit id="yes" resname="yes">
+        <source>Yes</source>
+        <target state="needs-translation">Yes</target>
+      </trans-unit>
+      <trans-unit id="no" resname="no">
+        <source>No</source>
+        <target state="needs-translation">No</target>
+      </trans-unit>
+      <trans-unit id="otherDomain" resname="otherDomain">
+        <source>To edit the current page, you need to log in to</source>
+        <target state="needs-translation">To edit the current page, you need to log in to</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
