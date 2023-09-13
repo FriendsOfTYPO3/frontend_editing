@@ -11,21 +11,13 @@
         <source>Discard</source>
         <target state="translated">Відмінити</target>
       </trans-unit>
-      <trans-unit id="top-bar.full-view">
-        <source>Full view</source>
-        <target state="translated">Повне представлення</target>
+      <trans-unit id="top-bar.toggle-contents-toolbar">
+        <source>Add content</source>
+        <target state="needs-translation">Add content</target>
       </trans-unit>
-      <trans-unit id="right-bar.tools-properties">
-        <source>Tools &amp; Properties</source>
-        <target state="translated">Інструменти &amp; властивості</target>
-      </trans-unit>
-      <trans-unit id="right-bar.page-edit">
-        <source>Edit page properties</source>
-        <target state="translated">Змінити властивості сторінки</target>
-      </trans-unit>
-      <trans-unit id="right-bar.page-new">
-        <source>Create new Page</source>
-        <target state="needs-translation">Create new Page</target>
+      <trans-unit id="top-bar.toggle-hidden-items">
+        <source>Show hidden</source>
+        <target state="needs-translation">Show hidden</target>
       </trans-unit>
       <trans-unit id="notifications.save-title">
         <source>Content saved</source>
@@ -51,9 +43,25 @@
         <source>Are you sure you want to remove all unsaved changes?</source>
         <target state="needs-translation">Are you sure you want to remove all unsaved changes?</target>
       </trans-unit>
-      <trans-unit id="notifications.unsaved-changes">
-        <source>You have some unsaved changes. They will disappear if you navigate away!</source>
-        <target state="needs-translation">You have some unsaved changes. They will disappear if you navigate away!</target>
+      <trans-unit id="notifications.unsaved-changes-title">
+        <source>Do you want to continue without saving?</source>
+        <target state="needs-translation">Do you want to continue without saving?</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes-message">
+        <source>You currently have unsaved changes. Are you sure you want to go ahead and discard these changes?</source>
+        <target state="needs-translation">You currently have unsaved changes. Are you sure you want to go ahead and discard these changes?</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes-save-and-go-ahead">
+        <source>Save and go ahead</source>
+        <target state="needs-translation">Save and go ahead</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes-discard-changes">
+        <source>Yes, Discard my changes</source>
+        <target state="needs-translation">Yes, Discard my changes</target>
+      </trans-unit>
+      <trans-unit id="notifications.unsaved-changes-continue-editing">
+        <source>No, I will continue editing</source>
+        <target state="needs-translation">No, I will continue editing</target>
       </trans-unit>
       <trans-unit id="notifications.delete-content-element">
         <source>Are you sure you want to delete the content element?</source>
@@ -103,6 +111,10 @@
         <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
         <target state="needs-translation">Could not fetch editor configurations due to a request error. ({0}, "{1}")</target>
       </trans-unit>
+      <trans-unit id="notifications.navigate-with-ctrl">
+        <source>To navigate, hold down the CTRL key and click on the link</source>
+        <target state="needs-translation">To navigate, hold down the CTRL key and click on the link</target>
+      </trans-unit>
       <trans-unit id="placeholder.label-wrap">
         <source>Enter %s here</source>
         <target state="needs-translation">Enter %s here</target>
@@ -114,14 +126,6 @@
       <trans-unit id="right-bar.element-title">
         <source>Drag and drop on page to create a new '%s' content element.</source>
         <target state="needs-translation">Drag and drop on page to create a new '%s' content element.</target>
-      </trans-unit>
-      <trans-unit id="right-bar.on-page.changed">
-        <source>Modified:</source>
-        <target state="needs-translation">Modified:</target>
-      </trans-unit>
-      <trans-unit id="right-bar.on-page.title">
-        <source>Elements on page</source>
-        <target state="needs-translation">Elements on page</target>
       </trans-unit>
       <trans-unit id="right-bar.custom-record.title">
         <source>Custom records</source>
@@ -154,6 +158,10 @@
       <trans-unit id="no" resname="no">
         <source>No</source>
         <target state="needs-translation">No</target>
+      </trans-unit>
+      <trans-unit id="move" resname="move">
+        <source>Move</source>
+        <target state="needs-translation">Move</target>
       </trans-unit>
       <trans-unit id="otherDomain" resname="otherDomain">
         <source>To edit the current page, you need to log in to</source>
