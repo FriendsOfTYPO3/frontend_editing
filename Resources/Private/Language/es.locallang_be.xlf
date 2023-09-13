@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns:t3="http://typo3.org/schemas/xliff" version="1.0">
+  <file t3:id="1486236619" source-language="en" datatype="plaintext" original="messages" date="2016-10-18T09:11:39Z" product-name="frontend_editing" target-language="es-ES">
+    <header/>
+    <body>
+      <trans-unit id="extension_management.seo_provider" approved="yes">
+        <source>SEO provider</source>
+        <target state="final">Proveedor de SEO</target>
+      </trans-unit>
+      <trans-unit id="extension_management.content_editable_wrapper_tag_name" approved="yes">
+        <source>The tag name that will be used for the Content editable wrapper</source>
+        <target state="final">El nombre de la etiqueta que se utilizará para el envoltorio del contenedor editable</target>
+      </trans-unit>
+      <trans-unit id="extension_management.placeholders" approved="yes">
+        <source>Enable placeholders and direct drop-to-edit without modal.</source>
+        <target state="final">Habilitar marcadores de posición y arrastrar-para-editar sin modal.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
