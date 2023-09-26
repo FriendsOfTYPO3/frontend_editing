@@ -13,6 +13,9 @@
 	        <trans-unit id="extension_management.placeholders">
 		        <source>Enable placeholders and direct drop-to-edit without modal.</source>
 	        </trans-unit>
+	        <trans-unit id="extension_management.disable_loading_screen">
+		        <source>Disable Frontend Editing loading screen.</source>
+	        </trans-unit>
         </body>
     </file>
 </xliff>
