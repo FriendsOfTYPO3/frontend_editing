@@ -552,6 +552,7 @@ class FrontendEditingModuleController
         $this->view->assign('protocol', $request->getUri()->getScheme());
         $this->view->assign('contentItems', $this->getContentItems());
         $this->view->assign('customRecords', $this->getCustomRecords());
+        $this->view->assign('disableLoadingScreen', (int)(ConfigurationUtility::getExtensionConfiguration()['disableLoadingScreen'] ?? 0));
         $this->view->assign('loadingIcon', $this->iconFactory->getIcon('spinner-circle-dark', Icon::SIZE_LARGE)->render());
 
         $this->initFrontendEditingGui();
