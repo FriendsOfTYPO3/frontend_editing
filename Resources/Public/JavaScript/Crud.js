@@ -235,7 +235,7 @@ define([
           // );
 
           Modal.confirm(
-            response.message,
+            response.title ?? response.message,
             response.message
           )
             .on('button.clicked', function (evt) {
