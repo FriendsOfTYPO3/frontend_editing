@@ -82,6 +82,27 @@
             <trans-unit id="notifications.new.content.fail">
                 <source>The content element could not be created</source>
             </trans-unit>
+            <trans-unit id="notifications.delete.content.success">
+                <source>Content deleted (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.delete.content.fail">
+                <source>Content could not be deleted (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.hidden.content.success">
+                <source>Content hidden (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.hidden.content.fail">
+                <source>Content could not be set hidden (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.visible.content.success">
+                <source>Content visible (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.visible.content.fail">
+                <source>Content could not be set visible (uid: %s)</source>
+            </trans-unit>
+            <trans-unit id="notifications.locked_record">
+                <source>The content (uid: %s) is probably edited by someone else.</source>
+            </trans-unit>
             <trans-unit id="notifications.request.configuration.fail">
                 <source>Could not fetch editor configurations due to a request error. ({0}, "{1}")</source>
             </trans-unit>

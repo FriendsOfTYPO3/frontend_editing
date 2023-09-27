@@ -160,10 +160,19 @@ class ReceiverController
         $dataHandler->BE_USER = $GLOBALS['BE_USER'];
         // Delete the record
         $dataHandler->deleteAction($table, $uid);
+        $translateKey = 'notifications.delete.content.';
         if (empty($dataHandler->errorLog)) {
-            $this->writeSuccessMessage('Content deleted (' . $uid . ')');
+            $this->writeSuccessMessage(LocalizationUtility::translate(
+                $translateKey . 'success',
+                'FrontendEditing',
+                [$uid]
+            ));
         } else {
-            $this->writeErrorMessage('Content could not be deleted (' . $uid . ')');
+            $this->writeErrorMessage(LocalizationUtility::translate(
+                $translateKey . 'fail',
+                'FrontendEditing',
+                [$uid]
+            ));
         }
     }
 
@@ -184,12 +193,19 @@ class ReceiverController
             $dataHandler->start($data, []);
             $dataHandler->process_datamap();
 
+            $translateKey = 'notifications.' . ($hide ? 'hidden' : 'visible') . '.content.';
             if (empty($dataHandler->errorLog)) {
-                $this->writeSuccessMessage('Content ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')');
+                $this->writeSuccessMessage(LocalizationUtility::translate(
+                    $translateKey . 'success',
+                    'FrontendEditing',
+                    [$uid]
+                ));
             } else {
-                $this->writeErrorMessage(
-                    'Content could not be set ' . ($hide ? 'hidden' : 'visible') . ' (' . $uid . ')'
-                );
+                $this->writeErrorMessage(LocalizationUtility::translate(
+                    $translateKey . 'fail',
+                    'FrontendEditing',
+                    [$uid]
+                ));
             }
         } else {
             $this->writeErrorMessage('Table does not have a hidden field (' . $table . ')');
@@ -204,9 +220,16 @@ class ReceiverController
      */
     protected function lockedRecordAction(string $table, int $uid): void
     {
-        if (BackendUtility::isRecordLocked($table, $uid)) {
-            $this->writeSuccessMessage('The content "' . $uid .
-                '" is currently edited by someone else. Do you want to save this?');
+        $lockedRecord = BackendUtility::isRecordLocked($table, $uid);
+        if ($lockedRecord) {
+            $this->writeSuccessMessage(
+                $lockedRecord['msg'],
+                LocalizationUtility::translate(
+                    'notifications.locked_record',
+                    'FrontendEditing',
+                    [$uid]
+                )
+            );
         }
     }
 
@@ -233,11 +256,14 @@ class ReceiverController
      * Ensure the message is printed and encoded as JSON
      *
      * @param string $message
+     * @param string|null $title
      */
-    protected function writeSuccessMessage(string $message): void
+    protected function writeSuccessMessage(string $message, string $title = null): void
     {
+        $title = $title ?: $message;
         $message = [
             'success' => true,
+            'title' => $title,
             'message' => $message
         ];
         $this->response->getBody()->write(json_encode($message));
