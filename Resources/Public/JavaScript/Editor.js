@@ -93,7 +93,27 @@ define([
           href: resourcePath + 'Css/inline_editing.css',
           type: 'text/css'
         }
-      )
+      ).on('load', function () {
+        // Dinamically add a spacer if the inline actions toolbar is hidden under the module doc header
+        // this could happen if there's not enough space between the top of the page and the first editable element
+        const feIframe = document.getElementById('tx_frontendediting_iframe');
+        const iframeDocument = feIframe.contentDocument;
+        const firstInlineActionsToolbar = iframeDocument.querySelector('.t3-frontend-editing__inline-actions');
+        if (firstInlineActionsToolbar) {
+          firstInlineActionsToolbar.style.display = 'block'; // Tmp set display block or else the toolbar has height=0
+          const toolbarTopYPosition = window.pageYOffset + firstInlineActionsToolbar.getBoundingClientRect().top;
+          const toolbarHeight = firstInlineActionsToolbar.offsetHeight;
+          firstInlineActionsToolbar.style.display = 'none'; // Reset toolbar display to none
+          if (toolbarTopYPosition < toolbarHeight) {
+            // Create a spacer element
+            const spacer = iframeDocument.createElement('div');
+            spacer.classList.add('t3-frontend-editing__spacer');
+            spacer.style.height = -toolbarTopYPosition + 'px';
+            // Insert the spacer as the first element inside the body of the iframe
+            iframeDocument.body.insertBefore(spacer, iframeDocument.body.firstChild);
+          }
+        }
+      })
     );
 
     // Links in editable CE are not navigable directly on click.
