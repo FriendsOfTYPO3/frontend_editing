@@ -18,6 +18,8 @@ namespace TYPO3\CMS\FrontendEditing\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Form\Exception\AccessDeniedEditInternalsException;
+use TYPO3\CMS\Backend\Form\Exception\AccessDeniedTableModifyException;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
@@ -88,51 +90,56 @@ class EditorController
                     'disabledWizards' => true
                 ];
 
-                $this->formData = $formDataCompiler->compile($formDataCompilerInput);
+                try {
+                    $this->formData = $formDataCompiler->compile($formDataCompilerInput);
 
-                $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName] ?? null;
-                $this->rteConfiguration = (isset($formDataFieldName['config']['richtextConfiguration']))
-                    ? $formDataFieldName['config']['richtextConfiguration']['editor'] : [];
-                $hasCkeditorConfiguration = !empty($this->rteConfiguration);
+                    $formDataFieldName = $this->formData['processedTca']['columns'][$fieldName] ?? null;
+                    $this->rteConfiguration = (isset($formDataFieldName['config']['richtextConfiguration']))
+                        ? $formDataFieldName['config']['richtextConfiguration']['editor'] : [];
+                    $hasCkeditorConfiguration = !empty($this->rteConfiguration);
 
-                $editorConfiguration = $this->prepareConfigurationForEditor();
+                    $editorConfiguration = $this->prepareConfigurationForEditor();
 
-                $externalPlugins = '';
-                foreach ($this->getExtraPlugins() as $pluginName => $config) {
-                    $editorConfiguration[$pluginName] = $config['config'];
-                    $editorConfiguration['extraPlugins'] = (isset($editorConfiguration['extraPlugins']))
-                        ? $editorConfiguration['extraPlugins'] : '';
-                    if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
-                        $editorConfiguration['extraPlugins'] .= ',';
+                    $externalPlugins = '';
+                    foreach ($this->getExtraPlugins() as $pluginName => $config) {
+                        $editorConfiguration[$pluginName] = $config['config'];
+                        $editorConfiguration['extraPlugins'] = (isset($editorConfiguration['extraPlugins']))
+                            ? $editorConfiguration['extraPlugins'] : '';
+                        if ($editorConfiguration['extraPlugins'] !== null && $editorConfiguration['extraPlugins'] !== '') {
+                            $editorConfiguration['extraPlugins'] .= ',';
+                        }
+                        $editorConfiguration['extraPlugins'] .= $pluginName;
+
+                        $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
+                        $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
+                        $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
+                        $externalPlugins .= '\'\');';
                     }
-                    $editorConfiguration['extraPlugins'] .= $pluginName;
 
-                    $externalPlugins .= 'CKEDITOR.plugins.addExternal(';
-                    $externalPlugins .= GeneralUtility::quoteJSvalue($pluginName) . ',';
-                    $externalPlugins .= GeneralUtility::quoteJSvalue($config['resource']) . ',';
-                    $externalPlugins .= '\'\');';
-                }
+                    $configuration = [
+                        'configuration' => $editorConfiguration,
+                        'hasCkeditorConfiguration' => $hasCkeditorConfiguration,
+                        'externalPlugins' => $externalPlugins,
+                    ];
 
-                $configuration = [
-                    'configuration' => $editorConfiguration,
-                    'hasCkeditorConfiguration' => $hasCkeditorConfiguration,
-                    'externalPlugins' => $externalPlugins,
-                ];
-
-                $configurationKey = '';
-                foreach ($configurations as $existingConfigurationKey => $existingConfiguration) {
-                    if (json_encode($existingConfiguration) === json_encode($configuration)) {
-                        $configurationKey = $existingConfigurationKey;
-                        break;
+                    $configurationKey = '';
+                    foreach ($configurations as $existingConfigurationKey => $existingConfiguration) {
+                        if (json_encode($existingConfiguration) === json_encode($configuration)) {
+                            $configurationKey = $existingConfigurationKey;
+                            break;
+                        }
                     }
-                }
 
-                if ($configurationKey === '') {
-                    $configurationKey = count($configurations);
-                    $configurations[$configurationKey] = $configuration;
-                }
+                    if ($configurationKey === '') {
+                        $configurationKey = count($configurations);
+                        $configurations[$configurationKey] = $configuration;
+                    }
 
-                $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
+                    $elements[$uid . '_' . $table . '_' . $fieldName] = $configurationKey;
+                } catch (AccessDeniedEditInternalsException|AccessDeniedTableModifyException $exception) {
+                    // The editor does not have access to the table of this specific field or to the field itself so,
+                    // instead of displaying a toast with an error, we simply intercept the exception and go on.
+                }
             }
         }
 

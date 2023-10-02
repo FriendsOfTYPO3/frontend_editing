@@ -19,6 +19,7 @@ namespace TYPO3\CMS\FrontendEditing\ViewHelpers;
 use Exception;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\FrontendEditing\Service\AccessService;
@@ -115,7 +116,10 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
             $isPageContentEditAllowed = true;
         }
 
-        if (!AccessService::isEnabled() || !$isPageContentEditAllowed) {
+        $backendUser = $this->getBackendUser();
+        $isTableEditAllowed = $backendUser->check('tables_modify', $this->arguments['table']);
+
+        if (!AccessService::isEnabled() || !$isPageContentEditAllowed || !$isTableEditAllowed) {
             $content = $content ?: '';
             return $this->renderAsTag($content);
         }
@@ -174,5 +178,13 @@ class ContentEditableViewHelper extends AbstractTagBasedViewHelper
         }
 
         return $content;
+    }
+
+    /**
+     * @return BackendUserAuthentication
+     */
+    protected function getBackendUser(): BackendUserAuthentication
+    {
+        return $GLOBALS['BE_USER'];
     }
 }

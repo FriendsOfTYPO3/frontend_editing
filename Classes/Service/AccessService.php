@@ -53,6 +53,33 @@ class AccessService
      * Has the user edit rights for the content of the page?
      *
      * @param array $page
+     * @param int $languageId
+     * @return bool
+     */
+    public static function isPageEditAllowed(array $page, int $languageId = 0): bool
+    {
+        if ($GLOBALS['TCA']['pages']['ctrl']['readOnly'] ?? false) {
+            return false;
+        }
+        $backendUser = $GLOBALS['BE_USER'];
+        if ($backendUser->isAdmin()) {
+            return true;
+        }
+        if ($GLOBALS['TCA']['pages']['ctrl']['adminOnly'] ?? false) {
+            return false;
+        }
+
+        return $page !== []
+            && !($page[$GLOBALS['TCA']['pages']['ctrl']['editlock'] ?? null] ?? false)
+            && $backendUser->doesUserHaveAccess($page, Permission::PAGE_EDIT)
+            && $backendUser->checkLanguageAccess($languageId)
+            && $backendUser->check('tables_modify', 'pages');
+    }
+
+    /**
+     * Has the user edit rights for the content of the page?
+     *
+     * @param array $page
      *
      * @return bool
      */
