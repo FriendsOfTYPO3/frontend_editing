@@ -194,6 +194,11 @@ class ContentEditableWrapperService
             return $content;
         }
 
+        // Is BE user allowed to edit CE of this table?
+        if (!$this->getBackendUser()->check('tables_modify', $table)) {
+            return $content;
+        }
+
         $hiddenElementClassName = $this->getContentElementClass($table, $uid);
         $elementIsHidden = $hiddenElementClassName !== '';
 
