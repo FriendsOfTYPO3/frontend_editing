@@ -101,7 +101,7 @@ define([
         const firstInlineActionsToolbar = iframeDocument.querySelector('.t3-frontend-editing__inline-actions');
         if (firstInlineActionsToolbar) {
           firstInlineActionsToolbar.style.display = 'block'; // Tmp set display block or else the toolbar has height=0
-          const toolbarTopYPosition = window.pageYOffset + firstInlineActionsToolbar.getBoundingClientRect().top;
+          const toolbarTopYPosition = feIframe.contentWindow.scrollY + firstInlineActionsToolbar.getBoundingClientRect().top;
           const toolbarHeight = firstInlineActionsToolbar.offsetHeight;
           firstInlineActionsToolbar.style.display = 'none'; // Reset toolbar display to none
           if (toolbarTopYPosition < toolbarHeight) {
